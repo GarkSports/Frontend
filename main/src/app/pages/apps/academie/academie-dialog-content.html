@@ -1,0 +1,202 @@
+<h2 class="f-w-500 m-b-24" mat-dialog-title><strong>{{action}}</strong></h2>
+
+<!-- Check if action is not 'Delete' -->
+<ng-container *ngIf="action !== 'Delete'">
+  <mat-dialog-content style="max-width: 600px">
+    <form #disciplineForm="ngForm">
+      <div class="d-flex align-items-center m-b-16" *ngIf="action === 'Add'">
+        <img
+          class="mat-card-avatar"
+          [src]="local_data.imagePath"
+          class="rounded-circle"
+          width="50"
+        />
+        <button mat-flat-button color="primary" class="m-l-16 input-file-button">
+          <input type="file" id="logo" name="logo" [(ngModel)]="local_data.logo" (change)="selectFile($event)" #fileInput />
+        </button>
+      </div>
+      <div class="row">
+        <div class="col-lg-6">
+          <mat-form-field appearance="outline" class="w-100">
+            <input
+              type="text"
+              matInput
+              required
+              id="nom"
+              name="nom"
+              [(ngModel)]="local_data.nom"
+              placeholder="Nom"
+            />
+          </mat-form-field>
+        </div>
+        <div class="col-lg-6">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Type</mat-label>
+            <mat-select required id="type" name="type" [(ngModel)]="local_data.type">
+              <mat-option *ngFor="let option of typeOptions" [value]="option">
+                {{ option }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>        
+        <div class="col-lg-6">
+          <mat-form-field appearance="outline" class="w-100">
+            <input
+              type="number"
+              matInput
+              required
+              id="fraisAdhesion"
+              name="fraisAdhesion"
+              [(ngModel)]="local_data.fraisAdhesion"
+              placeholder="Frais d'Adhesion"
+            />
+          </mat-form-field>
+        </div>
+        <div class="col-lg-6">
+          <mat-form-field appearance="outline" class="w-100">
+            <input
+              type="text"
+              matInput
+              required
+              id="affiliation"
+              name="affiliation"
+              [(ngModel)]="local_data.affiliation"
+              placeholder="Affiliation"
+            />
+          </mat-form-field>
+        </div>
+        <div class="col-lg-6" *ngIf="action === 'Add'">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Manager</mat-label>
+            <mat-select required id="manager" name="manager" [(ngModel)]="local_data.manager_id">
+              <mat-option *ngFor="let manager of managers" [value]="manager.id">
+                {{ manager.email }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-6" *ngIf="action === 'Add'">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Disciplines</mat-label>
+            <mat-select required id="discipline" name="discipline" [(ngModel)]="local_data.disciplineIds" multiple>
+              <mat-option *ngFor="let discipline of disciplines" [value]="discipline.id">
+                {{ discipline.nom }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>        
+        <div class="col-lg-6">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Etat</mat-label>
+            <mat-select required id="etat" name="etat" [(ngModel)]="local_data.etat">
+              <mat-option *ngFor="let option of etatOptions" [value]="option">
+                {{ option }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-6">
+          <mat-form-field appearance="outline" class="w-100">
+            <input
+              type="text"
+              matInput
+              required
+              id="description"
+              name="description"
+              [(ngModel)]="local_data.description"
+              placeholder="Description"
+            />
+          </mat-form-field>
+        </div>    
+        <!-- Adresse -->
+        <div class="col-lg-6">
+          <mat-form-field appearance="outline" class="w-100">
+            <input
+              type="text"
+              matInput
+              required
+              id="rue"
+              name="rue"
+              [(ngModel)]="local_data.rue"
+              placeholder="rue"
+            />
+          </mat-form-field>
+        </div>
+        <div class="col-lg-6">
+          <mat-form-field appearance="outline" class="w-100">
+            <input
+              type="text"
+              matInput
+              required
+              id="ville"
+              name="ville"
+              [(ngModel)]="local_data.ville"
+              placeholder="ville"
+            />
+          </mat-form-field>
+        </div>
+        <div class="col-lg-6">
+          <mat-form-field appearance="outline" class="w-100">
+            <input
+              type="text"
+              matInput
+              required
+              id="codePostal"
+              name="codePostal"
+              [(ngModel)]="local_data.codePostal"
+              placeholder="codePostal"
+            />
+          </mat-form-field>
+        </div>
+        <div class="col-lg-6">
+          <mat-form-field appearance="outline" class="w-100">
+            <input
+              type="text"
+              matInput
+              required
+              id="pays"
+              name="pays"
+              [(ngModel)]="local_data.pays"
+              placeholder="pays"
+            />
+          </mat-form-field>
+        </div>
+ 
+      </div>
+      
+
+      
+      <!-- Add other form fields based on your model properties -->
+      <button
+        mat-flat-button
+        (click)="doAction()"
+        mat-flat-button
+        color="primary"
+        [disabled]="!disciplineForm.valid"
+      >
+        {{action}}
+      </button>
+      <button
+        mat-stroked-button
+        color="warn"
+        class="m-l-8"
+        (click)="closeDialog()"
+      >
+        Cancel
+      </button>
+    </form>
+  </mat-dialog-content>
+</ng-container>
+
+<!-- Display delete confirmation if action is 'Delete' -->
+<ng-container *ngIf="action === 'Delete'">
+  <div class="p-x-24">
+    <p>Sure to delete <span class="f-w-600">{{local_data.nom}}</span> ?</p>
+  </div>
+  <div mat-dialog-actions class="p-x-24 p-b-24">
+    <button mat-button (click)="doAction()" mat-flat-button color="warn">
+      {{action}}
+    </button>
+    <button mat-button (click)="closeDialog()" class="m-l-8">Cancel</button>
+  </div>
+</ng-container>

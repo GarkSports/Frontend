@@ -1,0 +1,306 @@
+import {
+  Component,
+  Inject,
+  Optional,
+  ViewChild,
+  AfterViewInit,
+} from '@angular/core';
+import { MatTableDataSource, MatTable } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
+import { DatePipe } from '@angular/common';
+import { AppAddAcademieComponent } from './add/add.component';
+import { Academie } from 'src/models/academie.model';
+import { AcademieService } from 'src/app/services/academie.service';
+import { Manager } from 'src/models/manager.model';
+import { Discipline } from 'src/models/discipline.model';
+import { DisciplineService } from 'src/app/services/discipline.service';
+
+@Component({
+  templateUrl: './academie.component.html',
+})
+export class AcademieComponent implements AfterViewInit {
+  @ViewChild(MatTable, { static: true }) table: MatTable<any> =
+    Object.create(null);
+  searchText: any;
+  displayedColumns: string[] = [
+    '#',
+    'nom',
+    'type',
+    'fraisAdhesion',
+    'logo',
+    'affiliation',
+    'etat',
+    'description',
+    'manager',
+    'adresse',
+    'action',
+  ];
+
+  dataSource = new MatTableDataSource<Academie>([]);
+
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator =
+    Object.create(null);
+
+  constructor(
+    public dialog: MatDialog,
+    public datePipe: DatePipe,
+    public academieService: AcademieService
+  ) {}
+
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+    this.getAcademies();
+  }
+
+  applyFilter(filterValue: string): void {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  openDialog(action: string, obj: any): void {
+    obj.action = action;
+    const dialogRef = this.dialog.open(AppAcademieDialogContentComponent, {
+      data: obj,
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result.event === 'Add') {
+        this.addRowData(result.data);
+      } else if (result.event === 'Update') {
+        this.updateRowData(result.data);
+      } else if (result.event === 'Delete') {
+        this.deleteRowData(result.data);
+      }
+    });
+  }
+
+  addRowData(academieData: Academie): void {
+    if (academieData.manager_id && academieData.disciplineIds) {
+      console.log('this is academie data:', academieData);
+      this.academieService
+        .addAcademie(
+          academieData,
+          academieData.disciplineIds,
+          academieData.manager_id
+        )
+        .subscribe(
+          (response) => {
+            console.log('Academie added successfully', response);
+            this.getAcademies(); // Refresh the data after adding
+          },
+          (error) => {
+            console.error('Error adding academie', error);
+            // Handle error, if needed
+          }
+        );
+    }
+  }
+
+  updateRowData(academieData: Academie): void {
+    // Create a copy of the academieData without the manager_id property
+    const academieDataWithoutManagerId = { ...academieData };
+    delete academieDataWithoutManagerId.manager_id;
+
+    this.academieService.updateAcademie(academieDataWithoutManagerId, academieData.id).subscribe(
+        (response) => {
+          console.log('Academie updated successfully', response);
+          this.getAcademies(); // Refresh the data after updating
+        },
+        (error) => {
+          console.error('Error updating academie', error);
+          // Handle error, if needed
+        }
+    );
+}
+
+
+  deleteRowData(academieData: Academie): void {
+    this.academieService.archiveAcademie(academieData.id).subscribe(
+      (response) => {
+        console.log('Academie archived successfully', response);
+        this.getAcademies();
+      },
+      (error) => {
+        console.error('Error archiving academie', error);
+        // Handle error, if needed
+      }
+    );
+  }
+
+  getAcademies(): void {
+    this.academieService.getAcademies().subscribe(
+      (academies) => {
+        console.log('Academies fetched successfully', academies);
+        this.dataSource.data = academies;
+      },
+      (error) => {
+        console.error('Error fetching academies', error);
+      }
+    );
+  }
+
+  showManagerDetails(managerId: number): void {
+    this.academieService.getManagerDetails(managerId).subscribe(
+      (managerDetails) => {
+        this.openManagerDetailsDialog(managerDetails);
+      },
+      (error) => {
+        console.error('Error fetching manager details', error);
+        // Handle error, if needed
+      }
+    );
+  }
+
+  showAcademieDetails(academieId: number): void {
+    this.academieService.getAcademieById(academieId).subscribe(
+      (academieDetails) => {
+        this.openAcademieDetailsDialog(academieDetails);
+      },
+      (error) => {
+        console.error('Error fetching manager details', error);
+        // Handle error, if needed
+      }
+    );
+  }
+
+  openManagerDetailsDialog(managerDetails: Manager): void {
+    const dialogRef = this.dialog.open(ManagerDetailsDialogComponent, {
+      data: managerDetails,
+    });
+
+    // Handle dialog closed event if needed
+    dialogRef.afterClosed().subscribe((result) => {
+      // Handle result if needed
+    });
+  }
+
+  openAcademieDetailsDialog(academieDetails: Academie): void {
+    const dialogRef = this.dialog.open(AdresseDetailsDialogComponent, {
+      data: academieDetails,
+    });
+
+    // Handle dialog closed event if needed
+    dialogRef.afterClosed().subscribe((result) => {
+      // Handle result if needed
+    });
+  }
+
+
+}
+
+@Component({
+  selector: 'app-academie-dialog-content',
+  templateUrl: 'academie-dialog-content.html',
+})
+export class AppAcademieDialogContentComponent {
+  action: string;
+  // tslint:disable-next-line - Disables all
+  local_data: any;
+  selectedImage: any = '';
+  joiningDate: any = '';
+
+  
+
+  etatOptions = ['Actif', 'Suspendu', 'Inactif', 'Ferme'];
+
+  typeOptions = ['ACADEMY', 'CLUB'];
+
+  managers: Manager[] = [];
+  disciplines: Discipline[] = [];
+  
+  constructor(
+    public datePipe: DatePipe,
+    public dialogRef: MatDialogRef<AppAcademieDialogContentComponent>,
+    public academieService: AcademieService,
+    public disciplineService: DisciplineService,
+    // @Optional() is used to prevent error if no data is passed
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: Academie
+  ) {
+    this.local_data = { ...data };
+    this.action = this.local_data.action;
+    if (this.local_data.DateOfJoining !== undefined) {
+      this.joiningDate = this.datePipe.transform(
+        new Date(this.local_data.DateOfJoining),
+        'yyyy-MM-dd'
+      );
+    }
+    if (this.local_data.imagePath === undefined) {
+      this.local_data.imagePath = 'assets/images/profile/user-1.jpg';
+    }
+  }
+
+  ngAfterViewInit(): void {
+    this.getManagers();
+    this.getDisciplines();
+  }
+
+  getManagers(): void {
+    this.academieService.getManagers().subscribe(
+      (managers) => {
+        console.log('Managers fetched successfully', managers);
+        this.managers = managers;
+      },
+      (error) => {
+        console.error('Error fetching Managers', error);
+      }
+    );
+  }
+
+  getDisciplines(): void {
+    this.disciplineService.getDisciplines().subscribe(
+      (disciplines) => {
+        console.log('Disciplines fetched successfully', disciplines);
+        this.disciplines = disciplines;
+      },
+      (error) => {
+        console.error('Error fetching disciplines', error);
+      }
+    );
+  }
+
+  doAction(): void {
+    this.dialogRef.close({ event: this.action, data: this.local_data });
+  }
+  closeDialog(): void {
+    this.dialogRef.close({ event: 'Cancel' });
+  }
+
+  selectFile(event: any): void {
+    if (!event.target.files[0] || event.target.files[0].length === 0) {
+      // this.msg = 'You must select an image';
+      return;
+    }
+    const mimeType = event.target.files[0].type;
+    if (mimeType.match(/image\/*/) == null) {
+      // this.msg = "Only images are supported";
+      return;
+    }
+    // tslint:disable-next-line - Disables all
+    const reader = new FileReader();
+    reader.readAsDataURL(event.target.files[0]);
+    // tslint:disable-next-line - Disables all
+    reader.onload = (_event) => {
+      // tslint:disable-next-line - Disables all
+      this.local_data.imagePath = reader.result;
+    };
+  }
+}
+
+
+@Component({
+  templateUrl: 'manager-details-dialog.component.html',
+})
+export class ManagerDetailsDialogComponent {
+  constructor(@Optional() @Inject(MAT_DIALOG_DATA) public data: Manager) {}
+}
+
+
+@Component({
+  templateUrl: 'adresse-details-dialog.component.html',
+})
+export class AdresseDetailsDialogComponent {
+  constructor(@Optional() @Inject(MAT_DIALOG_DATA) public data: Academie) {}
+}
