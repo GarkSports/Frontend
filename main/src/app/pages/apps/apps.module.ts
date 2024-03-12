@@ -80,6 +80,7 @@ import { AcademieComponent, AppAcademieDialogContentComponent } from './academie
 import { AppAddAcademieComponent } from './academie/add/add.component';
 import { ManagerDetailsDialogComponent } from './academie/academie.component';
 import { AdresseDetailsDialogComponent } from './academie/academie.component';
+import { AppManagerDialogContentComponent, AppManagerlistComponent } from './managers/managerlist.component';
 
 
 @NgModule({
@@ -145,6 +146,8 @@ import { AdresseDetailsDialogComponent } from './academie/academie.component';
     OkDialogComponent,
     AppBlogsComponent,
     AppBlogDetailsComponent,
+    AppManagerlistComponent,
+    AppManagerDialogContentComponent
   ],
   providers: [DatePipe],
 })

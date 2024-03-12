@@ -19,8 +19,9 @@ import { AppInvoiceViewComponent } from './invoice/invoice-view/invoice-view.com
 import { AppEditInvoiceComponent } from './invoice/edit-invoice/edit-invoice.component';
 import { AppBlogsComponent } from './blogs/blogs.component';
 import { AppBlogDetailsComponent } from './blogs/details/details.component';
-import {DisciplineComponent} from './discipline/discipline.component';
+import { DisciplineComponent } from './discipline/discipline.component';
 import { AcademieComponent } from './academie/academie.component';
+import { AppManagerlistComponent } from './managers/managerlist.component';
 
 export const AppsRoutes: Routes = [
   {
@@ -125,6 +126,17 @@ export const AppsRoutes: Routes = [
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
             { title: 'Tickets' },
+          ],
+        },
+      },
+      {
+        path: 'managers',
+        component: AppManagerlistComponent,
+        data: {
+          title: 'Managers',
+          urls: [
+            { title: 'Managers', url: '/dashboards/dashboard1' },
+            { title: 'Managers' },
           ],
         },
       },
