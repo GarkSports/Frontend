@@ -25,24 +25,11 @@
   <mat-card class="cardWithShadow">
     <mat-card-content class="p-24">
       <div class="table-responsive">
-        <table mat-table [dataSource]="dataSource" class="w-100">
-          <!-- Column: # -->
-          <ng-container matColumnDef="#">
-            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">#</th>
-            <td mat-cell *matCellDef="let element">{{ element.id }}</td>
-          </ng-container>
-  
+        <table mat-table [dataSource]="dataSource" class="w-100">  
           <!-- Column: nom -->
           <ng-container matColumnDef="nom">
             <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Nom</th>
-            <td mat-cell *matCellDef="let element">
-              <div class="d-flex align-items-center">
-                <img class="rounded-circle" [src]="element.imagePath" width="40" />
-                <div class="m-l-16">
-                  <p class="f-w-600 mat-subtitle-1 f-s-16 m-t-0">{{ element.nom }}</p>
-                </div>
-              </div>
-            </td>
+              <td mat-cell *matCellDef="let element" class="f-w-600 mat-subtitle-1 f-s-16 m-t-0">{{ element.nom }}</td>
           </ng-container>
 
           <!-- Column: type -->
@@ -74,15 +61,28 @@
             
             <!-- Column: etat -->
             <ng-container matColumnDef="etat">
-                <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Etat</th>
-                <td mat-cell *matCellDef="let element">{{ element.etat }}</td>
+              <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Etat</th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.etat }}
+              </td>
             </ng-container>
+            
+            
   
   
           <!-- Column: description -->
           <ng-container matColumnDef="description">
             <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Description</th>
             <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.description }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="editEtat">
+            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Edit Etat</th>
+            <td mat-cell *matCellDef="let element">
+              <button mat-icon-button (click)="openEditForm(element)">
+                <mat-icon>edit</mat-icon>
+              </button>              
+            </td>
           </ng-container>
 
           <ng-container matColumnDef="manager">
@@ -99,6 +99,16 @@
             <td mat-cell *matCellDef="let element">
               <button mat-icon-button (click)="showAcademieDetails(element.id)">
                 <mat-icon>location_on</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+
+          <ng-container matColumnDef="etatHistory">
+            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Etat History</th>
+            <td mat-cell *matCellDef="let element">
+              <button mat-icon-button (click)="openHistoryPopup(element.id)">
+                <mat-icon>history</mat-icon>
               </button>
             </td>
           </ng-container>

@@ -1,0 +1,23 @@
+<div class="edit-form-container">
+    <form [formGroup]="editForm">
+      <mat-form-field class="full-width">
+        <mat-label>Etat</mat-label>
+        <mat-select formControlName="etat">
+          <mat-option *ngFor="let option of etatOptions" [value]="option">
+            {{ option }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+  
+      <mat-form-field class="full-width" style="margin-top: 16px;">
+        <mat-label>Change Reason</mat-label>
+        <input matInput formControlName="changeReason" />
+      </mat-form-field>
+  
+      <div class="button-container" style="margin-top: 16px;">
+        <button mat-raised-button color="primary" (click)="saveChanges()">Save</button>
+        <button mat-stroked-button (click)="cancel()">Cancel</button>
+      </div>
+    </form>
+  </div>
+  

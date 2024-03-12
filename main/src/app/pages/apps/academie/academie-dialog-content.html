@@ -85,7 +85,7 @@
             </mat-select>
           </mat-form-field>
         </div>        
-        <div class="col-lg-6">
+        <div class="col-lg-6" *ngIf="action === 'Add'">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Etat</mat-label>
             <mat-select required id="etat" name="etat" [(ngModel)]="local_data.etat">

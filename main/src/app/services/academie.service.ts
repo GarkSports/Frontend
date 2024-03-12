@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Academie } from 'src/models/academie.model';
 import { Manager } from 'src/models/manager.model';
+import { AcademieHistory } from 'src/models/academieHistory.models';
 
 @Injectable({
   providedIn: 'root'
@@ -39,8 +40,9 @@ export class AcademieService {
     return this.http.put<any>(`${this.apiUrl}/updateAcademie/${academieId}`, academieData, { headers });
   }
 
-  changeEtat(academieId: number): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/changeEtat/${academieId}`, {});
+  changeEtat(academieId: number, etatRequest: any): Observable<any> {
+    const url = `${this.apiUrl}/changeEtat/${academieId}`;
+    return this.http.put<any>(url, etatRequest);
   }
 
   archiveAcademie(academieId: number): Observable<any> {
@@ -55,4 +57,10 @@ export class AcademieService {
     const url = `${this.apiUrl}/getManagerDetails/${academieId}`;
     return this.http.get<Manager>(url);
   }
+
+  getAcademieHistory(academieId: number): Observable<AcademieHistory[]> {
+    return this.http.get<AcademieHistory[]>(`${this.apiUrl}/getAcademieHistory/${academieId}`);
+  }
+
+
 }

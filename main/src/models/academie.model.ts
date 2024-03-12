@@ -1,3 +1,4 @@
+import { AcademieHistory } from "./academieHistory.models";
 import { Adherent } from "./adherent.model";
 import { AcademieType } from "./enums/academie-type.model";
 import { Etat } from "./enums/etat.model";
@@ -21,4 +22,5 @@ export class Academie {
     pays: string;
     manager_id?: number;
     evenements?: Evenement[];
+    academieHistory?: AcademieHistory[];
 }

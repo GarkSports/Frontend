@@ -19,6 +19,8 @@ import { AcademieService } from 'src/app/services/academie.service';
 import { Manager } from 'src/models/manager.model';
 import { Discipline } from 'src/models/discipline.model';
 import { DisciplineService } from 'src/app/services/discipline.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { AcademieHistory } from 'src/models/academieHistory.models';
 
 @Component({
   templateUrl: './academie.component.html',
@@ -28,7 +30,6 @@ export class AcademieComponent implements AfterViewInit {
     Object.create(null);
   searchText: any;
   displayedColumns: string[] = [
-    '#',
     'nom',
     'type',
     'fraisAdhesion',
@@ -36,10 +37,15 @@ export class AcademieComponent implements AfterViewInit {
     'affiliation',
     'etat',
     'description',
+    'editEtat',
     'manager',
     'adresse',
+    'etatHistory',
     'action',
   ];
+
+  
+  etatOptions = ['ACTIF', 'SUSPENDU', 'INACTIF', 'FERME'];
 
   dataSource = new MatTableDataSource<Academie>([]);
 
@@ -73,6 +79,7 @@ export class AcademieComponent implements AfterViewInit {
         this.updateRowData(result.data);
       } else if (result.event === 'Delete') {
         this.deleteRowData(result.data);
+        window.location.reload();
       }
     });
   }
@@ -188,7 +195,37 @@ export class AcademieComponent implements AfterViewInit {
     });
   }
 
+  openEditForm(element: any): void {
+    const dialogRef = this.dialog.open(EditEtatFormComponent, {
+      data: { etat: element.etat, changeReason: '' }, // Pass data to the dialog
+    });
+  
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result && result.event === 'Save') {
+        // Implement the logic to call the backend API and update the etat
+        this.academieService.changeEtat(element.id, result.data).subscribe(
+          (response) => {
+            console.log('Etat changed successfully', response);
+            this.getAcademies(); // Refresh the data after changing etat
+          },
+          (error) => {
+            console.error('Error changing etat', error);
+            // Handle error, if needed
+          }
+        );
+      }
+    });
+  }
 
+  openHistoryPopup(academieId: number): void {
+    this.academieService.getAcademieHistory(academieId).subscribe(history => {
+      this.dialog.open(HistoryPopupComponent, {
+        data: history,
+      });
+    });
+  }
+
+  
 }
 
 @Component({
@@ -204,7 +241,7 @@ export class AppAcademieDialogContentComponent {
 
   
 
-  etatOptions = ['Actif', 'Suspendu', 'Inactif', 'Ferme'];
+  etatOptions = ['ACTIF', 'SUSPENDU', 'INACTIF', 'FERME'];
 
   typeOptions = ['ACADEMY', 'CLUB'];
 
@@ -291,6 +328,7 @@ export class AppAcademieDialogContentComponent {
 
 
 @Component({
+  selector: 'app-manager-details-dialog', // Change the selector to be unique
   templateUrl: 'manager-details-dialog.component.html',
 })
 export class ManagerDetailsDialogComponent {
@@ -299,8 +337,61 @@ export class ManagerDetailsDialogComponent {
 
 
 @Component({
+  selector: 'app-adresse-details-dialog',
   templateUrl: 'adresse-details-dialog.component.html',
 })
 export class AdresseDetailsDialogComponent {
   constructor(@Optional() @Inject(MAT_DIALOG_DATA) public data: Academie) {}
+}
+
+
+@Component({
+  templateUrl: 'etat-edit.html',
+})
+export class EditEtatFormComponent {
+  editForm: FormGroup;
+
+  etatOptions = ['ACTIF', 'SUSPENDU', 'INACTIF', 'FERME'];
+
+
+  constructor(
+    private fb: FormBuilder,
+    public dialogRef: MatDialogRef<EditEtatFormComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {
+    this.editForm = this.fb.group({
+      etat: data.etat,
+      changeReason: data.changeReason,
+    });
+  }
+
+  saveChanges(): void {
+    // Implement the logic to save changes
+    this.dialogRef.close({ event: 'Save', data: this.editForm.value });
+  }
+
+  cancel(): void {
+    this.dialogRef.close({ event: 'Cancel' });
+  }
+}
+
+
+@Component({
+  templateUrl: 'etatHisto.html',
+})
+export class HistoryPopupComponent {
+  constructor(
+    public dialogRef: MatDialogRef<HistoryPopupComponent>,
+    @Inject(MAT_DIALOG_DATA) public history: AcademieHistory[]
+  ) {}
+
+  close(): void {
+    this.dialogRef.close();
+  }
+  historyColumns: string[] = [
+    'previousEtat',
+    'newEtat',
+    'changeReason',
+    'changeDate',
+  ];
 }

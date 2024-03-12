@@ -80,6 +80,8 @@ import { AcademieComponent, AppAcademieDialogContentComponent } from './academie
 import { AppAddAcademieComponent } from './academie/add/add.component';
 import { ManagerDetailsDialogComponent } from './academie/academie.component';
 import { AdresseDetailsDialogComponent } from './academie/academie.component';
+import { EditEtatFormComponent } from './academie/academie.component';
+import { HistoryPopupComponent } from './academie/academie.component';
 
 
 @NgModule({
@@ -137,6 +139,8 @@ import { AdresseDetailsDialogComponent } from './academie/academie.component';
     ManagerDetailsDialogComponent,
     AdresseDetailsDialogComponent,
     AppAddAcademieComponent,
+    EditEtatFormComponent,
+    HistoryPopupComponent,
     AppInvoiceListComponent,
     AppInvoiceViewComponent,
     AppAddInvoiceComponent,
