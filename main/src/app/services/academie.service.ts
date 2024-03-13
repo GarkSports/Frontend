@@ -34,10 +34,15 @@ export class AcademieService {
     return this.http.get<Academie>(`${this.apiUrl}/getAcademieById/${academieId}`);
   }  
 
-  updateAcademie(academieData: Academie, academieId: number): Observable<any> {
+  updateAcademie(academieData: Academie, academieId: number, disciplineIds: number[],  managerId: number): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
-    return this.http.put<any>(`${this.apiUrl}/updateAcademie/${academieId}`, academieData, { headers });
+    const requestBody = {
+      academie: academieData,
+      disciplineIds: disciplineIds,
+    };
+
+    return this.http.put<any>(`${this.apiUrl}/updateAcademie/${academieId}/${managerId}`, requestBody, { headers });
   }
 
   changeEtat(academieId: number, etatRequest: any): Observable<any> {

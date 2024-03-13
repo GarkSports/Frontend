@@ -108,10 +108,10 @@ export class AcademieComponent implements AfterViewInit {
 
   updateRowData(academieData: Academie): void {
     // Create a copy of the academieData without the manager_id property
-    const academieDataWithoutManagerId = { ...academieData };
-    delete academieDataWithoutManagerId.manager_id;
-
-    this.academieService.updateAcademie(academieDataWithoutManagerId, academieData.id).subscribe(
+    // const academieDataWithoutManagerId = { ...academieData };
+    // delete academieDataWithoutManagerId.manager_id;
+    if (academieData.manager_id && academieData.disciplineIds) {
+    this.academieService.updateAcademie(academieData,academieData.id,academieData.disciplineIds,academieData.manager_id).subscribe(
         (response) => {
           console.log('Academie updated successfully', response);
           this.getAcademies(); // Refresh the data after updating
@@ -121,6 +121,7 @@ export class AcademieComponent implements AfterViewInit {
           // Handle error, if needed
         }
     );
+  }
 }
 
 
@@ -149,8 +150,8 @@ export class AcademieComponent implements AfterViewInit {
     );
   }
 
-  showManagerDetails(managerId: number): void {
-    this.academieService.getManagerDetails(managerId).subscribe(
+  showManagerDetails(academieId: number): void {
+    this.academieService.getManagerDetails(academieId).subscribe(
       (managerDetails) => {
         this.openManagerDetailsDialog(managerDetails);
       },

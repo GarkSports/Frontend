@@ -49,12 +49,12 @@ export const navItems: NavItem[] = [
   },
   {
     displayName: 'Discipline',
-    iconName: 'brand-ctemplar',
+    iconName: 'medal',
     route: 'apps/discipline',
   },
   {
     displayName: 'Academie',
-    iconName: 'brand-ctemplar',
+    iconName: 'building',
     route: 'apps/academie',
   },
   {

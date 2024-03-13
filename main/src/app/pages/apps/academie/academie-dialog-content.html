@@ -65,7 +65,7 @@
             />
           </mat-form-field>
         </div>
-        <div class="col-lg-6" *ngIf="action === 'Add'">
+        <div class="col-lg-6">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Manager</mat-label>
             <mat-select required id="manager" name="manager" [(ngModel)]="local_data.manager_id">
@@ -75,7 +75,7 @@
             </mat-select>
           </mat-form-field>
         </div>
-        <div class="col-lg-6" *ngIf="action === 'Add'">
+        <div class="col-lg-6">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Disciplines</mat-label>
             <mat-select required id="discipline" name="discipline" [(ngModel)]="local_data.disciplineIds" multiple>

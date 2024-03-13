@@ -80,7 +80,7 @@
             <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Edit Etat</th>
             <td mat-cell *matCellDef="let element">
               <button mat-icon-button (click)="openEditForm(element)">
-                <mat-icon>edit</mat-icon>
+                <mat-icon color="primary">settings</mat-icon>
               </button>              
             </td>
           </ng-container>
@@ -88,8 +88,8 @@
           <ng-container matColumnDef="manager">
             <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Manager</th>
             <td mat-cell *matCellDef="let element">
-              <button mat-icon-button (click)="showManagerDetails(element.manager.id)">
-                <mat-icon>manager_icon</mat-icon>
+              <button mat-icon-button (click)="showManagerDetails(element.id)">
+                <mat-icon color="primary">manager_icon</mat-icon>
               </button>
             </td>
           </ng-container>
@@ -98,7 +98,7 @@
             <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Adresse</th>
             <td mat-cell *matCellDef="let element">
               <button mat-icon-button (click)="showAcademieDetails(element.id)">
-                <mat-icon>location_on</mat-icon>
+                <mat-icon color="primary">location_on</mat-icon>
               </button>
             </td>
           </ng-container>
@@ -108,7 +108,7 @@
             <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Etat History</th>
             <td mat-cell *matCellDef="let element">
               <button mat-icon-button (click)="openHistoryPopup(element.id)">
-                <mat-icon>history</mat-icon>
+                <mat-icon color="primary">history</mat-icon>
               </button>
             </td>
           </ng-container>
@@ -120,10 +120,10 @@
             <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Action</th>
             <td mat-cell *matCellDef="let element" class="action-link">
               <a (click)="openDialog('Update', element)" class="m-r-10 cursor-pointer">
-                <i-tabler name="edit" class="icon-18"></i-tabler>
+                <i-tabler name="edit" class="icon-18" style="color: green;"></i-tabler>
               </a>
               <a (click)="openDialog('Delete', element)" class="m-r-10 cursor-pointer">
-                <i-tabler name="trash" class="icon-18"></i-tabler>
+                <i-tabler name="trash" class="icon-18" style="color: red;"></i-tabler>
               </a>
             </td>
           </ng-container>
