@@ -82,10 +82,17 @@ import { ManagerDetailsDialogComponent } from './academie/academie.component';
 import { AdresseDetailsDialogComponent } from './academie/academie.component';
 import { EditEtatFormComponent } from './academie/academie.component';
 import { HistoryPopupComponent } from './academie/academie.component';
+import { DisciplinesPopupComponent } from './academie/academie.component';
+
+import { AngularFireModule } from '@angular/fire/compat'; // Update import path
+import { AngularFireStorageModule } from '@angular/fire/compat/storage'; // Update import path
+import { environment } from '../api/environment';
 
 
 @NgModule({
   imports: [
+    AngularFireStorageModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
     CommonModule,
     RouterModule.forChild(AppsRoutes),
     MaterialModule,
@@ -141,6 +148,7 @@ import { HistoryPopupComponent } from './academie/academie.component';
     AppAddAcademieComponent,
     EditEtatFormComponent,
     HistoryPopupComponent,
+    DisciplinesPopupComponent,
     AppInvoiceListComponent,
     AppInvoiceViewComponent,
     AppAddInvoiceComponent,

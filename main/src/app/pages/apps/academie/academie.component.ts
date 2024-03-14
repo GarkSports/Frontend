@@ -13,7 +13,6 @@ import {
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
 import { DatePipe } from '@angular/common';
-import { AppAddAcademieComponent } from './add/add.component';
 import { Academie } from 'src/models/academie.model';
 import { AcademieService } from 'src/app/services/academie.service';
 import { Manager } from 'src/models/manager.model';
@@ -21,6 +20,7 @@ import { Discipline } from 'src/models/discipline.model';
 import { DisciplineService } from 'src/app/services/discipline.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AcademieHistory } from 'src/models/academieHistory.models';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 
 @Component({
   templateUrl: './academie.component.html',
@@ -35,19 +35,38 @@ export class AcademieComponent implements AfterViewInit {
     'fraisAdhesion',
     'logo',
     'affiliation',
-    'etat',
     'description',
+    'etat',
     'editEtat',
     'manager',
     'adresse',
+    'disciplines',
     'etatHistory',
     'action',
   ];
+
+
+  getEtatColor(etat: string): { backgroundColor: string } {
+    switch (etat) {
+      case 'INACTIF':
+        return { backgroundColor: '#FEF5E5' };
+      case 'ACTIF':
+        return { backgroundColor: '#E6FFFA' };
+      case 'SUSPENDU':
+        return { backgroundColor: '#FDEDE8' };
+      case 'FERME':
+        return { backgroundColor: '#ECF2FF' };
+      default:
+        return { backgroundColor: 'inherit' }; // Or a default color
+    }
+  }
 
   
   etatOptions = ['ACTIF', 'SUSPENDU', 'INACTIF', 'FERME'];
 
   dataSource = new MatTableDataSource<Academie>([]);
+
+
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator =
     Object.create(null);
@@ -226,7 +245,29 @@ export class AcademieComponent implements AfterViewInit {
     });
   }
 
-  
+  showDisciplines(academieId: number): void {
+    this.academieService.getDisciplinesByAcademie(academieId).subscribe({
+      next: (disciplines: Discipline[]) => {
+        // Open the disciplines popup with the fetched disciplines
+        this.openDisciplinesPopup(disciplines);
+      },
+      error: (error) => {
+        console.error('Error fetching disciplines:', error);
+        // Handle error, display error message, etc.
+      }
+    });
+  }
+
+  openDisciplinesPopup(disciplines: Discipline[]): void {
+    const dialogRef = this.dialog.open(DisciplinesPopupComponent, {
+      data: { disciplines: disciplines }
+    });
+
+    // Handle the result when the popup is closed if needed
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The disciplines popup was closed');
+    });
+  }  
 }
 
 @Component({
@@ -254,6 +295,7 @@ export class AppAcademieDialogContentComponent {
     public dialogRef: MatDialogRef<AppAcademieDialogContentComponent>,
     public academieService: AcademieService,
     public disciplineService: DisciplineService,
+    private firestorage: AngularFireStorage,
     // @Optional() is used to prevent error if no data is passed
     @Optional() @Inject(MAT_DIALOG_DATA) public data: Academie
   ) {
@@ -266,7 +308,7 @@ export class AppAcademieDialogContentComponent {
       );
     }
     if (this.local_data.imagePath === undefined) {
-      this.local_data.imagePath = 'assets/images/profile/user-1.jpg';
+      this.local_data.imagePath = 'assets/images/academie/academieLogo.png';
     }
   }
 
@@ -306,7 +348,8 @@ export class AppAcademieDialogContentComponent {
     this.dialogRef.close({ event: 'Cancel' });
   }
 
-  selectFile(event: any): void {
+  async uploadFile(event: any) {
+    //display image
     if (!event.target.files[0] || event.target.files[0].length === 0) {
       // this.msg = 'You must select an image';
       return;
@@ -324,9 +367,17 @@ export class AppAcademieDialogContentComponent {
       // tslint:disable-next-line - Disables all
       this.local_data.imagePath = reader.result;
     };
+    //upload image
+    const file = event.target.files[0];
+    if(file){
+      const path = `academie/${file.name}`;
+      const uploadTask = await this.firestorage.upload(path, file);
+      const url = await uploadTask.ref.getDownloadURL();
+      console.log('Image URL:', url);
+      this.local_data.logo = url;
+    }
   }
 }
-
 
 @Component({
   selector: 'app-manager-details-dialog', // Change the selector to be unique
@@ -395,4 +446,19 @@ export class HistoryPopupComponent {
     'changeReason',
     'changeDate',
   ];
+}
+
+@Component({
+  templateUrl: 'disciplines-list.html',
+})
+export class DisciplinesPopupComponent {
+  constructor(
+    public dialogRef: MatDialogRef<DisciplinesPopupComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: { disciplines: Discipline[] }
+  ) {}
+
+  // Function to close the dialog
+  closeDialog(): void {
+    this.dialogRef.close();
+  }
 }

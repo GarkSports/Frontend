@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Academie } from 'src/models/academie.model';
 import { Manager } from 'src/models/manager.model';
 import { AcademieHistory } from 'src/models/academieHistory.models';
+import { Discipline } from 'src/models/discipline.model';
 
 @Injectable({
   providedIn: 'root'
@@ -65,6 +66,10 @@ export class AcademieService {
 
   getAcademieHistory(academieId: number): Observable<AcademieHistory[]> {
     return this.http.get<AcademieHistory[]>(`${this.apiUrl}/getAcademieHistory/${academieId}`);
+  }
+
+  getDisciplinesByAcademie(academieId: number): Observable<Discipline[]> {
+    return this.http.get<Discipline[]>(`${this.apiUrl}/getDisciplinesByAcademie/${academieId}`);
   }
 
 

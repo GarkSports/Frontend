@@ -1,11 +1,71 @@
-<h2 mat-dialog-title>Adresse Details</h2>
-<mat-dialog-content>
-  <p><strong>Rue:</strong> {{ data.rue }}</p>
-  <p><strong>Ville:</strong> {{ data.ville }}</p>
-  <p><strong>Code Postal:</strong> {{ data.codePostal }}</p>
-  <p><strong>Pays:</strong> {{ data.pays }}</p>
-  <!-- Add other details based on your Manager model properties -->
-</mat-dialog-content>
-<mat-dialog-actions>
-  <button mat-button mat-dialog-close color="primary">Close</button>
-</mat-dialog-actions>
+<div class="adresse-details-container">
+  <h2 class="adresse-details-title">Adresse Details</h2>
+  <mat-dialog-content class="adresse-details-content">
+    <div class="detail-item">
+      <span class="detail-label">Rue:</span>
+      <span class="detail-value">{{ data.rue }}</span>
+    </div>
+    <div class="detail-item">
+      <span class="detail-label">Ville:</span>
+      <span class="detail-value">{{ data.ville }}</span>
+    </div>
+    <div class="detail-item">
+      <span class="detail-label">Code Postal:</span>
+      <span class="detail-value">{{ data.codePostal }}</span>
+    </div>
+    <div class="detail-item">
+      <span class="detail-label">Pays:</span>
+      <span class="detail-value">{{ data.pays }}</span>
+    </div>
+    <!-- Add other details based on your Manager model properties -->
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-button mat-dialog-close color="primary" class="close-button">Close</button>
+  </mat-dialog-actions>
+</div>
+
+<style>
+  .adresse-details-container {
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.adresse-details-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.adresse-details-content {
+  margin-bottom: 20px;
+}
+
+.detail-item {
+  margin-bottom: 10px;
+}
+
+.detail-label {
+  font-weight: bold;
+  color: #333;
+  margin-right: 10px;
+}
+
+.detail-value {
+  color: #666;
+}
+
+.close-button {
+  background-color: #007bff;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 5px;
+  padding: 8px 16px;
+}
+
+.close-button:hover {
+  background-color: #0056b3;
+}
+</style>

@@ -4,7 +4,7 @@
 <ng-container *ngIf="action !== 'Delete'">
   <mat-dialog-content style="max-width: 600px">
     <form #disciplineForm="ngForm">
-      <div class="d-flex align-items-center m-b-16" *ngIf="action === 'Add'">
+      <div class="d-flex align-items-center m-b-16">
         <img
           class="mat-card-avatar"
           [src]="local_data.imagePath"
@@ -12,7 +12,7 @@
           width="50"
         />
         <button mat-flat-button color="primary" class="m-l-16 input-file-button">
-          <input type="file" id="logo" name="logo" [(ngModel)]="local_data.logo" (change)="selectFile($event)" #fileInput />
+          <input type="file" id="logo" name="logo" (change)="uploadFile($event)" #fileInput />
         </button>
       </div>
       <div class="row">

@@ -1,37 +1,88 @@
-<!-- Academie History Table -->
-<h2 class="f-w-500 m-b-24" style="margin-left: 8px;">Academie History</h2>
+<div class="academie-history-container">
+  <h2 class="academie-history-title">Academie History</h2>
 
-<table mat-table [dataSource]="history" class="mat-elevation-z8">
-  <!-- New Etat Column -->
-  <ng-container matColumnDef="newEtat">
-    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">New Etat</th>
-    <td mat-cell *matCellDef="let entry">{{ entry.newEtat }}</td>
-  </ng-container>
+  <table class="academie-history-table">
+    <!-- New Etat Column -->
+    <thead>
+      <tr>
+        <th class="column-header">New Etat</th>
+        <th class="column-header">Previous Etat</th>
+        <th class="column-header">Change Reason</th>
+        <th class="column-header">Changing Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let entry of history" class="history-row">
+        <td class="column-cell">{{ entry.newEtat }}</td>
+        <td class="column-cell">{{ entry.previousEtat }}</td>
+        <td class="column-cell">{{ entry.changeReason }}</td>
+        <td class="column-cell">{{ entry.changeDate }}</td>
+      </tr>
+    </tbody>
+  </table>
 
-  <!-- Previous Etat Column -->
-  <ng-container matColumnDef="previousEtat">
-    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Previous Etat</th>
-    <td mat-cell *matCellDef="let entry">{{ entry.previousEtat }}</td>
-  </ng-container>
-
-  <!-- Change Reason Column -->
-  <ng-container matColumnDef="changeReason">
-    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Change Reason</th>
-    <td mat-cell *matCellDef="let entry">{{ entry.changeReason }}</td>
-  </ng-container>
-
-  <!-- Timestamp Column -->
-  <ng-container matColumnDef="changeDate">
-    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Timestamp</th>
-    <td mat-cell *matCellDef="let entry">{{ entry.changeDate }}</td>
-  </ng-container>
-
-  <!-- Table Content -->
-  <tr mat-header-row *matHeaderRowDef="historyColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: historyColumns"></tr>
-</table>
-
-<!-- Close Button -->
-<div class="actions" style="margin-top: 16px; margin-left: 8px; margin-bottom: 8px;">
-  <button mat-button color="primary" (click)="close()">Close</button>
+  <!-- Close Button -->
+  <div class="close-button-container">
+    <button mat-button color="primary" (click)="close()">Close</button>
+  </div>
 </div>
+
+<style>
+  .academie-history-container {
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+  }
+
+  .academie-history-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+  }
+
+  .academie-history-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    border: 1px solid #ddd; /* Added border style */
+  }
+
+  .column-header {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .column-cell {
+    font-size: 14px;
+    color: #666;
+    padding: 12px 16px;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .history-row:last-child .column-cell {
+    border-bottom: none;
+  }
+
+  .close-button-container {
+    text-align: right;
+  }
+
+  .close-button-container button {
+    background-color: #007bff;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 8px 16px;
+  }
+
+  .close-button-container button:hover {
+    background-color: #0056b3;
+  }
+</style>
