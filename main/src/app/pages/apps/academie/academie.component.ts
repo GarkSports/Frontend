@@ -89,7 +89,11 @@ export class AcademieComponent implements AfterViewInit {
   openDialog(action: string, obj: any): void {
     obj.action = action;
     const dialogRef = this.dialog.open(AppAcademieDialogContentComponent, {
-      data: obj,
+      data: {
+        ...obj,
+        // Pass the current disciplines' IDs to the dialog component
+        disciplineIds: obj.disciplines ? obj.disciplines.map((discipline: Discipline) => discipline.id) : []
+      }
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result.event === 'Add') {
@@ -299,7 +303,10 @@ export class AppAcademieDialogContentComponent {
     // @Optional() is used to prevent error if no data is passed
     @Optional() @Inject(MAT_DIALOG_DATA) public data: Academie
   ) {
-    this.local_data = { ...data };
+    this.local_data = {
+      ...data,
+      disciplineIds: data.disciplineIds || []
+    };
     this.action = this.local_data.action;
     if (this.local_data.DateOfJoining !== undefined) {
       this.joiningDate = this.datePipe.transform(
