@@ -29,21 +29,21 @@ export class ManagerService {
     return this.http.get<Manager[]>(`${this.apiUrl}/getManagers`);
   }
 
-  getAcademieById(academieId: number): Observable<Academie> {
+  getManagerById(academieId: number): Observable<Academie> {
     return this.http.get<Academie>(`${this.apiUrl}/getAcademieById/${academieId}`);
   }  
 
-  updateAcademie(academieData: Academie, academieId: number): Observable<any> {
+  updateManager(managerData: Manager, managerId: number): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
-    return this.http.put<any>(`${this.apiUrl}/updateAcademie/${academieId}`, academieData, { headers });
+    return this.http.put<any>(`${this.apiUrl}/updateManager/${managerId}`, managerData, { headers });
   }
 
   changeEtat(academieId: number): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/changeEtat/${academieId}`, {});
   }
 
-  archiveAcademie(academieId: number): Observable<any> {
+  archiveManager(academieId: number): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/archiveAcademie/${academieId}`, {});
   }
 

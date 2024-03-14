@@ -131,7 +131,6 @@ import { Academie } from 'src/models/academie.model';
 export class AppManagerlistComponent implements OnInit {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> =
     Object.create(null);
-    @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
   searchText: any;
   totalCount = -1;
   Closed = -1;
@@ -150,6 +149,7 @@ export class AppManagerlistComponent implements OnInit {
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator =
   Object.create(null);
+
 
   constructor(public dialog: MatDialog,
               public datePipe: DatePipe,
@@ -185,7 +185,7 @@ export class AppManagerlistComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result.event === 'Add') {
-        this.addRowData(result.data);
+        this.addRowData(result.data.managerData, result.data.academieId);
       } else if (result.event === 'Update') {
         this.updateRowData(result.data);
       } else if (result.event === 'Delete') {
@@ -209,27 +209,48 @@ export class AppManagerlistComponent implements OnInit {
   }
 
   // tslint:disable-next-line - Disables all
-  updateRowData(row_obj: ManagerElement): boolean | any {
-    this.dataSource.data = this.dataSource.data.filter((value, key) => {
-      if (value.id === row_obj.id) {
-        value.title = row_obj.title;
-        value.subtext = row_obj.subtext;
-        value.assignee = row_obj.assignee;
-        value.status = row_obj.status;
-        value.date = row_obj.date;
-      }
-      return true;
-    });
+  updateRowData(managerData: Manager): void {
+    this.managerService.updateManager(managerData, managerData.id).subscribe(
+    (response)=>{
+      console.log('Manager updated successfully', response);
+      this.getManagers();
+    },
+    (error)=> {
+      console.error('Error archiving academie', error);
+    }
+   )
+    
+   
   }
 
   // tslint:disable-next-line - Disables all
-  deleteRowData(row_obj: ManagerElement): boolean | any {
-    this.dataSource.data = this.dataSource.data.filter((value, key) => {
-      return value.id !== row_obj.id;
-    });
+  deleteRowData(managerData: Manager): void{
+    this.managerService.archiveManager(managerData.id).subscribe(
+      (response) => {
+        console.log('Academie archived successfully', response);
+        this.getManagers();
+      },
+      (error) => {
+        console.error('Error archiving academie', error);
+        // Handle error, if needed
+      }
+    );
+  }
+
+  getManagers(): void {
+    this.managerService.getManagers().subscribe(
+      (managers) => {
+        console.log('Academies fetched successfully', managers);
+        this.dataSource.data = managers;
+      },
+      (error) => {
+        console.error('Error fetching academies', error);
+      }
+    );
   }
 }
 
+ 
 @Component({
   // tslint:disable-next-line - Disables all
   selector: 'app-dialog-content',
@@ -243,7 +264,7 @@ export class AppManagerDialogContentComponent {
 
   constructor(
     public dialogRef: MatDialogRef<AppManagerDialogContentComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: ManagerElement
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: Manager
   ) {
     this.local_data = { ...data };
     this.action = this.local_data.action;
