@@ -55,8 +55,12 @@ export class AcademieService {
     return this.http.put<any>(`${this.apiUrl}/archiveAcademie/${academieId}`, {});
   }
 
-  getManagers(): Observable<Manager[]> {
-    return this.http.get<Manager[]>(`${this.apiUrlManager}/getManagers`);
+  getManagers(academieId: number | undefined): Observable<Manager[]> {
+    if (academieId === undefined) {
+      return this.http.get<Manager[]>(`${this.apiUrlManager}/getManagersNotAssigned`);
+    } else {
+      return this.http.get<Manager[]>(`${this.apiUrlManager}/getManagers/${academieId}`);
+    }
   }
 
   getManagerDetails(academieId: number): Observable<Manager> {

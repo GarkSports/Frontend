@@ -92,7 +92,7 @@ export class AcademieComponent implements AfterViewInit {
       data: {
         ...obj,
         // Pass the current disciplines' IDs to the dialog component
-        disciplineIds: obj.disciplines ? obj.disciplines.map((discipline: Discipline) => discipline.id) : []
+        disciplineIds: obj.disciplines ? obj.disciplines.map((discipline: Discipline) => discipline.id) : [],
       }
     });
     dialogRef.afterClosed().subscribe((result) => {
@@ -305,7 +305,7 @@ export class AppAcademieDialogContentComponent {
   ) {
     this.local_data = {
       ...data,
-      disciplineIds: data.disciplineIds || []
+      disciplineIds: data.disciplineIds || [],
     };
     this.action = this.local_data.action;
     if (this.local_data.DateOfJoining !== undefined) {
@@ -320,12 +320,12 @@ export class AppAcademieDialogContentComponent {
   }
 
   ngAfterViewInit(): void {
-    this.getManagers();
+    this.getManagers(this.local_data.id);
     this.getDisciplines();
   }
 
-  getManagers(): void {
-    this.academieService.getManagers().subscribe(
+  getManagers(academieId: number): void {
+    this.academieService.getManagers(academieId).subscribe(
       (managers) => {
         console.log('Managers fetched successfully', managers);
         this.managers = managers;
@@ -335,6 +335,7 @@ export class AppAcademieDialogContentComponent {
       }
     );
   }
+  
 
   getDisciplines(): void {
     this.disciplineService.getDisciplines().subscribe(
