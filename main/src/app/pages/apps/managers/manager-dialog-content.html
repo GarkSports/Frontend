@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>{{action}}</h2>
 
-@if(action !== 'Delete') {
+@if(action !== 'Delete' && action !== 'Archive') {
 <mat-dialog-content style="max-width: 500px" class="mat-typography m-t-24">
   <form #userForm="ngForm">
     <div class="row">

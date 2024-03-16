@@ -43,8 +43,16 @@ export class ManagerService {
     return this.http.put<any>(`${this.apiUrl}/changeEtat?id=${ManagerId}`, {});
   }
 
-  archiveManager(ManagerId: number): Observable<any> {
+  deleteManager(ManagerId: number): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/archive-user?id=${ManagerId}`, {});
+  }
+
+  blockManager(ManagerId: number): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/block-user?id=${ManagerId}`, {});
+  }
+
+  unBlockManager(ManagerId: number): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/unblock-user?id=${ManagerId}`, {});
   }
 
   getManagerDetails(ManagerId: number): Observable<Manager> {

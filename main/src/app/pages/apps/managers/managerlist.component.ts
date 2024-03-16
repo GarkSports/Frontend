@@ -197,6 +197,10 @@ export class AppManagerlistComponent implements OnInit {
         this.updateRowData(result.data);
       } else if (result.event === 'Delete') {
         this.deleteRowData(result.data.managerData);
+      } else if (result.event === 'Archive'){
+        this.blockRowData(result.data.managerData);
+      }else if (result.event === 'Unarchive'){
+        this.unblockRowData(result.data.managerData);
       }
     });
   }
@@ -232,15 +236,41 @@ export class AppManagerlistComponent implements OnInit {
  
   // tslint:disable-next-line - Disables all
   deleteRowData(managerData: Manager): void{
-    this.managerService.archiveManager(managerData.id).subscribe(
+    this.managerService.deleteManager(managerData.id).subscribe(
       (response) => {
-        console.log('Manager archived successfully', response);
+        console.log('Manager deleted successfully', response);
         this.getManagers();
-        this.dialogRef.close();
+        
 
       },
       (error) => {
         console.error('Error archiving academie', error);
+        // Handle error, if needed
+      }
+    );
+  }
+
+  blockRowData(managerData: Manager): void{
+    this.managerService.blockManager(managerData.id).subscribe(
+      (response) => {
+        console.log('Manager blocked successfully', response);
+        this.getManagers();
+      },
+      (error) => {
+        console.error('Error blocking academie', error);
+        // Handle error, if needed
+      }
+    );
+  }
+
+  unblockRowData(managerData: Manager): void{
+    this.managerService.unBlockManager(managerData.id).subscribe(
+      (response) => {
+        console.log('Manager unblocked successfully', response);
+        this.getManagers();
+      },
+      (error) => {
+        console.error('Error unblocking academie', error);
         // Handle error, if needed
       }
     );
@@ -314,13 +344,13 @@ export class AppManagerDialogContentComponent {
       }
     } else if (this.action === 'Delete') {
       // Handle Delete action
-      this.managerService.archiveManager(this.local_data.id).subscribe(
+      this.managerService.deleteManager(this.local_data.id).subscribe(
         (response) => {
-          console.log('Manager archived successfully', response);
+          console.log('Manager deleted successfully', response);
           this.dialogRef.close(); // Close the dialog without passing any data
         },
         (error) => {
-          console.error('Error archiving manager', error);
+          console.error('Error deleting manager', error);
         }
       );
     }

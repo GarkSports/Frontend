@@ -127,8 +127,12 @@
             </th>
             <td mat-cell *matCellDef="let element" class="action-link">
               <a (click)="openDialog('Update', element)" class="m-r-10 cursor-pointer">
-                <i-tabler name="edit" class="icon-18"></i-tabler></a>
+                <i-tabler name="edit" class="icon-18"></i-tabler>
+              </a>
               <a (click)="openDialog('Delete', element)" class="m-r-10 cursor-pointer">
+                <i-tabler name="trash" class="icon-18"></i-tabler>
+              </a>
+              <a (click)="openDialog('Archive', element)" class="m-r-10 cursor-pointer">
                 <i-tabler name="trash" class="icon-18"></i-tabler>
               </a>
             </td>
