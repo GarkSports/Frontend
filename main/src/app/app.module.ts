@@ -24,6 +24,8 @@ import { FilterPipe } from './pipe/filter.pipe';
 
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { httpInterceptorProviders } from './helpers/http.interceptor';
+
 
 export function HttpLoaderFactory(http: HttpClient): any {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -51,6 +53,7 @@ export function HttpLoaderFactory(http: HttpClient): any {
     FullComponent,
   ],
   exports: [TablerIconsModule],
+  providers: [httpInterceptorProviders],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

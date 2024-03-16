@@ -10,6 +10,7 @@ import { Manager } from 'src/models/manager.model';
 import { ManagerService } from 'src/app/services/manager.service';
 import { DatePipe } from '@angular/common';
 import { Academie } from 'src/models/academie.model';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 // export interface ManagerElement {
 //   id: number;
@@ -151,7 +152,8 @@ export class AppManagerlistComponent implements OnInit {
   Object.create(null);
 
 
-  constructor(public dialog: MatDialog,
+  constructor( 
+    public dialog: MatDialog,
               public datePipe: DatePipe,
               public managerService: ManagerService){}
 
@@ -161,11 +163,16 @@ export class AppManagerlistComponent implements OnInit {
     this.Closed = this.btnCategoryClick('Closed');
     this.Inprogress = this.btnCategoryClick('InProgress');
     this.dataSource = new MatTableDataSource<Manager>([]);
+    
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
-    this.getManagers();
+    this.managerService.getManagers().subscribe(managers => {
+      this.dataSource.data = managers;
+      this.dataSource.paginator = this.paginator;
+      console.log(managers);
+      
+    });
   }
 
   applyFilter(filterValue: string): void {
@@ -189,7 +196,7 @@ export class AppManagerlistComponent implements OnInit {
       } else if (result.event === 'Update') {
         this.updateRowData(result.data);
       } else if (result.event === 'Delete') {
-        this.deleteRowData(result.data);
+        this.deleteRowData(result.data.managerData);
       }
     });
   }
@@ -210,7 +217,7 @@ export class AppManagerlistComponent implements OnInit {
 
   // tslint:disable-next-line - Disables all
   updateRowData(managerData: Manager): void {
-    this.managerService.updateManager(managerData, managerData.id).subscribe(
+    this.managerService.updateManager(managerData).subscribe(
     (response)=>{
       console.log('Manager updated successfully', response);
       this.getManagers();
@@ -222,13 +229,15 @@ export class AppManagerlistComponent implements OnInit {
     
    
   }
-
+ 
   // tslint:disable-next-line - Disables all
   deleteRowData(managerData: Manager): void{
     this.managerService.archiveManager(managerData.id).subscribe(
       (response) => {
-        console.log('Academie archived successfully', response);
+        console.log('Manager archived successfully', response);
         this.getManagers();
+        this.dialogRef.close();
+
       },
       (error) => {
         console.error('Error archiving academie', error);
@@ -240,7 +249,7 @@ export class AppManagerlistComponent implements OnInit {
   getManagers(): void {
     this.managerService.getManagers().subscribe(
       (managers) => {
-        console.log('Academies fetched successfully', managers);
+        console.log('Managers fetched successfully', managers);
         this.dataSource.data = managers;
       },
       (error) => {
@@ -261,17 +270,60 @@ export class AppManagerDialogContentComponent {
   action: string;
   // tslint:disable-next-line - Disables all
   local_data: any;
+  managerForm: FormGroup;
 
   constructor(
     public dialogRef: MatDialogRef<AppManagerDialogContentComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: Manager
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: Manager,
+    private formBuilder: FormBuilder,
+    private managerService: ManagerService
   ) {
     this.local_data = { ...data };
     this.action = this.local_data.action;
+    if (this.action === 'Update') {
+      this.initManagerForm();
+    }
+  }
+
+  initManagerForm(): void {
+    this.managerForm = this.formBuilder.group({
+      // Add your form controls for the Manager data
+      name: [this.local_data.name, Validators.required],
+      // Add other form controls as needed
+    });
   }
 
   doAction(): void {
-    this.dialogRef.close({ event: this.action, data: this.local_data });
+    if (this.action === 'Add') {
+      // Handle Add action
+      this.dialogRef.close({ event: this.action, data: this.local_data });
+    } else if (this.action === 'Update') {
+      // Handle Update action
+      if (this.managerForm.valid) {
+        const updatedManager = this.managerForm.value;
+        updatedManager.id = this.local_data.id; // Set the id of the manager to be updated
+        this.managerService.updateManager(updatedManager).subscribe(
+          (response) => {
+            console.log('Manager updated successfully', response);
+            this.dialogRef.close({ event: this.action, data: updatedManager });
+          },
+          (error) => {
+            console.error('Error updating manager', error);
+          }
+        );
+      }
+    } else if (this.action === 'Delete') {
+      // Handle Delete action
+      this.managerService.archiveManager(this.local_data.id).subscribe(
+        (response) => {
+          console.log('Manager archived successfully', response);
+          this.dialogRef.close(); // Close the dialog without passing any data
+        },
+        (error) => {
+          console.error('Error archiving manager', error);
+        }
+      );
+    }
   }
 
   closeDialog(): void {

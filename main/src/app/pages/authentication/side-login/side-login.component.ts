@@ -38,7 +38,7 @@ export class AppSideLoginComponent {
 
       
       
-      this.http.post('http://localhost:8089/auth/authenticate', formData, {headers})
+      this.http.post('http://localhost:8089/auth/authenticate', formData, {withCredentials: true, headers})
       console.log(this.form.value);
       
       this.router.navigate(['/dashboards/dashboard1']);

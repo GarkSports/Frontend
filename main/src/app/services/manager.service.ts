@@ -21,34 +21,34 @@ export class ManagerService {
       academie: academieId,
     };
   
-    return this.http.post<any>(`${this.apiUrl}/add-manager`, requestBody, { headers });
+    return this.http.post<any>(`${this.apiUrl}/add-manager`, requestBody, { withCredentials: true, headers });
   }
   
 
   getManagers(): Observable<Manager[]> {
-    return this.http.get<Manager[]>(`${this.apiUrl}/getManagers`);
+    return this.http.get<Manager[]>(`${this.apiUrl}/get-all-users`, { withCredentials: true });
   }
 
-  getManagerById(academieId: number): Observable<Academie> {
-    return this.http.get<Academie>(`${this.apiUrl}/getAcademieById/${academieId}`);
+  getManagerById(ManagerId: number): Observable<Academie> {
+    return this.http.get<Academie>(`${this.apiUrl}/getAcademieById/${ManagerId}`);
   }  
 
-  updateManager(managerData: Manager, managerId: number): Observable<any> {
+  updateManager(managerData: Manager): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-
-    return this.http.put<any>(`${this.apiUrl}/updateManager/${managerId}`, managerData, { headers });
+    const url = `${this.apiUrl}/updateManager?id=${managerData.id}`;
+    return this.http.put<any>(url, managerData, { headers });
   }
 
-  changeEtat(academieId: number): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/changeEtat/${academieId}`, {});
+  changeEtat(ManagerId: number): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/changeEtat?id=${ManagerId}`, {});
   }
 
-  archiveManager(academieId: number): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/archiveAcademie/${academieId}`, {});
+  archiveManager(ManagerId: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/archive-user?id=${ManagerId}`, {});
   }
 
-  getManagerDetails(academieId: number): Observable<Manager> {
-    const url = `${this.apiUrl}/getManagerDetails/${academieId}`;
+  getManagerDetails(ManagerId: number): Observable<Manager> {
+    const url = `${this.apiUrl}/getManagerDetails?id=${ManagerId}`;
     return this.http.get<Manager>(url);
   }
 }
