@@ -13,12 +13,12 @@ export class ManagerService {
 
   constructor(private http: HttpClient) { }
 
-  addManager(managerData: Manager, academieId: Academie): Observable<any> {
+  addManager(managerData: Manager): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
   
     const requestBody = {
-      manager: managerData,
-      academie: academieId,
+      manager: managerData
+    
     };
   
     return this.http.post<any>(`${this.apiUrl}/add-manager`, requestBody, { withCredentials: true, headers });

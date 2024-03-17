@@ -12,119 +12,6 @@ import { DatePipe } from '@angular/common';
 import { Academie } from 'src/models/academie.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-// export interface ManagerElement {
-//   id: number;
-//   title: string;
-//   subtext: string;
-//   assignee: string;
-//   imgSrc: string;
-//   status: string;
-//   date: string;
-// }
-
-// const managers: ManagerElement[] = [
-//   {
-//     id: 1,
-//     title: 'Sed ut perspiciatis unde omnis iste',
-//     subtext:
-//       'ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos',
-//     imgSrc: '/assets/images/profile/user-1.jpg',
-//     assignee: 'Alice',
-//     status: 'inprogress',
-//     date: '2023-05-01',
-//   },
-//   {
-//     id: 2,
-//     title: 'Xtreme theme dropdown issue',
-//     subtext:
-//       'ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos',
-//     assignee: 'Jonathan',
-//     imgSrc: '/assets/images/profile/user-2.jpg',
-//     status: 'open',
-//     date: '2023-05-03',
-//   },
-//   {
-//     id: 3,
-//     title: 'Header issue in material admin',
-//     subtext:
-//       'ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos',
-//     assignee: 'Smith',
-//     imgSrc: '/assets/images/profile/user-3.jpg',
-//     status: 'closed',
-//     date: '2023-05-02',
-//   },
-//   {
-//     id: 4,
-//     title: 'Sidebar issue in Nice admin',
-//     subtext:
-//       'ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos',
-//     assignee: 'Vincent',
-//     imgSrc: '/assets/images/profile/user-4.jpg',
-//     status: 'inprogress',
-//     date: '2023-05-06',
-//   },
-//   {
-//     id: 5,
-//     title: 'Elegant Theme Side Menu show OnClick',
-//     subtext:
-//       'ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos',
-//     assignee: 'Chris',
-//     imgSrc: '/assets/images/profile/user-5.jpg',
-//     status: 'open',
-//     date: '2023-05-04',
-//   },
-//   {
-//     id: 6,
-//     title: 'Header issue in admin pro admin',
-//     subtext:
-//       'ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos',
-//     assignee: 'James',
-//     imgSrc: '/assets/images/profile/user-6.jpg',
-//     status: 'closed',
-//     date: '2023-05-03',
-//   },
-//   {
-//     id: 7,
-//     title: 'Elegant Theme Side Menu OnClick',
-//     subtext:
-//       'ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos',
-//     assignee: 'Jonathan',
-//     imgSrc: '/assets/images/profile/user-7.jpg',
-//     status: 'inprogress',
-//     date: '2023-05-05',
-//   },
-//   {
-//     id: 8,
-//     title: 'adminpress Theme Side Menu not opening',
-//     subtext:
-//       'ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos',
-//     assignee: 'Smith',
-//     imgSrc: '/assets/images/profile/user-8.jpg',
-//     status: 'open',
-//     date: '2023-05-04',
-//   },
-//   {
-//     id: 9,
-//     title: 'Charts not proper in xtreme admin',
-//     subtext:
-//       'ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos',
-//     assignee: 'Markus',
-//     imgSrc: '/assets/images/profile/user-9.jpg',
-//     status: 'closed',
-//     date: '2023-05-02',
-//   },
-//   {
-//     id: 10,
-//     title: 'Psd not availabel with package',
-//     subtext:
-//       'ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos',
-//     assignee: 'Jane',
-//     imgSrc: '/assets/images/profile/user-10.jpg',
-//     status: 'closed',
-//     date: '2023-05-03',
-//   },
-// ];
-
 @Component({
   selector: 'app-manager-list',
   templateUrl: './managerlist.component.html',
@@ -152,8 +39,7 @@ export class AppManagerlistComponent implements OnInit {
   Object.create(null);
 
 
-  constructor( 
-    public dialog: MatDialog,
+  constructor(public dialog: MatDialog,
               public datePipe: DatePipe,
               public managerService: ManagerService){}
 
@@ -171,7 +57,6 @@ export class AppManagerlistComponent implements OnInit {
       this.dataSource.data = managers;
       this.dataSource.paginator = this.paginator;
       console.log(managers);
-      
     });
   }
 
@@ -187,12 +72,12 @@ export class AppManagerlistComponent implements OnInit {
   openDialog(action: string, obj: any): void {
     obj.action = action;
     const dialogRef = this.dialog.open(AppManagerDialogContentComponent, {
-      data: obj,
+      data: obj
     });
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result.event === 'Add') {
-        this.addRowData(result.data.managerData, result.data.academieId);
+        this.addRowData(result.data.managerData);
       } else if (result.event === 'Update') {
         this.updateRowData(result.data);
       } else if (result.event === 'Delete') {
@@ -205,9 +90,9 @@ export class AppManagerlistComponent implements OnInit {
     });
   }
   // tslint:disable-next-line - Disables all
-  addRowData(managerData: Manager, academieId: Academie): void {
+  addRowData(managerData: Manager): void {
     const d = new Date();
-    this.managerService.addManager(managerData, academieId).subscribe(
+    this.managerService.addManager(managerData).subscribe(
       (response) => {
         console.log('Manager added successfully', response);
         this.getManagers(); // Refresh the data after adding
@@ -235,21 +120,12 @@ export class AppManagerlistComponent implements OnInit {
   }
  
   // tslint:disable-next-line - Disables all
-  deleteRowData(managerData: Manager): void{
-    this.managerService.deleteManager(managerData.id).subscribe(
-      (response) => {
-        console.log('Manager deleted successfully', response);
-        this.getManagers();
-        
-
-      },
-      (error) => {
-        console.error('Error archiving academie', error);
-        // Handle error, if needed
-      }
-    );
+  deleteRowData(managerData: Manager): boolean | any {
+    this.dataSource.data = this.dataSource.data.filter((value, key) => {
+      return value.id !== managerData.id;
+    });
   }
-
+  
   blockRowData(managerData: Manager): void{
     this.managerService.blockManager(managerData.id).subscribe(
       (response) => {
@@ -325,8 +201,15 @@ export class AppManagerDialogContentComponent {
 
   doAction(): void {
     if (this.action === 'Add') {
-      // Handle Add action
-      this.dialogRef.close({ event: this.action, data: this.local_data });
+      this.managerService.addManager(this.local_data).subscribe(
+        (response) => {
+          console.log('Manager added successfully', response);
+          this.dialogRef.close({ event: this.action, data: response });
+        },
+        (error) => {
+          console.error('Error adding manager', error);
+        }
+      );
     } else if (this.action === 'Update') {
       // Handle Update action
       if (this.managerForm.valid) {
@@ -347,14 +230,18 @@ export class AppManagerDialogContentComponent {
       this.managerService.deleteManager(this.local_data.id).subscribe(
         (response) => {
           console.log('Manager deleted successfully', response);
-          this.dialogRef.close(); // Close the dialog without passing any data
+          this.dialogRef.close({ event: this.action, data: this.local_data.id });
         },
         (error) => {
           console.error('Error deleting manager', error);
+          this.dialogRef.close({ event: this.action, data: this.local_data.id });
         }
       );
+    } else {
+      this.dialogRef.close({ event: 'Cancel' });
     }
   }
+  
 
   closeDialog(): void {
     this.dialogRef.close({ event: 'Cancel' });
