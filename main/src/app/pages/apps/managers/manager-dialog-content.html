@@ -10,10 +10,10 @@
             type="text"
             matInput
             required
-            id="id"
-            name="id"
-            [(ngModel)]="local_data.id"
-            placeholder="id"
+            id="firstname"
+            name="firstname"
+            [(ngModel)]="local_data.firstname"
+            placeholder="firstname"
           />
         </mat-form-field>
       </div>
@@ -23,10 +23,10 @@
             type="text"
             matInput
             required
-            id="title"
-            name="title"
-            [(ngModel)]="local_data.title"
-            placeholder="ticket title"
+            id="lastname"
+            name="lastname"
+            [(ngModel)]="local_data.lastname"
+            placeholder="lastname"
           />
         </mat-form-field>
       </div>
@@ -36,10 +36,10 @@
             type="text"
             matInput
             required
-            id="subtext"
-            name="subtext"
-            [(ngModel)]="local_data.subtext"
-            placeholder="ticket subtext"
+            id="email"
+            name="email"
+            [(ngModel)]="local_data.email"
+            placeholder="email"
           />
         </mat-form-field>
       </div>
@@ -49,10 +49,10 @@
             type="text"
             matInput
             required
-            id="assignee"
-            name="assignee"
-            [(ngModel)]="local_data.assignee"
-            placeholder="assigned to"
+            id="adresse"
+            name="adresse"
+            [(ngModel)]="local_data.adresse"
+            placeholder="adresse"
           />
         </mat-form-field>
       </div>
@@ -63,27 +63,15 @@
             matNativeControl
             required
             name="status"
-            [(ngModel)]="local_data.status"
+            [(ngModel)]="local_data.role"
           >
-            <option value="inprogress">In Progress</option>
-            <option value="open">Open</option>
-            <option value="closed">Closed</option>
+            <option value="Manager">Manager</option>
+            <option value="coach">coach</option>
+            <option value="finance">finance</option>
           </select>
         </mat-form-field>
       </div>
-      <div class="col-sm-6 col-lg-12">
-        <mat-form-field appearance="outline" class="w-100">
-          <input
-            type="date"
-            matInput
-            required
-            id="date"
-            name="date"
-            [(ngModel)]="local_data.date"
-            placeholder="date"
-          />
-        </mat-form-field>
-      </div>
+      
     </div>
   </form>
 </mat-dialog-content>

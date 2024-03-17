@@ -27,10 +27,10 @@ export class AppManagerlistComponent implements OnInit {
 
   displayedColumns: string[] = [
     'id',
-    'title',
-    'assignee',
+    'firstname',
+    'lastname',
+    'email',
     'status',
-    'date',
     'action',
   ];
   dataSource = new MatTableDataSource<Manager>([]);
