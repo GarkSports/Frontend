@@ -24,7 +24,9 @@ import { FilterPipe } from './pipe/filter.pipe';
 
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { httpInterceptorProviders } from './helpers/http.interceptor';
+import { Interceptor } from './helpers/http.interceptor';
+import { AuthService } from './services/auth.service';
+import { CookieService } from 'ngx-cookie-service';
 
 
 export function HttpLoaderFactory(http: HttpClient): any {
@@ -53,7 +55,7 @@ export function HttpLoaderFactory(http: HttpClient): any {
     FullComponent,
   ],
   exports: [TablerIconsModule],
-  providers: [httpInterceptorProviders],
+  providers: [AuthService,Interceptor, CookieService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

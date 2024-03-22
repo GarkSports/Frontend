@@ -1,18 +1,19 @@
 <h2 mat-dialog-title>{{action}}</h2>
 
 @if(action !== 'Delete' && action !== 'Archive') {
+  {{local_data.firstname}}
 <mat-dialog-content style="max-width: 500px" class="mat-typography m-t-24">
   <form #userForm="ngForm">
     <div class="row">
       <div class="col-sm-6 col-lg-12">
         <mat-form-field appearance="outline" class="w-100">
           <input
+            [(ngModel)]="local_data.firstname"
             type="text"
             matInput
             required
             id="firstname"
             name="firstname"
-            [(ngModel)]="local_data.firstname"
             placeholder="firstname"
           />
         </mat-form-field>
@@ -20,39 +21,39 @@
       <div class="col-sm-6 col-lg-12">
         <mat-form-field appearance="outline" class="w-100">
           <input
-            type="text"
-            matInput
-            required
-            id="lastname"
-            name="lastname"
-            [(ngModel)]="local_data.lastname"
-            placeholder="lastname"
+          [(ngModel)]="local_data.lastname"
+          type="text"
+          matInput
+          required
+          id="lastname"
+          name="lastname"
+          placeholder="lastname"
           />
         </mat-form-field>
       </div>
       <div class="col-sm-6 col-lg-12">
         <mat-form-field appearance="outline" class="w-100">
           <input
-            type="text"
-            matInput
-            required
-            id="email"
-            name="email"
-            [(ngModel)]="local_data.email"
-            placeholder="email"
+          [(ngModel)]="local_data.email"
+          type="text"
+          matInput
+          required
+          id="email"
+          name="email"
+          placeholder="email"
           />
         </mat-form-field>
       </div>
       <div class="col-sm-6 col-lg-12">
         <mat-form-field appearance="outline" class="w-100">
           <input
-            type="text"
-            matInput
-            required
-            id="adresse"
-            name="adresse"
-            [(ngModel)]="local_data.adresse"
-            placeholder="adresse"
+          [(ngModel)]="local_data.adresse"
+          type="text"
+          matInput
+          required
+          id="adresse"
+          name="adresse"
+          placeholder="adresse"
           />
         </mat-form-field>
       </div>
@@ -61,13 +62,19 @@
           <mat-label>Status</mat-label>
           <select
             matNativeControl
-            required
-            name="status"
+            
+            
             [(ngModel)]="local_data.role"
+            type="text"
+            matInput
+            required
+            id="role"
+            name="role"
+            placeholder="role"
           >
-            <option value="Manager">Manager</option>
-            <option value="coach">coach</option>
-            <option value="finance">finance</option>
+            <option value="ENTRAINEUR">Manager</option>
+            <option value="MANAGER">coach</option>
+            <option value="STAFF">finance</option>
           </select>
         </mat-form-field>
       </div>
@@ -76,10 +83,13 @@
   </form>
 </mat-dialog-content>
 } @else {
+  <!--case delete-->
 <div class="p-x-24 p-b-24">
-  Sure to delete <span class="f-w-600">{{local_data.title}}</span>?
+  Sure to delete <span class="f-w-600"></span>?
 </div>
 }
+  <!--case archive-->
+
 
 <div mat-dialog-actions class="p-24 p-t-0">
   <button mat-flat-button (click)="doAction()" color="primary">

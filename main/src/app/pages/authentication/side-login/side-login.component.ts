@@ -5,6 +5,8 @@ import { Router, RouterModule } from '@angular/router';
 import { MaterialModule } from '../../../material.module';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Axios } from 'axios';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-side-login',
@@ -16,7 +18,7 @@ export class AppSideLoginComponent {
   options = this.settings.getOptions();
   
 
-  constructor(private settings: CoreService, private router: Router, private http: HttpClient) { }
+  constructor(private settings: CoreService, private router: Router, private authService: AuthService) { }
 
   form = new FormGroup({
     uname: new FormControl('', [Validators.required]),
@@ -28,22 +30,21 @@ export class AppSideLoginComponent {
   }
 
   submit() {
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-
     if (this.form.valid) {
-      const formData = {
-        username: this.form.value.uname,
-        password: this.form.value.password
-      };
+      const uname = this.form.value.uname as string;
+      const password = this.form.value.password as string;
+  
+      if (uname && password) {
+        this.authService.authenticate(uname, password);
+            console.log('Authentication successful:');
+            this.router.navigate(['/dashboards/dashboard1']);
+          }
 
-      
-      
-      this.http.post('http://localhost:8089/auth/authenticate', formData, {withCredentials: true, headers})
-      console.log(this.form.value);
-      
-      this.router.navigate(['/dashboards/dashboard1']);
         
+      } else {
+        console.error('Username or password is undefined.');
+      }
     }
   }
+  
 
-}

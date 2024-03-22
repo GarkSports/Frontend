@@ -172,9 +172,8 @@ export class AppManagerlistComponent implements OnInit {
   templateUrl: 'manager-dialog-content.html',
 })
 // tslint:disable-next-line - Disables all
-export class AppManagerDialogContentComponent {
+export class AppManagerDialogContentComponent implements OnInit {
   action: string;
-  // tslint:disable-next-line - Disables all
   local_data: any;
   managerForm: FormGroup;
 
@@ -184,23 +183,31 @@ export class AppManagerDialogContentComponent {
     private formBuilder: FormBuilder,
     private managerService: ManagerService
   ) {
+
     this.local_data = { ...data };
     this.action = this.local_data.action;
     if (this.action === 'Update') {
       this.initManagerForm();
     }
   }
+  ngOnInit(): void {
+    this.managerForm = this.formBuilder.group({
+      firstname: [this.local_data.firstname, Validators.required],
+      lastname: [this.local_data.lastname, Validators.required],
+      // Add more form controls as needed
+    });
+  }
 
   initManagerForm(): void {
     this.managerForm = this.formBuilder.group({
       // Add your form controls for the Manager data
-      name: [this.local_data.name, Validators.required],
-      // Add other form controls as needed
+      name: [this.local_data.name, Validators.required],      // Add other form controls as needed
     });
   }
 
   doAction(): void {
-    if (this.action === 'Add') {
+    if (this.action === 'Add' && this.managerForm.valid) {
+      const formData = this.managerForm.value; // Get the form data
       this.managerService.addManager(this.local_data).subscribe(
         (response) => {
           console.log('Manager added successfully', response);
@@ -210,6 +217,7 @@ export class AppManagerDialogContentComponent {
           console.error('Error adding manager', error);
         }
       );
+   
     } else if (this.action === 'Update') {
       // Handle Update action
       if (this.managerForm.valid) {
