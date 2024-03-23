@@ -17,11 +17,16 @@ export class ManagerService {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
   
     const requestBody = {
-      manager: managerData
-    
+      email: managerData.email,
+      firstname: managerData.firstname,
+      lastname: managerData.lastname,
+      role: managerData.role,
+      adresse:managerData.adresse
     };
-  
+      console.log("this is service",requestBody);
+
     return this.http.post<any>(`${this.apiUrl}/add-manager`, requestBody, { withCredentials: true, headers });
+    
   }
   
 

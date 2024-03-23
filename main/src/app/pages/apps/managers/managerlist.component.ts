@@ -176,6 +176,7 @@ export class AppManagerDialogContentComponent implements OnInit {
   action: string;
   local_data: any;
   managerForm: FormGroup;
+  firstnameValue: string;
 
   constructor(
     public dialogRef: MatDialogRef<AppManagerDialogContentComponent>,
@@ -183,38 +184,38 @@ export class AppManagerDialogContentComponent implements OnInit {
     private formBuilder: FormBuilder,
     private managerService: ManagerService
   ) {
-
     this.local_data = { ...data };
-    this.action = this.local_data.action;
-    if (this.action === 'Update') {
-      this.initManagerForm();
-    }
+    this.action = this.local_data.id ? 'Update' : 'Add';
   }
+
   ngOnInit(): void {
-    this.managerForm = this.formBuilder.group({
-      firstname: [this.local_data.firstname, Validators.required],
-      lastname: [this.local_data.lastname, Validators.required],
-      // Add more form controls as needed
-    });
+    this.initManagerForm();
   }
 
   initManagerForm(): void {
     this.managerForm = this.formBuilder.group({
-      // Add your form controls for the Manager data
-      name: [this.local_data.name, Validators.required],      // Add other form controls as needed
+      firstname: [this.local_data.firstname, Validators.required],
+      lastname: [this.local_data.lastname, Validators.required],
+      email: [this.local_data.email, [Validators.required, Validators.email]],
+      adresse: [this.local_data.adresse, Validators.required],
+      role: [this.local_data.role, Validators.required]
     });
   }
 
   doAction(): void {
-    if (this.action === 'Add' && this.managerForm.valid) {
-      const formData = this.managerForm.value; // Get the form data
-      this.managerService.addManager(this.local_data).subscribe(
+    if (this.action === 'Add') {
+      this.managerService.addManager(this.managerForm.value).subscribe(
+        
         (response) => {
-          console.log('Manager added successfully', response);
-          this.dialogRef.close({ event: this.action, data: response });
+          console.log(this.managerForm.value);
+
+          // Handle successful response
+          console.log('Manager added:', response);
+          this.dialogRef.close(true);
         },
         (error) => {
-          console.error('Error adding manager', error);
+          // Handle error
+          console.error('Error adding manager:', error);
         }
       );
    
