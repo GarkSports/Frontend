@@ -185,7 +185,10 @@ export class AppManagerDialogContentComponent implements OnInit {
     private managerService: ManagerService
   ) {
     this.local_data = { ...data };
-    this.action = this.local_data.id ? 'Update' : 'Add';
+    this.action = this.local_data.action ;
+    if (this.action === 'Update') {
+      this.initManagerForm();
+    }
   }
 
   ngOnInit(): void {
@@ -236,14 +239,15 @@ export class AppManagerDialogContentComponent implements OnInit {
       }
     } else if (this.action === 'Delete') {
       // Handle Delete action
-      this.managerService.deleteManager(this.local_data.id).subscribe(
+      this.managerService.blockManager(this.local_data.id).subscribe(
         (response) => {
-          console.log('Manager deleted successfully', response);
+          console.log('Manager blockManager successfully', response);
           this.dialogRef.close({ event: this.action, data: this.local_data.id });
         },
         (error) => {
           console.error('Error deleting manager', error);
-          this.dialogRef.close({ event: this.action, data: this.local_data.id });
+          // i should display another dialogRef showing that the request wasn't successfull
+          this.dialogRef.close({ event: this.action});
         }
       );
     } else {

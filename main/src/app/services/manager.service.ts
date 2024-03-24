@@ -40,8 +40,7 @@ export class ManagerService {
 
   updateManager(managerData: Manager): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    const url = `${this.apiUrl}/updateManager?id=${managerData.id}`;
-    return this.http.put<any>(url, managerData, { headers });
+    return this.http.put<any>(`${this.apiUrl}/update-manager?id=${managerData.id}`, managerData, { headers });
   }
 
   changeEtat(ManagerId: number): Observable<any> {
@@ -53,7 +52,8 @@ export class ManagerService {
   }
 
   blockManager(ManagerId: number): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/block-user?id=${ManagerId}`, {});
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.put<any>(`${this.apiUrl}/block-user?id=${ManagerId}`, {headers});
   }
 
   unBlockManager(ManagerId: number): Observable<any> {
