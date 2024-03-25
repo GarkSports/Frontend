@@ -75,13 +75,14 @@ export class AppManagerlistComponent implements OnInit {
       data: obj
     });
 
+    //here we will just reload or display the changes instantly but the real work will be in the dialog
     dialogRef.afterClosed().subscribe((result) => {
       if (result.event === 'Add') {
-        this.addRowData(result.data.managerData);
+        this.addRowData(result.data.managerData); // add the user in the page just display it 
       } else if (result.event === 'Update') {
         this.updateRowData(result.data);
       } else if (result.event === 'Delete') {
-        this.deleteRowData(result.data.managerData);
+        this.deleteRowData(result.data);
       } else if (result.event === 'Archive'){
         this.blockRowData(result.data.managerData);
       }else if (result.event === 'Unarchive'){
@@ -91,16 +92,10 @@ export class AppManagerlistComponent implements OnInit {
   }
   // tslint:disable-next-line - Disables all
   addRowData(managerData: Manager): void {
-    const d = new Date();
-    this.managerService.addManager(managerData).subscribe(
-      (response) => {
-        console.log('Manager added successfully', response);
-        this.getManagers(); // Refresh the data after adding
-      },
-      (error) => {
-        console.error('Error adding academie', error); // Handle error, if needed
-      }
-    );
+  
+  
+        this.ngAfterViewInit();// Refresh the data after adding
+    
     //this.table.renderRows();
   }
 
@@ -215,6 +210,7 @@ export class AppManagerDialogContentComponent implements OnInit {
           // Handle successful response
           console.log('Manager added:', response);
           this.dialogRef.close(true);
+          
         },
         (error) => {
           // Handle error
@@ -229,7 +225,7 @@ export class AppManagerDialogContentComponent implements OnInit {
         updatedManager.id = this.local_data.id; // Set the id of the manager to be updated
         this.managerService.updateManager(updatedManager).subscribe(
           (response) => {
-            console.log('Manager updated successfully', response);
+            console.log('Manager updated 222 successfully', response);
             this.dialogRef.close({ event: this.action, data: updatedManager });
           },
           (error) => {
@@ -239,15 +235,27 @@ export class AppManagerDialogContentComponent implements OnInit {
       }
     } else if (this.action === 'Delete') {
       // Handle Delete action
-      this.managerService.blockManager(this.local_data.id).subscribe(
+      this.managerService.deleteManager(this.local_data.id).subscribe(
         (response) => {
-          console.log('Manager blockManager successfully', response);
+          console.log('Manager deleted successfully', response);
           this.dialogRef.close({ event: this.action, data: this.local_data.id });
         },
         (error) => {
           console.error('Error deleting manager', error);
           // i should display another dialogRef showing that the request wasn't successfull
           this.dialogRef.close({ event: this.action});
+        }
+      );
+    } 
+    else if (this.action === 'Archive') {
+      this.managerService.blockManager(this.local_data.id).subscribe(
+        (response) => {
+          console.log('Manager blockManager successfully', response);
+          this.dialogRef.close({ event: this.action, data: { managerData: this.local_data } });
+        },
+        (error) => {
+          console.error('Error archiving manager', error);
+          this.dialogRef.close({ event: this.action });
         }
       );
     } else {
