@@ -92,10 +92,16 @@ export class AppManagerlistComponent implements OnInit {
   }
   // tslint:disable-next-line - Disables all
   addRowData(managerData: Manager): void {
-  
-  
-        this.ngAfterViewInit();// Refresh the data after adding
-    
+    const d = new Date();
+    this.managerService.addManager(managerData).subscribe(
+      (response) => {
+        console.log('Manager added successfully', response);
+        this.getManagers(); // Refresh the data after adding
+      },
+      (error) => {
+        console.error('Error adding academie', error); // Handle error, if needed
+      }
+    );
     //this.table.renderRows();
   }
 
@@ -121,18 +127,19 @@ export class AppManagerlistComponent implements OnInit {
     });
   }
   
-  blockRowData(managerData: Manager): void{
+  blockRowData(managerData: Manager): void {
     this.managerService.blockManager(managerData.id).subscribe(
       (response) => {
-        console.log('Manager blocked successfully', response);
-        this.getManagers();
+        console.log('Manager blockManager successfully', response);
+        this.getManagers(); // Reload the data after blocking
       },
       (error) => {
-        console.error('Error blocking academie', error);
+        console.error('Error archiving manager', error);
         // Handle error, if needed
       }
     );
   }
+  
 
   unblockRowData(managerData: Manager): void{
     this.managerService.unBlockManager(managerData.id).subscribe(
@@ -210,7 +217,6 @@ export class AppManagerDialogContentComponent implements OnInit {
           // Handle successful response
           console.log('Manager added:', response);
           this.dialogRef.close(true);
-          
         },
         (error) => {
           // Handle error
