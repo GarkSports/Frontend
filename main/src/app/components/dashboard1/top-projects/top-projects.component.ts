@@ -1,61 +1,9 @@
-import { Component } from '@angular/core';
-import { MaterialModule } from '../../../material.module';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { MaterialModule } from 'src/app/material.module';
+import { DashboardService } from 'src/app/services/dashboard.service';
+import { Academie } from 'src/models/academie.model';
 
-
-export interface productsData {
-  id: number;
-  imagePath: string;
-  uname: string;
-  position: string;
-  productName: string;
-  budget: number;
-  priority: string;
-}
-
-const ELEMENT_DATA: productsData[] = [
-  {
-    id: 1,
-    imagePath: 'assets/images/profile/user-1.jpg',
-    uname: 'Sunil Joshi',
-    position: 'Web Designer',
-    productName: 'Elite Admin',
-    budget: 3.9,
-    priority: 'low'
-  },
-  {
-    id: 2,
-    imagePath: 'assets/images/profile/user-2.jpg',
-    uname: 'Andrew McDownland',
-    position: 'Project Manager',
-    productName: 'Real Homes Theme',
-    budget: 24.5,
-    priority: 'medium'
-  },
-  {
-    id: 3,
-    imagePath: 'assets/images/profile/user-3.jpg',
-    uname: 'Christopher Jamil',
-    position: 'Project Manager',
-    productName: 'MedicalPro Theme',
-    budget: 12.8,
-    priority: 'high'
-  },
-  {
-    id: 4,
-    imagePath: 'assets/images/profile/user-4.jpg',
-    uname: 'Nirav Joshi',
-    position: 'Frontend Engineer',
-    productName: 'Hosting Press HTML',
-    budget: 2.4,
-    priority: 'critical'
-  },
-];
-
-interface month {
-  value: string;
-  viewValue: string;
-}
 
 @Component({
   selector: 'app-top-projects',
@@ -63,14 +11,28 @@ interface month {
   imports: [MaterialModule, CommonModule],
   templateUrl: './top-projects.component.html',
 })
-export class AppTopProjectsComponent {
+export class AppTopProjectsComponent implements OnInit {
 
-  displayedColumns: string[] = ['assigned', 'name', 'priority', 'budget'];
-  dataSource = ELEMENT_DATA;
+  displayedColumns: string[] = ['Academie', 'Affiliation', 'Description', 'Frais Adhesion'];
+  dataSource: Academie[] = [];
 
-  months: month[] = [
-    { value: 'mar', viewValue: 'March 2023' },
-    { value: 'apr', viewValue: 'April 2023' },
-    { value: 'june', viewValue: 'June 2023' },
-  ];
+  // Inject the DashboardService in the constructor
+  constructor(private dashboardService: DashboardService) {}
+
+  ngOnInit(): void {
+    this.fetchAcademies();
+  }
+  
+  fetchAcademies(): void {
+    this.dashboardService.getAcademiesWithMostEvents().subscribe(
+      (data: Academie[]) => {
+        this.dataSource = data;
+      },
+      (error) => {
+        console.error('Error fetching top projects:', error);
+        // Handle error, display error message, etc.
+      }
+    );
+  }
+  
 }

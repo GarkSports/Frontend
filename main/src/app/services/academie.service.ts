@@ -76,5 +76,9 @@ export class AcademieService {
     return this.http.get<Discipline[]>(`${this.apiUrl}/getDisciplinesByAcademie/${academieId}`);
   }
 
+  countAcademies(): Observable<number> {
+    return this.http.get<number>(`${this.apiUrl}/countAcademies`);
+  }
+
 
 }
