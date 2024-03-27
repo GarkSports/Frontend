@@ -21,7 +21,8 @@ import { AppBlogsComponent } from './blogs/blogs.component';
 import { AppBlogDetailsComponent } from './blogs/details/details.component';
 import { DisciplineComponent } from './discipline/discipline.component';
 import { AcademieComponent } from './academie/academie.component';
-import { AppManagerlistComponent } from './managers/managerlist.component';
+import { AppManagerlistComponent } from './admin/managerlist.component';
+import { AppStafflistComponent } from './managers/stafflist.component';
 
 export const AppsRoutes: Routes = [
   {
@@ -137,6 +138,17 @@ export const AppsRoutes: Routes = [
           urls: [
             { title: 'Managers', url: '/dashboards/dashboard1' },
             { title: 'Managers' },
+          ],
+        },
+      },
+      {
+        path: 'staff',
+        component: AppStafflistComponent,
+        data: {
+          title: 'Staff',
+          urls: [
+            { title: 'Staff', url: '/dashboards/dashboard1' },
+            { title: 'Staff' },
           ],
         },
       },

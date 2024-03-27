@@ -48,6 +48,11 @@ export const navItems: NavItem[] = [
     route: 'apps/managers',
   },
   {
+    displayName: 'Staff',
+    iconName: 'user-circle',
+    route: 'apps/staff',
+  },
+  {
     displayName: 'Employee',
     iconName: 'brand-ctemplar',
     route: 'apps/employee',
