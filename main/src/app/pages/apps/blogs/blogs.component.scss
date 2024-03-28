@@ -11,6 +11,10 @@
   position: relative;
 }
 
+.post-card-image{
+  object-fit: contain;
+}
+
 .featured-card {
   height: 400px;
   &:before {

@@ -1,5 +1,5 @@
 <div class="row">
-  @for(blogPost of blogService.blogPosts; track blogPost.user) {
+  @for(blogPost of PostsService.blogPosts; track blogPost.id) {
   @if(blogPost.featuredPost) {
   <div
     class="col-12 col-lg-4 col-xl-8"
@@ -60,26 +60,30 @@
       class="cardWithShadow card2 position-relative card-hover cursor-pointer"
       (click)="selectBlog(blogPost.title)"
     >
-      <img
+      
+   
+        <img
         mat-card-image
-        src="{{ blogPost.imgSrc }}"
+        src="{{ blogPost.imageUrl }}"
         alt="Photo of a Shiba Inu"
+       
       />
+
       <div
-        class="card-overlay h-100 d-flex p-16 p-y-0 align-items-end justify-content-between"
+        class="card-overlay h-100 d-flex p-16 p-y-0 justify-content-end align-items-start"
       >
+
+      
         <mat-chip class="f-s-12 m-y-16 f-w-600 bg-white">{{
           blogPost.category
         }}</mat-chip>
-        <mat-chip class="f-s-12 f-w-600 m-y-16 bg-white">{{
-          blogPost.time
-        }}</mat-chip>
+       
       </div>
 
       <mat-card-content class="p-y-24">
         <div class="user-category">
           <div>
-            <img src="{{ blogPost.user }}" class="rounded-circle" width="40" />
+            <img src="{{ blogPost.authorImageUrl }}" class="rounded-circle" width="40" />
           </div>
         </div>
         <mat-card-title class="mat-headline-6 m-t-15">{{
@@ -100,7 +104,7 @@
             class="m-l-auto f-s-14 mat-subtitle-2 d-flex align-items-center"
           >
             <i-tabler name="point" class="icon-14 m-r-4"></i-tabler>
-            {{ blogPost.date }}
+            {{ blogPost.createdAt }}
           </span>
         </div>
       </mat-card-content>

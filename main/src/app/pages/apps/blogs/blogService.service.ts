@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { blogPosts } from './blogData';
-
+import { PostsService } from 'src/app/services/posts.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +16,7 @@ export class blogService {
   }
 
   public getBlog(): Observable<any> {
-    return of(blogPosts);
+    return of(this.blogPosts);
   }
 
   

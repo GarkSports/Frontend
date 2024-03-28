@@ -2,7 +2,7 @@
 <mat-card class="cardWithShadow">
   <img
     mat-card-image
-    src="{{ blogPost?.imgSrc }}"
+    src="{{ blogPost?.imageUrl }}"
     alt="Photo of a Shiba Inu"
     height="440"
   />
@@ -14,7 +14,7 @@
   <mat-card-content class="p-24 b-b-1">
     <div class="user-category">
       <div>
-        <img src="{{ blogPost?.user }}" class="rounded-circle" width="40" />
+        <img src="{{ blogPost?.author }}" class="rounded-circle" width="40" />
       </div>
       <mat-chip class="f-s-12 m-y-16 f-w-600">{{
         blogPost?.category
