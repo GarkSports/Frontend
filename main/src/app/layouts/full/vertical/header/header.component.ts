@@ -15,6 +15,7 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgScrollbarModule } from 'ngx-scrollbar';
+import { AuthService } from 'src/app/services/auth.service';
 
 
 interface notifications {
@@ -97,10 +98,16 @@ export class HeaderComponent {
   constructor(
     private vsidenav: CoreService,
     public dialog: MatDialog,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private authService: AuthService
   ) {
     translate.setDefaultLang('en');
   }
+
+  // ngOnInit() {
+  //   // Retrieve the user's name from the AuthService or any other service
+  //   this.firstname = this.authService.getFirstname();
+  // }
 
   openDialog() {
     const dialogRef = this.dialog.open(AppSearchDialogComponent);

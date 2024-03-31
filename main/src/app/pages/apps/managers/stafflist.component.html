@@ -47,7 +47,7 @@
       </div>
       <div class="col-sm-4 d-flex justify-content-end align-items-center">
         <button mat-flat-button (click)="openDialog('Add', {})" color="primary">
-          Add Manager
+          Add Staff
         </button>
       </div>
     </div>
@@ -102,15 +102,15 @@
               bloqué
             </span>}
 
-            @if(element.status == 'Manager') {
+            @if(element.status == 'Paiement') {
             <span class="bg-light-warning mat-body-2 f-w-500 p-x-8 p-y-4 f-s-12 rounded-pill">Manager</span>
             }
 
-            @if(element.status == 'coach') {
+            @if(element.status == 'Coach') {
             <span class="bg-light-success mat-body-2 f-w-500 p-x-8 p-y-4 f-s-12 rounded-pill">coach</span>
             }
 
-            @if(element.status == 'finance') {
+            @if(element.status == 'Finance') {
             <span class="bg-light-error mat-body-2 f-w-500 p-x-8 p-y-4 f-s-12 rounded-pill">finance</span>
             }
 
@@ -132,11 +132,11 @@
             <a (click)="openDialog('Update', element)" class="m-r-10 cursor-pointer">
               <i-tabler name="edit" class="icon-18"></i-tabler>
             </a>
-            <a (click)="openDialog('Delete', element)" class="m-r-10 cursor-pointer">
+            <!-- <a (click)="openDialog('Delete', element)" class="m-r-10 cursor-pointer">
               <i-tabler name="trash" class="icon-18"></i-tabler>
-            </a>
-            <a (click)="openDialog('Archive', element)" class="m-r-10 cursor-pointer">
-              <i-tabler name="trash" class="icon-18"></i-tabler>
+            </a> -->
+            <a (click)="openDialog('Block', element)" class="m-r-10 cursor-pointer">
+              <i-tabler name="ban" class="icon-18"></i-tabler>
             </a>
           </td>
         </ng-container>

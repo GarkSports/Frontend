@@ -37,6 +37,7 @@ export class AppStafflistComponent implements OnInit {
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator =
   Object.create(null);
+  roleNames: string[] = [];
 
 
   constructor(public dialog: MatDialog,
@@ -49,7 +50,14 @@ export class AppStafflistComponent implements OnInit {
     this.Closed = this.btnCategoryClick('Closed');
     this.Inprogress = this.btnCategoryClick('InProgress');
     this.dataSource = new MatTableDataSource<Manager>([]);
-    
+    this.fetchRoleNames();
+
+  }
+
+  fetchRoleNames(): void {
+    this.managerService.getRoleNames().subscribe(roleNames => {
+      this.roleNames = roleNames;
+    });
   }
 
   ngAfterViewInit(): void {
@@ -81,77 +89,82 @@ export class AppStafflistComponent implements OnInit {
         this.addRowData(result.data.managerData); // add the user in the page just display it 
       } else if (result.event === 'Update') {
         this.updateRowData(result.data);
-      } else if (result.event === 'Delete') {
-        this.deleteRowData(result.data);
-      } else if (result.event === 'Archive'){
+      // } else if (result.event === 'Delete') {
+      //   this.deleteRowData(result.data);
+      } else if (result.event === 'Block'){
         this.blockRowData(result.data.managerData);
-      }else if (result.event === 'Unarchive'){
-        this.unblockRowData(result.data.managerData);
       }
+      // else if (result.event === 'UnBlock'){
+      //   this.unblockRowData(result.data.managerData);
+      // }
     });
   }
   // tslint:disable-next-line - Disables all
   addRowData(managerData: Manager): void {
-    const d = new Date();
-    this.managerService.addManager(managerData).subscribe(
-      (response) => {
-        console.log('Manager added successfully', response);
-        this.getManagers(); // Refresh the data after adding
-      },
-      (error) => {
-        console.error('Error adding academie', error); // Handle error, if needed
-      }
-    );
+    this.table.renderRows();
+    // const d = new Date();
+    // this.managerService.addStaff(managerData).subscribe(
+    //   (response) => {
+    //     console.log('Manager added successfully1', response);
+    //     this.getManagers(); // Refresh the data after adding
+    //     this.table.renderRows();
+    //   },
+    //   (error) => {
+    //     console.error('Error adding Manager', error); // Handle error, if needed
+    //   }
+    // );
     //this.table.renderRows();
   }
 
   // tslint:disable-next-line - Disables all
   updateRowData(managerData: Manager): void {
-    this.managerService.updateManager(managerData).subscribe(
-    (response)=>{
-      console.log('Manager updated successfully', response);
-      this.getManagers();
-    },
-    (error)=> {
-      console.error('Error archiving academie', error);
-    }
-   )
-    
-   
+    this.table.renderRows();
+  //   this.managerService.updateManager(managerData).subscribe(
+  //   (response)=>{
+  //     console.log('Manager updated successfully', response);
+  //     this.getManagers();
+  //   },
+  //   (error)=> {
+  //     console.error('Error archiving academie', error);
+  //   }
+  //  )
   }
  
   // tslint:disable-next-line - Disables all
-  deleteRowData(managerData: Manager): boolean | any {
-    this.dataSource.data = this.dataSource.data.filter((value, key) => {
-      return value.id !== managerData.id;
-    });
-  }
+  // deleteRowData(managerData: Manager): boolean | any {
+  //   this.dataSource.data = this.dataSource.data.filter((value, key) => {
+  //     return value.id !== managerData.id;
+  //   });
+  // }
   
   blockRowData(managerData: Manager): void {
-    this.managerService.blockManager(managerData.id).subscribe(
-      (response) => {
-        console.log('Manager blockManager successfully', response);
-        this.getManagers(); // Reload the data after blocking
-      },
-      (error) => {
-        console.error('Error archiving manager', error);
-        // Handle error, if needed
-      }
-    );
+    this.table.renderRows();
+    // this.managerService.blockManager(managerData.id).subscribe(
+    //   (response) => {
+    //     console.log('Manager blockManager successfully', response);
+    //     this.getManagers(); // Reload the data after blocking
+    //     this.table.renderRows();
+    //   },
+    //   (error) => {
+    //     console.error('Error archiving manager', error);
+    //     // Handle error, if needed
+    //   }
+    // );
   }
   
 
   unblockRowData(managerData: Manager): void{
-    this.managerService.unBlockManager(managerData.id).subscribe(
-      (response) => {
-        console.log('Manager unblocked successfully', response);
-        this.getManagers();
-      },
-      (error) => {
-        console.error('Error unblocking academie', error);
-        // Handle error, if needed
-      }
-    );
+    this.table.renderRows();
+    // this.managerService.unBlockManager(managerData.id).subscribe(
+    //   (response) => {
+    //     console.log('Manager unblocked successfully', response);
+    //     this.getManagers();
+    //   },
+    //   (error) => {
+    //     console.error('Error unblocking academie', error);
+    //     // Handle error, if needed
+    //   }
+    // );
   }
 
   getManagers(): void {
@@ -179,6 +192,8 @@ export class AppStaffDialogContentComponent implements OnInit {
   local_data: any;
   managerForm: FormGroup;
   firstnameValue: string;
+  roleNames: string[] = [];
+  permissions: string[] = [];
 
   constructor(
     public dialogRef: MatDialogRef<AppStaffDialogContentComponent>,
@@ -195,6 +210,8 @@ export class AppStaffDialogContentComponent implements OnInit {
 
   ngOnInit(): void {
     this.initManagerForm();
+    this.fetchRoleNames();
+    this.fetchPermissions();
   }
 
   initManagerForm(): void {
@@ -203,13 +220,30 @@ export class AppStaffDialogContentComponent implements OnInit {
       lastname: [this.local_data.lastname, Validators.required],
       email: [this.local_data.email, [Validators.required, Validators.email]],
       adresse: [this.local_data.adresse, Validators.required],
-      role: [this.local_data.role, Validators.required]
+      roleName: [this.local_data.roleName, Validators.required],
+      permission: [this.local_data.permissions, Validators.required],
+    });
+  }
+
+  fetchRoleNames(): void {
+    this.managerService.getRoleNames().subscribe(roleNames => {
+      this.roleNames = roleNames;
+      console.log(roleNames);
+      
+    });
+  }
+
+  fetchPermissions(): void {
+    this.managerService.getPermissions().subscribe(permissions => {
+      this.permissions = permissions;
+      console.log(permissions);
+      
     });
   }
 
   doAction(): void {
     if (this.action === 'Add') {
-      this.managerService.addManager(this.managerForm.value).subscribe(
+      this.managerService.addStaff(this.managerForm.value).subscribe(
         
         (response) => {
           console.log(this.managerForm.value);
@@ -239,32 +273,34 @@ export class AppStaffDialogContentComponent implements OnInit {
           }
         );
       }
-    } else if (this.action === 'Delete') {
-      // Handle Delete action
-      this.managerService.deleteManager(this.local_data.id).subscribe(
-        (response) => {
-          console.log('Manager deleted successfully', response);
-          this.dialogRef.close({ event: this.action, data: this.local_data.id });
+    // } else if (this.action === 'Delete') {
+    //   // Handle Delete action
+    //   this.managerService.deleteManager(this.local_data.id).subscribe(
+    //     (response) => {
+    //       console.log('Manager deleted successfully', response);
+    //       this.dialogRef.close({ event: this.action, data: this.local_data.id });
+    //     },
+    //     (error) => {
+    //       console.error('Error deleting manager', error);
+    //       // i should display another dialogRef showing that the request wasn't successfull
+    //       this.dialogRef.close({ event: this.action});
+    //     }
+    //   );
+     } 
+     if (this.action === 'Block') {
+      const blockAction = this.local_data.blocked ? 'unBlockManager' : 'blockManager';
+      this.managerService[blockAction](this.local_data.id).subscribe(
+        (response: any) => {
+          console.log('Manager action successful', response);
+          this.dialogRef.close({ event: this.action });
         },
-        (error) => {
-          console.error('Error deleting manager', error);
-          // i should display another dialogRef showing that the request wasn't successfull
-          this.dialogRef.close({ event: this.action});
-        }
-      );
-    } 
-    else if (this.action === 'Archive') {
-      this.managerService.blockManager(this.local_data.id).subscribe(
-        (response) => {
-          console.log('Manager blockManager successfully', response);
-          this.dialogRef.close({ event: this.action, data: { managerData: this.local_data } });
-        },
-        (error) => {
-          console.error('Error archiving manager', error);
+        (error: any) => {
+          console.error('Error', error);
           this.dialogRef.close({ event: this.action });
         }
       );
-    } else {
+    }
+     else {
       this.dialogRef.close({ event: 'Cancel' });
     }
   }

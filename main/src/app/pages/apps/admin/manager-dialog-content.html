@@ -1,7 +1,7 @@
 <h2 mat-dialog-title>{{action}}</h2>
 
 
-<ng-container *ngIf="action !== 'Delete' && action !== 'Archive'">
+<ng-container *ngIf="action !== 'Delete' && action !== 'Block'">
   <mat-dialog-content *ngIf="action === 'Add' || action ==='Update'" style="max-width: 500px" class="mat-typography m-t-24">
     <form [formGroup]="managerForm">
       <div class="row">
@@ -44,7 +44,7 @@
   </mat-dialog-content>
 </ng-container>
 
-<ng-container *ngIf="action === 'Archive'">
+<ng-container *ngIf="action === 'Block'">
   @if(local_data.blocked){<div class="p-x-24 p-b-24">
     Sure to unblock <span class="f-w-600"></span>
   </div>}
@@ -55,18 +55,18 @@
   
 </ng-container>
 
-<ng-container *ngIf="action === 'Delete'">
+<!-- <ng-container *ngIf="action === 'Delete'">
   <div class="p-x-24 p-b-24">
     Sure to delete <span class="f-w-600"></span>
   </div>
-</ng-container>
+</ng-container> -->
 
   <!--case archive-->
 
 
 <div mat-dialog-actions class="p-24 p-t-0">
   <button mat-flat-button (click)="doAction()" color="primary">
-    @if(action === 'Archive' && local_data.blocked){
+    @if(action === 'Block' && local_data.blocked){
       <span>unblock</span>
     }
     @else{
