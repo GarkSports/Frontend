@@ -1,0 +1,203 @@
+<mat-card class="cardWithShadow">
+    <mat-card-content class="p-24">
+        <div class="row justify-content-between">
+            <div class="col-lg-4">
+                <mat-form-field appearance="outline" class="w-100 hide-hint">
+                    <input matInput placeholder="Search Academie" (keyup)="applyFilter($any($event.target).value)" />
+                    <mat-icon matSuffix>
+                        <i-tabler name="search" class="icon-20"></i-tabler>
+                    </mat-icon>
+                </mat-form-field>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>
+
+<!--Formular-->
+<mat-card class="cardWithShadow">
+    <mat-card-content class="p-24">
+        <form (ngSubmit)="onSubmit()" #equipeForm="ngForm"> <!-- Add #equipeForm and ngForm directive -->
+            <table>
+                <tr>
+                    <th>Nom</th>
+                    <th>Genre</th>
+                    <th>Groupe d'âge</th>
+                    <th>Couleur</th>
+                    <th>Select discipline</th>
+                    <th></th> <!-- Empty header for the Submit button -->
+                </tr>
+                <tr>
+                    <td>
+                        <mat-form-field appearance="outline" class="w-100 hide-hint" style="width: 100%;">
+                            <input matInput placeholder="Nom" name="nom" [(ngModel)]="equipe.nom" required>
+                            <!-- Add required -->
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field appearance="outline" class="w-100 hide-hint" style="width: 150px;">
+                            <mat-label>Select
+                                genre</mat-label>
+                            <mat-select placeholder="Genre" [(ngModel)]="equipe.genre" name="genre" required>
+                                <!-- Add name and required -->
+                                <mat-option *ngFor="let genre of genres" [value]="genre">
+                                    {{ genre }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field appearance="outline" class="w-100 hide-hint" style="width: 100%;">
+                            <input matInput placeholder="Groupe d'âge" name="groupeAge" [(ngModel)]="equipe.groupeAge"
+                                required> <!-- Add required -->
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field appearance="outline" class="w-100 hide-hint" style="width: 130px;">
+                            <input matInput type="color" placeholder="Couleur" name="couleur"
+                                [(ngModel)]="equipe.couleur"> <!-- Add required -->
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field appearance="outline" class="w-100 hide-hint" style="width: 175px;">
+                            <mat-label>Select
+                                discipline</mat-label>
+                            <mat-select placeholder="Discipline" [(ngModel)]="equipe.discipline" name="discipline"
+                                required> <!-- Add name and required -->
+                                <mat-option *ngFor="let discipline of disciplines" [value]="discipline">
+                                    {{ discipline.nom }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <button mat-raised-button type="submit" style="margin-top: 8px; margin-left: 8px;"
+                            color="primary" [disabled]="!equipeForm.valid">Ajouter</button>
+                        <!-- Add [disabled] and equipeForm.valid -->
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+    </mat-card-content>
+</mat-card>
+
+
+
+
+<mat-card class="cardWithShadow">
+    <mat-card-content class="p-24">
+        <div class="table-responsive">
+            <table mat-table [dataSource]="dataSource" class="w-100">
+                <!-- Column definitions -->
+
+                <!-- Column: logo -->
+                <ng-container matColumnDef="logo">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Logo</th>
+                    <td mat-cell *matCellDef="let element">
+                        <img [src]="element.academie.logo" alt="Logo" width="40" />
+                    </td>
+                </ng-container>
+
+                <!-- Column: nom -->
+                <ng-container matColumnDef="nom">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Nom</th>
+                    <td mat-cell *matCellDef="let element" class="f-w-600 mat-subtitle-1 f-s-16 m-t-0">
+                        {{ element.nom }}
+                    </td>
+                </ng-container>
+
+                <!-- Column: type -->
+                <ng-container matColumnDef="genre">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Genre</th>
+                    <td mat-cell *matCellDef="let element">{{ element.genre }}</td>
+                </ng-container>
+
+                <!-- Column: discipline -->
+                <ng-container matColumnDef="discipline">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Discipline</th>
+                    <td mat-cell *matCellDef="let element">{{ element.discipline.nom }}</td>
+                </ng-container>
+
+
+
+                <!-- Column: type -->
+                <ng-container matColumnDef="groupAge">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Groupe d'age</th>
+                    <td mat-cell *matCellDef="let element">{{ element.groupeAge }}</td>
+                </ng-container>
+
+                <!-- Column: type -->
+                <ng-container matColumnDef="couleur">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Couleur</th>
+                    <td mat-cell *matCellDef="let element">
+                        <div [style.backgroundColor]="element.couleur" style="width: 20px; height: 20px;"></div>
+                    </td>
+                </ng-container>
+
+                <!-- Column: codeEquipe -->
+                <ng-container matColumnDef="codeEquipe">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Code Equipe</th>
+                    <td mat-cell *matCellDef="let element">{{ element.codeEquipe }}</td>
+                </ng-container>
+
+                <!-- Column: adherents -->
+                <ng-container matColumnDef="adherents">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Adherents</th>
+                    <td mat-cell *matCellDef="let equipe">
+                        <button mat-icon-button (click)="showAdherentsPopup(equipe.adherents)">
+                            <mat-icon>group</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+
+                <!-- Column: Add Member -->
+                <ng-container matColumnDef="addMember">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Add Member</th>
+                    <td mat-cell *matCellDef="let equipe">
+                        <button mat-icon-button (click)="openAddMemberPopup(equipe)">
+                            <mat-icon>add</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+
+                <!-- Column: entraineurs -->
+                <ng-container matColumnDef="entraineurs">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Entraineurs</th>
+                    <td mat-cell *matCellDef="let equipe">
+                        <button mat-icon-button (click)="showEntraineursPopup(equipe.entraineurs)">
+                            <mat-icon>sports_coach</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+
+                <!-- Column: Add Entraineur -->
+                <ng-container matColumnDef="addEntraineur">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Add Entraineur</th>
+                    <td mat-cell *matCellDef="let equipe" (click)="openAddEntraineurPopup(equipe)">
+                        <button mat-icon-button >
+                            <mat-icon>add</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+
+
+
+                <!-- Column: action -->
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Action</th>
+                    <td mat-cell *matCellDef="let equipe">
+                        <button mat-icon-button color="warn" (click)="onDeleteEquipe(equipe.id)">
+                            <mat-icon>delete_outline</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+
+
+                <!-- Table rows -->
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        </div>
+    </mat-card-content>
+</mat-card>

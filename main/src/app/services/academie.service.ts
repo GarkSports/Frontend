@@ -12,6 +12,7 @@ import { Discipline } from 'src/models/discipline.model';
 export class AcademieService {
   private apiUrl = 'http://localhost:8089/academie';
   private apiUrlManager = 'http://localhost:8089/random';
+  academieId = 1;
 
   constructor(private http: HttpClient) { }
 
@@ -80,5 +81,23 @@ export class AcademieService {
     return this.http.get<number>(`${this.apiUrl}/countAcademies`);
   }
 
+  getAcademie(): Observable<Academie> {
+    return this.http.get<Academie>(`${this.apiUrl}/getAcademieById/${this.academieId}`);
+  }
 
+  updateAcademieProfile(academie: Academie): Observable<Academie> {
+    return this.http.put<Academie>(`${this.apiUrlManager}/updateAcademie/${this.academieId}`, academie);
+  }
+
+  getArchivedAcademies(): Observable<Academie[]> {
+    return this.http.get<Academie[]>(`${this.apiUrl}/getArchivedAcademies`);
+  }
+
+  deleteArchivedAcademie(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/deleteArchivedAcademie/${id}`);
+  }
+
+  restoreArchivedAcademie(id: number): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/restoreArchivedAcademie/${id}`,{});
+  }
 }
