@@ -105,6 +105,10 @@ import { ArchivedAcademieConfirmationRestoreDialogComponent } from './archived-a
 import { AngularFireModule } from '@angular/fire/compat'; // Update import path
 import { AngularFireStorageModule } from '@angular/fire/compat/storage'; // Update import path
 import { environment } from '../api/environment';
+import { AppManagerDialogContentComponent, AppManagerlistComponent } from './admin/managerlist.component';
+import { AppStaffDialogContentComponent, AppStafflistComponent } from './managers/staff/stafflist.component';
+import { AppRolesDialogContentComponent, AppRoleslistComponent } from './managers/roles/roleslist.component';
+import { AppProfilComponent } from './managers/profil/profil.component';
 
 
 @NgModule({
@@ -191,6 +195,12 @@ import { environment } from '../api/environment';
     OkDialogComponent,
     AppBlogsComponent,
     AppBlogDetailsComponent,
+    AppManagerlistComponent,
+    AppManagerDialogContentComponent,
+    AppStaffDialogContentComponent,
+    AppStafflistComponent,
+    AppRolesDialogContentComponent,
+    AppRoleslistComponent,
   ],
   providers: [DatePipe],
 })

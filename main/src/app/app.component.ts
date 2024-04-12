@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { AuthService } from './services/auth.service';
+import { catchError } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-root',
