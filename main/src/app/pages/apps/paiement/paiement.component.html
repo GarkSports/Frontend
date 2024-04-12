@@ -1,6 +1,6 @@
 <mat-card class="cardWithShadow">
   <mat-card-content class="p-24">
-    <div class="row justify-content-between">
+    <div class="row justify-content-between" style="margin-bottom: 20px;">
       <div class="col-lg-3">
         <mat-form-field appearance="outline" class="w-100 hide-hint">
           <mat-label>Filtrer par équipe</mat-label>
@@ -31,14 +31,6 @@
         </button>
       </div>
     </div>
-  </mat-card-content>
-</mat-card>
-
-
-
-
-<mat-card class="cardWithShadow">
-  <mat-card-content class="p-24">
     <div class="row justify-content-between">
       <div class="col-lg-4">
         <mat-form-field appearance="outline" class="w-100 hide-hint">
@@ -66,7 +58,8 @@
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
             Membre
           </th>
-          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.adherent.firstname }}</td>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.adherent.firstname }} {{
+            element.adherent.lastname }}</td>
         </ng-container>
 
         <ng-container matColumnDef="equipe">
