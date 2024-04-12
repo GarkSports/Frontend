@@ -16,9 +16,10 @@ export class ManagerService {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
     const requestBody = {
-        roleName: managerData.roleName
+        roleName: managerData.roleName,
+        permission: managerData.permissions
     };
-    return this.http.post<any>(`${this.apiUrl}/add-roleName`, requestBody, {withCredentials: true, headers});
+    return this.http.post<any>(`${this.apiUrl}/add-role-name`, requestBody, { withCredentials: true, headers});
 }
 
 

@@ -55,6 +55,16 @@ export const navItems: NavItem[] = [
     route: 'apps/staff',
   },
   {
+    displayName: 'Roles',
+    iconName: 'user-circle',
+    route: 'apps/roles',
+  },
+  {
+    displayName: 'Profil',
+    iconName: 'user-circle',
+    route: 'apps/profil',
+  },
+  {
     displayName: 'Employee',
     iconName: 'brand-ctemplar',
     route: 'apps/employee',

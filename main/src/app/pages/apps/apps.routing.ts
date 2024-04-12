@@ -22,7 +22,10 @@ import { AppBlogDetailsComponent } from './blogs/details/details.component';
 import { DisciplineComponent } from './discipline/discipline.component';
 import { AcademieComponent } from './academie/academie.component';
 import { AppManagerlistComponent } from './admin/managerlist.component';
-import { AppStafflistComponent } from './managers/stafflist.component';
+import { AppStafflistComponent } from './managers/staff/stafflist.component';
+import { AppRoleslistComponent } from './managers/roles/roleslist.component';
+import { AppProfilComponent } from './managers/profil/profil.component';
+
 
 export const AppsRoutes: Routes = [
   {
@@ -149,6 +152,28 @@ export const AppsRoutes: Routes = [
           urls: [
             { title: 'Staff', url: '/dashboards/dashboard1' },
             { title: 'Staff' },
+          ],
+        },
+      },
+      {
+        path: 'roles',
+        component: AppRoleslistComponent,
+        data: {
+          title: 'Roles',
+          urls: [
+            { title: 'Roles', url: '/dashboards/dashboard1' },
+            { title: 'Roles' },
+          ],
+        },
+      },
+      {
+        path: 'profil',
+        component: AppProfilComponent,
+        data: {
+          title: 'Profil',
+          urls: [
+            { title: 'Profil', url: '/dashboards/dashboard1' },
+            { title: 'Profil' },
           ],
         },
       },

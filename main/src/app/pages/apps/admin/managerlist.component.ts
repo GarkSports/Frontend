@@ -27,10 +27,11 @@ export class AppManagerlistComponent implements OnInit {
   Open = -1;
 
   displayedColumns: string[] = [
-    'id',
     'firstname',
-    'lastname',
     'email',
+    'roleName',
+    'telephone',   
+    'equipe',
     'status',
     'action',
   ];

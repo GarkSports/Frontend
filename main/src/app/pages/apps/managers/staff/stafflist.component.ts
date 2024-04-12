@@ -11,6 +11,7 @@ import { ManagerService } from 'src/app/services/manager.service';
 import { DatePipe } from '@angular/common';
 import { Academie } from 'src/models/academie.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Role,RoleArray  } from 'src/models/enums/role.model';
 
 @Component({
   selector: 'app-staff-list',
@@ -26,10 +27,11 @@ export class AppStafflistComponent implements OnInit {
   Open = -1;
 
   displayedColumns: string[] = [
-    'id',
     'firstname',
-    'lastname',
     'email',
+    'roleName',
+    'telephone',   
+    'equipe',
     'status',
     'action',
   ];
@@ -51,6 +53,7 @@ export class AppStafflistComponent implements OnInit {
     this.Inprogress = this.btnCategoryClick('InProgress');
     this.dataSource = new MatTableDataSource<Manager>([]);
     this.fetchRoleNames();
+    this.table.renderRows();
 
   }
 
@@ -192,6 +195,7 @@ export class AppStaffDialogContentComponent implements OnInit {
   local_data: any;
   managerForm: FormGroup;
   firstnameValue: string;
+  roles: string[];  
   roleNames: string[] = [];
   permissions: string[] = [];
 
@@ -208,10 +212,22 @@ export class AppStaffDialogContentComponent implements OnInit {
     }
   }
 
+  showRoleInput: boolean = false;
+
+
+  onRoleChange(event: Event) {
+    const selectedValue = (event.target as HTMLSelectElement).value;
+    this.showRoleInput = selectedValue === 'Staff' || selectedValue === 'Entraineur';
+  }
+  
+
+
   ngOnInit(): void {
     this.initManagerForm();
     this.fetchRoleNames();
     this.fetchPermissions();
+    this.roles = RoleArray;
+
   }
 
   initManagerForm(): void {
@@ -220,6 +236,7 @@ export class AppStaffDialogContentComponent implements OnInit {
       lastname: [this.local_data.lastname, Validators.required],
       email: [this.local_data.email, [Validators.required, Validators.email]],
       adresse: [this.local_data.adresse, Validators.required],
+      role: [this.local_data.role, Validators.required],
       roleName: [this.local_data.roleName, Validators.required],
       permission: [this.local_data.permissions, Validators.required],
     });

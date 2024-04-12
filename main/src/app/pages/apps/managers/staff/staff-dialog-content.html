@@ -31,13 +31,31 @@
         </div>
         <div class="col-sm-6 col-lg-12">
           <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Status</mat-label>
-            <select formControlName="roleName" matNativeControl required id="roleName" name="roleName" placeholder="role">
-                <option *ngFor="let roleName of roleNames" [value]="roleName">{{ roleName }}</option>
-              </select>
-              
+            <mat-label>Role</mat-label>
+            <select formControlName="role" matNativeControl required id="role" name="role" placeholder="Role" (change)="onRoleChange($event)">
+              <option value="Manager">Manager</option>
+              <option value="Staff">Staff</option>
+              <option value="Entraineur">Entraineur</option>
+              <option value="Adherant">Adherant</option>
+              <option value="Parent">Parent</option>
+            </select>
+            
           </mat-form-field>
         </div>
+        
+        
+        
+        
+        <div *ngIf="showRoleInput" class="col-sm-6 col-lg-12">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Role</mat-label>
+            <select formControlName="roleName" matNativeControl required id="roleName" name="roleName" placeholder="Role">
+              <option *ngFor="let roleName of roleNames" [value]="roleName">{{ roleName }}</option>
+            </select>
+          </mat-form-field>
+        </div>
+
+
         <div class="col-sm-6 col-lg-12">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Permissions</mat-label>
@@ -61,7 +79,7 @@
         <span class="f-w-600"> Sure to block </span>
       </ng-template>
     </div>
-  
+    
   
 <!-- 
 <ng-container *ngIf="action === 'Delete'">
