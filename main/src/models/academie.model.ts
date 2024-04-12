@@ -21,4 +21,5 @@ export class Academie {
     pays: string;
     manager_id?: number;
     evenements?: Evenement[];
+    manager: any;
 }

@@ -1,36 +1,27 @@
 <mat-card class="cardWithShadow">
   <mat-card-header class="d-flex">
     <div class="m-r-auto">
-      <mat-card-title>Top Projects</mat-card-title>
-      <mat-card-subtitle class="mat-body-1">Best Products</mat-card-subtitle>
+      <mat-card-title>Top Academies with the Most Events</mat-card-title>
+      <mat-card-subtitle class="mat-body-1">Most Dynamic</mat-card-subtitle>
     </div>
-    <mat-form-field class="theme-select" appearance="outline">
-      <mat-select value="mar">
-        @for(month of months; track month.viewValue) {
-        <mat-option [value]="month.value">
-          {{ month.viewValue }}
-        </mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
   </mat-card-header>
   <mat-card-content>
     <div class="table-responsive m-t-30">
       <table mat-table [dataSource]="dataSource" class="w-100">
         <!-- Position Column -->
-        <ng-container matColumnDef="assigned">
+        <ng-container matColumnDef="Academie">
           <th mat-header-cell *matHeaderCellDef class="f-w-600 mat-subtitle-1 f-s-14">
-            Assigned
+            Academie
           </th>
-          <td mat-cell *matCellDef="let element">
+          <td mat-cell *matCellDef="let academie">
             <div class="d-flex align-items-center">
-              <img [src]="element.imagePath" alt="users" width="40" class="rounded-circle" />
+              <img [src]="academie.logo" alt="users" width="40" class="rounded-circle" />
               <div class="m-l-16">
                 <h6 class="mat-subtitle-1 f-s-14 f-w-600">
-                  {{ element.uname }}
+                  {{ academie.nom }}
                 </h6>
                 <span class="mat-body-1 f-s-12">
-                  {{ element.position }}
+                  {{ academie.type }}
                 </span>
               </div>
             </div>
@@ -38,68 +29,39 @@
         </ng-container>
 
         <!-- Name Column -->
-        <ng-container matColumnDef="name">
+        <ng-container matColumnDef="Affiliation">
           <th mat-header-cell *matHeaderCellDef class="f-w-600 mat-subtitle-1 f-s-14">
-            Name
+            Affiliation
           </th>
-          <td mat-cell *matCellDef="let element" class="mat-body-1">
-            {{ element.productName }}
+          <td mat-cell *matCellDef="let academie" class="mat-body-1">
+            {{ academie.affiliation }}
           </td>
         </ng-container>
 
-        <!-- Weight Column -->
-        <ng-container matColumnDef="priority">
+        <!-- Priority Column -->
+        <ng-container matColumnDef="Description">
           <th mat-header-cell *matHeaderCellDef class="f-w-600 mat-subtitle-1 f-s-14">
-            Priority
+            Description
           </th>
-          <td mat-cell *matCellDef="let element">
-            @if(element.priority == 'low') {
-
-            <span class="bg-light-accent text-accent rounded f-w-600 p-6 p-y-4 f-s-12">
-              {{ element.priority | titlecase }}
+          <td mat-cell *matCellDef="let academie">
+            <span>
+              {{ academie.description}}
             </span>
-
-            }
-
-            @if(element.priority == 'medium') {
-            <span class="bg-light-primary text-primary rounded f-w-600 p-6 p-y-4 f-s-12">
-              {{ element.priority | titlecase }}
-            </span>
-            }
-
-            @if(element.priority == 'high') {
-            <span class="bg-light-warning text-warning rounded f-w-600 p-6 p-y-4 f-s-12">
-              {{ element.priority | titlecase }}
-            </span>
-            }
-
-            @if(element.priority == 'critical') {
-            <span class="bg-light-error text-error rounded f-w-600 p-6 p-y-4 f-s-12">
-              {{ element.priority | titlecase }}
-            </span>
-            }
-
-            @if(element.priority == 'moderate') {
-            <span class="bg-light-success text-success rounded f-w-600 p-6 p-y-4 f-s-12">
-              {{ element.priority | titlecase }}
-            </span>
-            }
-
           </td>
         </ng-container>
 
-        <!-- Symbol Column -->
-        <ng-container matColumnDef="budget">
+        <!-- Budget Column -->
+        <ng-container matColumnDef="Frais Adhesion">
           <th mat-header-cell *matHeaderCellDef class="f-w-600 mat-subtitle-1 f-s-14">
-            Budget
+            Frais Adhesion
           </th>
-          <td mat-cell *matCellDef="let element" class="mat-body-1">
-            ${{ element.budget }}k
+          <td mat-cell *matCellDef="let academie" class="mat-body-1">
+            {{ academie.fraisAdhesion }}Dt
           </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr mat-row *matRowDef="let academie; columns: displayedColumns"></tr>
       </table>
     </div>
   </mat-card-content>

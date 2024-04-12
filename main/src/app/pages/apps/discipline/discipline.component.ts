@@ -24,7 +24,7 @@ export class DisciplineComponent implements AfterViewInit {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> =
     Object.create(null);
   searchText: any;
-  displayedColumns: string[] = ['#', 'nom', 'description', 'action'];
+  displayedColumns: string[] = ['nom', 'description', 'action'];
   dataSource = new MatTableDataSource<Discipline>([]);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator =
     Object.create(null);

@@ -1,0 +1,17 @@
+<h2 mat-dialog-title>Select Members</h2>
+<mat-dialog-content>
+  <mat-form-field appearance="outline" class="w-100 hide-hint">
+    <input matInput placeholder="Search Members" #searchInput (input)="applyFilter(searchInput.value)" />
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+
+  <mat-selection-list #membersList (selectionChange)="selectMembers($event)">
+    <mat-list-option *ngFor="let member of filteredMembers" [value]="member.id">
+      {{ member.firstname }} {{ member.lastname }}
+    </mat-list-option>
+  </mat-selection-list>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button [mat-dialog-close]="selectedMembers">OK</button>
+  <button mat-button mat-dialog-close>Cancel</button>
+</mat-dialog-actions>

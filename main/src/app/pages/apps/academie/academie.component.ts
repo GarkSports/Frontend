@@ -13,12 +13,14 @@ import {
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
 import { DatePipe } from '@angular/common';
-import { AppAddAcademieComponent } from './add/add.component';
 import { Academie } from 'src/models/academie.model';
 import { AcademieService } from 'src/app/services/academie.service';
 import { Manager } from 'src/models/manager.model';
 import { Discipline } from 'src/models/discipline.model';
 import { DisciplineService } from 'src/app/services/discipline.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { AcademieHistory } from 'src/models/academieHistory.models';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 
 @Component({
   templateUrl: './academie.component.html',
@@ -28,18 +30,37 @@ export class AcademieComponent implements AfterViewInit {
     Object.create(null);
   searchText: any;
   displayedColumns: string[] = [
-    '#',
     'nom',
-    'type',
-    'fraisAdhesion',
     'logo',
-    'affiliation',
-    'etat',
+    'type',
     'description',
+    'affiliation',
+    'fraisAdhesion',
+    'etat',
+    'editEtat',
     'manager',
     'adresse',
+    'disciplines',
+    'etatHistory',
     'action',
   ];
+
+  getEtatColor(etat: string): { backgroundColor: string } {
+    switch (etat) {
+      case 'INACTIF':
+        return { backgroundColor: '#FEF5E5' };
+      case 'ACTIF':
+        return { backgroundColor: '#E6FFFA' };
+      case 'SUSPENDU':
+        return { backgroundColor: '#FDEDE8' };
+      case 'FERME':
+        return { backgroundColor: '#ECF2FF' };
+      default:
+        return { backgroundColor: 'inherit' }; // Or a default color
+    }
+  }
+
+  etatOptions = ['ACTIF', 'SUSPENDU', 'INACTIF', 'FERME'];
 
   dataSource = new MatTableDataSource<Academie>([]);
 
@@ -50,7 +71,7 @@ export class AcademieComponent implements AfterViewInit {
     public dialog: MatDialog,
     public datePipe: DatePipe,
     public academieService: AcademieService
-  ) {}
+  ) { }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
@@ -64,7 +85,13 @@ export class AcademieComponent implements AfterViewInit {
   openDialog(action: string, obj: any): void {
     obj.action = action;
     const dialogRef = this.dialog.open(AppAcademieDialogContentComponent, {
-      data: obj,
+      data: {
+        ...obj,
+        // Pass the current disciplines' IDs to the dialog component
+        disciplineIds: obj.disciplines
+          ? obj.disciplines.map((discipline: Discipline) => discipline.id)
+          : [],
+      },
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result.event === 'Add') {
@@ -73,6 +100,7 @@ export class AcademieComponent implements AfterViewInit {
         this.updateRowData(result.data);
       } else if (result.event === 'Delete') {
         this.deleteRowData(result.data);
+        window.location.reload();
       }
     });
   }
@@ -101,21 +129,28 @@ export class AcademieComponent implements AfterViewInit {
 
   updateRowData(academieData: Academie): void {
     // Create a copy of the academieData without the manager_id property
-    const academieDataWithoutManagerId = { ...academieData };
-    delete academieDataWithoutManagerId.manager_id;
-
-    this.academieService.updateAcademie(academieDataWithoutManagerId, academieData.id).subscribe(
-        (response) => {
-          console.log('Academie updated successfully', response);
-          this.getAcademies(); // Refresh the data after updating
-        },
-        (error) => {
-          console.error('Error updating academie', error);
-          // Handle error, if needed
-        }
-    );
-}
-
+    // const academieDataWithoutManagerId = { ...academieData };
+    // delete academieDataWithoutManagerId.manager_id;
+    if (academieData.manager_id && academieData.disciplineIds) {
+      this.academieService
+        .updateAcademie(
+          academieData,
+          academieData.id,
+          academieData.disciplineIds,
+          academieData.manager_id
+        )
+        .subscribe(
+          (response) => {
+            console.log('Academie updated successfully', response);
+            this.getAcademies(); // Refresh the data after updating
+          },
+          (error) => {
+            console.error('Error updating academie', error);
+            // Handle error, if needed
+          }
+        );
+    }
+  }
 
   deleteRowData(academieData: Academie): void {
     this.academieService.archiveAcademie(academieData.id).subscribe(
@@ -142,8 +177,8 @@ export class AcademieComponent implements AfterViewInit {
     );
   }
 
-  showManagerDetails(managerId: number): void {
-    this.academieService.getManagerDetails(managerId).subscribe(
+  showManagerDetails(academieId: number): void {
+    this.academieService.getManagerDetails(academieId).subscribe(
       (managerDetails) => {
         this.openManagerDetailsDialog(managerDetails);
       },
@@ -188,7 +223,59 @@ export class AcademieComponent implements AfterViewInit {
     });
   }
 
+  openEditForm(element: any): void {
+    const dialogRef = this.dialog.open(EditEtatFormComponent, {
+      data: { etat: element.etat, changeReason: '' }, // Pass data to the dialog
+    });
 
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result && result.event === 'Save') {
+        // Implement the logic to call the backend API and update the etat
+        this.academieService.changeEtat(element.id, result.data).subscribe(
+          (response) => {
+            console.log('Etat changed successfully', response);
+            this.getAcademies(); // Refresh the data after changing etat
+          },
+          (error) => {
+            console.error('Error changing etat', error);
+            // Handle error, if needed
+          }
+        );
+      }
+    });
+  }
+
+  openHistoryPopup(academieId: number): void {
+    this.academieService.getAcademieHistory(academieId).subscribe((history) => {
+      this.dialog.open(HistoryPopupComponent, {
+        data: history,
+      });
+    });
+  }
+
+  showDisciplines(academieId: number): void {
+    this.academieService.getDisciplinesByAcademie(academieId).subscribe({
+      next: (disciplines: Discipline[]) => {
+        // Open the disciplines popup with the fetched disciplines
+        this.openDisciplinesPopup(disciplines);
+      },
+      error: (error) => {
+        console.error('Error fetching disciplines:', error);
+        // Handle error, display error message, etc.
+      },
+    });
+  }
+
+  openDisciplinesPopup(disciplines: Discipline[]): void {
+    const dialogRef = this.dialog.open(DisciplinesPopupComponent, {
+      data: { disciplines: disciplines },
+    });
+
+    // Handle the result when the popup is closed if needed
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('The disciplines popup was closed');
+    });
+  }
 }
 
 @Component({
@@ -202,24 +289,26 @@ export class AppAcademieDialogContentComponent {
   selectedImage: any = '';
   joiningDate: any = '';
 
-  
-
-  etatOptions = ['Actif', 'Suspendu', 'Inactif', 'Ferme'];
+  etatOptions = ['ACTIF', 'SUSPENDU', 'INACTIF', 'FERME'];
 
   typeOptions = ['ACADEMY', 'CLUB'];
 
   managers: Manager[] = [];
   disciplines: Discipline[] = [];
-  
+
   constructor(
     public datePipe: DatePipe,
     public dialogRef: MatDialogRef<AppAcademieDialogContentComponent>,
     public academieService: AcademieService,
     public disciplineService: DisciplineService,
+    private firestorage: AngularFireStorage,
     // @Optional() is used to prevent error if no data is passed
     @Optional() @Inject(MAT_DIALOG_DATA) public data: Academie
   ) {
-    this.local_data = { ...data };
+    this.local_data = {
+      ...data,
+      disciplineIds: data.disciplineIds || [],
+    };
     this.action = this.local_data.action;
     if (this.local_data.DateOfJoining !== undefined) {
       this.joiningDate = this.datePipe.transform(
@@ -228,17 +317,17 @@ export class AppAcademieDialogContentComponent {
       );
     }
     if (this.local_data.imagePath === undefined) {
-      this.local_data.imagePath = 'assets/images/profile/user-1.jpg';
+      this.local_data.imagePath = 'assets/images/academie/academieLogo.png';
     }
   }
 
   ngAfterViewInit(): void {
-    this.getManagers();
+    this.getManagers(this.local_data.id);
     this.getDisciplines();
   }
 
-  getManagers(): void {
-    this.academieService.getManagers().subscribe(
+  getManagers(academieId: number): void {
+    this.academieService.getManagers(academieId).subscribe(
       (managers) => {
         console.log('Managers fetched successfully', managers);
         this.managers = managers;
@@ -268,7 +357,8 @@ export class AppAcademieDialogContentComponent {
     this.dialogRef.close({ event: 'Cancel' });
   }
 
-  selectFile(event: any): void {
+  async uploadFile(event: any) {
+    //display image
     if (!event.target.files[0] || event.target.files[0].length === 0) {
       // this.msg = 'You must select an image';
       return;
@@ -286,21 +376,94 @@ export class AppAcademieDialogContentComponent {
       // tslint:disable-next-line - Disables all
       this.local_data.imagePath = reader.result;
     };
+    //upload image
+    const file = event.target.files[0];
+    if (file) {
+      const path = `academie/${file.name}`;
+      const uploadTask = await this.firestorage.upload(path, file);
+      const url = await uploadTask.ref.getDownloadURL();
+      console.log('Image URL:', url);
+      this.local_data.logo = url;
+    }
   }
 }
 
-
 @Component({
+  selector: 'app-manager-details-dialog', // Change the selector to be unique
   templateUrl: 'manager-details-dialog.component.html',
 })
 export class ManagerDetailsDialogComponent {
-  constructor(@Optional() @Inject(MAT_DIALOG_DATA) public data: Manager) {}
+  constructor(@Optional() @Inject(MAT_DIALOG_DATA) public data: Manager) { }
 }
 
-
 @Component({
+  selector: 'app-adresse-details-dialog',
   templateUrl: 'adresse-details-dialog.component.html',
 })
 export class AdresseDetailsDialogComponent {
-  constructor(@Optional() @Inject(MAT_DIALOG_DATA) public data: Academie) {}
+  constructor(@Optional() @Inject(MAT_DIALOG_DATA) public data: Academie) { }
+}
+
+@Component({
+  templateUrl: 'etat-edit.html',
+})
+export class EditEtatFormComponent {
+  editForm: FormGroup;
+
+  etatOptions = ['ACTIF', 'SUSPENDU', 'INACTIF', 'FERME'];
+
+  constructor(
+    private fb: FormBuilder,
+    public dialogRef: MatDialogRef<EditEtatFormComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {
+    this.editForm = this.fb.group({
+      etat: data.etat,
+      changeReason: data.changeReason,
+    });
+  }
+
+  saveChanges(): void {
+    // Implement the logic to save changes
+    this.dialogRef.close({ event: 'Save', data: this.editForm.value });
+  }
+
+  cancel(): void {
+    this.dialogRef.close({ event: 'Cancel' });
+  }
+}
+
+@Component({
+  templateUrl: 'etatHisto.html',
+})
+export class HistoryPopupComponent {
+  constructor(
+    public dialogRef: MatDialogRef<HistoryPopupComponent>,
+    @Inject(MAT_DIALOG_DATA) public history: AcademieHistory[]
+  ) { }
+
+  close(): void {
+    this.dialogRef.close();
+  }
+  historyColumns: string[] = [
+    'previousEtat',
+    'newEtat',
+    'changeReason',
+    'changeDate',
+  ];
+}
+
+@Component({
+  templateUrl: 'disciplines-list.html',
+})
+export class DisciplinesPopupComponent {
+  constructor(
+    public dialogRef: MatDialogRef<DisciplinesPopupComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: { disciplines: Discipline[] }
+  ) { }
+
+  // Function to close the dialog
+  closeDialog(): void {
+    this.dialogRef.close();
+  }
 }

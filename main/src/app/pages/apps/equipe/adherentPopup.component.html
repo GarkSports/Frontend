@@ -1,0 +1,78 @@
+<div class="adherents-dialog">
+  <h2 mat-dialog-title class="dialog-title">Adherents</h2>
+  <mat-dialog-content class="dialog-content">
+    <table class="adherent-table">
+      <thead>
+        <tr>
+          <th>Fastname</th>
+          <th>Lastname</th>
+          <th>Email</th>
+          <th>Phone</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let adherent of data.adherents" class="adherent-item">
+          <td>{{ adherent.firstname }}</td>
+          <td>{{ adherent.lastname }}</td>
+          <td>{{ adherent.email }}</td>
+          <td>{{ adherent.telephone }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </mat-dialog-content>
+  <mat-dialog-actions class="dialog-actions">
+    <button mat-button mat-dialog-close color="primary" class="close-button">Close</button>
+  </mat-dialog-actions>
+</div>
+
+<style>
+  .adherents-dialog {
+    padding: 20px;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+  }
+
+  .dialog-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+  }
+
+  .dialog-content {
+    margin-bottom: 20px;
+  }
+
+  .adherent-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .adherent-table th,
+  .adherent-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+
+  .adherent-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+  }
+
+  .adherent-item td:first-child {
+    font-weight: bold;
+  }
+
+  .close-button {
+    background-color: #007bff;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 8px 16px;
+  }
+
+  .close-button:hover {
+    background-color: #0056b3;
+  }
+</style>

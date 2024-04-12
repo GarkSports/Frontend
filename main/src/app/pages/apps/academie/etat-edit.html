@@ -1,0 +1,59 @@
+<div class="edit-form-container">
+  <form [formGroup]="editForm" class="form">
+    <mat-form-field class="full-width">
+      <mat-label>Etat</mat-label>
+      <mat-select formControlName="etat">
+        <mat-option *ngFor="let option of etatOptions" [value]="option">
+          {{ option }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label>Change Reason</mat-label>
+      <textarea matInput formControlName="changeReason" rows="4"></textarea>
+    </mat-form-field>
+
+    <div class="button-container">
+      <button mat-raised-button color="primary" class="save-button" (click)="saveChanges()">Save</button>
+      <button mat-stroked-button class="cancel-button" (click)="cancel()">Cancel</button>
+    </div>
+  </form>
+</div>
+
+<style>
+  .edit-form-container {
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .full-width {
+    width: 100%;
+  }
+
+  .button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+  }
+
+  .save-button {
+    margin-right: 10px;
+  }
+
+  .cancel-button {
+    color: #6c757d;
+  }
+
+  .cancel-button:hover {
+    background-color: transparent;
+    color: #495057;
+  }
+</style>

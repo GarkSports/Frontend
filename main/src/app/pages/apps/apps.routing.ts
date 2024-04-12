@@ -21,6 +21,10 @@ import { AppBlogsComponent } from './blogs/blogs.component';
 import { AppBlogDetailsComponent } from './blogs/details/details.component';
 import { DisciplineComponent } from './discipline/discipline.component';
 import { AcademieComponent } from './academie/academie.component';
+import { AcademieProfileComponent } from './academie-profile/academie-profile.component';
+import { EquipeComponent } from './equipe/equipe.component';
+import { PaiementComponent } from './paiement/paiement.component';
+import { ArchivedAcademieComponent } from './archived-academie/academie.component';
 import { AppManagerlistComponent } from './admin/managerlist.component';
 import { AppStafflistComponent } from './managers/staff/stafflist.component';
 import { AppRoleslistComponent } from './managers/roles/roleslist.component';
@@ -240,6 +244,50 @@ export const AppsRoutes: Routes = [
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
             { title: 'Employee' },
+          ],
+        },
+      },
+      {
+        path: 'archivedacademie',
+        component: ArchivedAcademieComponent,
+        data: {
+          title: 'Archived Academies',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Archived Academies' },
+          ],
+        },
+      },
+      {
+        path: 'academieprofile',
+        component: AcademieProfileComponent,
+        data: {
+          title: 'Academie Profile',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Academie Profile' },
+          ],
+        },
+      },
+      {
+        path: 'equipe',
+        component: EquipeComponent,
+        data: {
+          title: 'Equipe',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Equipe' },
+          ],
+        },
+      },
+      {
+        path: 'paiement',
+        component: PaiementComponent,
+        data: {
+          title: 'Paiement',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Paiement' },
           ],
         },
       },

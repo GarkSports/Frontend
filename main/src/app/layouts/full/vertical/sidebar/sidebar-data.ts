@@ -70,13 +70,33 @@ export const navItems: NavItem[] = [
     route: 'apps/employee',
   },
   {
+    displayName: 'Archived Academies',
+    iconName: 'building',
+    route: 'apps/archivedacademie',
+  },
+  {
+    displayName: 'Academie Profile',
+    iconName: 'building',
+    route: 'apps/academieprofile',
+  },
+  {
+    displayName: 'Equipe',
+    iconName: 'users',
+    route: 'apps/equipe',
+  },
+  {
+    displayName: 'Paiement',
+    iconName: 'money',
+    route: 'apps/paiement',
+  },
+  {
     displayName: 'Discipline',
-    iconName: 'brand-ctemplar',
+    iconName: 'medal',
     route: 'apps/discipline',
   },
   {
     displayName: 'Academie',
-    iconName: 'brand-ctemplar',
+    iconName: 'building',
     route: 'apps/academie',
   },
   {

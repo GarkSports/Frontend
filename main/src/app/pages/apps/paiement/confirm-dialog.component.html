@@ -1,0 +1,59 @@
+<h2 mat-dialog-title class="dialog-title">Confirm Action</h2>
+<div mat-dialog-content class="dialog-content">
+    <p>{{ data.message }}</p>
+</div>
+<div mat-dialog-actions class="dialog-actions">
+    <button mat-button class="action-button primary" (click)="onCancelClick()">Cancel</button>
+    <button mat-button class="action-button warn" (click)="onConfirmClick()">Confirm</button>
+</div>
+
+<style>
+    .dialog-title {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .dialog-content {
+        margin-bottom: 1.5rem;
+    }
+
+    .dialog-actions {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+
+    .action-button:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .action-button.primary {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+    .action-button.primary:hover {
+        background-color: #0056b3;
+    }
+
+    /* Add this to your existing CSS */
+    .action-button {
+        margin-left: 1rem;
+        background-color: #007bff;
+        /* Blue background color */
+        color: #fff;
+        /* White text color */
+    }
+
+    .action-button.warn {
+        background-color: #dc3545;
+        /* Red background color */
+        color: #fff;
+        /* White text color */
+    }
+
+
+    .action-button.warn:hover {
+        background-color: #c82333;
+    }
+</style>

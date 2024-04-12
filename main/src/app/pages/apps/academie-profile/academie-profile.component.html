@@ -1,0 +1,113 @@
+<mat-card class="cardWithShadow">
+    <mat-card-content class="p-0">
+        <mat-tab-group mat-stretch-tabs="false" animationDuration="0ms">
+            <mat-tab>
+                <ng-template mat-tab-label>
+                    <div class="d-flex align-items-center">
+                        <mat-icon>
+                            <i-tabler name="user-circle" class="icon-20 m-r-8"></i-tabler>
+                        </mat-icon>
+                    </div>
+                    Academie
+                </ng-template>
+                <mat-card-content class="p-y-24 b-t-1">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <mat-card class="cardWithShadow">
+                                <mat-card-content class="p-y-24">
+                                    <mat-card-title>Change Profile</mat-card-title>
+                                    <mat-card-subtitle class="mat-body-1">Change your profile details from
+                                        here</mat-card-subtitle>
+                                    <div *ngIf="academie" class="text-center m-t-24">
+                                        <img [src]="academie.logo" class="rounded-circle" width="120" />
+                                        <div class="m-t-24">
+                                            <button mat-flat-button color="primary" class="m-r-8" (click)="openUpdateProfileDialog()"> 
+                                                Update profile
+                                            </button>
+                                        </div>
+                                    </div>
+                                </mat-card-content>
+                            </mat-card>
+                        </div>
+                        <div class="col-sm-6">
+                            <mat-card class="cardWithShadow">
+                                <mat-card-content class="p-y-24">
+                                    <mat-card-title>Academie Information</mat-card-title>
+                                    <form class="m-t-24" *ngIf="academie">
+                                        <!-- input -->
+                                        <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Nom academie</mat-label>
+                                        <mat-form-field appearance="outline" class="w-100" color="primary">
+                                            <input matInput type="text" [value]="academie.nom" readonly />
+                                        </mat-form-field>
+                                        <!-- input -->
+                                        <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Type
+                                            academie</mat-label>
+                                        <mat-form-field appearance="outline" class="w-100" color="primary">
+                                            <input matInput type="text" [value]="academie.type" readonly />
+                                        </mat-form-field>
+                                        <!-- input -->
+                                        <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Nom manager
+                                            academie</mat-label>
+                                        <mat-form-field appearance="outline" class="w-100 hide-hint" color="primary">
+                                            <input matInput type="text"
+                                                [value]="academie.manager.firstname + ' ' + academie.manager.lastname"
+                                                readonly>
+                                        </mat-form-field>
+
+                                    </form>
+                                </mat-card-content>
+                            </mat-card>
+                        </div>
+                        <div class="col-12">
+                            <mat-card class="cardWithShadow">
+                                <mat-card-content>
+                                    <mat-card-title>Academie Details</mat-card-title>
+                                    <div class="row m-t-24" *ngIf="academie">
+                                        <div class="col-sm-6">
+                                            <!-- input -->
+                                            <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Description
+                                                academie</mat-label>
+                                            <mat-form-field appearance="outline" class="w-100" color="primary">
+                                                <input matInput type="text" [value]="academie.description" readonly />
+                                            </mat-form-field>
+                                            <!-- input -->
+                                            <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Affiliation
+                                                academie</mat-label>
+                                            <mat-form-field appearance="outline" class="w-100" color="primary">
+                                                <input matInput type="text" [value]="academie.affiliation" readonly />
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <!-- input -->
+                                            <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Etat
+                                                academie</mat-label>
+                                            <mat-form-field appearance="outline" class="w-100" color="primary">
+                                                <input matInput type="text" [value]="academie.etat" readonly />
+                                            </mat-form-field>
+                                            <!-- input -->
+                                            <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Frais
+                                                academie</mat-label>
+                                            <mat-form-field appearance="outline" class="w-100" color="primary">
+                                                <input matInput type="number" [value]="academie.fraisAdhesion"
+                                                    readonly />
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-12">
+                                            <!-- input -->
+                                            <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Address</mat-label>
+                                            <mat-form-field appearance="outline" class="w-100" color="primary">
+                                                <input matInput type="text"
+                                                    [value]="academie.codePostal + ' ' + academie.rue + ' ' + academie.ville + ' ' + academie.pays"
+                                                    readonly />
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </mat-card-content>
+                            </mat-card>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-tab>
+        </mat-tab-group>
+    </mat-card-content>
+</mat-card>

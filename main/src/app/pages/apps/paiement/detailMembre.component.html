@@ -1,0 +1,57 @@
+<h2 class="f-w-500 m-b-24" mat-dialog-title>Member Details</h2>
+<mat-dialog-content style="width: 500px;">
+    <!-- Member details displayed in read-only input fields -->
+    <div class="form-row" style="margin-top: 15px;">
+        <div class="input-container">
+            <mat-form-field appearance="outline" style="width: 100%;">
+                <mat-label>Nom</mat-label>
+                <input matInput [value]="adherent.firstname + ' ' + adherent.lastname" readonly />
+            </mat-form-field>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="input-container">
+            <mat-form-field appearance="outline" style="width: 100%;">
+                <mat-label>Email</mat-label>
+                <input matInput [value]="adherent.email" readonly />
+            </mat-form-field>
+        </div>
+
+    </div>
+
+    <div class="form-row">
+        <div class="input-container">
+            <mat-form-field appearance="outline" style="width: 100%;">
+                <mat-label>Telephone</mat-label>
+                <input matInput [value]="adherent.telephone" readonly />
+            </mat-form-field>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="input-container">
+            <mat-form-field appearance="outline" style="width: 100%;">
+                <mat-label>Statut</mat-label>
+                <input matInput [value]="adherent.statutAdherent" readonly />
+            </mat-form-field>
+        </div>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <!-- Button to close the dialog -->
+    <button mat-raised-button color="primary" (click)="close()">Close</button>
+</mat-dialog-actions>
+
+<style>
+    .form-row {
+        display: flex;
+        margin-bottom: 16px;
+    }
+
+    .input-container {
+        flex: 1;
+        margin-right: 10px;
+    }
+
+</style>

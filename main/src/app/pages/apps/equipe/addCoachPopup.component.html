@@ -1,0 +1,17 @@
+<h2 mat-dialog-title>Select Entraineurs</h2>
+<mat-dialog-content>
+  <mat-form-field appearance="outline" class="w-100 hide-hint">
+    <input matInput placeholder="Search Entraineurs" #searchInput (input)="applyFilter(searchInput.value)" />
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+
+  <mat-selection-list #entraineursList (selectionChange)="selectCoachs($event)">
+    <mat-list-option *ngFor="let coach of filteredCoachs" [value]="coach.id">
+      {{ coach.firstname }} {{ coach.lastname }}
+    </mat-list-option>
+  </mat-selection-list>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button [mat-dialog-close]="selectedCoachs">OK</button>
+  <button mat-button mat-dialog-close>Cancel</button>
+</mat-dialog-actions>

@@ -1,11 +1,64 @@
-<h2 mat-dialog-title>Manager Details</h2>
-<mat-dialog-content>
-  <p><strong>First Name:</strong> {{ data.firstname }}</p>
-  <p><strong>Last Name:</strong> {{ data.lastname }}</p>
-  <p><strong>Last Name:</strong> {{ data.telephone }}</p>
-  <p><strong>Last Name:</strong> {{ data.telephone2 }}</p>
-  <!-- Add other details based on your Manager model properties -->
-</mat-dialog-content>
-<mat-dialog-actions>
-  <button mat-button mat-dialog-close>Close</button>
-</mat-dialog-actions>
+<div class="manager-details-container">
+  <h2 class="manager-details-title">Manager Details</h2>
+  <mat-dialog-content>
+    <div class="detail-item">
+      <span class="detail-label">First Name:</span>
+      <span class="detail-value">{{ data.firstname }}</span>
+    </div>
+    <div class="detail-item">
+      <span class="detail-label">Last Name:</span>
+      <span class="detail-value">{{ data.lastname }}</span>
+    </div>
+    <div class="detail-item">
+      <span class="detail-label">Telephone:</span>
+      <span class="detail-value">{{ data.telephone }}</span>
+    </div>
+    <div class="detail-item">
+      <span class="detail-label">Telephone 2:</span>
+      <span class="detail-value">{{ data.telephone2 }}</span>
+    </div>
+    <!-- Add other details based on your Manager model properties -->
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-button mat-dialog-close color="primary" class="close-button">Close</button>
+  </mat-dialog-actions>
+</div>
+
+<style>
+  .manager-details-container {
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .manager-details-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+  }
+
+  .detail-item {
+    margin-bottom: 10px;
+  }
+
+  .detail-label {
+    font-weight: bold;
+    color: #333;
+    margin-right: 10px;
+  }
+
+  .detail-value {
+    color: #666;
+  }
+
+  .close-button {
+    background-color: #007bff;
+    color: #fff;
+  }
+
+  .close-button:hover {
+    background-color: #0056b3;
+  }
+</style>
