@@ -19,8 +19,13 @@ import { AppInvoiceViewComponent } from './invoice/invoice-view/invoice-view.com
 import { AppEditInvoiceComponent } from './invoice/edit-invoice/edit-invoice.component';
 import { AppBlogsComponent } from './blogs/blogs.component';
 import { AppBlogDetailsComponent } from './blogs/details/details.component';
-import {DisciplineComponent} from './discipline/discipline.component';
+import { DisciplineComponent } from './discipline/discipline.component';
 import { AcademieComponent } from './academie/academie.component';
+import { AppManagerlistComponent } from './admin/managerlist.component';
+import { AppStafflistComponent } from './managers/staff/stafflist.component';
+import { AppRoleslistComponent } from './managers/roles/roleslist.component';
+import { AppProfilComponent } from './managers/profil/profil.component';
+
 
 export const AppsRoutes: Routes = [
   {
@@ -125,6 +130,50 @@ export const AppsRoutes: Routes = [
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
             { title: 'Tickets' },
+          ],
+        },
+      },
+      {
+        path: 'managers',
+        component: AppManagerlistComponent,
+        data: {
+          title: 'Managers',
+          urls: [
+            { title: 'Managers', url: '/dashboards/dashboard1' },
+            { title: 'Managers' },
+          ],
+        },
+      },
+      {
+        path: 'staff',
+        component: AppStafflistComponent,
+        data: {
+          title: 'Staff',
+          urls: [
+            { title: 'Staff', url: '/dashboards/dashboard1' },
+            { title: 'Staff' },
+          ],
+        },
+      },
+      {
+        path: 'roles',
+        component: AppRoleslistComponent,
+        data: {
+          title: 'Roles',
+          urls: [
+            { title: 'Roles', url: '/dashboards/dashboard1' },
+            { title: 'Roles' },
+          ],
+        },
+      },
+      {
+        path: 'profil',
+        component: AppProfilComponent,
+        data: {
+          title: 'Profil',
+          urls: [
+            { title: 'Profil', url: '/dashboards/dashboard1' },
+            { title: 'Profil' },
           ],
         },
       },

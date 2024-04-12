@@ -80,6 +80,10 @@ import { AcademieComponent, AppAcademieDialogContentComponent } from './academie
 import { AppAddAcademieComponent } from './academie/add/add.component';
 import { ManagerDetailsDialogComponent } from './academie/academie.component';
 import { AdresseDetailsDialogComponent } from './academie/academie.component';
+import { AppManagerDialogContentComponent, AppManagerlistComponent } from './admin/managerlist.component';
+import { AppStaffDialogContentComponent, AppStafflistComponent } from './managers/staff/stafflist.component';
+import { AppRolesDialogContentComponent, AppRoleslistComponent } from './managers/roles/roleslist.component';
+import { AppProfilComponent } from './managers/profil/profil.component';
 
 
 @NgModule({
@@ -145,6 +149,12 @@ import { AdresseDetailsDialogComponent } from './academie/academie.component';
     OkDialogComponent,
     AppBlogsComponent,
     AppBlogDetailsComponent,
+    AppManagerlistComponent,
+    AppManagerDialogContentComponent,
+    AppStaffDialogContentComponent,
+    AppStafflistComponent,
+    AppRolesDialogContentComponent,
+    AppRoleslistComponent,
   ],
   providers: [DatePipe],
 })
