@@ -33,7 +33,7 @@ export class AcademieService {
 
   getAcademieById(academieId: number): Observable<Academie> {
     return this.http.get<Academie>(`${this.apiUrl}/getAcademieById/${academieId}`);
-  }  
+  }
 
   updateAcademie(academieData: Academie, academieId: number, disciplineIds: number[],  managerId: number): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });

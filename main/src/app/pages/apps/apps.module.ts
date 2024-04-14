@@ -87,6 +87,7 @@ import { DisciplinesPopupComponent } from './academie/academie.component';
 import { AngularFireModule } from '@angular/fire/compat'; // Update import path
 import { AngularFireStorageModule } from '@angular/fire/compat/storage'; // Update import path
 import { environment } from '../api/environment';
+import { AppBlogDialogContentComponent, AppBloglistComponent } from './blogs/bloglist/blog.component';
 
 
 @NgModule({
@@ -157,6 +158,8 @@ import { environment } from '../api/environment';
     OkDialogComponent,
     AppBlogsComponent,
     AppBlogDetailsComponent,
+    AppBloglistComponent,
+    AppBlogDialogContentComponent
   ],
   providers: [DatePipe],
 })

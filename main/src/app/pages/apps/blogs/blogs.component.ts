@@ -27,6 +27,12 @@ export class AppBlogsComponent implements OnInit {
     this.PostsService.getPosts().subscribe((d: any) => (this.PostsService.blogPosts = d));
      
   }
+
+  applyFilter(filterValue: string): void {
+    //this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  
   // filterFeaturedPost = this.blogPosts.filter(function (item) {
   //   return item.featuredPost == true;
   // });

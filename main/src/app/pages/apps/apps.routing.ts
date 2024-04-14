@@ -21,6 +21,7 @@ import { AppBlogsComponent } from './blogs/blogs.component';
 import { AppBlogDetailsComponent } from './blogs/details/details.component';
 import {DisciplineComponent} from './discipline/discipline.component';
 import { AcademieComponent } from './academie/academie.component';
+import { AppBloglistComponent } from './blogs/bloglist/blog.component';
 
 export const AppsRoutes: Routes = [
   {
@@ -172,6 +173,17 @@ export const AppsRoutes: Routes = [
           ],
         },
       },
+      {
+        path: 'blog/postslist',
+        component: AppBloglistComponent,
+        data: {
+          title: 'PostsList',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'PostsList' },
+          ],
+        },
+      },    
       {
         path: 'blog/detail/:id',
         component: AppBlogDetailsComponent,

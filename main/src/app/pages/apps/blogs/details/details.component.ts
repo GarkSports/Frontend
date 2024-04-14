@@ -34,7 +34,7 @@ export class AppBlogDetailsComponent implements OnInit{
       this.PostService.getPosts().subscribe((d: any) => (this.PostService.blogPosts = d));
     
     
-    this.blogDetail = this.PostService.blogPosts.filter(x => x.title === this.title);
+    this.blogDetail = this.PostService.blogPosts.filter(x => x.id == this.title);
     console.log(this.blogDetail)
   }
 }
