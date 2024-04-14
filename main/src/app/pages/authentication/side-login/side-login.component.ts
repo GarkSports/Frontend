@@ -4,9 +4,6 @@ import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } 
 import { Router, RouterModule } from '@angular/router';
 import { MaterialModule } from '../../../material.module';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { Axios } from 'axios';
-import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-side-login',

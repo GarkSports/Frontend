@@ -108,7 +108,6 @@ import { environment } from '../api/environment';
 import { AppManagerDialogContentComponent, AppManagerlistComponent } from './admin/managerlist.component';
 import { AppStaffDialogContentComponent, AppStafflistComponent } from './managers/staff/stafflist.component';
 import { AppRolesDialogContentComponent, AppRoleslistComponent } from './managers/roles/roleslist.component';
-import { AppProfilComponent } from './managers/profil/profil.component';
 
 
 @NgModule({
