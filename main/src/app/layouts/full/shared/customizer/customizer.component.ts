@@ -26,12 +26,12 @@ export class CustomizerComponent {
   constructor(private settings: CoreService) {}
   options = this.settings.getOptions();
 
-  // ngOnInit() {
-  //   // Set boxed to false (full) by default
-  //   this.options.theme = 'dark';
-  //   this.options.boxed = false;
-  //   this.optionsChange.emit(this.options);
-  // }
+  ngOnInit() {
+    // Set boxed to false (full) by default
+    this.options.theme = 'dark';
+    //this.options.boxed = false;
+    this.optionsChange.emit(this.options);
+  }
 
   setDark() {
     this.optionsChange.emit(this.options);

@@ -132,9 +132,22 @@ export class AcademieComponent implements AfterViewInit {
     // const academieDataWithoutManagerId = { ...academieData };
     // delete academieDataWithoutManagerId.manager_id;
     if (academieData.manager_id && academieData.disciplineIds) {
+      const updatedAcademieData = {
+        nom: academieData.nom,
+        type: academieData.type,
+        fraisAdhesion: academieData.fraisAdhesion,
+        affiliation: academieData.affiliation,
+        description: academieData.description,
+        rue: academieData.rue,
+        ville: academieData.ville,
+        codePostal: academieData.codePostal,
+        pays: academieData.pays,
+        logo: academieData.logo,
+      };
+      const updatedAcademie: Partial<Academie> = { ...updatedAcademieData };
       this.academieService
         .updateAcademie(
-          academieData,
+          updatedAcademie as Academie,
           academieData.id,
           academieData.disciplineIds,
           academieData.manager_id

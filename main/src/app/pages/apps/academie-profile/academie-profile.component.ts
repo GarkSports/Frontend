@@ -24,8 +24,23 @@ export class AcademieProfileComponent {
   }
 
   openUpdateProfileDialog(): void {
+    console.log('Academie data:', this.academie);
+
+    // Extracting the desired attributes from the academie object
+    const academieData = {
+      nom: this.academie.nom,
+      fraisAdhesion: this.academie.fraisAdhesion,
+      affiliation: this.academie.affiliation,
+      description: this.academie.description,
+      rue: this.academie.rue,
+      ville: this.academie.ville,
+      codePostal: this.academie.codePostal,
+      pays: this.academie.pays,
+      logo: this.academie.logo
+    };
+
     const dialogRef = this.dialog.open(UpdateProfileDialogComponent, {
-      data: this.academie // Pass academie data to the dialog
+      data: academieData // Pass only the extracted attributes to the dialog
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -35,6 +50,7 @@ export class AcademieProfileComponent {
       }
     });
   }
+
 }
 
 
@@ -78,4 +94,3 @@ export class UpdateProfileDialogComponent {
     }
   }
 }
-
