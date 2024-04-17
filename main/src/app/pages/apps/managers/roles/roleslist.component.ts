@@ -12,6 +12,9 @@ import { DatePipe } from '@angular/common';
 import { Academie } from 'src/models/academie.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Roles } from 'src/models/roles.model';
+import { RoleName } from 'src/models/roleName.models';
+
+
 
 @Component({
   selector: 'app-roles-list',
@@ -25,16 +28,14 @@ export class AppRoleslistComponent implements OnInit {
 
   displayedColumns: string[] = [
     'roleName',
-    'creerPar',
-    'assignedTo',   
     'permissions',
     'action',
   ];
-  dataSource = new MatTableDataSource<Manager>([]);
+  dataSource = new MatTableDataSource<RoleName>([]);
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator =
   Object.create(null);
-  roleNames: string[] = [];
+  roleNames: string[];
 
 
   constructor(public dialog: MatDialog,
@@ -42,25 +43,19 @@ export class AppRoleslistComponent implements OnInit {
               public managerService: ManagerService){}
 
   ngOnInit(): void {
-
-    this.fetchRoleNames();
+    this.dataSource = new MatTableDataSource<RoleName>([]);
     this.table.renderRows();
 
   }
 
-  fetchRoleNames(): void {
-    this.managerService.getRoleNames().subscribe(roleNames => {
-      this.roleNames = roleNames;
-    });
-  }
-
+ 
   ngAfterViewInit(): void {
     this.managerService.getRoleNames().subscribe(roleNames => {
-      this.roleNames = roleNames;
-    
+      this.dataSource.data = roleNames;
+      this.dataSource.paginator = this.paginator;
     });
   }
-
+  
   applyFilter(filterValue: string): void {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
@@ -142,7 +137,7 @@ export class AppRolesDialogContentComponent implements OnInit {
 
   fetchRoleNames(): void {
     this.managerService.getRoleNames().subscribe(roleNames => {
-      this.roleNames = roleNames;
+      //this.roleNames = roleNames;
       console.log(roleNames);
       
     });

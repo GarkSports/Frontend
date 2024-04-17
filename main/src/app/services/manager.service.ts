@@ -3,6 +3,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { Observable, catchError, of, tap, throwError } from 'rxjs';
 import { Academie } from 'src/models/academie.model';
 import { Manager } from 'src/models/manager.model';
+import { RoleName } from 'src/models/roleName.models';
 
 @Injectable({
   providedIn: 'root'
@@ -44,8 +45,8 @@ export class ManagerService {
     
   }
   
-  getRoleNames(): Observable<string[]> {
-    return this.http.get<string[]>(`${this.apiUrl}/get-role-names`, { withCredentials: true });
+  getRoleNames(): Observable<RoleName[]> {
+    return this.http.get<RoleName[]>(`${this.apiUrl}/get-role-names`, { withCredentials: true });
   }
 
   getPermissions(): Observable<string[]> {

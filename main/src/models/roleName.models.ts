@@ -5,3 +5,5 @@ export class RoleName {
     roleName?: string;
     permissions?: string[];
 }
+
+export const RoleNameArray = Object.keys(RoleName).map(key => RoleName[key as keyof typeof RoleName]);

@@ -12,6 +12,7 @@ import { DatePipe } from '@angular/common';
 import { Academie } from 'src/models/academie.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Role,RoleArray  } from 'src/models/enums/role.model';
+import { RoleNameArray } from 'src/models/roleName.models';
 
 @Component({
   selector: 'app-staff-list',
@@ -59,7 +60,9 @@ export class AppStafflistComponent implements OnInit {
 
   fetchRoleNames(): void {
     this.managerService.getRoleNames().subscribe(roleNames => {
-      this.roleNames = roleNames;
+      //this.roleNames = roleNames;
+      this.dataSource.paginator = this.paginator;
+
     });
   }
 
@@ -196,8 +199,8 @@ export class AppStaffDialogContentComponent implements OnInit {
   managerForm: FormGroup;
   firstnameValue: string;
   roles: string[];  
-  roleNames: string[] = [];
-  permissions: string[] = [];
+  roleNames: string[];
+
 
   constructor(
     public dialogRef: MatDialogRef<AppStaffDialogContentComponent>,
@@ -222,14 +225,20 @@ export class AppStaffDialogContentComponent implements OnInit {
   
 
 
+  // ngOnInit(): void {
+  //   this.initManagerForm();
+  //   this.fetchRoleNames();
+  //   //this.roleNames = RoleNameArray;
+  //   this.roles = RoleArray;
+
+  // }
   ngOnInit(): void {
-    this.initManagerForm();
-    this.fetchRoleNames();
-    this.fetchPermissions();
-    this.roles = RoleArray;
-
+    this.managerService.getRoleNames().subscribe(roleNames => {
+      this.roleNames = roleNames.map(role => role.roleName);
+    });
   }
-
+  
+  
   initManagerForm(): void {
     this.managerForm = this.formBuilder.group({
       firstname: [this.local_data.firstname, Validators.required],
@@ -238,23 +247,18 @@ export class AppStaffDialogContentComponent implements OnInit {
       adresse: [this.local_data.adresse, Validators.required],
       role: [this.local_data.role, Validators.required],
       roleName: [this.local_data.roleName, Validators.required],
-      permission: [this.local_data.permissions, Validators.required],
     });
   }
 
+  // fetchRoleNames(): void {
+  //   this.managerService.getRoleNames().subscribe(roleNames => {
+  //     this.roleNames = roleNames;
+  //     console.log(roleNames);
+  //   });
+  // }
   fetchRoleNames(): void {
     this.managerService.getRoleNames().subscribe(roleNames => {
       this.roleNames = roleNames;
-      console.log(roleNames);
-      
-    });
-  }
-
-  fetchPermissions(): void {
-    this.managerService.getPermissions().subscribe(permissions => {
-      this.permissions = permissions;
-      console.log(permissions);
-      
     });
   }
 
