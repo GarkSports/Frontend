@@ -88,13 +88,13 @@ export class PaiementComponent implements AfterViewInit {
     if (this.selectedStatut !== null) {
       // Convert the selectedStatut to lowercase for case-insensitive comparison
       const filter = this.selectedStatut.trim().toLowerCase();
-  
+
       // Set filter function for data source
       this.dataSource.filterPredicate = (data: Paiement, filter: string) => {
         // Check if the statut matches the filter value exactly
         return data.adherent?.statutAdherent.toString().toLowerCase() === filter;
       };
-  
+
       // Apply the filter
       this.dataSource.filter = filter;
     } else {
@@ -102,7 +102,7 @@ export class PaiementComponent implements AfterViewInit {
       this.applyFilter('');
     }
   }
-  
+
 
   // Inside the Component Class
   applyFilterByEquipe(): void {
@@ -185,7 +185,7 @@ export class PaiementComponent implements AfterViewInit {
         return ''; // Default background color
     }
   }
-  
+
   getTextColor(status: string): string {
     switch (status) {
       case 'Non_Payé':
@@ -199,7 +199,7 @@ export class PaiementComponent implements AfterViewInit {
       default:
         return ''; // Default text color
     }
-  }  
+  }
 
   onDeletePaiement(idPaiement: number): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
@@ -230,13 +230,8 @@ export class PaiementComponent implements AfterViewInit {
 
     dialogRef.afterClosed().subscribe(updatedPaiement => {
       if (updatedPaiement) {
-        // Perform update operation here
-        this.paiementService.updatePaiement(updatedPaiement, updatedPaiement.id)
-          .subscribe(response => {
-            // Handle response or any further action
-            console.log('Payment updated:', response);
-            this.getPaiements();
-          });
+        // Handle dialog result if needed
+        this.getPaiements();
       }
     });
   }
@@ -284,10 +279,39 @@ export class PaiementDetailsPopupComponent {
     .filter(value => typeof value === 'string')
     .map(value => String(value));
   constructor(public dialogRef: MatDialogRef<PaiementDetailsPopupComponent>,
-    @Inject(MAT_DIALOG_DATA) public paiement: Paiement) { }
+    @Inject(MAT_DIALOG_DATA) public paiement: Paiement, private paiementService: PaiementService) { }
 
   onCancelClick(): void {
     this.dialogRef.close();
+  }
+  onUpdateClick(): void {
+    if (this.paiement) {
+      const updatedPaiementData = {
+        typeAbonnement: this.paiement.typeAbonnement,
+        dateDebut: this.paiement.dateDebut,
+        dateFin: this.paiement.dateFin,
+        datePaiement: this.paiement.datePaiement,
+        montant: this.paiement.montant,
+        reste: this.paiement.reste,
+        remarque: this.paiement.remarque,
+        retardPaiement: this.paiement.retardPaiement
+      };
+      const updatedPaiement: Partial<Paiement> = { ...updatedPaiementData };
+      this.paiementService.updatePaiement(updatedPaiement as Paiement, this.paiement.id)
+        .subscribe(
+          response => {
+            console.log('Payment updated:', response);
+            this.dialogRef.close(response); // Close dialog with response
+          },
+          error => {
+            console.error('Error updating payment:', error);
+            // Handle error if necessary
+          }
+        );
+    } else {
+      console.error('Paiement is undefined');
+      // Handle case where paiement is undefined
+    }
   }
 }
 
@@ -362,7 +386,18 @@ export class AddPaiementPopupComponent {
 
   onSaveClick(): void {
     if (this.paiement.adherent) {
-      this.paiementService.addPaiement(this.paiement, this.paiement.adherent.id)
+      const paiementData = {
+        typeAbonnement: this.paiement.typeAbonnement,
+        dateDebut: this.paiement.dateDebut,
+        dateFin: this.paiement.dateFin,
+        datePaiement: this.paiement.datePaiement,
+        montant: this.paiement.montant,
+        reste: this.paiement.reste,
+        remarque: this.paiement.remarque,
+        retardPaiement: this.paiement.retardPaiement
+      };
+      const newPaiement: Partial<Paiement> = { ...paiementData };
+      this.paiementService.addPaiement(newPaiement as Paiement, this.paiement.adherent.id)
         .subscribe(response => {
           console.log('Payment added:', response);
           this.dialogRef.close(response); // Close dialog with response if needed
@@ -438,4 +473,3 @@ export class ConfirmDialogComponent {
     this.dialogRef.close(true); // Close the dialog with true value
   }
 }
-

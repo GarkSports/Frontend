@@ -69,7 +69,7 @@
 <mat-dialog-actions>
   <!-- Buttons for Save and Cancel -->
   <button mat-raised-button class="cancel-button" (click)="onCancelClick()">Cancel</button>
-  <button mat-raised-button color="primary" [mat-dialog-close]="paiement" class="save-button">Update</button>
+  <button mat-raised-button color="primary" [mat-dialog-close]="paiement" class="save-button" (click)="onUpdateClick()">Update</button>
 </mat-dialog-actions>
 
 <style>
