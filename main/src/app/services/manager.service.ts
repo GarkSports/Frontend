@@ -10,17 +10,17 @@ import { Manager } from 'src/models/manager.model';
 export class ManagerService {
   private apiUrl = 'http://localhost:8089/manager';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  addRoleName(managerData: Manager): Observable<any> {
+  addRoleName(roleName: string, permissions: string[]): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const requestBody = { roleName, permissions };
 
-    const requestBody = {
-        roleName: managerData.roleName,
-        permission: managerData.permissions
-    };
-    return this.http.post<any>(`${this.apiUrl}/add-role-name`, requestBody, { withCredentials: true, headers});
-}
+    return this.http.post<any>(`${this.apiUrl}/add-role-name`, requestBody, {
+      withCredentials: true,
+      headers,
+    });
+  }
 
 
   addStaff(managerData: Manager): Observable<any> {

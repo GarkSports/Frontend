@@ -21,10 +21,7 @@ export class AppRoleslistComponent implements OnInit {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> =
     Object.create(null);
   searchText: any;
-  totalCount = -1;
-  Closed = -1;
-  Inprogress = -1;
-  Open = -1;
+  
 
   displayedColumns: string[] = [
     'roleName',
@@ -45,11 +42,7 @@ export class AppRoleslistComponent implements OnInit {
               public managerService: ManagerService){}
 
   ngOnInit(): void {
-    this.totalCount = this.dataSource.data.length;
-    this.Open = this.btnCategoryClick('Open');
-    this.Closed = this.btnCategoryClick('Closed');
-    this.Inprogress = this.btnCategoryClick('InProgress');
-    this.dataSource = new MatTableDataSource<Manager>([]);
+
     this.fetchRoleNames();
     this.table.renderRows();
 
@@ -62,10 +55,9 @@ export class AppRoleslistComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.managerService.getManagers().subscribe(managers => {
-      this.dataSource.data = managers;
-      this.dataSource.paginator = this.paginator;
-      console.log(managers);
+    this.managerService.getRoleNames().subscribe(roleNames => {
+      this.roleNames = roleNames;
+    
     });
   }
 
@@ -92,92 +84,18 @@ export class AppRoleslistComponent implements OnInit {
         this.updateRowData(result.data);
       // } else if (result.event === 'Delete') {
       //   this.deleteRowData(result.data);
-      } else if (result.event === 'Block'){
-        this.blockRowData(result.data.managerData);
-      }
-      // else if (result.event === 'UnBlock'){
-      //   this.unblockRowData(result.data.managerData);
-      // }
+      } 
+      
     });
   }
   // tslint:disable-next-line - Disables all
   addRowData(managerData: Manager): void {
     this.table.renderRows();
-    // const d = new Date();
-    // this.managerService.addStaff(managerData).subscribe(
-    //   (response) => {
-    //     console.log('Manager added successfully1', response);
-    //     this.getManagers(); // Refresh the data after adding
-    //     this.table.renderRows();
-    //   },
-    //   (error) => {
-    //     console.error('Error adding Manager', error); // Handle error, if needed
-    //   }
-    // );
-    //this.table.renderRows();
-  }
 
+  }
   // tslint:disable-next-line - Disables all
   updateRowData(managerData: Manager): void {
     this.table.renderRows();
-  //   this.managerService.updateManager(managerData).subscribe(
-  //   (response)=>{
-  //     console.log('Manager updated successfully', response);
-  //     this.getManagers();
-  //   },
-  //   (error)=> {
-  //     console.error('Error archiving academie', error);
-  //   }
-  //  )
-  }
- 
-  // tslint:disable-next-line - Disables all
-  // deleteRowData(managerData: Manager): boolean | any {
-  //   this.dataSource.data = this.dataSource.data.filter((value, key) => {
-  //     return value.id !== managerData.id;
-  //   });
-  // }
-  
-  blockRowData(managerData: Manager): void {
-    this.table.renderRows();
-    // this.managerService.blockManager(managerData.id).subscribe(
-    //   (response) => {
-    //     console.log('Manager blockManager successfully', response);
-    //     this.getManagers(); // Reload the data after blocking
-    //     this.table.renderRows();
-    //   },
-    //   (error) => {
-    //     console.error('Error archiving manager', error);
-    //     // Handle error, if needed
-    //   }
-    // );
-  }
-  
-
-  unblockRowData(managerData: Manager): void{
-    this.table.renderRows();
-    // this.managerService.unBlockManager(managerData.id).subscribe(
-    //   (response) => {
-    //     console.log('Manager unblocked successfully', response);
-    //     this.getManagers();
-    //   },
-    //   (error) => {
-    //     console.error('Error unblocking academie', error);
-    //     // Handle error, if needed
-    //   }
-    // );
-  }
-
-  getManagers(): void {
-    this.managerService.getManagers().subscribe(
-      (managers) => {
-        console.log('Managers fetched successfully', managers);
-        this.dataSource.data = managers;
-      },
-      (error) => {
-        console.error('Error fetching academies', error);
-      }
-    );
   }
 }
 
@@ -218,7 +136,7 @@ export class AppRolesDialogContentComponent implements OnInit {
   initManagerForm(): void {
     this.managerForm = this.formBuilder.group({
       roleName: [this.local_data.roleName, Validators.required],
-      permission: [this.local_data.permissions, Validators.required],
+      permissions: [this.local_data.permissions, Validators.required],
     });
   }
 
@@ -241,13 +159,13 @@ export class AppRolesDialogContentComponent implements OnInit {
   }
 
   doAction(): void {
-    if (this.action === 'Add') {
-      this.managerService.addRoleName(this.managerForm.value).subscribe(
-        
+    if (this.action === 'Add' && this.managerForm) {
+      const roleName = this.managerForm.get('roleName')?.value; // Add '?' for null check
+      const permissions = this.managerForm.get('permissions')?.value; // Add '?' for null check
+  
+  
+      this.managerService.addRoleName(roleName, permissions).subscribe(
         (response) => {
-          console.log(this.managerForm.value);
-
-          // Handle successful response
           console.log('Role name added:', response);
           this.dialogRef.close(true);
         },
