@@ -35,9 +35,29 @@ export class ManagerService {
       email: managerData.email,
       firstname: managerData.firstname,
       lastname: managerData.lastname,
+      role:managerData.role,
       roleName: managerData.roleName,
       adresse:managerData.adresse,
-      permissions: managerData.permissions || []
+    };
+      console.log("this is service",requestBody);
+
+    return this.http.post<any>(`${this.apiUrl}/add-staff`, requestBody, { withCredentials: true, headers });
+    
+  }
+
+  addEntraineur(managerData: Manager): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+    const permissionsArray = Array.isArray(managerData.permissions) ? managerData.permissions : [managerData.permissions];
+// Filter out any null or undefined values
+    const filteredPermissions = permissionsArray.filter(permission => permission !== null && permission !== undefined);
+  
+    const requestBody = {
+      email: managerData.email,
+      firstname: managerData.firstname,
+      lastname: managerData.lastname,
+      roleName: managerData.roleName,
+      adresse:managerData.adresse,
     };
       console.log("this is service",requestBody);
 
@@ -47,6 +67,10 @@ export class ManagerService {
   
   getRoleNames(): Observable<RoleName[]> {
     return this.http.get<RoleName[]>(`${this.apiUrl}/get-role-names`, { withCredentials: true });
+  }
+
+  getOnlyRoleNames(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiUrl}/get-only-role-names`, { withCredentials: true });
   }
 
   getPermissions(): Observable<string[]> {
