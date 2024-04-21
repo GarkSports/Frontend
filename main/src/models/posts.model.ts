@@ -10,16 +10,3 @@ export class BlogPosts {
     views: number;
     createdAt: Date;
 }
-
-// export interface BlogPost {
-//     id: number;
-//     title: string;
-//     subtitle: string;
-//     body: string;
-//     author: string;
-//     authorImageUrl: string;
-//     category: string;
-//     imageUrl: string;
-//     views: number;
-//     createdAt: Date;
-// }
