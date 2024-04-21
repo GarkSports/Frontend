@@ -17,10 +17,10 @@ import { Discipline } from 'src/models/discipline.model';
 import { DisciplineService } from 'src/app/services/discipline.service';
 
 @Component({
-  selector: 'app-discipline',
+  selector: 'app-discipline-manager',
   templateUrl: './discipline.component.html',
 })
-export class DisciplineComponent implements AfterViewInit {
+export class DisciplineManagerComponent implements AfterViewInit {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> =
     Object.create(null);
   searchText: any;
@@ -46,7 +46,7 @@ export class DisciplineComponent implements AfterViewInit {
 
   openDialog(action: string, obj: any): void {
     obj.action = action;
-    const dialogRef = this.dialog.open(AppDisciplineDialogContentComponent, {
+    const dialogRef = this.dialog.open(AppDisciplineManagerDialogContentComponent, {
       data: obj,
     });
     dialogRef.afterClosed().subscribe((result) => {
@@ -61,7 +61,7 @@ export class DisciplineComponent implements AfterViewInit {
   }
 
   addRowData(row_obj: Discipline): void {
-    this.disciplineService.addDiscipline(row_obj).subscribe(
+    this.disciplineService.addDisciplineManager(row_obj).subscribe(
       (response) => {
         console.log('Discipline added successfully', response);
         this.getDisciplines(); // Refresh the data after adding
@@ -100,7 +100,7 @@ export class DisciplineComponent implements AfterViewInit {
   }
 
   getDisciplines(): void {
-    this.disciplineService.getDisciplines().subscribe(
+    this.disciplineService.getDisciplinesManager().subscribe(
       (disciplines) => {
         console.log('Disciplines fetched successfully', disciplines);
         this.dataSource.data = disciplines;
@@ -113,10 +113,10 @@ export class DisciplineComponent implements AfterViewInit {
 }
 
 @Component({
-  selector: 'app-discipline-dialog-content',
+  selector: 'app-discipline-manager-dialog-content',
   templateUrl: 'discipline-dialog-content.html',
 })
-export class AppDisciplineDialogContentComponent {
+export class AppDisciplineManagerDialogContentComponent {
   action: string;
   // tslint:disable-next-line - Disables all
   local_data: any;
@@ -125,7 +125,7 @@ export class AppDisciplineDialogContentComponent {
 
   constructor(
     public datePipe: DatePipe,
-    public dialogRef: MatDialogRef<AppDisciplineDialogContentComponent>,
+    public dialogRef: MatDialogRef<AppDisciplineManagerDialogContentComponent>,
     // @Optional() is used to prevent error if no data is passed
     @Optional() @Inject(MAT_DIALOG_DATA) public data: Discipline
   ) {

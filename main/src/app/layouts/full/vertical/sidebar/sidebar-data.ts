@@ -90,6 +90,11 @@ export const navItems: NavItem[] = [
     route: 'apps/paiement',
   },
   {
+    displayName: 'Discipline Manager',
+    iconName: 'medal',
+    route: 'apps/disciplinemanager',
+  },
+  {
     displayName: 'Discipline',
     iconName: 'medal',
     route: 'apps/discipline',

@@ -14,6 +14,10 @@
         <div class="col-lg-6">
           <mat-form-field appearance="outline" class="w-100">
             <input type="text" matInput required id="nom" name="nom" [(ngModel)]="local_data.nom" placeholder="Nom" />
+            <mat-error
+              *ngIf="disciplineForm.controls['nom'].invalid && (disciplineForm.controls['nom'].dirty || disciplineForm.controls['nom'].touched)">
+              Nom est requis
+            </mat-error>
           </mat-form-field>
         </div>
         <div class="col-lg-6">
@@ -44,16 +48,6 @@
             <mat-select required id="manager" name="manager" [(ngModel)]="local_data.manager_id">
               <mat-option *ngFor="let manager of managers" [value]="manager.id">
                 {{ manager.firstname }} {{ manager.lastname }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="col-lg-6">
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Disciplines</mat-label>
-            <mat-select required id="discipline" name="discipline" [(ngModel)]="local_data.disciplineIds" multiple>
-              <mat-option *ngFor="let discipline of disciplines" [value]="discipline.id">
-                {{ discipline.nom }}
               </mat-option>
             </mat-select>
           </mat-form-field>

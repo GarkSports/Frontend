@@ -281,6 +281,11 @@ export class PaiementDetailsPopupComponent {
   constructor(public dialogRef: MatDialogRef<PaiementDetailsPopupComponent>,
     @Inject(MAT_DIALOG_DATA) public paiement: Paiement, private paiementService: PaiementService) { }
 
+  isFormValid(): boolean {
+    // Vérifier si tous les champs obligatoires sont remplis et s'ils ont des valeurs valides
+    return (this.paiement.montant !== undefined && this.paiement.montant >= 0 && this.paiement.montant !== null) && (this.paiement.reste === undefined || this.paiement.reste >= 0) && this.paiement.typeAbonnement !== undefined && (this.paiement.dateDebut !== undefined && this.paiement.dateDebut !== null) && (this.paiement.dateFin !== undefined && this.paiement.dateFin !== null) && (this.paiement.datePaiement !== undefined && this.paiement.datePaiement !== null);
+  }
+
   onCancelClick(): void {
     this.dialogRef.close();
   }
@@ -334,10 +339,14 @@ export class AddPaiementPopupComponent {
     this.getMembers();
   }
 
+  isFormValid(): boolean {
+    // Vérifier si tous les champs obligatoires sont remplis et s'ils ont des valeurs valides
+    return (this.paiement.montant !== undefined && this.paiement.montant >= 0 && this.paiement.montant !== null) && (this.paiement.reste === undefined || this.paiement.reste >= 0) && this.paiement.typeAbonnement !== undefined && this.paiement.adherent !== undefined && (this.paiement.dateDebut !== undefined && this.paiement.dateDebut !== null) && (this.paiement.dateFin !== undefined && this.paiement.dateFin !== null) && (this.paiement.datePaiement !== undefined && this.paiement.datePaiement !== null);
+  }
+
   getTypeAbonnementName(type: TypeAbonnement): string {
     return TypeAbonnement[type];
   }
-
 
   getMembers(): void {
     this.paiementService.getMembers().subscribe(members => {
