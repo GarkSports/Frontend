@@ -22,7 +22,7 @@ export class EquipeService {
   }
 
   getDisciplines(): Observable<Discipline[]> {
-    return this.http.get<Discipline[]>(`${this.apiUrlDiscipline}/getDisciplines`);
+    return this.http.get<Discipline[]>(`${this.apiUrlDiscipline}/getAllDisciplines`);
   }
 
   getEntraineurs(): Observable<Entraineur[]> {

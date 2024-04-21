@@ -29,6 +29,7 @@ import { AppManagerlistComponent } from './admin/managerlist.component';
 import { AppStafflistComponent } from './managers/staff/stafflist.component';
 import { AppRoleslistComponent } from './managers/roles/roleslist.component';
 import { AppProfilComponent } from './managers/profil/profil.component';
+import { DisciplineManagerComponent } from './discipline-manager/discipline.component';
 
 
 export const AppsRoutes: Routes = [
@@ -299,6 +300,17 @@ export const AppsRoutes: Routes = [
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
             { title: 'Discipline' },
+          ],
+        },
+      },
+      {
+        path: 'disciplinemanager',
+        component: DisciplineManagerComponent,
+        data: {
+          title: 'Discipline Manager',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Discipline Manager' },
           ],
         },
       },

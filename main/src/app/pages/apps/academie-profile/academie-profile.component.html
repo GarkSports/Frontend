@@ -13,17 +13,29 @@
                 <mat-card-content class="p-y-24 b-t-1">
                     <div class="row">
                         <div class="col-sm-6">
-                            <mat-card class="cardWithShadow">
+                            <mat-card *ngIf="academie" class="cardWithShadow"
+                                [ngStyle]="{'background-image': 'url(' + academie.backgroundImage + ')', 'background-size': 'cover', 'background-repeat': 'no-repeat', 'background-position': 'center top'}">
                                 <mat-card-content class="p-y-24">
-                                    <mat-card-title>Change Profile</mat-card-title>
-                                    <mat-card-subtitle class="mat-body-1">Change your profile details from
-                                        here</mat-card-subtitle>
-                                    <div *ngIf="academie" class="text-center m-t-24">
+                                    <mat-card-title [style.color]="academie.backgroundImage ? 'white' : 'black'">Change
+                                        Profile</mat-card-title>
+                                    <mat-card-subtitle class="mat-body-1"
+                                        [style.color]="academie.backgroundImage ? 'white' : ''">Change your profile
+                                        details from here</mat-card-subtitle>
+                                    <div class="text-center m-t-24">
                                         <img [src]="academie.logo" class="rounded-circle" width="120" />
                                         <div class="m-t-24">
-                                            <button mat-flat-button color="primary" class="m-r-8" (click)="openUpdateProfileDialog()"> 
+                                            <button mat-flat-button color="primary" class="update-profile-button"
+                                                (click)="openUpdateProfileDialog()">
                                                 Update profile
                                             </button>
+                                            <!-- Updated button to have transparent background and picture icon -->
+                                            <button mat-icon-button class="upload-background-button"
+                                                [style.color]="academie.backgroundImage ? 'white' : 'black'"
+                                                (click)="fileInput.click()">
+                                                <mat-icon>image</mat-icon>
+                                            </button>
+                                            <input type="file" #fileInput style="display: none;"
+                                                (change)="uploadFile($event)">
                                         </div>
                                     </div>
                                 </mat-card-content>
@@ -111,3 +123,40 @@
         </mat-tab-group>
     </mat-card-content>
 </mat-card>
+
+<style>
+    .upload-background-button {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        background-color: rgba(255, 255, 255, 0);
+        /* Transparent background */
+        border: none;
+        /* Remove border */
+        padding: 8px;
+        transition: background-color 0.3s;
+        color: white;
+        /* Set icon color to white */
+    }
+
+    .upload-background-button:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        /* Light transparent background on hover */
+    }
+
+    .update-profile-button {
+        color: white;
+        /* Set text color to white */
+        background-color: #2196F3;
+        /* Set background color */
+        border-radius: 4px;
+        /* Rounded corners */
+        transition: background-color 0.3s, color 0.3s;
+        /* Smooth transition */
+    }
+
+    .update-profile-button:hover {
+        background-color: #0D47A1;
+        /* Darker background color on hover */
+    }
+</style>

@@ -82,7 +82,6 @@ import { ManagerDetailsDialogComponent } from './academie/academie.component';
 import { AdresseDetailsDialogComponent } from './academie/academie.component';
 import { EditEtatFormComponent } from './academie/academie.component';
 import { HistoryPopupComponent } from './academie/academie.component';
-import { DisciplinesPopupComponent } from './academie/academie.component';
 import { AcademieProfileComponent } from './academie-profile/academie-profile.component';
 import { UpdateProfileDialogComponent } from './academie-profile/academie-profile.component';
 import { EquipeComponent } from './equipe/equipe.component';
@@ -99,6 +98,11 @@ import { ConfirmDialogComponent } from './paiement/paiement.component';
 import { ArchivedAcademieComponent } from './archived-academie/academie.component';
 import { ArchivedAcademieConfirmationDialogComponent } from './archived-academie/academie.component';
 import { ArchivedAcademieConfirmationRestoreDialogComponent } from './archived-academie/academie.component';
+import { DisciplineManagerComponent } from './discipline-manager/discipline.component';
+import { AppDisciplineManagerDialogContentComponent } from './discipline-manager/discipline.component';
+import { AppAddDisciplineManagerComponent } from './discipline-manager/add/add.component';
+
+
 
 
 
@@ -135,6 +139,9 @@ import { AppRolesDialogContentComponent, AppRoleslistComponent } from './manager
   ],
   exports: [TablerIconsModule],
   declarations: [
+    DisciplineManagerComponent,
+    AppDisciplineManagerDialogContentComponent,
+    AppAddDisciplineManagerComponent,
     ArchivedAcademieComponent,
     ArchivedAcademieConfirmationDialogComponent,
     ArchivedAcademieConfirmationRestoreDialogComponent,
@@ -185,7 +192,6 @@ import { AppRolesDialogContentComponent, AppRoleslistComponent } from './manager
     AppAddAcademieComponent,
     EditEtatFormComponent,
     HistoryPopupComponent,
-    DisciplinesPopupComponent,
     AppInvoiceListComponent,
     AppInvoiceViewComponent,
     AppAddInvoiceComponent,

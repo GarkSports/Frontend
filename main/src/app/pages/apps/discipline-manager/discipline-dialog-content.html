@@ -1,0 +1,69 @@
+<h2 class="f-w-500 m-b-24" mat-dialog-title><strong>{{action}}</strong></h2>
+
+<!-- Check if action is not 'Delete' -->
+<ng-container *ngIf="action !== 'Delete'">
+  <mat-dialog-content style="max-width: 600px">
+    <form #disciplineForm="ngForm">
+      <div class="row">
+        <div class="col-lg-6">
+          <mat-form-field appearance="outline" class="w-100">
+            <input
+              type="text"
+              matInput
+              required
+              id="nom"
+              name="nom"
+              [(ngModel)]="local_data.nom"
+              placeholder="Nom"
+            />
+          </mat-form-field>
+        </div>
+        <div class="col-lg-6">
+          <mat-form-field appearance="outline" class="w-100">
+            <input
+              type="text"
+              matInput
+              required
+              id="description"
+              name="description"
+              [(ngModel)]="local_data.description"
+              placeholder="Description"
+            />
+          </mat-form-field>
+        </div>
+      </div>
+      <!-- Add other form fields based on your model properties -->
+
+      <button
+        mat-flat-button
+        (click)="doAction()"
+        mat-flat-button
+        color="primary"
+        [disabled]="!disciplineForm.valid"
+      >
+        {{action}}
+      </button>
+      <button
+        mat-stroked-button
+        color="warn"
+        class="m-l-8"
+        (click)="closeDialog()"
+      >
+        Cancel
+      </button>
+    </form>
+  </mat-dialog-content>
+</ng-container>
+
+<!-- Display delete confirmation if action is 'Delete' -->
+<ng-container *ngIf="action === 'Delete'">
+  <div class="p-x-24">
+    <p>Sure to delete <span class="f-w-600">{{local_data.nom}}</span> ?</p>
+  </div>
+  <div mat-dialog-actions class="p-x-24 p-b-24">
+    <button mat-button (click)="doAction()" mat-flat-button color="warn">
+      {{action}}
+    </button>
+    <button mat-button (click)="closeDialog()" class="m-l-8">Cancel</button>
+  </div>
+</ng-container>
