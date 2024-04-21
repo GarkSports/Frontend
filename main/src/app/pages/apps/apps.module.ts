@@ -82,12 +82,37 @@ import { ManagerDetailsDialogComponent } from './academie/academie.component';
 import { AdresseDetailsDialogComponent } from './academie/academie.component';
 import { EditEtatFormComponent } from './academie/academie.component';
 import { HistoryPopupComponent } from './academie/academie.component';
-import { DisciplinesPopupComponent } from './academie/academie.component';
+import { AcademieProfileComponent } from './academie-profile/academie-profile.component';
+import { UpdateProfileDialogComponent } from './academie-profile/academie-profile.component';
+import { EquipeComponent } from './equipe/equipe.component';
+import { AdherentPopupComponent } from './equipe/equipe.component';
+import { EntraineurPopupComponent } from './equipe/equipe.component';
+import { AddMemberPopupComponent } from './equipe/equipe.component';
+import { AddCoachPopupComponent } from './equipe/equipe.component';
+import { PaiementComponent } from './paiement/paiement.component';
+import { PaiementDetailsPopupComponent } from './paiement/paiement.component';
+import { AddPaiementPopupComponent } from './paiement/paiement.component';
+import { PaiementHistoryPopupComponent } from './paiement/paiement.component';
+import { detailMembrePopupComponent } from './paiement/paiement.component';
+import { ConfirmDialogComponent } from './paiement/paiement.component';
+import { ArchivedAcademieComponent } from './archived-academie/academie.component';
+import { ArchivedAcademieConfirmationDialogComponent } from './archived-academie/academie.component';
+import { ArchivedAcademieConfirmationRestoreDialogComponent } from './archived-academie/academie.component';
+import { DisciplineManagerComponent } from './discipline-manager/discipline.component';
+import { AppDisciplineManagerDialogContentComponent } from './discipline-manager/discipline.component';
+import { AppAddDisciplineManagerComponent } from './discipline-manager/add/add.component';
+
+
+
+
 
 import { AngularFireModule } from '@angular/fire/compat'; // Update import path
 import { AngularFireStorageModule } from '@angular/fire/compat/storage'; // Update import path
 import { environment } from '../api/environment';
 import { AppBlogDialogContentComponent, AppBloglistComponent } from './blogs/bloglist/blog.component';
+import { AppManagerDialogContentComponent, AppManagerlistComponent } from './admin/managerlist.component';
+import { AppStaffDialogContentComponent, AppStafflistComponent } from './managers/staff/stafflist.component';
+import { AppRolesDialogContentComponent, AppRoleslistComponent } from './managers/roles/roleslist.component';
 
 
 @NgModule({
@@ -115,6 +140,25 @@ import { AppBlogDialogContentComponent, AppBloglistComponent } from './blogs/blo
   ],
   exports: [TablerIconsModule],
   declarations: [
+    DisciplineManagerComponent,
+    AppDisciplineManagerDialogContentComponent,
+    AppAddDisciplineManagerComponent,
+    ArchivedAcademieComponent,
+    ArchivedAcademieConfirmationDialogComponent,
+    ArchivedAcademieConfirmationRestoreDialogComponent,
+    PaiementComponent,
+    PaiementDetailsPopupComponent,
+    AddPaiementPopupComponent,
+    PaiementHistoryPopupComponent,
+    detailMembrePopupComponent,
+    ConfirmDialogComponent,
+    EquipeComponent,
+    AdherentPopupComponent,
+    EntraineurPopupComponent,
+    AddMemberPopupComponent,
+    AddCoachPopupComponent,
+    AcademieProfileComponent,
+    UpdateProfileDialogComponent,
     AppChatComponent,
     AppPermissionComponent,
     AppNotesComponent,
@@ -149,7 +193,6 @@ import { AppBlogDialogContentComponent, AppBloglistComponent } from './blogs/blo
     AppAddAcademieComponent,
     EditEtatFormComponent,
     HistoryPopupComponent,
-    DisciplinesPopupComponent,
     AppInvoiceListComponent,
     AppInvoiceViewComponent,
     AppAddInvoiceComponent,
@@ -159,7 +202,13 @@ import { AppBlogDialogContentComponent, AppBloglistComponent } from './blogs/blo
     AppBlogsComponent,
     AppBlogDetailsComponent,
     AppBloglistComponent,
-    AppBlogDialogContentComponent
+    AppBlogDialogContentComponent,
+    AppManagerlistComponent,
+    AppManagerDialogContentComponent,
+    AppStaffDialogContentComponent,
+    AppStafflistComponent,
+    AppRolesDialogContentComponent,
+    AppRoleslistComponent,
   ],
   providers: [DatePipe],
 })

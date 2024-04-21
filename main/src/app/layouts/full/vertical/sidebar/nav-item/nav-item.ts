@@ -1,3 +1,5 @@
+import { Role } from "src/models/enums/role.model";
+
 export interface NavItem {
     displayName?: string;
     disabled?: boolean;
@@ -12,4 +14,5 @@ export interface NavItem {
     route?: string;
     children?: NavItem[];
     ddType?: string;
+    roles?: Role[];
 }

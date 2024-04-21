@@ -1,17 +1,21 @@
-<div class="disciplines-dialog">
-    <h2 mat-dialog-title class="dialog-title">Disciplines</h2>
+<div class="entraineurs-dialog">
+    <h2 mat-dialog-title class="dialog-title">Entraineurs</h2>
     <mat-dialog-content class="dialog-content">
-      <table class="discipline-table">
+      <table class="entraineur-table">
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Description</th>
+            <th>Fastname</th>
+            <th>Lastname</th>
+            <th>Email</th>
+            <th>Phone</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let discipline of data.disciplines" class="discipline-item">
-            <td>{{ discipline.nom }}</td>
-            <td>{{ discipline.description }}</td>
+          <tr *ngFor="let entraineur of data.entraineurs" class="entraineur-item">
+            <td>{{ entraineur.firstname }}</td>
+            <td>{{ entraineur.lastname }}</td>
+            <td>{{ entraineur.email }}</td>
+            <td>{{ entraineur.telephone }}</td>
           </tr>
         </tbody>
       </table>
@@ -22,7 +26,7 @@
   </div>
   
   <style>
-    .disciplines-dialog {
+    .entraineurs-dialog {
       padding: 20px;
       border-radius: 5px;
       background-color: #f8f9fa;
@@ -39,23 +43,24 @@
       margin-bottom: 20px;
     }
   
-    .discipline-table {
+    .entraineur-table {
       width: 100%;
       border-collapse: collapse;
     }
   
-    .discipline-table th, .discipline-table td {
+    .entraineur-table th,
+    .entraineur-table td {
       border: 1px solid #ddd;
       padding: 8px;
       text-align: left;
     }
   
-    .discipline-table th {
+    .entraineur-table th {
       background-color: #f2f2f2;
       font-weight: bold;
     }
   
-    .discipline-item td:first-child {
+    .entraineur-item td:first-child {
       font-weight: bold;
     }
   

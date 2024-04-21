@@ -16,8 +16,6 @@ import { DatePipe } from '@angular/common';
 import { Academie } from 'src/models/academie.model';
 import { AcademieService } from 'src/app/services/academie.service';
 import { Manager } from 'src/models/manager.model';
-import { Discipline } from 'src/models/discipline.model';
-import { DisciplineService } from 'src/app/services/discipline.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AcademieHistory } from 'src/models/academieHistory.models';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
@@ -31,20 +29,18 @@ export class AcademieComponent implements AfterViewInit {
   searchText: any;
   displayedColumns: string[] = [
     'nom',
-    'type',
-    'fraisAdhesion',
     'logo',
-    'affiliation',
+    'type',
     'description',
+    'affiliation',
+    'fraisAdhesion',
     'etat',
     'editEtat',
     'manager',
     'adresse',
-    'disciplines',
     'etatHistory',
     'action',
   ];
-
 
   getEtatColor(etat: string): { backgroundColor: string } {
     switch (etat) {
@@ -61,12 +57,9 @@ export class AcademieComponent implements AfterViewInit {
     }
   }
 
-  
   etatOptions = ['ACTIF', 'SUSPENDU', 'INACTIF', 'FERME'];
 
   dataSource = new MatTableDataSource<Academie>([]);
-
-
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator =
     Object.create(null);
@@ -75,7 +68,7 @@ export class AcademieComponent implements AfterViewInit {
     public dialog: MatDialog,
     public datePipe: DatePipe,
     public academieService: AcademieService
-  ) {}
+  ) { }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
@@ -91,9 +84,7 @@ export class AcademieComponent implements AfterViewInit {
     const dialogRef = this.dialog.open(AppAcademieDialogContentComponent, {
       data: {
         ...obj,
-        // Pass the current disciplines' IDs to the dialog component
-        disciplineIds: obj.disciplines ? obj.disciplines.map((discipline: Discipline) => discipline.id) : [],
-      }
+      },
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result.event === 'Add') {
@@ -108,12 +99,11 @@ export class AcademieComponent implements AfterViewInit {
   }
 
   addRowData(academieData: Academie): void {
-    if (academieData.manager_id && academieData.disciplineIds) {
+    if (academieData.manager_id) {
       console.log('this is academie data:', academieData);
       this.academieService
         .addAcademie(
           academieData,
-          academieData.disciplineIds,
           academieData.manager_id
         )
         .subscribe(
@@ -133,20 +123,38 @@ export class AcademieComponent implements AfterViewInit {
     // Create a copy of the academieData without the manager_id property
     // const academieDataWithoutManagerId = { ...academieData };
     // delete academieDataWithoutManagerId.manager_id;
-    if (academieData.manager_id && academieData.disciplineIds) {
-    this.academieService.updateAcademie(academieData,academieData.id,academieData.disciplineIds,academieData.manager_id).subscribe(
-        (response) => {
-          console.log('Academie updated successfully', response);
-          this.getAcademies(); // Refresh the data after updating
-        },
-        (error) => {
-          console.error('Error updating academie', error);
-          // Handle error, if needed
-        }
-    );
+    if (academieData.manager_id) {
+      const updatedAcademieData = {
+        nom: academieData.nom,
+        type: academieData.type,
+        fraisAdhesion: academieData.fraisAdhesion,
+        affiliation: academieData.affiliation,
+        description: academieData.description,
+        rue: academieData.rue,
+        ville: academieData.ville,
+        codePostal: academieData.codePostal,
+        pays: academieData.pays,
+        logo: academieData.logo,
+      };
+      const updatedAcademie: Partial<Academie> = { ...updatedAcademieData };
+      this.academieService
+        .updateAcademie(
+          updatedAcademie as Academie,
+          academieData.id,
+          academieData.manager_id
+        )
+        .subscribe(
+          (response) => {
+            console.log('Academie updated successfully', response);
+            this.getAcademies(); // Refresh the data after updating
+          },
+          (error) => {
+            console.error('Error updating academie', error);
+            // Handle error, if needed
+          }
+        );
+    }
   }
-}
-
 
   deleteRowData(academieData: Academie): void {
     this.academieService.archiveAcademie(academieData.id).subscribe(
@@ -223,7 +231,7 @@ export class AcademieComponent implements AfterViewInit {
     const dialogRef = this.dialog.open(EditEtatFormComponent, {
       data: { etat: element.etat, changeReason: '' }, // Pass data to the dialog
     });
-  
+
     dialogRef.afterClosed().subscribe((result) => {
       if (result && result.event === 'Save') {
         // Implement the logic to call the backend API and update the etat
@@ -242,36 +250,12 @@ export class AcademieComponent implements AfterViewInit {
   }
 
   openHistoryPopup(academieId: number): void {
-    this.academieService.getAcademieHistory(academieId).subscribe(history => {
+    this.academieService.getAcademieHistory(academieId).subscribe((history) => {
       this.dialog.open(HistoryPopupComponent, {
         data: history,
       });
     });
   }
-
-  showDisciplines(academieId: number): void {
-    this.academieService.getDisciplinesByAcademie(academieId).subscribe({
-      next: (disciplines: Discipline[]) => {
-        // Open the disciplines popup with the fetched disciplines
-        this.openDisciplinesPopup(disciplines);
-      },
-      error: (error) => {
-        console.error('Error fetching disciplines:', error);
-        // Handle error, display error message, etc.
-      }
-    });
-  }
-
-  openDisciplinesPopup(disciplines: Discipline[]): void {
-    const dialogRef = this.dialog.open(DisciplinesPopupComponent, {
-      data: { disciplines: disciplines }
-    });
-
-    // Handle the result when the popup is closed if needed
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The disciplines popup was closed');
-    });
-  }  
 }
 
 @Component({
@@ -285,27 +269,22 @@ export class AppAcademieDialogContentComponent {
   selectedImage: any = '';
   joiningDate: any = '';
 
-  
-
   etatOptions = ['ACTIF', 'SUSPENDU', 'INACTIF', 'FERME'];
 
   typeOptions = ['ACADEMY', 'CLUB'];
 
   managers: Manager[] = [];
-  disciplines: Discipline[] = [];
-  
+
   constructor(
     public datePipe: DatePipe,
     public dialogRef: MatDialogRef<AppAcademieDialogContentComponent>,
     public academieService: AcademieService,
-    public disciplineService: DisciplineService,
     private firestorage: AngularFireStorage,
     // @Optional() is used to prevent error if no data is passed
     @Optional() @Inject(MAT_DIALOG_DATA) public data: Academie
   ) {
     this.local_data = {
       ...data,
-      disciplineIds: data.disciplineIds || [],
     };
     this.action = this.local_data.action;
     if (this.local_data.DateOfJoining !== undefined) {
@@ -321,7 +300,6 @@ export class AppAcademieDialogContentComponent {
 
   ngAfterViewInit(): void {
     this.getManagers(this.local_data.id);
-    this.getDisciplines();
   }
 
   getManagers(academieId: number): void {
@@ -332,19 +310,6 @@ export class AppAcademieDialogContentComponent {
       },
       (error) => {
         console.error('Error fetching Managers', error);
-      }
-    );
-  }
-  
-
-  getDisciplines(): void {
-    this.disciplineService.getDisciplines().subscribe(
-      (disciplines) => {
-        console.log('Disciplines fetched successfully', disciplines);
-        this.disciplines = disciplines;
-      },
-      (error) => {
-        console.error('Error fetching disciplines', error);
       }
     );
   }
@@ -377,7 +342,7 @@ export class AppAcademieDialogContentComponent {
     };
     //upload image
     const file = event.target.files[0];
-    if(file){
+    if (file) {
       const path = `academie/${file.name}`;
       const uploadTask = await this.firestorage.upload(path, file);
       const url = await uploadTask.ref.getDownloadURL();
@@ -392,18 +357,16 @@ export class AppAcademieDialogContentComponent {
   templateUrl: 'manager-details-dialog.component.html',
 })
 export class ManagerDetailsDialogComponent {
-  constructor(@Optional() @Inject(MAT_DIALOG_DATA) public data: Manager) {}
+  constructor(@Optional() @Inject(MAT_DIALOG_DATA) public data: Manager) { }
 }
-
 
 @Component({
   selector: 'app-adresse-details-dialog',
   templateUrl: 'adresse-details-dialog.component.html',
 })
 export class AdresseDetailsDialogComponent {
-  constructor(@Optional() @Inject(MAT_DIALOG_DATA) public data: Academie) {}
+  constructor(@Optional() @Inject(MAT_DIALOG_DATA) public data: Academie) { }
 }
-
 
 @Component({
   templateUrl: 'etat-edit.html',
@@ -412,7 +375,6 @@ export class EditEtatFormComponent {
   editForm: FormGroup;
 
   etatOptions = ['ACTIF', 'SUSPENDU', 'INACTIF', 'FERME'];
-
 
   constructor(
     private fb: FormBuilder,
@@ -435,7 +397,6 @@ export class EditEtatFormComponent {
   }
 }
 
-
 @Component({
   templateUrl: 'etatHisto.html',
 })
@@ -443,7 +404,7 @@ export class HistoryPopupComponent {
   constructor(
     public dialogRef: MatDialogRef<HistoryPopupComponent>,
     @Inject(MAT_DIALOG_DATA) public history: AcademieHistory[]
-  ) {}
+  ) { }
 
   close(): void {
     this.dialogRef.close();
@@ -454,19 +415,4 @@ export class HistoryPopupComponent {
     'changeReason',
     'changeDate',
   ];
-}
-
-@Component({
-  templateUrl: 'disciplines-list.html',
-})
-export class DisciplinesPopupComponent {
-  constructor(
-    public dialogRef: MatDialogRef<DisciplinesPopupComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { disciplines: Discipline[] }
-  ) {}
-
-  // Function to close the dialog
-  closeDialog(): void {
-    this.dialogRef.close();
-  }
 }

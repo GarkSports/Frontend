@@ -1,3 +1,4 @@
+import { Role } from 'src/models/enums/role.model';
 import { NavItem } from './nav-item/nav-item';
 
 export const navItems: NavItem[] = [
@@ -43,9 +44,55 @@ export const navItems: NavItem[] = [
     route: 'apps/courses',
   },
   {
+    displayName: 'Managers',
+    iconName: 'user-circle',
+    route: 'apps/managers',
+    roles: [Role.ADMIN],
+  },
+  {
+    displayName: 'Staff',
+    iconName: 'user-circle',
+    route: 'apps/staff',
+  },
+  {
+    displayName: 'Roles',
+    iconName: 'user-circle',
+    route: 'apps/roles',
+  },
+  {
+    displayName: 'Profil',
+    iconName: 'user-circle',
+    route: 'apps/profil',
+  },
+  {
     displayName: 'Employee',
     iconName: 'brand-ctemplar',
     route: 'apps/employee',
+  },
+  {
+    displayName: 'Archived Academies',
+    iconName: 'building',
+    route: 'apps/archivedacademie',
+  },
+  {
+    displayName: 'Academie Profile',
+    iconName: 'building',
+    route: 'apps/academieprofile',
+  },
+  {
+    displayName: 'Equipe',
+    iconName: 'users',
+    route: 'apps/equipe',
+  },
+  {
+    displayName: 'Paiement',
+    iconName: 'money',
+    route: 'apps/paiement',
+  },
+  {
+    displayName: 'Discipline Manager',
+    iconName: 'medal',
+    route: 'apps/disciplinemanager',
   },
   {
     displayName: 'Discipline',

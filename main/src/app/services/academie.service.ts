@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { Academie } from 'src/models/academie.model';
 import { Manager } from 'src/models/manager.model';
 import { AcademieHistory } from 'src/models/academieHistory.models';
-import { Discipline } from 'src/models/discipline.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,20 +11,20 @@ import { Discipline } from 'src/models/discipline.model';
 export class AcademieService {
   private apiUrl = 'http://localhost:8089/academie';
   private apiUrlManager = 'http://localhost:8089/random';
+  academieId = 1;
 
   constructor(private http: HttpClient) { }
 
-  addAcademie(academieData: Academie, disciplineIds: number[], managerId: number): Observable<any> {
+  addAcademie(academieData: Academie, managerId: number): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-  
+
     const requestBody = {
       academie: academieData,
-      disciplineIds: disciplineIds,
     };
-  
+
     return this.http.post<any>(`${this.apiUrl}/addAcademie/${managerId}`, requestBody, { headers });
   }
-  
+
 
   getAcademies(): Observable<Academie[]> {
     return this.http.get<Academie[]>(`${this.apiUrl}/getAcademies`);
@@ -35,12 +34,11 @@ export class AcademieService {
     return this.http.get<Academie>(`${this.apiUrl}/getAcademieById/${academieId}`);
   }
 
-  updateAcademie(academieData: Academie, academieId: number, disciplineIds: number[],  managerId: number): Observable<any> {
+  updateAcademie(academieData: Academie, academieId: number, managerId: number): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
     const requestBody = {
       academie: academieData,
-      disciplineIds: disciplineIds,
     };
 
     return this.http.put<any>(`${this.apiUrl}/updateAcademie/${academieId}/${managerId}`, requestBody, { headers });
@@ -72,9 +70,32 @@ export class AcademieService {
     return this.http.get<AcademieHistory[]>(`${this.apiUrl}/getAcademieHistory/${academieId}`);
   }
 
-  getDisciplinesByAcademie(academieId: number): Observable<Discipline[]> {
-    return this.http.get<Discipline[]>(`${this.apiUrl}/getDisciplinesByAcademie/${academieId}`);
+  countAcademies(): Observable<number> {
+    return this.http.get<number>(`${this.apiUrl}/countAcademies`);
   }
 
+  getAcademie(): Observable<Academie> {
+    return this.http.get<Academie>(`${this.apiUrl}/getAcademieById/${this.academieId}`);
+  }
 
+  updateAcademieProfile(academie: Academie): Observable<Academie> {
+    return this.http.put<Academie>(`${this.apiUrlManager}/updateAcademie/${this.academieId}`, academie);
+  }
+
+  updateAcademieBackground(academieId: number, background: string): Observable<any> {
+    const url = `${this.apiUrlManager}/updateAcademieBackground/${academieId}`;
+    return this.http.put(url, background, { responseType: 'text' });
+  }
+
+  getArchivedAcademies(): Observable<Academie[]> {
+    return this.http.get<Academie[]>(`${this.apiUrl}/getArchivedAcademies`);
+  }
+
+  deleteArchivedAcademie(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/deleteArchivedAcademie/${id}`);
+  }
+
+  restoreArchivedAcademie(id: number): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/restoreArchivedAcademie/${id}`, {});
+  }
 }

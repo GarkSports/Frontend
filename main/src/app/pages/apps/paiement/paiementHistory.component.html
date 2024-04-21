@@ -1,0 +1,47 @@
+<h2 mat-dialog-title class="dialog-title">Paiement Historque</h2>
+<div mat-dialog-content class="dialog-content">
+    <table mat-table [dataSource]="paiementHistory" class="mat-elevation-z8">
+        <!-- Date Debut Column -->
+        <ng-container matColumnDef="dateDebut">
+            <th mat-header-cell *matHeaderCellDef>Date Debut</th>
+            <td mat-cell *matCellDef="let element">{{ element.dateDebut | date }}</td>
+        </ng-container>
+
+        <!-- Date Fin Column -->
+        <ng-container matColumnDef="dateFin">
+            <th mat-header-cell *matHeaderCellDef>Date Fin</th>
+            <td mat-cell *matCellDef="let element">{{ element.dateFin | date }}</td>
+        </ng-container>
+
+        <!-- Date Paiement Column -->
+        <ng-container matColumnDef="datePaiement">
+            <th mat-header-cell *matHeaderCellDef>Date Paiement</th>
+            <td mat-cell *matCellDef="let element">{{ element.datePaiement | date }}</td>
+        </ng-container>
+
+        <!-- Retard Paiement Column -->
+        <ng-container matColumnDef="retardPaiement">
+            <th mat-header-cell *matHeaderCellDef>Retard Paiement</th>
+            <td mat-cell *matCellDef="let element">{{ element.retardPaiement }} Jours</td>
+        </ng-container>
+
+        <!-- Reste Column -->
+        <ng-container matColumnDef="reste">
+            <th mat-header-cell *matHeaderCellDef>Montant Restant</th>
+            <td mat-cell *matCellDef="let element">{{ element.reste }} TND</td>
+        </ng-container>
+
+        <!-- Montant Column -->
+        <ng-container matColumnDef="montant">
+            <th mat-header-cell *matHeaderCellDef>Montant</th>
+            <td mat-cell *matCellDef="let element">{{ element.montant }} TND</td>
+        </ng-container>
+
+        <!-- Table Rows -->
+        <tr mat-header-row *matHeaderRowDef="paiementhistoryColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: paiementhistoryColumns;"></tr>
+    </table>
+</div>
+<div mat-dialog-actions class="dialog-actions">
+    <button mat-raised-button color="primary" (click)="close()">Close</button>
+</div>

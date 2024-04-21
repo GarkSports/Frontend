@@ -14,6 +14,7 @@ import { AppSellingProductComponent } from '../../../components/dashboard1/selli
 import { AppWeeklyStatsComponent } from '../../../components/dashboard1/weekly-stats/weekly-stats.component';
 import { AppTopProjectsComponent } from '../../../components/dashboard1/top-projects/top-projects.component';
 import { AppProjectsComponent } from '../../../components/dashboard1/projects/projects.component';
+import { AppSalesOverviewComponent } from 'src/app/components/dashboard2/sales-overview/sales-overview.component';
 
 @Component({
   selector: 'app-dashboard1',
@@ -31,7 +32,8 @@ import { AppProjectsComponent } from '../../../components/dashboard1/projects/pr
     AppSellingProductComponent,
     AppWeeklyStatsComponent,
     AppTopProjectsComponent,
-    AppProjectsComponent
+    AppProjectsComponent,
+    AppSalesOverviewComponent,
   ],
   templateUrl: './dashboard1.component.html',
 })

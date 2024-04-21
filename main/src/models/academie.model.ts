@@ -1,4 +1,3 @@
-import { AcademieHistory } from "./academieHistory.models";
 import { Adherent } from "./adherent.model";
 import { AcademieType } from "./enums/academie-type.model";
 import { Etat } from "./enums/etat.model";
@@ -10,11 +9,11 @@ export class Academie {
     type: AcademieType;
     fraisAdhesion: number;
     logo: string;
+    backgroundImage: string;
     affiliation: string;
     etat: Etat;
     description: string;
     isArchived: boolean;
-    disciplineIds?: number[];
     adherents?: Adherent[];
     rue: string;
     ville: string;
@@ -22,5 +21,5 @@ export class Academie {
     pays: string;
     manager_id?: number;
     evenements?: Evenement[];
-    academieHistory?: AcademieHistory[];
+    manager: any;
 }

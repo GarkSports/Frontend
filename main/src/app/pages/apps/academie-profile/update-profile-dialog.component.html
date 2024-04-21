@@ -1,0 +1,109 @@
+<h2 class="f-w-500 m-b-24" mat-dialog-title>Modifier le profil</h2>
+<mat-dialog-content style="max-width: 600px">
+  <!-- Form fields for updating profile attributes -->
+  <div class="form-row" style="margin-top: 10px;">
+    <div class="input-container">
+      <mat-form-field appearance="outline">
+        <mat-label>Nom</mat-label>
+        <input matInput [(ngModel)]="updatedAcademie.nom" placeholder="Nom" />
+      </mat-form-field>
+    </div>
+    <div class="input-container">
+      <mat-form-field appearance="outline">
+        <mat-label>Frais d'adhésion</mat-label>
+        <input matInput type="number" [(ngModel)]="updatedAcademie.fraisAdhesion" placeholder="Frais d'adhésion" />
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="input-container">
+      <mat-form-field appearance="outline">
+        <mat-label>Affiliation</mat-label>
+        <input matInput [(ngModel)]="updatedAcademie.affiliation" placeholder="Affiliation" />
+      </mat-form-field>
+    </div>
+    <div class="input-container">
+      <mat-form-field appearance="outline">
+        <mat-label>Description</mat-label>
+        <input matInput [(ngModel)]="updatedAcademie.description" placeholder="Description" />
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="input-container">
+      <mat-form-field appearance="outline">
+        <mat-label>Rue</mat-label>
+        <input matInput [(ngModel)]="updatedAcademie.rue" placeholder="Rue" />
+      </mat-form-field>
+    </div>
+    <div class="input-container">
+      <mat-form-field appearance="outline">
+        <mat-label>Ville</mat-label>
+        <input matInput [(ngModel)]="updatedAcademie.ville" placeholder="Ville" />
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="input-container">
+      <mat-form-field appearance="outline">
+        <mat-label>Code Postal</mat-label>
+        <input matInput [(ngModel)]="updatedAcademie.codePostal" placeholder="Code Postal" />
+      </mat-form-field>
+    </div>
+    <div class="input-container">
+      <mat-form-field appearance="outline">
+        <mat-label>Pays</mat-label>
+        <input matInput [(ngModel)]="updatedAcademie.pays" placeholder="Pays" />
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="input-container">
+      <img class="mat-card-avatar" [src]="updatedAcademie.logo" class="rounded-circle" width="50" />
+      <button mat-flat-button color="primary" class="input-file-button">
+        <input type="file" id="logo" name="logo" (change)="uploadFile($event)" #fileInput />
+      </button>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <!-- Buttons for Save and Cancel -->
+  <button mat-raised-button color="primary" (click)="onSave()">Enregistrer</button>
+  <button mat-button mat-dialog-close color="warn" class="cancel-button">Annuler</button>
+</mat-dialog-actions>
+
+<style>
+  .form-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* Center align items vertically */
+    margin-bottom: 16px;
+    /* Adjust spacing between rows */
+  }
+
+  .input-container {
+    width: calc(50% - 8px);
+    /* Adjust width of input container */
+  }
+
+  .input-file-button {
+    margin-top: 24px;
+    /* Adjust top margin for the file input button */
+  }
+
+  /* Adjust button styles */
+  ::ng-deep .mat-dialog-actions button {
+    min-width: 100px;
+    /* Set minimum width for buttons */
+  }
+
+  .cancel-button {
+    border: 1px solid #FA9175;
+    /* Adjust border color and size */
+  }
+</style>

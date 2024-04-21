@@ -13,11 +13,11 @@ import {
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
 import { DatePipe } from '@angular/common';
-import { AppAddDisciplineComponent } from './add/add.component';
 import { Discipline } from 'src/models/discipline.model';
 import { DisciplineService } from 'src/app/services/discipline.service';
 
 @Component({
+  selector: 'app-discipline',
   templateUrl: './discipline.component.html',
 })
 export class DisciplineComponent implements AfterViewInit {

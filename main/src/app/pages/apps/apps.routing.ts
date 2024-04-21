@@ -19,9 +19,19 @@ import { AppInvoiceViewComponent } from './invoice/invoice-view/invoice-view.com
 import { AppEditInvoiceComponent } from './invoice/edit-invoice/edit-invoice.component';
 import { AppBlogsComponent } from './blogs/blogs.component';
 import { AppBlogDetailsComponent } from './blogs/details/details.component';
-import {DisciplineComponent} from './discipline/discipline.component';
+import { DisciplineComponent } from './discipline/discipline.component';
 import { AcademieComponent } from './academie/academie.component';
 import { AppBloglistComponent } from './blogs/bloglist/blog.component';
+import { AcademieProfileComponent } from './academie-profile/academie-profile.component';
+import { EquipeComponent } from './equipe/equipe.component';
+import { PaiementComponent } from './paiement/paiement.component';
+import { ArchivedAcademieComponent } from './archived-academie/academie.component';
+import { AppManagerlistComponent } from './admin/managerlist.component';
+import { AppStafflistComponent } from './managers/staff/stafflist.component';
+import { AppRoleslistComponent } from './managers/roles/roleslist.component';
+import { AppProfilComponent } from './managers/profil/profil.component';
+import { DisciplineManagerComponent } from './discipline-manager/discipline.component';
+
 
 export const AppsRoutes: Routes = [
   {
@@ -130,6 +140,50 @@ export const AppsRoutes: Routes = [
         },
       },
       {
+        path: 'managers',
+        component: AppManagerlistComponent,
+        data: {
+          title: 'Managers',
+          urls: [
+            { title: 'Managers', url: '/dashboards/dashboard1' },
+            { title: 'Managers' },
+          ],
+        },
+      },
+      {
+        path: 'staff',
+        component: AppStafflistComponent,
+        data: {
+          title: 'Staff',
+          urls: [
+            { title: 'Staff', url: '/dashboards/dashboard1' },
+            { title: 'Staff' },
+          ],
+        },
+      },
+      {
+        path: 'roles',
+        component: AppRoleslistComponent,
+        data: {
+          title: 'Roles',
+          urls: [
+            { title: 'Roles', url: '/dashboards/dashboard1' },
+            { title: 'Roles' },
+          ],
+        },
+      },
+      {
+        path: 'profil',
+        component: AppProfilComponent,
+        data: {
+          title: 'Profil',
+          urls: [
+            { title: 'Profil', url: '/dashboards/dashboard1' },
+            { title: 'Profil' },
+          ],
+        },
+      },
+      {
         path: 'contacts',
         component: AppContactComponent,
         data: {
@@ -207,6 +261,50 @@ export const AppsRoutes: Routes = [
         },
       },
       {
+        path: 'archivedacademie',
+        component: ArchivedAcademieComponent,
+        data: {
+          title: 'Archived Academies',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Archived Academies' },
+          ],
+        },
+      },
+      {
+        path: 'academieprofile',
+        component: AcademieProfileComponent,
+        data: {
+          title: 'Academie Profile',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Academie Profile' },
+          ],
+        },
+      },
+      {
+        path: 'equipe',
+        component: EquipeComponent,
+        data: {
+          title: 'Equipe',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Equipe' },
+          ],
+        },
+      },
+      {
+        path: 'paiement',
+        component: PaiementComponent,
+        data: {
+          title: 'Paiement',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Paiement' },
+          ],
+        },
+      },
+      {
         path: 'discipline',
         component: DisciplineComponent,
         data: {
@@ -214,6 +312,17 @@ export const AppsRoutes: Routes = [
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
             { title: 'Discipline' },
+          ],
+        },
+      },
+      {
+        path: 'disciplinemanager',
+        component: DisciplineManagerComponent,
+        data: {
+          title: 'Discipline Manager',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Discipline Manager' },
           ],
         },
       },

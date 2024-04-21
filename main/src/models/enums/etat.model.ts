@@ -1,3 +1,3 @@
 export enum Etat {
-    ACTIF,SUSPENDU,INACTIF,FERME
+    Actif,Suspendu,Inactif,Ferme
 }
