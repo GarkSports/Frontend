@@ -34,10 +34,10 @@ export class DisciplineService {
   addDisciplineManager(disciplineData: Discipline): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
-    return this.http.post<any>(`${this.apiUrl}/addDisciplineManager`, disciplineData, { headers });
+    return this.http.post<any>(`${this.apiUrl}/addDisciplineManager`, disciplineData,{withCredentials: true});
   }
 
   getDisciplinesManager(): Observable<Discipline[]> {
-    return this.http.get<Discipline[]>(`${this.apiUrl}/getAllDisciplines`);
+    return this.http.get<Discipline[]>(`${this.apiUrl}/getAllDisciplines`,{withCredentials: true});
   }
 }
