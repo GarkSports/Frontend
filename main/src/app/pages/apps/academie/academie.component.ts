@@ -19,6 +19,7 @@ import { Manager } from 'src/models/manager.model';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AcademieHistory } from 'src/models/academieHistory.models';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { User } from 'src/models/user.model';
 
 @Component({
   templateUrl: './academie.component.html',
@@ -27,6 +28,8 @@ export class AcademieComponent implements AfterViewInit {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> =
     Object.create(null);
   searchText: any;
+  connectedUser: User;
+
   displayedColumns: string[] = [
     'nom',
     'logo',
@@ -67,14 +70,30 @@ export class AcademieComponent implements AfterViewInit {
   constructor(
     public dialog: MatDialog,
     public datePipe: DatePipe,
-    public academieService: AcademieService
+    public academieService: AcademieService,
   ) { }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
+    this.getConnectedUserProfile();
     this.getAcademies();
   }
 
+  getConnectedUserProfile(): void {
+    this.academieService.getProfil().subscribe(
+      (user: User) => {
+        this.connectedUser = user;
+        console.log('User Profile:', this.connectedUser);
+        // You can do further processing with the user profile data here
+      },
+      (error) => {
+        console.error('Error fetching user profile', error);
+        // Handle error, if needed
+      }
+    );
+  }
+
+  
   applyFilter(filterValue: string): void {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
