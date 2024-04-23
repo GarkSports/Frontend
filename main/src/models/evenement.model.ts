@@ -1,27 +1,20 @@
 import { Academie } from "./academie.model";
 import { Adherent } from "./adherent.model";
-import { Destinataire } from "./enums/destinataire.model";
 import { EvenementType } from "./enums/evenementType";
-import { Repetition } from "./enums/repetition.model";
 import { Equipe } from "./equipe.model";
 
 export class Evenement {
-    id: number;
-    nom: string;
-    description: string;
-    type:EvenementType;
-    destinataire:Destinataire;
-    academie?: Academie;
-    equipe?: Equipe;
-    membres?:Adherent[];
-    dateDebut: Date;
-    dateFin: Date;
-    heur: Date;
-    repetition: boolean;
-    chaque: Repetition;
-    numero: number;
-    adresse: string;
+    id?: number;
+    type: EvenementType;
+    nomEvent: string;
     lieu: string;
-
-
+    date: Date;
+    heure: Date;
+    description: string;
+    convocationEquipe?: Equipe;
+    convocationMembres?: Adherent[];
+    test?: string;
+    nomAdversaire?: string;
+    convocationEquipes?: Equipe[];
+    academie?: Academie;
 }

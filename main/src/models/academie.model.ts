@@ -20,6 +20,5 @@ export class Academie {
     codePostal: string;
     pays: string;
     manager_id?: number;
-    evenements?: Evenement[];
     manager: any;
 }

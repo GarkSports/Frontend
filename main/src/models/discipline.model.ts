@@ -3,4 +3,5 @@ export class Discipline {
     nom: string;
     description: string;
     protectedDiscipline: boolean;
+    academieId : number;
 }

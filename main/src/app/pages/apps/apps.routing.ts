@@ -30,6 +30,12 @@ import { AppStafflistComponent } from './managers/staff/stafflist.component';
 import { AppRoleslistComponent } from './managers/roles/roleslist.component';
 import { AppProfilComponent } from './managers/profil/profil.component';
 import { DisciplineManagerComponent } from './discipline-manager/discipline.component';
+import { AddMatchAmicalComponent } from './evenement/addMatchAmical/addMatchAmical.component';
+import { AddPersonnaliseComponent } from './evenement/addPersonnalise/addPersonnalise.component';
+import { AddTestComponent } from './evenement/addTest/addTest.component';
+import { AddCompetitionComponent } from './evenement/addcompetition/addCompetition.component';
+import { CalendrierComponent } from './evenement/calendrier/calendrier.component';
+import { ListEvenementComponent } from './evenement/listEvenement/listEvenement.component';
 
 
 export const AppsRoutes: Routes = [
@@ -322,6 +328,72 @@ export const AppsRoutes: Routes = [
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
             { title: 'Academie' },
+          ],
+        },
+      },
+      {
+        path: 'calendrier',
+        component: CalendrierComponent,
+        data: {
+          title: 'Calendrier',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Calendrier' },
+          ],
+        },
+      },
+      {
+        path: 'listevenement',
+        component: ListEvenementComponent,
+        data: {
+          title: 'List Evenement',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'List Evenement' },
+          ],
+        },
+      },
+      {
+        path: 'addcompetition',
+        component: AddCompetitionComponent,
+        data: {
+          title: 'Add Competition',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Add Competition' },
+          ],
+        },
+      },
+      {
+        path: 'addmatchamical',
+        component: AddMatchAmicalComponent,
+        data: {
+          title: 'Add Match Amical',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Add Match Amical' },
+          ],
+        },
+      },
+      {
+        path: 'addpersonnalise',
+        component: AddPersonnaliseComponent,
+        data: {
+          title: 'Add Personnalise',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Add Personnalise' },
+          ],
+        },
+      },
+      {
+        path: 'addtest',
+        component: AddTestComponent,
+        data: {
+          title: 'Add Test',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Add Test' },
           ],
         },
       },

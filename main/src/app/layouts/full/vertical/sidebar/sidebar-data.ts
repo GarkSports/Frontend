@@ -22,11 +22,11 @@ export const navItems: NavItem[] = [
     iconName: 'message-2',
     route: 'apps/chat',
   },
-  {
-    displayName: 'Calendar',
-    iconName: 'calendar-event',
-    route: 'apps/calendar',
-  },
+  // {
+  //   displayName: 'Calendar',
+  //   iconName: 'calendar-event',
+  //   route: 'apps/calendar',
+  // },
   {
     displayName: 'Email',
     iconName: 'mail',
@@ -101,6 +101,16 @@ export const navItems: NavItem[] = [
     displayName: 'Academie',
     iconName: 'building',
     route: 'apps/academie',
+  },
+  {
+    displayName: 'Calendrier',
+    iconName: 'calendar-event',
+    route: 'apps/calendrier',
+  },
+  {
+    displayName: 'List Evenement',
+    iconName: 'star',
+    route: 'apps/listevenement',
   },
   {
     displayName: 'Notes',
