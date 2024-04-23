@@ -1,4 +1,3 @@
-import { Role } from 'src/models/enums/role.model';
 import { NavItem } from './nav-item/nav-item';
 
 export const navItems: NavItem[] = [
@@ -47,7 +46,6 @@ export const navItems: NavItem[] = [
     displayName: 'Managers',
     iconName: 'user-circle',
     route: 'apps/managers',
-    roles: [Role.ADMIN],
   },
   {
     displayName: 'Staff',
@@ -86,7 +84,7 @@ export const navItems: NavItem[] = [
   },
   {
     displayName: 'Paiement',
-    iconName: 'money',
+    iconName: 'credit-card',
     route: 'apps/paiement',
   },
   {
