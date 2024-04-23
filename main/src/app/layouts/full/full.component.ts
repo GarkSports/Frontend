@@ -20,6 +20,7 @@ import { AppHorizontalHeaderComponent } from './horizontal/header/header.compone
 import { AppHorizontalSidebarComponent } from './horizontal/sidebar/sidebar.component';
 import { AppBreadcrumbComponent } from './shared/breadcrumb/breadcrumb.component';
 import { CustomizerComponent } from './shared/customizer/customizer.component';
+import { AcademieService } from 'src/app/services/academie.service';
 
 const MOBILE_VIEW = 'screen and (max-width: 768px)';
 const TABLET_VIEW = 'screen and (min-width: 769px) and (max-width: 1024px)';
@@ -64,7 +65,8 @@ interface quicklinks {
 })
 export class FullComponent implements OnInit {
 
-  navItems = navItems;
+  navItems: any[] = [];
+
 
   @ViewChild('leftsidenav')
   public sidenav: MatSidenav;
@@ -195,6 +197,7 @@ export class FullComponent implements OnInit {
     private router: Router,
     private breakpointObserver: BreakpointObserver,
     private navService: NavService,
+    private academieService: AcademieService
   ) {
     this.htmlElement = document.querySelector('html')!;
     this.layoutChangesSubscription = this.breakpointObserver
@@ -221,7 +224,101 @@ export class FullComponent implements OnInit {
       });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.academieService.getProfil().subscribe(
+      (user) => {
+        const userRole = user.role;
+        this.updateNavItems(userRole); // Update navItems based on user role
+      },
+      (error) => {
+        console.error('Failed to fetch user profile:', error);
+        // Optionally handle error
+      }
+    );
+  }
+
+  updateNavItems(userRole: string): void {
+    // Dynamically update navItems based on user role
+    if (userRole === 'ADMIN') {
+      this.navItems = [
+        {
+          displayName: 'Dashboard',
+          iconName: 'home',
+          route: '/dashboards/dashboard1',
+        },
+        {
+          displayName: 'Managers',
+          iconName: 'user-circle',
+          route: 'apps/managers',
+        },
+        {
+          displayName: 'Staff',
+          iconName: 'user-circle',
+          route: 'apps/staff',
+        },
+        {
+          displayName: 'Roles',
+          iconName: 'user-circle',
+          route: 'apps/roles',
+        },
+        {
+          displayName: 'Profil',
+          iconName: 'user-circle',
+          route: 'apps/profil',
+        },
+        {
+          displayName: 'Archived Academies',
+          iconName: 'building',
+          route: 'apps/archivedacademie',
+        },
+        {
+          displayName: 'Discipline',
+          iconName: 'medal',
+          route: 'apps/discipline',
+        },
+        {
+          displayName: 'Academie',
+          iconName: 'building',
+          route: 'apps/academie',
+        },
+
+      ];
+    } else if (userRole === 'MANAGER') {
+      this.navItems = [
+        {
+          displayName: 'Academie Profile',
+          iconName: 'building',
+          route: 'apps/academieprofile',
+        },
+        {
+          displayName: 'Equipe',
+          iconName: 'users',
+          route: 'apps/equipe',
+        },
+        {
+          displayName: 'Paiement',
+          iconName: 'credit-card',
+          route: 'apps/paiement',
+        },
+        {
+          displayName: 'Discipline Manager',
+          iconName: 'medal',
+          route: 'apps/disciplinemanager',
+        },
+        {
+          displayName: 'Calendrier',
+          iconName: 'calendar-event',
+          route: 'apps/calendrier',
+        },
+        {
+          displayName: 'List Evenement',
+          iconName: 'star',
+          route: 'apps/listevenement',
+        },
+        // Add other default items for regular users
+      ];
+    }
+  }
 
   ngOnDestroy() {
     this.layoutChangesSubscription.unsubscribe();
