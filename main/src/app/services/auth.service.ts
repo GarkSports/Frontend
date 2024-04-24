@@ -7,6 +7,7 @@ import { catchError, map } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class AuthService {
+  private apiUrl = 'http://localhost:8089/auth';
   constructor(private http: HttpClient) {}
 
   authenticate(uname: string, password: string): Observable<boolean> {
@@ -26,4 +27,16 @@ export class AuthService {
         })
       );
   }
+
+  logout(): Observable<string> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      }),
+      withCredentials: true // Include credentials with the request
+    };
+    return this.http.post<string>(`${this.apiUrl}/logout`, null, httpOptions);
+  }
+
+
 }

@@ -21,6 +21,7 @@ import { AppHorizontalSidebarComponent } from './horizontal/sidebar/sidebar.comp
 import { AppBreadcrumbComponent } from './shared/breadcrumb/breadcrumb.component';
 import { CustomizerComponent } from './shared/customizer/customizer.component';
 import { AcademieService } from 'src/app/services/academie.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 const MOBILE_VIEW = 'screen and (max-width: 768px)';
 const TABLET_VIEW = 'screen and (min-width: 769px) and (max-width: 1024px)';
@@ -197,7 +198,9 @@ export class FullComponent implements OnInit {
     private router: Router,
     private breakpointObserver: BreakpointObserver,
     private navService: NavService,
-    private academieService: AcademieService
+    private academieService: AcademieService,
+    private authService: AuthService,
+
   ) {
     this.htmlElement = document.querySelector('html')!;
     this.layoutChangesSubscription = this.breakpointObserver
@@ -237,6 +240,17 @@ export class FullComponent implements OnInit {
     );
   }
 
+  logout(): void {
+    this.authService.logout().subscribe(
+      response => {
+        console.log(response); // Handle success response
+      },
+      error => {
+        console.error(error); // Handle error response
+      }
+    );
+  }
+
   updateNavItems(userRole: string): void {
     // Dynamically update navItems based on user role
     if (userRole === 'ADMIN') {
@@ -250,21 +264,6 @@ export class FullComponent implements OnInit {
           displayName: 'Managers',
           iconName: 'user-circle',
           route: 'apps/managers',
-        },
-        {
-          displayName: 'Staff',
-          iconName: 'user-circle',
-          route: 'apps/staff',
-        },
-        {
-          displayName: 'Roles',
-          iconName: 'user-circle',
-          route: 'apps/roles',
-        },
-        {
-          displayName: 'Profil',
-          iconName: 'user-circle',
-          route: 'apps/profil',
         },
         {
           displayName: 'Archived Academies',
@@ -286,9 +285,24 @@ export class FullComponent implements OnInit {
     } else if (userRole === 'MANAGER') {
       this.navItems = [
         {
+          displayName: 'Profil',
+          iconName: 'user-circle',
+          route: 'apps/profil',
+        },
+        {
           displayName: 'Academie Profile',
           iconName: 'building',
           route: 'apps/academieprofile',
+        },
+        {
+          displayName: 'Staff',
+          iconName: 'user-circle',
+          route: 'apps/staff',
+        },
+        {
+          displayName: 'Roles',
+          iconName: 'user-circle',
+          route: 'apps/roles',
         },
         {
           displayName: 'Equipe',

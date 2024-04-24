@@ -43,7 +43,7 @@ export class AppSideLoginComponent {
           // Handle successful response, e.g., redirect to dashboard
           console.log('Authentication successful', response);
           localStorage.setItem('jwtToken', response.accessToken);
-          this.router.navigate(['/dashboards/dashboard1']);
+          this.router.navigate(['/apps/profil']);
         },
         (error) => {
           // Handle error
