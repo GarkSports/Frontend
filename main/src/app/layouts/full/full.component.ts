@@ -329,6 +329,24 @@ export class FullComponent implements OnInit {
           iconName: 'star',
           route: 'apps/listevenement',
         },
+        {
+          displayName: 'Blog',
+          iconName: 'chart-donut-3',
+          route: 'apps/blog',
+          children: [
+            {
+              displayName: 'PostsList',
+              iconName: 'point',
+              route: 'apps/blog/postslist',
+            },
+            {
+              displayName: 'Post',
+              iconName: 'point',
+              route: 'apps/blog/post',
+            },
+
+          ],
+        },
         // Add other default items for regular users
       ];
     }

@@ -2,6 +2,24 @@ import { NavItem } from './nav-item/nav-item';
 
 export const navItems: NavItem[] = [
   {
+    displayName: 'Blog',
+    iconName: 'chart-donut-3',
+    route: 'apps/blog',
+    children: [
+      {
+        displayName: 'PostsList',
+        iconName: 'point',
+        route: 'apps/blog/postslist',
+      },
+      {
+        displayName: 'Post',
+        iconName: 'point',
+        route: 'apps/blog/post',
+      },
+      
+    ],
+  },
+  {
     displayName: 'Dashboard',
     iconName: 'home',
     route: '/dashboards/dashboard1',

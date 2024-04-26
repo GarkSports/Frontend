@@ -232,6 +232,7 @@ export const AppsRoutes: Routes = [
       },
       {
         path: 'blog/post',
+        canActivate: [isManagerGuard],
         component: AppBlogsComponent,
         data: {
           title: 'Posts',
@@ -243,6 +244,7 @@ export const AppsRoutes: Routes = [
       },
       {
         path: 'blog/postslist',
+        canActivate: [isManagerGuard],
         component: AppBloglistComponent,
         data: {
           title: 'PostsList',
@@ -251,9 +253,10 @@ export const AppsRoutes: Routes = [
             { title: 'PostsList' },
           ],
         },
-      },    
+      },
       {
         path: 'blog/detail/:id',
+        canActivate: [isManagerGuard],
         component: AppBlogDetailsComponent,
         data: {
           title: 'Blog Detail',
