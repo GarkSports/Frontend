@@ -106,6 +106,7 @@ import { AppAddDisciplineManagerComponent } from './discipline-manager/add/add.c
 import { AngularFireModule } from '@angular/fire/compat'; // Update import path
 import { AngularFireStorageModule } from '@angular/fire/compat/storage'; // Update import path
 import { environment } from '../api/environment';
+import { AppBlogDialogContentComponent, AppBloglistComponent } from './blogs/bloglist/blog.component';
 import { AppManagerDialogContentComponent, AppManagerlistComponent } from './admin/managerlist.component';
 import { AppStaffDialogContentComponent, AppStafflistComponent } from './managers/staff/stafflist.component';
 import { AppRolesDialogContentComponent, AppRoleslistComponent } from './managers/roles/roleslist.component';
@@ -206,6 +207,8 @@ import { NavbarComponent } from './evenement/navbar/navbar.component';
     OkDialogComponent,
     AppBlogsComponent,
     AppBlogDetailsComponent,
+    AppBloglistComponent,
+    AppBlogDialogContentComponent,
     AppManagerlistComponent,
     AppManagerDialogContentComponent,
     AppStaffDialogContentComponent,
