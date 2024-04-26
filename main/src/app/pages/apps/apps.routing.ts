@@ -31,11 +31,21 @@ import { AppStafflistComponent } from './managers/staff/stafflist.component';
 import { AppRoleslistComponent } from './managers/roles/roleslist.component';
 import { AppProfilComponent } from './managers/profil/profil.component';
 import { DisciplineManagerComponent } from './discipline-manager/discipline.component';
+import { AddMatchAmicalComponent } from './evenement/addMatchAmical/addMatchAmical.component';
+import { AddPersonnaliseComponent } from './evenement/addPersonnalise/addPersonnalise.component';
+import { AddTestComponent } from './evenement/addTest/addTest.component';
+import { AddCompetitionComponent } from './evenement/addcompetition/addCompetition.component';
+import { CalendrierComponent } from './evenement/calendrier/calendrier.component';
+import { ListEvenementComponent } from './evenement/listEvenement/listEvenement.component';
+import { authGuard } from 'src/app/guards/auth.guard';
+import { isAdminGuard } from 'src/app/guards/is-admin.guard';
+import { isManagerGuard } from 'src/app/guards/is-manager.guard';
 
 
 export const AppsRoutes: Routes = [
   {
     path: '',
+    canActivate: [authGuard],
     children: [
       {
         path: 'chat',
@@ -141,6 +151,7 @@ export const AppsRoutes: Routes = [
       },
       {
         path: 'managers',
+        canActivate: [isAdminGuard],
         component: AppManagerlistComponent,
         data: {
           title: 'Managers',
@@ -152,6 +163,7 @@ export const AppsRoutes: Routes = [
       },
       {
         path: 'staff',
+        canActivate: [isManagerGuard],
         component: AppStafflistComponent,
         data: {
           title: 'Staff',
@@ -163,6 +175,7 @@ export const AppsRoutes: Routes = [
       },
       {
         path: 'roles',
+        canActivate: [isManagerGuard],
         component: AppRoleslistComponent,
         data: {
           title: 'Roles',
@@ -174,6 +187,7 @@ export const AppsRoutes: Routes = [
       },
       {
         path: 'profil',
+        canActivate: [isManagerGuard],
         component: AppProfilComponent,
         data: {
           title: 'Profil',
@@ -218,6 +232,7 @@ export const AppsRoutes: Routes = [
       },
       {
         path: 'blog/post',
+        canActivate: [isManagerGuard],
         component: AppBlogsComponent,
         data: {
           title: 'Posts',
@@ -229,6 +244,7 @@ export const AppsRoutes: Routes = [
       },
       {
         path: 'blog/postslist',
+        canActivate: [isManagerGuard],
         component: AppBloglistComponent,
         data: {
           title: 'PostsList',
@@ -237,9 +253,10 @@ export const AppsRoutes: Routes = [
             { title: 'PostsList' },
           ],
         },
-      },    
+      },
       {
         path: 'blog/detail/:id',
+        canActivate: [isManagerGuard],
         component: AppBlogDetailsComponent,
         data: {
           title: 'Blog Detail',
@@ -262,6 +279,7 @@ export const AppsRoutes: Routes = [
       },
       {
         path: 'archivedacademie',
+        canActivate: [isAdminGuard],
         component: ArchivedAcademieComponent,
         data: {
           title: 'Archived Academies',
@@ -273,6 +291,7 @@ export const AppsRoutes: Routes = [
       },
       {
         path: 'academieprofile',
+        canActivate: [isManagerGuard],
         component: AcademieProfileComponent,
         data: {
           title: 'Academie Profile',
@@ -284,6 +303,7 @@ export const AppsRoutes: Routes = [
       },
       {
         path: 'equipe',
+        canActivate: [isManagerGuard],
         component: EquipeComponent,
         data: {
           title: 'Equipe',
@@ -295,6 +315,7 @@ export const AppsRoutes: Routes = [
       },
       {
         path: 'paiement',
+        canActivate: [isManagerGuard],
         component: PaiementComponent,
         data: {
           title: 'Paiement',
@@ -306,6 +327,7 @@ export const AppsRoutes: Routes = [
       },
       {
         path: 'discipline',
+        canActivate: [isAdminGuard],
         component: DisciplineComponent,
         data: {
           title: 'Discipline',
@@ -317,6 +339,7 @@ export const AppsRoutes: Routes = [
       },
       {
         path: 'disciplinemanager',
+        canActivate: [isManagerGuard],
         component: DisciplineManagerComponent,
         data: {
           title: 'Discipline Manager',
@@ -328,12 +351,85 @@ export const AppsRoutes: Routes = [
       },
       {
         path: 'academie',
+        canActivate: [isAdminGuard],
         component: AcademieComponent,
         data: {
           title: 'Academie',
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
             { title: 'Academie' },
+          ],
+        },
+      },
+      {
+        path: 'calendrier',
+        canActivate: [isManagerGuard],
+        component: CalendrierComponent,
+        data: {
+          title: 'Calendrier',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Calendrier' },
+          ],
+        },
+      },
+      {
+        path: 'listevenement',
+        canActivate: [isManagerGuard],
+        component: ListEvenementComponent,
+        data: {
+          title: 'List Evenement',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'List Evenement' },
+          ],
+        },
+      },
+      {
+        path: 'addcompetition',
+        canActivate: [isManagerGuard],
+        component: AddCompetitionComponent,
+        data: {
+          title: 'Add Competition',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Add Competition' },
+          ],
+        },
+      },
+      {
+        path: 'addmatchamical',
+        canActivate: [isManagerGuard],
+        component: AddMatchAmicalComponent,
+        data: {
+          title: 'Add Match Amical',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Add Match Amical' },
+          ],
+        },
+      },
+      {
+        path: 'addpersonnalise',
+        canActivate: [isManagerGuard],
+        component: AddPersonnaliseComponent,
+        data: {
+          title: 'Add Personnalise',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Add Personnalise' },
+          ],
+        },
+      },
+      {
+        path: 'addtest',
+        canActivate: [isManagerGuard],
+        component: AddTestComponent,
+        data: {
+          title: 'Add Test',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Add Test' },
           ],
         },
       },

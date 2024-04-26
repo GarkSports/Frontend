@@ -21,7 +21,7 @@ export class EquipeService {
   }
 
   getDisciplines(): Observable<Discipline[]> {
-    return this.http.get<Discipline[]>(`${this.apiUrlDiscipline}/getAllDisciplines`);
+    return this.http.get<Discipline[]>(`${this.apiUrlDiscipline}/getAllDisciplines`,{withCredentials: true});
   }
 
   getEntraineurs(): Observable<Entraineur[]> {

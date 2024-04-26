@@ -1,0 +1,51 @@
+<mat-card class="cardWithShadow theme-card">
+    <mat-card-header>
+        <mat-card-title class="m-b-0">Add Competition</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="b-t-1">
+        <form class="m-t-24">
+            <div class="row">
+                <!-- Nom -->
+                <div class="col-md-12">
+                    <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Nom</mat-label>
+                    <mat-form-field appearance="outline" class="w-100">
+                        <input matInput required />
+                    </mat-form-field>
+                </div>
+                <!-- Lieu -->
+                <div class="col-md-12">
+                    <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Lieu</mat-label>
+                    <mat-form-field appearance="outline" class="w-100">
+                        <input matInput required />
+                    </mat-form-field>
+                </div>
+                <!-- Date -->
+                <div class="col-md-6">
+                    <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Date</mat-label>
+                    <mat-form-field appearance="outline" class="w-100">
+                        <input matInput [matDatepicker]="picker" required />
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <!-- Horraire -->
+                <div class="col-md-6">
+                    <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Horraire</mat-label>
+                    <mat-form-field appearance="outline" class="w-100">
+                        <input matInput required type="time" />
+                    </mat-form-field>
+                </div>
+                <!-- Description -->
+                <div class="col-md-12">
+                    <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Description</mat-label>
+                    <mat-form-field appearance="outline" class="w-100">
+                        <textarea matInput required rows="4"></textarea>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="text-right">
+                <button mat-flat-button color="primary">Finish</button>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>

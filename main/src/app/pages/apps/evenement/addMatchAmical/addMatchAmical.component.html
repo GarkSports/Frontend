@@ -1,0 +1,101 @@
+<mat-card class="cardWithShadow theme-card">
+    <mat-card-header>
+        <mat-card-title class="m-b-0">Add Match Amical</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="b-t-1">
+        <mat-stepper #stepper>
+            <mat-step>
+                <form class="m-t-24">
+                    <ng-template matStepLabel>Détails</ng-template>
+                    <div class="row">
+                        <!-- Nom -->
+                        <div class="col-md-12">
+                            <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Nom</mat-label>
+                            <mat-form-field appearance="outline" class="w-100">
+                                <input matInput required />
+                            </mat-form-field>
+                        </div>
+                        <!-- Lieu -->
+                        <div class="col-md-12">
+                            <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Lieu</mat-label>
+                            <mat-form-field appearance="outline" class="w-100">
+                                <input matInput required />
+                            </mat-form-field>
+                        </div>
+                        <!-- Date -->
+                        <div class="col-md-12">
+                            <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Date</mat-label>
+                            <mat-form-field appearance="outline" class="w-100">
+                                <input matInput [matDatepicker]="picker" required />
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                        <!-- Description -->
+                        <div class="col-md-12">
+                            <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Description</mat-label>
+                            <mat-form-field appearance="outline" class="w-100">
+                                <textarea matInput required rows="4"></textarea>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <button mat-flat-button color="primary" matStepperNext>Next</button>
+                    </div>
+                </form>
+            </mat-step>
+
+            <mat-step>
+                <form class="m-t-24">
+                    <ng-template matStepLabel>Convocation</ng-template>
+                    <div class="radio-container">
+                        <!-- Radio buttons for equipe selection -->
+                        <div *ngFor="let equipe of equipeList" class="radio-input-container">
+                            <mat-radio-button [value]="equipe.id" class="radio-button"
+                                (change)="onEquipeSelect(equipe.id)">
+                                {{ equipe.nom }}
+                                <input type="time" class="time-input" [disabled]="selectedEquipe !== equipe.id" />
+                            </mat-radio-button>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between" style="margin-top: 70px;">
+                        <button mat-flat-button color="warn" matStepperPrevious>
+                            Back
+                        </button>
+                        <button mat-flat-button color="primary" (click)="stepper.reset()">Finish</button>
+                    </div>
+                </form>
+            </mat-step>
+        </mat-stepper>
+    </mat-card-content>
+</mat-card>
+
+
+<style>
+    .radio-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .radio-input-container {
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+
+    .radio-button {
+        display: flex;
+        align-items: center;
+    }
+
+    .time-input {
+        margin-left: 10px;
+        /* Adjust the spacing between radio button and input */
+        border: 1px solid #ccc;
+        /* Add border for better visibility */
+        padding: 4px;
+        /* Add padding for better appearance */
+        border-radius: 4px;
+        /* Add border radius for rounded corners */
+    }
+</style>

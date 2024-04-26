@@ -15,5 +15,5 @@ export class Equipe {
     adherents?: Adherent[];
     entraineurs?: Entraineur[];
     academie?: Academie;
-    evenements?: Evenement[];
+    dateMatchAmical: Date;
 }
