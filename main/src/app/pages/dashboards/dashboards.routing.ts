@@ -3,6 +3,7 @@ import { Routes } from '@angular/router';
 // dashboards
 import { AppDashboard1Component } from './dashboard1/dashboard1.component';
 import { AppDashboard2Component } from './dashboard2/dashboard2.component';
+import { isAdminGuard } from 'src/app/guards/is-admin.guard';
 
 export const DashboardsRoutes: Routes = [
   {
@@ -10,6 +11,7 @@ export const DashboardsRoutes: Routes = [
     children: [
       {
         path: 'dashboard1',
+        canActivate: [isAdminGuard],
         component: AppDashboard1Component,
         data: {
           title: 'Analytical',

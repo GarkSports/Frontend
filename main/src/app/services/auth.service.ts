@@ -8,12 +8,14 @@ import { catchError, map } from 'rxjs/operators';
 })
 export class AuthService {
   private apiUrl = 'http://localhost:8089/auth';
-  constructor(private http: HttpClient) {}
+  private apiAcademie = 'http://localhost:8089/academie';
+  router: any;
+  constructor(private http: HttpClient) { }
 
   authenticate(uname: string, password: string): Observable<boolean> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     const formData = { uname, password };
-  
+
     return this.http.post<any>('http://localhost:8089/auth/authenticate', formData, { headers })
       .pipe(
         map(response => {
@@ -36,6 +38,37 @@ export class AuthService {
       withCredentials: true // Include credentials with the request
     };
     return this.http.post<string>(`${this.apiUrl}/logout`, null, httpOptions);
+  }
+
+  checkAuthenticated(): Observable<boolean> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      }),
+      withCredentials: true // Include credentials with the request
+    };
+    return this.http.get<boolean>(`${this.apiUrl}/checkAccessToken`,httpOptions);
+  }
+
+
+  checkIfManager(): Observable<boolean> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      }),
+      withCredentials: true // Include credentials with the request
+    };
+    return this.http.get<boolean>(`${this.apiAcademie}/checkIfManager`, httpOptions);
+  }
+
+  checkIfAdmin(): Observable<boolean> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      }),
+      withCredentials: true // Include credentials with the request
+    };
+    return this.http.get<boolean>(`${this.apiAcademie}/checkIfAdmin`, httpOptions);
   }
 
 

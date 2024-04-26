@@ -4,6 +4,7 @@ import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } 
 import { Router, RouterModule } from '@angular/router';
 import { MaterialModule } from '../../../material.module';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-side-login',
@@ -13,9 +14,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class AppSideLoginComponent {
   options = this.settings.getOptions();
-  
 
-  constructor(private settings: CoreService, private router: Router, private http: HttpClient) { }
+
+  constructor(private settings: CoreService, private router: Router, private http: HttpClient, private authService: AuthService) { }
 
   form = new FormGroup({
     uname: new FormControl('', [Validators.required]),
@@ -35,24 +36,38 @@ export class AppSideLoginComponent {
         password: this.form.value.password
       };
 
+      this.http.post<any>('http://localhost:8089/auth/authenticate', formData, { withCredentials: true, headers })
+        .subscribe(
+          (response) => {
+            // Handle successful response
+            console.log('Authentication successful', response);
+            localStorage.setItem('jwtToken', response.accessToken);
 
-
-      this.http.post<any>('http://localhost:8089/auth/authenticate', formData, { withCredentials:true, headers })
-      .subscribe(
-        (response) => {
-          // Handle successful response, e.g., redirect to dashboard
-          console.log('Authentication successful', response);
-          localStorage.setItem('jwtToken', response.accessToken);
-          this.router.navigate(['/apps/profil']);
-        },
-        (error) => {
-          // Handle error
-          console.error('Authentication error', error);
-          console.log(formData);
-          
-          // Display an error message or handle the failure case
-        })
+            // Check if the user is a manager
+            this.authService.checkIfManager().subscribe((isManager) => {
+              if (isManager) {
+                // Navigate to manager page
+                this.router.navigate(['/apps/profil']);
+              } else {
+                // Check if the user is an admin
+                this.authService.checkIfAdmin().subscribe((isAdmin) => {
+                  if (isAdmin) {
+                    // Navigate to admin page
+                    this.router.navigate(['/dashboards/dashboard1']);
+                  } else {
+                    // Navigate to default page for regular users
+                    this.router.navigate(['/authentication/side-login']);
+                  }
+                });
+              }
+            });
+          },
+          (error) => {
+            // Handle error
+            console.error('Authentication error', error);
+            // Display an error message or handle the failure case
+          }
+        );
+    }
   }
-  
-}
 }
