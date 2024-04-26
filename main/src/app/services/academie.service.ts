@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Academie } from 'src/models/academie.model';
 import { Manager } from 'src/models/manager.model';
 import { AcademieHistory } from 'src/models/academieHistory.models';
+import { User } from 'src/models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,6 @@ import { AcademieHistory } from 'src/models/academieHistory.models';
 export class AcademieService {
   private apiUrl = 'http://localhost:8089/academie';
   private apiUrlManager = 'http://localhost:8089/random';
-  academieId = 1;
 
   constructor(private http: HttpClient) { }
 
@@ -75,11 +75,11 @@ export class AcademieService {
   }
 
   getAcademie(): Observable<Academie> {
-    return this.http.get<Academie>(`${this.apiUrl}/getAcademieById/${this.academieId}`);
+    return this.http.get<Academie>(`${this.apiUrl}/getAcademieById`, { withCredentials: true });
   }
 
   updateAcademieProfile(academie: Academie): Observable<Academie> {
-    return this.http.put<Academie>(`${this.apiUrlManager}/updateAcademie/${this.academieId}`, academie);
+    return this.http.put<Academie>(`${this.apiUrlManager}/updateAcademie`, academie, { withCredentials: true });
   }
 
   updateAcademieBackground(academieId: number, background: string): Observable<any> {
@@ -97,5 +97,9 @@ export class AcademieService {
 
   restoreArchivedAcademie(id: number): Observable<void> {
     return this.http.put<void>(`${this.apiUrl}/restoreArchivedAcademie/${id}`, {});
+  }
+
+  getProfil(): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/get-profil`, { withCredentials: true });
   }
 }

@@ -12,13 +12,12 @@ import { Equipe } from 'src/models/equipe.model';
 export class EquipeService {
   private apiUrl = 'http://localhost:8089/random';
   private apiUrlDiscipline = 'http://localhost:8089/discipline';
-  academieId = 1;
 
   constructor(private http: HttpClient) { }
 
   getMembers(): Observable<Adherent[]> {
-    const url = `${this.apiUrl}/getAdherents/${this.academieId}`;
-    return this.http.get<Adherent[]>(url);
+    const url = `${this.apiUrl}/getAdherents`;
+    return this.http.get<Adherent[]>(url,{withCredentials: true});
   }
 
   getDisciplines(): Observable<Discipline[]> {
@@ -26,7 +25,7 @@ export class EquipeService {
   }
 
   getEntraineurs(): Observable<Entraineur[]> {
-    return this.http.get<Entraineur[]>(`${this.apiUrl}/getEntraineurs/${this.academieId}`);
+    return this.http.get<Entraineur[]>(`${this.apiUrl}/getEntraineurs`,{withCredentials: true});
   }
 
   addEquipe(equipeData: Equipe, disciplineId: number): Observable<any> {
@@ -40,12 +39,12 @@ export class EquipeService {
       disciplineId
     };
     console.log(equipeRequest);
-    const url = `${this.apiUrl}/addEquipe/${this.academieId}`;
-    return this.http.post<any>(url, equipeRequest);
+    const url = `${this.apiUrl}/addEquipe`;
+    return this.http.post<any>(url, equipeRequest,{withCredentials: true});
   }
 
   getEquipes(): Observable<Equipe[]> {
-    return this.http.get<Equipe[]>(`${this.apiUrl}/getEquipes/${this.academieId}`);
+    return this.http.get<Equipe[]>(`${this.apiUrl}/getEquipes`,{withCredentials: true});
   }
 
   deleteEquipe(equipeId: number): Observable<void> {
