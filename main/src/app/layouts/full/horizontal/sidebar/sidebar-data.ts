@@ -88,15 +88,20 @@ export const navItems: NavItem[] = [
         route: 'apps/blog',
         children: [
           {
+            displayName: 'PostsList',
+            iconName: 'point',
+            route: 'apps/blog/postslist',
+          },
+          {
             displayName: 'Post',
             iconName: 'point',
             route: 'apps/blog/post',
           },
-          {
-            displayName: 'Detail',
-            iconName: 'point',
-            route: 'apps/blog/detail/Early Black Friday Amazon deals: cheap TVs, headphones, laptops',
-          },
+          // {
+          //   displayName: 'Detail',
+          //   iconName: 'point',
+          //   route: 'apps/blog/detail/Early Black Friday Amazon deals: cheap TVs, headphones, laptops',
+          // },
         ],
       },
     ],

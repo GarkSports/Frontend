@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { blogService } from '../blogService.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { PostsService } from 'src/app/services/posts.service';
 
 @Component({
   selector: 'app-blog-details',
@@ -21,7 +22,7 @@ export class AppBlogDetailsComponent implements OnInit{
   constructor(
     public router: Router,
     activatedRouter: ActivatedRoute,
-    public blogService: blogService
+    public PostService: PostsService,
   ){
     this.title = activatedRouter.snapshot.paramMap.get('id');
     
@@ -29,11 +30,11 @@ export class AppBlogDetailsComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    if (this.blogService.blogPosts.length === 0){
-      this.blogService.getBlog().subscribe((d: any) => (this.blogService.blogPosts = d));
-    }
     
-    this.blogDetail = this.blogService.blogPosts.filter(x => x.title === this.title);
+      this.PostService.getPosts().subscribe((d: any) => (this.PostService.blogPosts = d));
+    
+    
+    this.blogDetail = this.PostService.blogPosts.filter(x => x.id == this.title);
     console.log(this.blogDetail)
   }
 }
