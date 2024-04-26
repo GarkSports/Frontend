@@ -31,7 +31,7 @@ export class AppBloglistComponent implements AfterViewInit {
     'title',
     'author',
     'category',
-    'views',
+    'publicAudience',
     'action',
   ];
   

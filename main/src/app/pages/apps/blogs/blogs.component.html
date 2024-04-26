@@ -35,7 +35,7 @@
               <span
                 class="m-r-12 f-s-14 mat-subtitle-2 text-white d-flex align-items-center"
                 ><i-tabler name="eye" class="icon-18 m-r-4"></i-tabler
-                >{{ blogPost.views }}</span
+                > {{ blogPost.publicAudience ? 'Public' : 'Privé' }}</span
               >
               <span
                 class="f-s-14 mat-subtitle-2 text-white d-flex align-items-center"
@@ -93,7 +93,7 @@
           <div class="d-flex align-items-center">
             <span class="m-r-12 f-s-14 mat-subtitle-2 d-flex align-items-center"
               ><i-tabler name="eye" class="icon-18 m-r-4"></i-tabler
-              >{{ blogPost.views }}</span
+              > {{ blogPost.publicAudience ? 'Public' : 'Privé' }}</span
             >
             <span class="f-s-14 mat-subtitle-2 d-flex align-items-center"
               ><i-tabler name="message-2" class="icon-18 m-r-4"></i-tabler

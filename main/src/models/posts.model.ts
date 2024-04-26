@@ -7,6 +7,6 @@ export class BlogPosts {
     authorImageUrl: string;
     category: string;
     imageUrl: string;
-    views: number;
+    publicAudience: boolean;
     createdAt: Date;
 }

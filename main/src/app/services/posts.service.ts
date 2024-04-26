@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { BlogPosts } from 'src/models/posts.model';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
     providedIn: 'root'
@@ -12,15 +13,19 @@ import { BlogPosts } from 'src/models/posts.model';
 
     blogPosts: any[] = [];
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient, private cookieService: CookieService) { }
+
 
     public getPosts(): Observable<BlogPosts[]>{
-        return this.http.get<BlogPosts[]>(`${this.apiUrl}/posts`);
+        return this.http.get<BlogPosts[]>(`${this.apiUrl}/posts/getacademiePosts`,{ withCredentials: true });
     }
 
     public addPost(postData: any): Observable<BlogPosts> {
-      return this.http.post<BlogPosts>(`${this.apiUrl}/posts/addpost`, postData);
+      return this.http.post<BlogPosts>(`${this.apiUrl}/posts/addpost`, postData, { withCredentials: true });
     }
+    
+
+    
     public deletePost(id: number): Observable<void> {
       return this.http.delete<void>(`${this.apiUrl}/posts/deletepost/${id}`);
     }

@@ -8,14 +8,14 @@
   />
   <div class="card-overlay h-100 d-flex align-items-end justify-content-end">
     <mat-chip class="f-s-12 f-w-600 m-y-16 m-r-16 bg-white"
-      >2 mins Read</mat-chip
+      >Read</mat-chip
     >
   </div>
   <mat-card-content class="p-24 b-b-1">
     <div class="user-category">
       <div >
         <img src="{{ blogPost?.authorImageUrl }}" class="rounded-circle" width="40" />
-        <p class="mat-body-1 m-t-4 f-w-500"><i>{{ blogPost?.author }}</i></p>
+        <p class="mat-body-1 m-t-4 f-w-500">{{ blogPost?.author }}</p>
       </div>
       <mat-chip class="f-s-12 m-y-16 f-w-600">{{
         blogPost?.category
@@ -28,15 +28,15 @@
     <div class="d-flex align-items-center justify-content-center m-t-24">
       <div class="d-flex align-items-center">
         <span class="m-r-12 f-s-14 mat-subtitle-2 d-flex align-items-center"
-          ><i-tabler name="eye" class="icon-18 m-r-4"></i-tabler>360</span
+          ><i-tabler name="eye" class="icon-18 m-r-4"></i-tabler> {{ blogPost?.publicAudience ? 'Public' : 'Privé' }}</span
         >
-        <span class="f-s-14 mat-subtitle-2 d-flex align-items-center"
+        <!-- <span class="f-s-14 mat-subtitle-2 d-flex align-items-center"
           ><i-tabler name="message-2" class="icon-18 m-r-4"></i-tabler>4</span
-        >
+        > -->
       </div>
       <span class="m-l-auto f-s-14 mat-subtitle-2 d-flex align-items-center">
         <i-tabler name="point" class="icon-14 m-r-4"></i-tabler>
-        Thu, Mar 30
+        {{blogPost?.createdAt}}
       </span>
     </div>
   </mat-card-content>
