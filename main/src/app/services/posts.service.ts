@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { BlogPosts } from 'src/models/posts.model';
-import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
     providedIn: 'root'
@@ -13,7 +12,7 @@ import { CookieService } from 'ngx-cookie-service';
 
     blogPosts: any[] = [];
 
-    constructor(private http: HttpClient, private cookieService: CookieService) { }
+    constructor(private http: HttpClient) { }
 
 
     public getPosts(): Observable<BlogPosts[]>{
