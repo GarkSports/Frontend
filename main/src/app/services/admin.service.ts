@@ -3,19 +3,20 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Academie } from 'src/models/academie.model';
 import { Manager } from 'src/models/manager.model';
+import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdminService {
-  private apiUrl = 'http://localhost:8089/admin';
-  private apiUrlManager = 'http://localhost:8089/random';
+  private apiUrl =  environment.apiUrl+'admin';
+  private apiUrlManager =  environment.apiUrl+'random';
 
   constructor(private http: HttpClient) { }
 
   addManager(managerData: Manager): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-  
+
     const requestBody = {
       email: managerData.email,
       firstname: managerData.firstname,
@@ -26,9 +27,9 @@ export class AdminService {
       console.log("this is service",requestBody);
 
     return this.http.post<any>(`${this.apiUrl}/add-manager`, requestBody, { withCredentials: true, headers });
-    
+
   }
-  
+
 
   getManagers(): Observable<Manager[]> {
     return this.http.get<Manager[]>(`${this.apiUrl}/get-all-users`, { withCredentials: true });
@@ -36,7 +37,7 @@ export class AdminService {
 
   getManagerById(ManagerId: number): Observable<Academie> {
     return this.http.get<Academie>(`${this.apiUrl}/getAcademieById/${ManagerId}`,{ withCredentials: true });
-  }  
+  }
 
   updateManager(managerData: Manager): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
@@ -63,7 +64,7 @@ export class AdminService {
   }
 
   getManagerDetails(ManagerId: number): Observable<Manager> {
-    
+
     return this.http.get<Manager>(`${this.apiUrl}/getManagerDetails?id=${ManagerId}`,{ withCredentials: true });
   }
 }
