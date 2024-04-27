@@ -11,7 +11,7 @@ RUN npm install
 
 #RUN ng build --configuration=production
 
-CMD ["ng", "serve", "--host", "0.0.0.0","--configuration=production"]
+CMD [" ng serve --configuration=production "]
 EXPOSE 4200
 
 ## Stage 2: Setup Nginx to serve Angular app

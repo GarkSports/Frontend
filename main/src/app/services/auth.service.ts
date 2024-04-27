@@ -11,7 +11,9 @@ export class AuthService {
   private apiUrl =  environment.apiUrl+'auth';
   private apiAcademie = environment.apiUrl+ 'academie';
   router: any;
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    console.log( environment.apiUrl)
+  }
 
   authenticate(uname: string, password: string): Observable<boolean> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
