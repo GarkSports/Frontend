@@ -5,13 +5,14 @@ import { Adherent } from 'src/models/adherent.model';
 import { Discipline } from 'src/models/discipline.model';
 import { Entraineur } from 'src/models/entraineur.model';
 import { Equipe } from 'src/models/equipe.model';
+import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class EquipeService {
-  private apiUrl = 'http://localhost:8089/random';
-  private apiUrlDiscipline = 'http://localhost:8089/discipline';
+  private apiUrl = environment.apiUrl+ 'random';
+  private apiUrlDiscipline = environment.apiUrl+ 'discipline';
 
   constructor(private http: HttpClient) { }
 

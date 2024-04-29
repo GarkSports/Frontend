@@ -5,6 +5,7 @@ import { Router, RouterModule } from '@angular/router';
 import { MaterialModule } from '../../../material.module';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from 'src/app/services/auth.service';
+import {environment} from "../../../../environments/environment";
 
 @Component({
   selector: 'app-side-login',
@@ -36,7 +37,7 @@ export class AppSideLoginComponent {
         password: this.form.value.password
       };
 
-      this.http.post<any>('http://localhost:8089/auth/authenticate', formData, { withCredentials: true, headers })
+      this.http.post<any>(environment.apiUrl + 'auth/authenticate', formData, { withCredentials: true, headers })
         .subscribe(
           (response) => {
             // Handle successful response
