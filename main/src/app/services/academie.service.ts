@@ -5,13 +5,14 @@ import { Academie } from 'src/models/academie.model';
 import { Manager } from 'src/models/manager.model';
 import { AcademieHistory } from 'src/models/academieHistory.models';
 import { User } from 'src/models/user.model';
+import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AcademieService {
-  private apiUrl = 'http://localhost:8089/academie';
-  private apiUrlManager = 'http://localhost:8089/random';
+  private apiUrl = environment.apiUrl+ 'academie';
+  private apiUrlManager =  environment.apiUrl+'random';
 
   constructor(private http: HttpClient) { }
 

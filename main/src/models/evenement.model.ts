@@ -1,20 +1,29 @@
 import { Academie } from "./academie.model";
 import { Adherent } from "./adherent.model";
 import { EvenementType } from "./enums/evenementType";
+import { StatutEvenement } from "./enums/statutEvenenement.model";
 import { Equipe } from "./equipe.model";
 
 export class Evenement {
     id?: number;
-    type: EvenementType;
+    type?: EvenementType;
     nomEvent: string;
     lieu: string;
     date: Date;
-    heure: Date;
+    heure: string;
     description: string;
-    convocationEquipe?: Equipe;
-    convocationMembres?: Adherent[];
-    test?: string;
-    nomAdversaire?: string;
-    convocationEquipes?: Equipe[];
+    statut?: StatutEvenement;
+
+    //Match Amical
+    convocationEquipesMatchAmical?: Equipe[];
+
+    //Evenement personnalisé
+    convocationEquipePersonnalise?: Equipe;
+    convocationMembresPersonnalise?: Adherent[];
+
+    //Test evaulation
+    convocationEquipesTest?: Equipe[];
+    convocationMembresTest?: Adherent[];
+
     academie?: Academie;
 }

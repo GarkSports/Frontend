@@ -2,21 +2,24 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8089/auth';
-  private apiAcademie = 'http://localhost:8089/academie';
+  private apiUrl =  environment.apiUrl+'auth';
+  private apiAcademie = environment.apiUrl+ 'academie';
   router: any;
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    console.log( environment.apiUrl)
+  }
 
   authenticate(uname: string, password: string): Observable<boolean> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     const formData = { uname, password };
 
-    return this.http.post<any>('http://localhost:8089/auth/authenticate', formData, { headers })
+    return this.http.post<any>( environment.apiUrl+'auth/authenticate', formData, { headers })
       .pipe(
         map(response => {
           localStorage.setItem('jwtToken', response.accessToken);
