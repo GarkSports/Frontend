@@ -101,6 +101,7 @@ import { ArchivedAcademieConfirmationRestoreDialogComponent } from './archived-a
 import { DisciplineManagerComponent } from './discipline-manager/discipline.component';
 import { AppDisciplineManagerDialogContentComponent } from './discipline-manager/discipline.component';
 import { AppAddDisciplineManagerComponent } from './discipline-manager/add/add.component';
+import { DeleteEventConfirmationDialogComponent } from './evenement/listEvenement/listEvenement.component';
 
 
 import { AngularFireModule } from '@angular/fire/compat'; // Update import path
@@ -142,6 +143,7 @@ import { NavbarComponent } from './evenement/navbar/navbar.component';
   ],
   exports: [TablerIconsModule],
   declarations: [
+    DeleteEventConfirmationDialogComponent,
     NavbarComponent,
     CalendrierComponent,
     AddEvenementPopupComponent,
