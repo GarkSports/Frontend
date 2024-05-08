@@ -25,6 +25,7 @@ import { FilterPipe } from './pipe/filter.pipe';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AuthService } from './services/auth.service';
+import { AppProfilComponent } from './pages/apps/managers/profil/profil.component';
 
 
 export function HttpLoaderFactory(http: HttpClient): any {

@@ -13,6 +13,7 @@ import { Academie } from 'src/models/academie.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Role,RoleArray  } from 'src/models/enums/role.model';
 import { RoleName, RoleNameArray } from 'src/models/roleName.models';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 
 @Component({
   selector: 'app-staff-list',
@@ -28,6 +29,7 @@ export class AppStafflistComponent implements OnInit {
   Open = -1;
 
   displayedColumns: string[] = [
+    'photo',
     'firstname',
     'email',
     'roleName',
@@ -36,6 +38,7 @@ export class AppStafflistComponent implements OnInit {
     'status',
     'action',
   ];
+  
   dataSource = new MatTableDataSource<Manager>([]);
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator =
@@ -50,7 +53,7 @@ export class AppStafflistComponent implements OnInit {
   ngOnInit(): void {
     this.dataSource = new MatTableDataSource<Manager>([]);
     this.fetchRoleNames();
-    this.table.renderRows();
+    //this.table.renderRows();
   }
 
   fetchRoleNames(): void {
@@ -93,7 +96,7 @@ export class AppStafflistComponent implements OnInit {
       // } else if (result.event === 'Delete') {
       //   this.deleteRowData(result.data);
       } else if (result.event === 'Block'){
-        this.blockRowData(result.data.managerData);
+        this.blockRowData(result.data);
       }
       // else if (result.event === 'UnBlock'){
       //   this.unblockRowData(result.data.managerData);
@@ -194,12 +197,16 @@ export class AppStaffDialogContentComponent implements OnInit {
   firstnameValue: string;
   roles: string[];  
   roleNames: string[];
+  photo: string;
 
   dataSource = new MatTableDataSource<string>([]);
+  managerSource = new MatTableDataSource<Manager>([]);
+
 
   constructor(
     public dialogRef: MatDialogRef<AppStaffDialogContentComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: Manager,
+    private firestorage: AngularFireStorage,
     private formBuilder: FormBuilder,
     private managerService: ManagerService
   ) {
@@ -264,8 +271,10 @@ export class AppStaffDialogContentComponent implements OnInit {
       email: [this.local_data.email, [Validators.required, Validators.email]],
       adresse: [this.local_data.adresse, Validators.required],
       role: [this.local_data.role, Validators.required],
-      roleName: [this.local_data.roleName, Validators.required],
-    });
+      roleName: this.local_data.role === 'ADHERENT' || 'PARENT' ? null : [this.local_data.roleName],
+      photo: [null] 
+      });
+
   }
 
   // fetchRoleNames(): void {
@@ -274,6 +283,20 @@ export class AppStaffDialogContentComponent implements OnInit {
   //     console.log(roleNames);
   //   });
   // }
+
+  getManagers(): void {
+    this.managerService.getManagers().subscribe(
+      (managers) => {
+        console.log('Managers fetched successfully', managers);
+        this.managerSource.data = managers;
+      },
+      (error) => {
+        console.error('Error fetching academies', error);
+      }
+    );
+  }
+
+
   doAction(): void {
     if (this.action === 'Add') {
       const role = this.managerForm.get('role')?.value;
@@ -284,15 +307,85 @@ export class AppStaffDialogContentComponent implements OnInit {
     if (this.managerForm.valid) {
       const updatedManager = this.managerForm.value;
       updatedManager.id = this.local_data.id; // Set the id of the manager to be updated
-      this.managerService.updateManager(updatedManager).subscribe(
-        (response) => {
-          console.log('Manager updated 222 successfully', response);
-          this.dialogRef.close({ event: this.action, data: updatedManager });
-        },
-        (error) => {
-          console.error('Error updating manager', error);
+      var role = updatedManager.role;
+      switch(role){
+        case 'STAFF':
+          if (this.managerForm.valid) {
+          this.managerService.updateStaff(this.managerForm.value).subscribe(
+            (response) => {
+              console.log(this.managerForm.value); // Handle successful response
+              console.log('Manager updated:', response);
+              this.dialogRef.close(true);
+              this.getManagers();
+            },
+            (error) => {
+              // Handle error
+              console.error('Error adding manager:', error);
+            }
+          );
+        } else {
+          console.error('Form is not valid. Please fill out all required fields.');
         }
-      );
+          break;
+      case 'ENTRAINEUR':
+        if (this.managerForm.valid) {
+        this.managerService.updateEntraineur(this.managerForm.value).subscribe(
+          (response) => {
+            console.log(this.managerForm.value); // Handle successful response
+            console.log('Manager added:', response);
+            this.dialogRef.close(true);
+          },
+          (error) => {
+            // Handle error
+            console.error('Error adding manager:', error);
+          }
+        );
+      } else {
+        console.error('Form is not valid. Please fill out all required fields.');
+      }
+        break;
+      case 'ADHERENT':
+        if (this.managerForm.valid) {
+        this.managerService.updateAdherent(this.managerForm.value).subscribe(
+          (response) => {
+            console.log(this.managerForm.value); // Handle successful response
+            console.log('adherent added:', response);
+            this.dialogRef.close(true);
+          },
+          (error) => {
+            // Handle error
+            console.error('Error adding manager:', error);
+            // Also, log the error object
+            console.log(error);
+          }
+        );
+      } else {
+        console.error('Form is not valid. Please fill out all required fields.');
+      }
+        break;
+      case 'PARENT':
+        if (this.managerForm.valid) {
+        this.managerService.updateParent(this.managerForm.value).subscribe(
+          (response) => {
+            console.log(this.managerForm.value); // Handle successful response
+            console.log('adherent added:', response);
+            this.dialogRef.close(true);
+          },
+          (error) => {
+            // Handle error
+            console.error('Error adding manager:', error);
+            // Also, log the error object
+            console.log(error);
+          }
+        );
+      } else {
+        console.error('Form is not valid. Please fill out all required fields.');
+      }
+        break;
+      default:
+        break;
+    
+      } 
     }
   }
   if (this.action === 'Block') {
@@ -316,6 +409,7 @@ export class AppStaffDialogContentComponent implements OnInit {
   sendRequestBasedOnRole(role: string) {
     switch (role) {
       case 'STAFF':
+        if (this.managerForm.valid) {
         this.managerService.addStaff(this.managerForm.value).subscribe(
           (response) => {
             console.log(this.managerForm.value); // Handle successful response
@@ -327,9 +421,13 @@ export class AppStaffDialogContentComponent implements OnInit {
             console.error('Error adding manager:', error);
           }
         );
+      } else {
+        console.error('Form is not valid. Please fill out all required fields.');
+      }
         break;
       case 'ENTRAINEUR':
-        this.managerService.addStaff(this.managerForm.value).subscribe(
+        if (this.managerForm.valid) {
+        this.managerService.addEntraineur(this.managerForm.value).subscribe(
           (response) => {
             console.log(this.managerForm.value); // Handle successful response
             console.log('Manager added:', response);
@@ -338,20 +436,71 @@ export class AppStaffDialogContentComponent implements OnInit {
           (error) => {
             // Handle error
             console.error('Error adding manager:', error);
-          }
+          }          
         );
+      } else {
+        console.error('Form is not valid. Please fill out all required fields.');
+      }
         break;
-      case 'Adherant':
-        // this.getAdherantData();
-        break;
-      case 'Parent':
+        case 'ADHERENT':
+          if (this.managerForm.valid) {
+            this.managerService.addAdherent(this.managerForm.value).subscribe(
+              (response) => {
+                console.log(this.managerForm.value); // Handle successful response
+                console.log('adherent added:', response);
+                this.dialogRef.close(true);
+              },
+              (error) => {
+                // Handle error
+                console.error('Error adding manager:', error);
+              }
+            );
+          } else {
+            console.error('Form is not valid. Please fill out all required fields.');
+          }
+          break;
+        
+      case 'PARENT':
         // this.getParentData();
         break;
       default:
         break;
     }
   }
-     
+
+
+  async uploadFile(event: any) {
+    //display image
+    if (!event.target.files[0] || event.target.files[0].length === 0) {
+      // this.msg = 'You must select an image';
+      return;
+    }
+    const mimeType = event.target.files[0].type;
+    if (mimeType.match(/image\/*/) == null) {
+      // this.msg = "Only images are supported";
+      return;
+    }
+    // tslint:disable-next-line - Disables all
+    const reader = new FileReader();
+    reader.readAsDataURL(event.target.files[0]);
+    // tslint:disable-next-line - Disables all
+    reader.onload = (_event) => {
+      // tslint:disable-next-line - Disables all
+      this.local_data.imagePath = reader.result;
+    };
+    //upload image
+    const file = event.target.files[0];
+    if(file){
+      const path = `academie/${file.name}`;
+      const uploadTask = await this.firestorage.upload(path, file);
+      const url = await uploadTask.ref.getDownloadURL();
+      console.log('Image URL:', url);
+      this.local_data.photo = url;
+      this.managerForm.patchValue({
+        photo: url
+      });
+    }
+  }
   
 
      

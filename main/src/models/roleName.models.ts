@@ -1,6 +1,7 @@
 import { Academie } from "./academie.model";
 
 export class RoleName {
+    id: number;
     academie?: Academie;
     roleName?: string;
     permissions?: string[];

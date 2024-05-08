@@ -17,12 +17,61 @@ import { TablerIconsModule } from 'angular-tabler-icons';
 
 @Component({
   selector: 'app-profil',
-  standalone: true,
-  imports: [MaterialModule, TablerIconsModule],
   templateUrl: './profil.component.html',
 })
-export class AppProfilComponent  {
-    constructor() {}
+export class AppProfilComponent implements OnInit {
+  @ViewChild(MatTable, { static: true }) table: MatTable<any> =
+  Object.create(null);
+   action: string;
+   local_data: any;
+   managerForm: FormGroup;
+
+   managerSource = new MatTableDataSource<Manager>([]);
+
+    constructor(
+      private fb: FormBuilder,
+      public dialogRef: MatDialogRef<AppProfilComponent>,
+      @Optional() @Inject(MAT_DIALOG_DATA) public data: Manager,
+      private managerService: ManagerService,
+      private formBuilder: FormBuilder,
+    ) {
+      this.local_data = { ...data };
+      this.action = this.local_data.action ;
+    if (this.action === 'Update') {
+      this.initManagerForm();
+    }
+    }
+
+    ngOnInit(): void {
+      this.getProfil();
+    }
+
+    initManagerForm(): void {
+      this.managerForm = this.fb.group({
+        firstname: [this.local_data.firstname, Validators.required],
+        lastname: [this.local_data.lastname, Validators.required],
+        email: [this.local_data.email, [Validators.required, Validators.email]],
+        adresse: [this.local_data.adresse, Validators.required],
+        role: [this.local_data.role, Validators.required],
+        roleName: this.local_data.role === 'ADHERENT' || 'PARENT' ? null : [this.local_data.roleName],
+        photo: [null] 
+        });
+  
+    }
+
+    getProfil(): void{
+      this.managerService.getProfil().subscribe(
+        (profil) => {
+          console.log('profil fetched successfully', profil);
+          this.managerSource.data = profil;
+          console.log("source", profil);
+          
+        },
+        (error) => {
+          console.error('Error fetching academies', error);
+        }
+      );
+    }
     hide = true;
     hide2 = true;
     conhide = true;

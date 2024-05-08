@@ -1,39 +1,48 @@
 
   <!-- add and search tickets -->
-  <mat-card class="cardWithShadow">
-    <mat-card-content>
-      <div class="row justify-content-center">
+  <mat-card class="cardWithShadow no-shadow">
+    <mat-card-content class="p-24">
+      <div class="row justify-content-between" style="margin-bottom: 20px;">
         <div class="row">
-          <div class="col-sm-4">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-select placeholder="Filtrer par nom">
-                  <mat-option disabled selected>Filtrer par nom</mat-option>
+          <div class="col-lg-4">
+            <mat-form-field appearance="outline" class="w-100 hide-hint gray-background">
+              <mat-label>Filtrer par nom</mat-label>
+
+                  <mat-select >
                   <mat-option value="asc">De A à Z</mat-option>
                   <mat-option value="desc">De Z à A</mat-option>
               </mat-select>
           </mat-form-field>
           
           </div>
-          <div class="col-sm-4">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-select placeholder="Filtrer par role">
-                  <mat-option disabled selected>Filtrer par role</mat-option>
+          <div class="col-lg-4">
+            <mat-form-field appearance="outline" class="w-100 hide-hint gray-background">
+              <mat-label>Filtrer par équipe</mat-label>
+
+              <mat-select >
                   <mat-option value="asc">De A à Z</mat-option>
                   <mat-option value="desc">De Z à A</mat-option>
               </mat-select>
           </mat-form-field>
           
           </div>
-          <div class="col-sm-4">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-select placeholder="Filtrer par équipe">
-                  <mat-option disabled selected>Filtrer par équipe</mat-option>
+          <div class="col-lg-4">
+            <mat-form-field appearance="outline" class="w-100 hide-hint gray-background">
+              <mat-label>Filtrer par équipe</mat-label>
+
+              <mat-select>
                   <mat-option value="asc">De A à Z</mat-option>
                   <mat-option value="desc">De Z à A</mat-option>
               </mat-select>
           </mat-form-field>
           
           </div>
+          
+        </div>
+        <div class="col-lg-1 d-flex align-items-center justify-content-end">
+          <button mat-icon-button color="primary" style="color: gray;">
+            <mat-icon>refresh</mat-icon>
+          </button>
         </div>
       </div>
     </mat-card-content>
@@ -41,107 +50,72 @@
         
    
   <!-- table -->
-  <mat-card class="cardWithShadow">
-    <mat-card-content>
-      
-      <div class="table-responsive">
-        <div class="row" style="margin-left:2px ;">
-            <div class="col-sm-6" style="margin-top: 15px;">LISTE DES UTILISATEURS</div>
-            <div class="col-sm-6 d-flex justify-content-end">
-                <div class="d-flex align-items-center" style="margin-right: 30px;">
-                    <mat-form-field appearance="outline" class="hide-hint">
-                        <input matInput (keyup)="applyFilter($any($event.target).value)" placeholder="rechercher" />
-                        <mat-icon matSuffix>
-                            <i-tabler name="search" class="icon-20"></i-tabler>
-                        </mat-icon>
-                    </mat-form-field>
-                </div>
-                <div class="d-flex align-items-center" style="margin-right: 30px;">
-                    <button mat-flat-button (click)="openDialog('Add', {})" color="primary">
-                        <mat-icon matSuffix>
-                            <i-tabler name="plus" class="icon-20"></i-tabler>
-                        </mat-icon>
-                        Ajouter
-                    </button>
-                </div>
-            </div>
+  <mat-card class="cardWithShadow gray-background">
+    <mat-card-content class="p-24 gray-background">
+      <div class="row justify-content-between">
+        <div class="col-lg-6">
+          <h2>Liste des utilisateurs</h2>
         </div>
-   
+        <div class="col-lg-6 d-flex align-items-center justify-content-end">
+          <mat-form-field appearance="outline" class="w-50 hide-hint mr-2" style="margin-right: 10px;">
+            <input matInput placeholder="Rechercher" (keyup)="applyFilter($any($event.target).value)" />
+            <mat-icon matSuffix>
+              <i-tabler name="search" class="icon-20"></i-tabler>
+            </mat-icon>
+          </mat-form-field>
+          <button mat-flat-button (click)="openDialog('Add', {})" color="primary">
+            <mat-icon matSuffix>
+              <i-tabler name="plus" class="icon-20"></i-tabler>
+          </mat-icon>
+          Ajouter
+      </button>
+        </div>
+      </div>
     
-      
-        
-        <table mat-table [dataSource]="dataSource" class="w-100 f-s-14 f-w-500 no-wrap" style="margin-top: 30px;">
-        <!-- <ng-container matColumnDef="id">
-            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Id</th>
-            <td mat-cell *matCellDef="let element">
-              {{ element.id }}
-            </td>           
-          </ng-container> -->
+      <div class="table-responsive gray-background">
+        <table mat-table [dataSource]="dataSource" class="w-100 gray-background">
+  
   
           <ng-container matColumnDef="firstname">
             <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-              NOM
+             Nom
             </th>
-            <td mat-cell *matCellDef="let element">
-              <h1 class="m-0 f-s-14 mat-subtitle-1 f-w-500 m-b-4">{{ element.firstname }} {{element.lastname}}</h1>          
+            <td mat-cell *matCellDef="let element" class="f-s-14">
+              {{ element.firstname }} {{element.lastname}}       
             </td>
           </ng-container>
   
           <ng-container matColumnDef="email">
             <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-              E-MAIL
+               E-mail
             </th>
-            <td mat-cell *matCellDef="let element">
-              <div class="d-flex align-items-center">
-                <!--img [src]="element.imgSrc" alt="user" width="35" class="rounded-circle m-r-8" /-->
-                <h1 class="m-0 f-s-14 mat-subtitle-1 f-w-500 m-b-4">{{ element.email }}</h1>          
-              </div>
+            <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.email }}
             </td>
           </ng-container>
 
-          <ng-container matColumnDef="roleName">
+          <ng-container matColumnDef="academie">
             <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-              ROLE
+              Academie
             </th>
-            <td mat-cell *matCellDef="let element">
-              <div class="d-flex align-items-center">
-                <!--img [src]="element.imgSrc" alt="user" width="35" class="rounded-circle m-r-8" /-->
-                <h1 class="m-0 f-s-14 mat-subtitle-1 f-w-500 m-b-4">{{ element.roleName }}</h1>          
-
-              </div>
+            <td mat-cell *matCellDef="let element" class="f-s-14">
+              {{ element.academie }}
             </td>
           </ng-container>
 
           <ng-container matColumnDef="telephone">
             <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-              TELEPHONE
+              Téléphone
             </th>
-            <td mat-cell *matCellDef="let element">
-              <div class="d-flex align-items-center">
-                <!--img [src]="element.imgSrc" alt="user" width="35" class="rounded-circle m-r-8" /-->
-                <h1 class="m-0 f-s-14 mat-subtitle-1 f-w-500 m-b-4">{{ element.telephone }}</h1>          
-              </div>
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="equipe">
-            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-              EQUIPE
-            </th>
-            <td mat-cell *matCellDef="let element">
-              <div class="d-flex align-items-center">
-                <!--img [src]="element.imgSrc" alt="user" width="35" class="rounded-circle m-r-8" /-->
-                <h1 class="m-0 f-s-14 mat-subtitle-1 f-w-500 m-b-4">{{ element.equipe }}</h1>          
-
-              </div>
+            <td mat-cell *matCellDef="let element" class="f-s-14">
+            {{ element.telephone }}
             </td>
           </ng-container>
   
           <ng-container matColumnDef="status">
             <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-              STATUT
+              Statut
             </th>
-            <td mat-cell *matCellDef="let element">
+            <td mat-cell *matCellDef="let element" class="f-s-14">
               @if(element.blocked == '0'){<span class="mat-body-2 f-w-500 p-x-8 p-y-4 f-s-12 rounded-pill" style="background-color:#B7EE3E; color:#ffffff">
                 activé
               </span>}
@@ -150,17 +124,6 @@
                 bloqué
               </span>}
   
-              @if(element.status == 'Manager') {
-              <span class="bg-light-warning mat-body-2 f-w-500 p-x-8 p-y-4 f-s-12 rounded-pill">Manager</span>
-              }
-  
-              @if(element.status == 'coach') {
-              <span class="bg-light-success mat-body-2 f-w-500 p-x-8 p-y-4 f-s-12 rounded-pill">coach</span>
-              }
-  
-              @if(element.status == 'finance') {
-              <span class="bg-light-error mat-body-2 f-w-500 p-x-8 p-y-4 f-s-12 rounded-pill">finance</span>
-              }
   
             </td>
           </ng-container>
@@ -174,9 +137,6 @@
               <a (click)="openDialog('Update', element)" class="m-r-10 cursor-pointer">
                 <i-tabler name="edit" class="icon-18"></i-tabler>
               </a>
-              <!-- <a (click)="openDialog('Delete', element)" class="m-r-10 cursor-pointer">
-                <i-tabler name="trash" class="icon-18"></i-tabler>
-              </a> -->
               <a (click)="openDialog('Block', element)" class="m-r-10 cursor-pointer">
                 <i-tabler name="ban" class="icon-18"></i-tabler>
               </a>
@@ -186,9 +146,37 @@
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
         </table>
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons class="gray-background"></mat-paginator>
       </div>
   
-      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
-      </mat-paginator>
     </mat-card-content>
   </mat-card>
+
+  <style>
+    .text-danger {
+      color: red;
+    }
+  
+    .custom-select {
+      /* background color for the select */
+      background-color: red;
+      /* border color */
+      border: 1px solid #cccccc;
+      /* border radius */
+      border-radius: 4px;
+      /* color for the text */
+      color: #333333;
+      /* font size */
+      font-size: 14px;
+      /* padding */
+      padding: 5px 10px;
+    }
+  
+    .gray-background {
+      background-color: #FAFAFA;
+    }
+  
+    .no-shadow {
+      box-shadow: none;
+    }
+  </style>

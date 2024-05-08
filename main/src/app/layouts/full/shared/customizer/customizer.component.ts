@@ -28,7 +28,7 @@ export class CustomizerComponent {
 
   ngOnInit() {
     // Set boxed to false (full) by default
-    this.options.theme = 'dark';
+    //this.options.theme = 'dark';
     //this.options.boxed = false;
     this.optionsChange.emit(this.options);
   }

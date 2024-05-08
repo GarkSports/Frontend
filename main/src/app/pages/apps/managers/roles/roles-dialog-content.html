@@ -1,7 +1,7 @@
 <h2 mat-dialog-title>{{action}}</h2>
 
 <!-- it was <ng-container *ngIf="action !== 'Delete' && action !== 'Block'">  -->
-<ng-container *ngIf="action !== 'Block'">
+<ng-container *ngIf="action !== 'Delete'">
   <mat-dialog-content *ngIf="action === 'Add' || action ==='Update'" style="max-width: 500px" class="mat-typography m-t-24">
     <form [formGroup]="managerForm">
       <div class="row">

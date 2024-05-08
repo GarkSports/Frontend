@@ -171,48 +171,41 @@ export class AppRolesDialogContentComponent implements OnInit {
         }
       );
    
-    } else if (this.action === 'Update') {
+    } else if (this.action === 'Update' && this.managerForm) {
       // Handle Update action
-      if (this.managerForm.valid) {
-        const updatedManager = this.managerForm.value;
-        updatedManager.id = this.local_data.id; // Set the id of the manager to be updated
-        this.managerService.updateManager(updatedManager).subscribe(
+        const updatedRolename = this.managerForm.value;
+        // const updatedRoleName = this.managerForm.get('roleName')?.value; // Add '?' for null check
+        // const permissions = this.managerForm.get('permissions')?.value; // Add '?' for null check
+
+        updatedRolename.id = this.local_data.id; // Set the id of the manager to be updated
+        this.managerService.updateRolename(updatedRolename).subscribe(
           (response) => {
-            console.log('Manager updated 222 successfully', response);
-            this.dialogRef.close({ event: this.action, data: updatedManager });
+            console.log('rolename updated successfully', response);
+            this.dialogRef.close({ event: this.action, data: updatedRolename });
           },
           (error) => {
-            console.error('Error updating manager', error);
+            console.error('Error updating rolename', error);
           }
         );
-      }
-    // } else if (this.action === 'Delete') {
-    //   // Handle Delete action
-    //   this.managerService.deleteManager(this.local_data.id).subscribe(
-    //     (response) => {
-    //       console.log('Manager deleted successfully', response);
-    //       this.dialogRef.close({ event: this.action, data: this.local_data.id });
-    //     },
-    //     (error) => {
-    //       console.error('Error deleting manager', error);
-    //       // i should display another dialogRef showing that the request wasn't successfull
-    //       this.dialogRef.close({ event: this.action});
-    //     }
-    //   );
-     } 
-     if (this.action === 'Block') {
-      const blockAction = this.local_data.blocked ? 'unBlockManager' : 'blockManager';
-      this.managerService[blockAction](this.local_data.id).subscribe(
-        (response: any) => {
-          console.log('Manager action successful', response);
-          this.dialogRef.close({ event: this.action });
+      
+    } else if (this.action === 'Delete') {
+      // Handle Delete action
+      this.managerService.deleteRolename(this.local_data).subscribe(
+        (response) => {
+          console.log('Manager deleted successfully', response);
+          console.log( this.local_data.id );
+          
+          this.dialogRef.close({ event: this.action, data: this.local_data.id });
         },
-        (error: any) => {
-          console.error('Error', error);
-          this.dialogRef.close({ event: this.action });
+        (error) => {
+          console.error('Error deleting manager', error);
+          console.log( this.local_data.id );
+
+          // i should display another dialogRef showing that the request wasn't successfull
+          this.dialogRef.close({ event: this.action});
         }
       );
-    }
+     } 
      else {
       this.dialogRef.close({ event: 'Cancel' });
     }
