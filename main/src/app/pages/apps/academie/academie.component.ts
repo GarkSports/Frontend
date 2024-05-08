@@ -16,11 +16,10 @@ import { DatePipe } from '@angular/common';
 import { Academie } from 'src/models/academie.model';
 import { AcademieService } from 'src/app/services/academie.service';
 import { Manager } from 'src/models/manager.model';
-import { Discipline } from 'src/models/discipline.model';
-import { DisciplineService } from 'src/app/services/discipline.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AcademieHistory } from 'src/models/academieHistory.models';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { User } from 'src/models/user.model';
 
 @Component({
   templateUrl: './academie.component.html',
@@ -29,6 +28,8 @@ export class AcademieComponent implements AfterViewInit {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> =
     Object.create(null);
   searchText: any;
+  connectedUser: User;
+
   displayedColumns: string[] = [
     'nom',
     'logo',
@@ -40,7 +41,6 @@ export class AcademieComponent implements AfterViewInit {
     'editEtat',
     'manager',
     'adresse',
-    'disciplines',
     'etatHistory',
     'action',
   ];
@@ -70,14 +70,30 @@ export class AcademieComponent implements AfterViewInit {
   constructor(
     public dialog: MatDialog,
     public datePipe: DatePipe,
-    public academieService: AcademieService
+    public academieService: AcademieService,
   ) { }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
+    this.getConnectedUserProfile();
     this.getAcademies();
   }
 
+  getConnectedUserProfile(): void {
+    this.academieService.getProfil().subscribe(
+      (user: User) => {
+        this.connectedUser = user;
+        console.log('User Profile:', this.connectedUser);
+        // You can do further processing with the user profile data here
+      },
+      (error) => {
+        console.error('Error fetching user profile', error);
+        // Handle error, if needed
+      }
+    );
+  }
+
+  
   applyFilter(filterValue: string): void {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
@@ -87,10 +103,6 @@ export class AcademieComponent implements AfterViewInit {
     const dialogRef = this.dialog.open(AppAcademieDialogContentComponent, {
       data: {
         ...obj,
-        // Pass the current disciplines' IDs to the dialog component
-        disciplineIds: obj.disciplines
-          ? obj.disciplines.map((discipline: Discipline) => discipline.id)
-          : [],
       },
     });
     dialogRef.afterClosed().subscribe((result) => {
@@ -106,12 +118,11 @@ export class AcademieComponent implements AfterViewInit {
   }
 
   addRowData(academieData: Academie): void {
-    if (academieData.manager_id && academieData.disciplineIds) {
+    if (academieData.manager_id) {
       console.log('this is academie data:', academieData);
       this.academieService
         .addAcademie(
           academieData,
-          academieData.disciplineIds,
           academieData.manager_id
         )
         .subscribe(
@@ -131,7 +142,7 @@ export class AcademieComponent implements AfterViewInit {
     // Create a copy of the academieData without the manager_id property
     // const academieDataWithoutManagerId = { ...academieData };
     // delete academieDataWithoutManagerId.manager_id;
-    if (academieData.manager_id && academieData.disciplineIds) {
+    if (academieData.manager_id) {
       const updatedAcademieData = {
         nom: academieData.nom,
         type: academieData.type,
@@ -149,7 +160,6 @@ export class AcademieComponent implements AfterViewInit {
         .updateAcademie(
           updatedAcademie as Academie,
           academieData.id,
-          academieData.disciplineIds,
           academieData.manager_id
         )
         .subscribe(
@@ -265,30 +275,6 @@ export class AcademieComponent implements AfterViewInit {
       });
     });
   }
-
-  showDisciplines(academieId: number): void {
-    this.academieService.getDisciplinesByAcademie(academieId).subscribe({
-      next: (disciplines: Discipline[]) => {
-        // Open the disciplines popup with the fetched disciplines
-        this.openDisciplinesPopup(disciplines);
-      },
-      error: (error) => {
-        console.error('Error fetching disciplines:', error);
-        // Handle error, display error message, etc.
-      },
-    });
-  }
-
-  openDisciplinesPopup(disciplines: Discipline[]): void {
-    const dialogRef = this.dialog.open(DisciplinesPopupComponent, {
-      data: { disciplines: disciplines },
-    });
-
-    // Handle the result when the popup is closed if needed
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log('The disciplines popup was closed');
-    });
-  }
 }
 
 @Component({
@@ -307,20 +293,17 @@ export class AppAcademieDialogContentComponent {
   typeOptions = ['ACADEMY', 'CLUB'];
 
   managers: Manager[] = [];
-  disciplines: Discipline[] = [];
 
   constructor(
     public datePipe: DatePipe,
     public dialogRef: MatDialogRef<AppAcademieDialogContentComponent>,
     public academieService: AcademieService,
-    public disciplineService: DisciplineService,
     private firestorage: AngularFireStorage,
     // @Optional() is used to prevent error if no data is passed
     @Optional() @Inject(MAT_DIALOG_DATA) public data: Academie
   ) {
     this.local_data = {
       ...data,
-      disciplineIds: data.disciplineIds || [],
     };
     this.action = this.local_data.action;
     if (this.local_data.DateOfJoining !== undefined) {
@@ -336,7 +319,6 @@ export class AppAcademieDialogContentComponent {
 
   ngAfterViewInit(): void {
     this.getManagers(this.local_data.id);
-    this.getDisciplines();
   }
 
   getManagers(academieId: number): void {
@@ -347,18 +329,6 @@ export class AppAcademieDialogContentComponent {
       },
       (error) => {
         console.error('Error fetching Managers', error);
-      }
-    );
-  }
-
-  getDisciplines(): void {
-    this.disciplineService.getDisciplines().subscribe(
-      (disciplines) => {
-        console.log('Disciplines fetched successfully', disciplines);
-        this.disciplines = disciplines;
-      },
-      (error) => {
-        console.error('Error fetching disciplines', error);
       }
     );
   }
@@ -464,19 +434,4 @@ export class HistoryPopupComponent {
     'changeReason',
     'changeDate',
   ];
-}
-
-@Component({
-  templateUrl: 'disciplines-list.html',
-})
-export class DisciplinesPopupComponent {
-  constructor(
-    public dialogRef: MatDialogRef<DisciplinesPopupComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { disciplines: Discipline[] }
-  ) { }
-
-  // Function to close the dialog
-  closeDialog(): void {
-    this.dialogRef.close();
-  }
 }

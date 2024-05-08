@@ -5,11 +5,27 @@
   height: 225px;
 }
 
+
+
 .user-category {
   margin-top: -45px;
   z-index: 1;
   position: relative;
 }
+
+.post-card-image{
+  object-fit: cover;
+  height: 200px;
+
+}
+
+.mat-card-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%; // Ensure the title doesn't wrap
+}
+
 
 .featured-card {
   height: 400px;

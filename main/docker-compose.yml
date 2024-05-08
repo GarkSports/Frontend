@@ -1,0 +1,49 @@
+version: "3.7"
+services:
+  gark-db:
+    image: "mysql:8.0"             # Use the MySQL 8.0 image.
+    restart: always                # Always restart the MySQL service if it stops.
+    networks:
+      - gark-net      # Connect to the ' garkclub-net' network.
+    environment:
+      MYSQL_ROOT_PASSWORD: ''      # Set an empty root password for MySQL.
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"  # Allow an empty password for MySQL root.
+      MYSQL_DATABASE: Garksport  # Create a database named 'gark_club '.
+      MYSQL_USER: gark        # Replace 'your_username' with your desired username.
+      MYSQL_PASSWORD:
+    volumes:
+      - ./db:/var/lib/mysql
+  backend-gark:
+    build: ./GarkAcademy2024-Back/GarkSport   # Build the backend service using the Dockerfile in the 'garkclub-back' directory.
+    restart: always                # Always restart the backend service if it stops.
+    ports:
+      - 9100:8089
+    networks:
+      - gark-net      # Connect to the 'garkclub-net' network.
+
+    environment:
+      - spring.datasource.url=jdbc:mysql://gark-db:3306/Garksport
+      # Set environment variables for the backend service, including the database URL.
+    depends_on:
+      - gark-db       # Ensure the backend service starts only after 'gark-club-db' is ready.
+    volumes:
+      - .m2:/root/.m2              # Mount the host machine's '.m2' directory to the container for Maven caching.
+  frontend-gark:
+    build: ./garkclub-front  # Build the frontend service using the Dockerfile in 'garkclub-front'.
+    restart: always                 # Always restart the frontend service if it stops.
+    ports:
+      - 4250:4200                      # Map port 81 on the host to port 80 on the container.
+    networks:
+      - gark-net       # Connect to the ' garkclub-net' network.
+    depends_on:
+      - backend-gark                      # Ensure the frontend service starts only after the backend service is ready.
+    environment:
+      - API_URL=http://localhost:9000/api
+      - WS_URL=http://localhost:9000/api
+networks:
+  gark-net:             # Define a custom Docker network called ' garkclub-net'.
+
+
+
+
+

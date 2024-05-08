@@ -7,5 +7,4 @@ export class Entraineur extends User {
     discipline?: Discipline;
     adherents?: Adherent[];
     equipes?: Equipe[];
-
 }

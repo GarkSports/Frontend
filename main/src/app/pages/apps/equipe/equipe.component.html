@@ -1,21 +1,7 @@
-<mat-card class="cardWithShadow">
-    <mat-card-content class="p-24">
-        <div class="row justify-content-between">
-            <div class="col-lg-4">
-                <mat-form-field appearance="outline" class="w-100 hide-hint">
-                    <input matInput placeholder="Search Academie" (keyup)="applyFilter($any($event.target).value)" />
-                    <mat-icon matSuffix>
-                        <i-tabler name="search" class="icon-20"></i-tabler>
-                    </mat-icon>
-                </mat-form-field>
-            </div>
-        </div>
-    </mat-card-content>
-</mat-card>
-
 <!--Formular-->
-<mat-card class="cardWithShadow">
+<mat-card class="cardWithShadow gray-background">
     <mat-card-content class="p-24">
+        <h2>Ajouter une équipe</h2>
         <form (ngSubmit)="onSubmit()" #equipeForm="ngForm"> <!-- Add #equipeForm and ngForm directive -->
             <table>
                 <tr>
@@ -75,6 +61,38 @@
                         <!-- Add [disabled] and equipeForm.valid -->
                     </td>
                 </tr>
+                <tr>
+                    <td>
+                        <div
+                            *ngIf="equipeForm.controls['nom'].invalid && (equipeForm.controls['nom'].dirty || equipeForm.controls['nom'].touched)">
+                            <span class="error-message">Le nom est requis</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div
+                            *ngIf="equipeForm.controls['genre'].invalid && (equipeForm.controls['genre'].dirty || equipeForm.controls['genre'].touched)">
+                            <span class="error-message">Veuillez sélectionner un genre</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div
+                            *ngIf="equipeForm.controls['groupeAge'].invalid && (equipeForm.controls['groupeAge'].dirty || equipeForm.controls['groupeAge'].touched)">
+                            <span class="error-message">Veuillez saisir un groupe d'âge</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div
+                            *ngIf="equipeForm.controls['couleur'].invalid && (equipeForm.controls['couleur'].dirty || equipeForm.controls['couleur'].touched)">
+                            <span class="error-message">Veuillez choisir une couleur</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div
+                            *ngIf="equipeForm.controls['discipline'].invalid && (equipeForm.controls['discipline'].dirty || equipeForm.controls['discipline'].touched)">
+                            <span class="error-message">Veuillez sélectionner une discipline</span>
+                        </div>
+                    </td>
+                </tr>
             </table>
         </form>
 
@@ -82,12 +100,24 @@
 </mat-card>
 
 
-
-
-<mat-card class="cardWithShadow">
+<mat-card class="cardWithShadow gray-background">
     <mat-card-content class="p-24">
-        <div class="table-responsive">
-            <table mat-table [dataSource]="dataSource" class="w-100">
+        <div class="row justify-content-between">
+            <div class="col-lg-6">
+                <h2>Liste des equipes</h2>
+            </div>
+            <div class="col-lg-6 d-flex align-items-center justify-content-end">
+                <mat-form-field appearance="outline" class="w-50 hide-hint mr-2" style="margin-right: 10px;">
+                    <input matInput placeholder="Search Equipe" (keyup)="applyFilter($any($event.target).value)" />
+                    <mat-icon matSuffix>
+                        <i-tabler name="search" class="icon-20"></i-tabler>
+                    </mat-icon>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div class="table-responsive ">
+            <table mat-table [dataSource]="dataSource" class="w-100 gray-background">
                 <!-- Column definitions -->
 
                 <!-- Column: logo -->
@@ -174,7 +204,7 @@
                 <ng-container matColumnDef="addEntraineur">
                     <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Add Entraineur</th>
                     <td mat-cell *matCellDef="let equipe" (click)="openAddEntraineurPopup(equipe)">
-                        <button mat-icon-button >
+                        <button mat-icon-button>
                             <mat-icon>add</mat-icon>
                         </button>
                     </td>
@@ -197,7 +227,25 @@
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
             </table>
-            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons class="gray-background"></mat-paginator>
         </div>
     </mat-card-content>
 </mat-card>
+
+<style>
+    .error-message {
+        color: #ff0000;
+        /* Red color for error messages */
+        font-size: 12px;
+        /* Adjust font size */
+        font-style: italic;
+        /* Italics */
+        margin-top: 4px;
+        /* Adjust spacing from the field */
+    }
+
+    .gray-background {
+        background-color: #FAFAFA;
+        /*testing color blue: 0000FF*/
+    }
+</style>

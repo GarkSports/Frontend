@@ -9,17 +9,16 @@ export class Academie {
     type: AcademieType;
     fraisAdhesion: number;
     logo: string;
+    backgroundImage: string;
     affiliation: string;
     etat: Etat;
     description: string;
     isArchived: boolean;
-    disciplineIds?: number[];
     adherents?: Adherent[];
     rue: string;
     ville: string;
     codePostal: string;
     pays: string;
     manager_id?: number;
-    evenements?: Evenement[];
     manager: any;
 }

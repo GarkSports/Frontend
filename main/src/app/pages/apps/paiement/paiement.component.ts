@@ -36,6 +36,11 @@ export class PaiementComponent implements AfterViewInit {
   dataSource = new MatTableDataSource<Paiement>([]);
   paiementList: Paiement[] = [];
   paiement: Paiement;
+  selectedSortingOption: string;
+  sortingOptions = [
+    { value: 'asc', viewValue: 'Ascendant' },
+    { value: 'desc', viewValue: 'Descendant' }
+  ];
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
   constructor(public dialog: MatDialog, public datePipe: DatePipe, private paiementService: PaiementService) { }
@@ -43,6 +48,25 @@ export class PaiementComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
   }
+
+  applySorting() {
+    if (this.selectedSortingOption === 'asc') {
+      this.dataSource.data.sort((a, b) => {
+        const memberA = `${a.adherent?.firstname} ${a.adherent?.lastname}`.toLowerCase();
+        const memberB = `${b.adherent?.firstname} ${b.adherent?.lastname}`.toLowerCase();
+        return memberA.localeCompare(memberB);
+      });
+    } else if (this.selectedSortingOption === 'desc') {
+      this.dataSource.data.sort((a, b) => {
+        const memberA = `${a.adherent?.firstname} ${a.adherent?.lastname}`.toLowerCase();
+        const memberB = `${b.adherent?.firstname} ${b.adherent?.lastname}`.toLowerCase();
+        return memberB.localeCompare(memberA);
+      });
+    }
+    // After sorting, reassign the sorted data to the dataSource
+    this.dataSource = new MatTableDataSource<Paiement>(this.dataSource.data);
+  }
+  
 
   applyFilter(filterValue: string): void {
     // Convert filter value to lowercase for case-insensitive comparison
@@ -130,6 +154,7 @@ export class PaiementComponent implements AfterViewInit {
     this.selectedType = null;
     this.selectedStatut = null;
     this.selectedEquipe = null;
+    this.selectedSortingOption = '';
 
     // Apply filters again to refresh the data
     this.applyFilter('');
@@ -281,6 +306,11 @@ export class PaiementDetailsPopupComponent {
   constructor(public dialogRef: MatDialogRef<PaiementDetailsPopupComponent>,
     @Inject(MAT_DIALOG_DATA) public paiement: Paiement, private paiementService: PaiementService) { }
 
+  isFormValid(): boolean {
+    // Vérifier si tous les champs obligatoires sont remplis et s'ils ont des valeurs valides
+    return (this.paiement.montant !== undefined && this.paiement.montant >= 0 && this.paiement.montant !== null) && (this.paiement.reste === undefined || this.paiement.reste >= 0) && this.paiement.typeAbonnement !== undefined && (this.paiement.dateDebut !== undefined && this.paiement.dateDebut !== null) && (this.paiement.dateFin !== undefined && this.paiement.dateFin !== null) && (this.paiement.datePaiement !== undefined && this.paiement.datePaiement !== null);
+  }
+
   onCancelClick(): void {
     this.dialogRef.close();
   }
@@ -334,10 +364,14 @@ export class AddPaiementPopupComponent {
     this.getMembers();
   }
 
+  isFormValid(): boolean {
+    // Vérifier si tous les champs obligatoires sont remplis et s'ils ont des valeurs valides
+    return (this.paiement.montant !== undefined && this.paiement.montant >= 0 && this.paiement.montant !== null) && (this.paiement.reste === undefined || this.paiement.reste >= 0) && this.paiement.typeAbonnement !== undefined && this.paiement.adherent !== undefined && (this.paiement.dateDebut !== undefined && this.paiement.dateDebut !== null) && (this.paiement.dateFin !== undefined && this.paiement.dateFin !== null) && (this.paiement.datePaiement !== undefined && this.paiement.datePaiement !== null);
+  }
+
   getTypeAbonnementName(type: TypeAbonnement): string {
     return TypeAbonnement[type];
   }
-
 
   getMembers(): void {
     this.paiementService.getMembers().subscribe(members => {

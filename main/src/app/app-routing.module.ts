@@ -6,6 +6,11 @@ import { FullComponent } from './layouts/full/full.component';
 const routes: Routes = [
   {
     path: '',
+    redirectTo: 'authentication/side-login',
+    pathMatch: 'full',
+  },
+  {
+    path: '',
     component: FullComponent,
     children: [
       {

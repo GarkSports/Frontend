@@ -1,0 +1,106 @@
+<h2 mat-dialog-title>{{action}}</h2>
+
+@if(action !== 'Delete') {
+<mat-dialog-content style="max-width: 600px" class="mat-typography m-t-24">
+  <form #postForm="ngForm">
+    <div class="row">
+      <div class="col-sm-6 col-lg-12">
+        <mat-form-field appearance="outline" class="w-100">
+          <input
+            type="text"
+            matInput
+            required
+            id="title"
+            name="title"
+            [(ngModel)]="local_data.title"
+            placeholder="post title"
+          />
+        </mat-form-field>
+      </div>
+     
+      <div class="col-sm-6 col-lg-12">
+      
+        <button mat-flat-button color="primary" class="m-l-16 input-file-button">
+          <input type="file" id="imageUrl" name="imageUrl" (change)="uploadFile($event)" #fileInput />
+        </button>
+      </div>
+      <div class="col-sm-6 col-lg-12">
+        <img
+          class="mat-card"
+          [src]="local_data.imageUrl"
+          width="200"
+        />
+      </div>
+      <div class="col-sm-6 col-lg-12">
+        <mat-form-field appearance="outline" class="w-100">
+          <input
+            type="text"
+            matInput
+            required
+            id="subtitle"
+            name="subtitle"
+            [(ngModel)]="local_data.subtitle"
+            placeholder="post subtitle"
+          />
+        </mat-form-field>
+      </div>
+      <div class="col-sm-6 col-lg-12">
+        <mat-form-field appearance="outline" class="w-100">
+          <input
+            type="text"
+            matInput
+            required
+            id="body"
+            name="body"
+            [(ngModel)]="local_data.body"
+            placeholder="ADD TEXT TO POST BODY"
+          />
+        </mat-form-field>
+      </div>
+      <div class="col-sm-6 col-lg-12">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>category</mat-label>
+          <select
+            matNativeControl
+            required
+            name="category"
+            [(ngModel)]="local_data.category"
+          >
+            <option value="football">Football</option>
+            <option value="basketball">Basketball</option>
+            <option value="Tennis">Tennis</option>
+          </select>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-6 col-lg-12">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>PublicAudience</mat-label>
+          <select
+            matNativeControl
+            required
+            name="publicAudience"
+            [(ngModel)]="local_data.publicAudience"
+          >
+            <option [ngValue]="0">Privé</option>
+            <option [ngValue]="1">Public</option>
+          </select>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+} @else {
+<div class="p-x-24 p-b-24">
+  Sure to delete <span class="f-w-600">{{local_data.title}}</span>?
+</div>
+}
+
+<div mat-dialog-actions class="p-24 p-t-0">
+  <button mat-flat-button (click)="doAction()" color="primary" [disabled]="!local_data.title || !local_data.subtitle || !local_data.body || !local_data.category">
+    {{action}}
+  </button>
+   
+  <button mat-stroked-button color="warn" (click)="closeDialog()">
+    Cancel
+  </button>
+</div>

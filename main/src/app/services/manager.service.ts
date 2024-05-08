@@ -4,12 +4,13 @@ import { Observable, catchError, of, tap, throwError } from 'rxjs';
 import { Academie } from 'src/models/academie.model';
 import { Manager } from 'src/models/manager.model';
 import { RoleName } from 'src/models/roleName.models';
+import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ManagerService {
-  private apiUrl = 'http://localhost:8089/manager';
+  private apiUrl = environment.apiUrl+ 'manager';
 
   constructor(private http: HttpClient) {}
 
@@ -62,7 +63,7 @@ export class ManagerService {
     const permissionsArray = Array.isArray(managerData.permissions) ? managerData.permissions : [managerData.permissions];
 // Filter out any null or undefined values
     const filteredPermissions = permissionsArray.filter(permission => permission !== null && permission !== undefined);
-  
+
     const requestBody = {
       email: managerData.email,
       firstname: managerData.firstname,
@@ -130,7 +131,7 @@ export class ManagerService {
 
   getManagerById(ManagerId: number): Observable<Academie> {
     return this.http.get<Academie>(`${this.apiUrl}/getAcademieById/${ManagerId}`,  { withCredentials: true });
-  }  
+  }
 
   changeEtat(ManagerId: number): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/changeEtat?id=${ManagerId}`, {withCredentials: true});
@@ -176,8 +177,8 @@ export class ManagerService {
         })
       );
   }
-  
-  
+
+
 
   // unBlockManager(ManagerId: number): Observable<any> {
   //   return this.http.put<any>(`${this.apiUrl}/unblock-user?id=${ManagerId}`, {withCredentials: true});

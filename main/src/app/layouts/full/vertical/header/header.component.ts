@@ -122,6 +122,17 @@ export class HeaderComponent {
     this.selectedLanguage = lang;
   }
 
+  logout(): void {
+    this.authService.logout().subscribe(
+      response => {
+        console.log(response); // Handle success response
+      },
+      error => {
+        console.error(error); // Handle error response
+      }
+    );
+  }
+
   notifications: notifications[] = [
     {
       id: 1,

@@ -82,7 +82,6 @@ import { ManagerDetailsDialogComponent } from './academie/academie.component';
 import { AdresseDetailsDialogComponent } from './academie/academie.component';
 import { EditEtatFormComponent } from './academie/academie.component';
 import { HistoryPopupComponent } from './academie/academie.component';
-import { DisciplinesPopupComponent } from './academie/academie.component';
 import { AcademieProfileComponent } from './academie-profile/academie-profile.component';
 import { UpdateProfileDialogComponent } from './academie-profile/academie-profile.component';
 import { EquipeComponent } from './equipe/equipe.component';
@@ -99,19 +98,28 @@ import { ConfirmDialogComponent } from './paiement/paiement.component';
 import { ArchivedAcademieComponent } from './archived-academie/academie.component';
 import { ArchivedAcademieConfirmationDialogComponent } from './archived-academie/academie.component';
 import { ArchivedAcademieConfirmationRestoreDialogComponent } from './archived-academie/academie.component';
-
+import { DisciplineManagerComponent } from './discipline-manager/discipline.component';
+import { AppDisciplineManagerDialogContentComponent } from './discipline-manager/discipline.component';
+import { AppAddDisciplineManagerComponent } from './discipline-manager/add/add.component';
+import { DeleteEventConfirmationDialogComponent } from './evenement/listEvenement/listEvenement.component';
 
 
 import { AngularFireModule } from '@angular/fire/compat'; // Update import path
 import { AngularFireStorageModule } from '@angular/fire/compat/storage'; // Update import path
 import { environment } from '../api/environment';
+import { AppBlogDialogContentComponent, AppBloglistComponent } from './blogs/bloglist/blog.component';
 import { AppManagerDialogContentComponent, AppManagerlistComponent } from './admin/managerlist.component';
 import { AppStaffDialogContentComponent, AppStafflistComponent } from './managers/staff/stafflist.component';
 import { AppRolesDialogContentComponent, AppRoleslistComponent } from './managers/roles/roleslist.component';
+import { FullCalendarModule } from '@fullcalendar/angular';
+import { CalendrierComponent } from './evenement/calendrier/calendrier.component';
+import { AddEvenementPopupComponent, ListEvenementComponent } from './evenement/listEvenement/listEvenement.component';
+import { NavbarComponent } from './evenement/navbar/navbar.component';
 
 
 @NgModule({
   imports: [
+    FullCalendarModule,
     AngularFireStorageModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     CommonModule,
@@ -135,6 +143,14 @@ import { AppRolesDialogContentComponent, AppRoleslistComponent } from './manager
   ],
   exports: [TablerIconsModule],
   declarations: [
+    DeleteEventConfirmationDialogComponent,
+    NavbarComponent,
+    CalendrierComponent,
+    AddEvenementPopupComponent,
+    ListEvenementComponent,
+    DisciplineManagerComponent,
+    AppDisciplineManagerDialogContentComponent,
+    AppAddDisciplineManagerComponent,
     ArchivedAcademieComponent,
     ArchivedAcademieConfirmationDialogComponent,
     ArchivedAcademieConfirmationRestoreDialogComponent,
@@ -185,7 +201,6 @@ import { AppRolesDialogContentComponent, AppRoleslistComponent } from './manager
     AppAddAcademieComponent,
     EditEtatFormComponent,
     HistoryPopupComponent,
-    DisciplinesPopupComponent,
     AppInvoiceListComponent,
     AppInvoiceViewComponent,
     AppAddInvoiceComponent,
@@ -194,6 +209,8 @@ import { AppRolesDialogContentComponent, AppRoleslistComponent } from './manager
     OkDialogComponent,
     AppBlogsComponent,
     AppBlogDetailsComponent,
+    AppBloglistComponent,
+    AppBlogDialogContentComponent,
     AppManagerlistComponent,
     AppManagerDialogContentComponent,
     AppStaffDialogContentComponent,

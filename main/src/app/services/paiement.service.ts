@@ -2,24 +2,23 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Adherent } from 'src/models/adherent.model';
-import { StatutAdherent } from 'src/models/enums/statutAdherent.model';
 import { Equipe } from 'src/models/equipe.model';
 import { Paiement } from 'src/models/paiement.model';
 import { PaiementHistory } from 'src/models/paiementHistory.model';
+import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class PaiementService {
-  private apiUrl = 'http://localhost:8089/paiement';
-  private apiUrlEquipe = 'http://localhost:8089/random';
-  academieId = 1;
+  private apiUrl = environment.apiUrl+ 'paiement';
+  private apiUrlEquipe =environment.apiUrl+  'random';
 
   constructor(private http: HttpClient) { }
 
   getPaiements(): Observable<Paiement[]> {
-    const url = `${this.apiUrl}/getAllPaiements/${this.academieId}`;
-    return this.http.get<Paiement[]>(url);
+    const url = `${this.apiUrl}/getAllPaiements`;
+    return this.http.get<Paiement[]>(url,{withCredentials: true});
   }
 
   updatePaiement(updatedPaiement: Paiement, idPaiement: number): Observable<Paiement> {
@@ -33,8 +32,8 @@ export class PaiementService {
   }
 
   getMembers(): Observable<Adherent[]> {
-    const url = `${this.apiUrl}/getAdherents/${this.academieId}`;
-    return this.http.get<Adherent[]>(url);
+    const url = `${this.apiUrl}/getAdherents`;
+    return this.http.get<Adherent[]>(url,{withCredentials: true});
   }
 
   getPaiementHistory(adherentId: number): Observable<PaiementHistory[]> {
@@ -58,7 +57,7 @@ export class PaiementService {
   }
 
   getEquipes(): Observable<Equipe[]> {
-    return this.http.get<Equipe[]>(`${this.apiUrlEquipe}/getEquipes/${this.academieId}`);
+    return this.http.get<Equipe[]>(`${this.apiUrlEquipe}/getEquipes`,{withCredentials: true});
   }
-  
+
 }

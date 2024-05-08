@@ -10,7 +10,7 @@ import { Academie } from 'src/models/academie.model';
 })
 export class AcademieProfileComponent {
   academie: Academie;
-  constructor(private academieService: AcademieService, public dialog: MatDialog) { }
+  constructor(private academieService: AcademieService, public dialog: MatDialog, private firestorage: AngularFireStorage) { }
 
   ngOnInit(): void {
     this.getAcademie();
@@ -50,6 +50,31 @@ export class AcademieProfileComponent {
       }
     });
   }
+
+  async uploadFile(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      const path = `academie/${file.name}`;
+      const uploadTask = this.firestorage.upload(path, file);
+      uploadTask.then(async (snapshot) => {
+        const url = await snapshot.ref.getDownloadURL();
+        console.log('Image URL:', url);
+        this.academie.backgroundImage = url; // Update the academie.backgroundImage with the new URL
+        
+        // Call the service method to update the Academie background
+        this.academieService.updateAcademieBackground(this.academie.id, url).subscribe(response => {
+          console.log(response); // Log the response from the API
+        }, error => {
+          console.error('Error updating Academie background:', error);
+        });
+      }).catch(error => {
+        console.error('Error uploading image:', error);
+      });
+    }
+}
+
+
+
 
 }
 

@@ -2,18 +2,24 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private http: HttpClient) {}
+  private apiUrl =  environment.apiUrl+'auth';
+  private apiAcademie = environment.apiUrl+ 'academie';
+  router: any;
+  constructor(private http: HttpClient) {
+    console.log( environment.apiUrl)
+  }
 
   authenticate(uname: string, password: string): Observable<boolean> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     const formData = { uname, password };
-  
-    return this.http.post<any>('http://localhost:8089/auth/authenticate', formData, { headers })
+
+    return this.http.post<any>( environment.apiUrl+'auth/authenticate', formData, { headers })
       .pipe(
         map(response => {
           localStorage.setItem('jwtToken', response.accessToken);
@@ -26,4 +32,47 @@ export class AuthService {
         })
       );
   }
+
+  logout(): Observable<string> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      }),
+      withCredentials: true // Include credentials with the request
+    };
+    return this.http.post<string>(`${this.apiUrl}/logout`, null, httpOptions);
+  }
+
+  checkAuthenticated(): Observable<boolean> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      }),
+      withCredentials: true // Include credentials with the request
+    };
+    return this.http.get<boolean>(`${this.apiUrl}/checkAccessToken`,httpOptions);
+  }
+
+
+  checkIfManager(): Observable<boolean> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      }),
+      withCredentials: true // Include credentials with the request
+    };
+    return this.http.get<boolean>(`${this.apiAcademie}/checkIfManager`, httpOptions);
+  }
+
+  checkIfAdmin(): Observable<boolean> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      }),
+      withCredentials: true // Include credentials with the request
+    };
+    return this.http.get<boolean>(`${this.apiAcademie}/checkIfAdmin`, httpOptions);
+  }
+
+
 }

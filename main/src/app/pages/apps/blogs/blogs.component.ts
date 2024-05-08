@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { Router } from '@angular/router';
 import { blogService } from './blogService.service';
+import { PostsService } from 'src/app/services/posts.service';
 
 @Component({
   selector: 'app-blogs',
@@ -13,6 +14,7 @@ export class AppBlogsComponent implements OnInit {
   constructor(
     public router: Router,
     public blogService: blogService,
+    public PostsService: PostsService,
   ){
 
   }
@@ -22,10 +24,15 @@ export class AppBlogsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.blogService.blogPosts.length === 0){
-      this.blogService.getBlog().subscribe((d: any) => (this.blogService.blogPosts = d));
-    }
+    this.PostsService.getPosts().subscribe((d: any) => (this.PostsService.blogPosts = d));
+     
   }
+
+  applyFilter(filterValue: string): void {
+    //this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  
   // filterFeaturedPost = this.blogPosts.filter(function (item) {
   //   return item.featuredPost == true;
   // });
