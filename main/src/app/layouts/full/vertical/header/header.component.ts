@@ -172,7 +172,7 @@ export class HeaderComponent {
       img: '/assets/images/svgs/icon-account.svg',
       title: 'My Profile',
       subtitle: 'Account Settings',
-      link: '/',
+      link: '/apps/profil',
     },
     {
       id: 2,

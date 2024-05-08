@@ -1,7 +1,11 @@
-<h2 mat-dialog-title>{{action}}</h2>
+<h2 mat-dialog-title>
+  @if(action=='Block' && local_data.blocked) {
+  Unblock {{ local_data.firstname }} {{ local_data.lastname }}
+} @else {
+  {{action}} {{ local_data.firstname }} {{ local_data.lastname }}
+}</h2>
 
-<!-- it was <ng-container *ngIf="action !== 'Delete' && action !== 'Block'">  -->
-<ng-container *ngIf="action !== 'Block'">
+  @if(action !== 'Block') {
   <mat-dialog-content *ngIf="action === 'Add' || action ==='Update'" style="max-width: 500px" class="mat-typography m-t-24">
     <form [formGroup]="managerForm">
       <div class="row">
@@ -31,73 +35,54 @@
         </div>
         <div class="col-sm-6 col-lg-12">
           <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Role</mat-label>
+            <mat-label>Role Category</mat-label>
             <select formControlName="role" matNativeControl required id="role" name="role" placeholder="Role" (change)="onRoleChange($event)">
-              <option value="Manager">Manager</option>
-              <option value="Staff">Staff</option>
-              <option value="Entraineur">Entraineur</option>
-              <option value="Adherant">Adherant</option>
-              <option value="Parent">Parent</option>
+              <option value="STAFF">Staff</option>
+              <option value="ENTRAINEUR">Entraineur</option>
+              <option value="ADHERENT">Adherent</option>
+              <option value="PARENT">Parent</option>
             </select>
-            
           </mat-form-field>
         </div>
-        
-        
-        
-        
         <div *ngIf="showRoleInput" class="col-sm-6 col-lg-12">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Role</mat-label>
-            <select formControlName="roleName" matNativeControl required id="roleName" name="roleName" placeholder="Role">
+            <select formControlName="roleName" matNativeControl required id="roleNames" name="roleNames" placeholder="Role">
               <option *ngFor="let roleName of roleNames" [value]="roleName">{{ roleName }}</option>
             </select>
           </mat-form-field>
         </div>
-
-
-        <div class="col-sm-6 col-lg-12">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Permissions</mat-label>
-              <select formControlName="permissions" matNativeControl required id="Permissions" name="permissions" placeholder="role">
-                  <option *ngFor="let permissions of permissions" [value]="permissions">{{ permissions }}</option>
-                </select>
-                
-            </mat-form-field>
+        <div>
+          <button mat-flat-button color="primary" class="m-l-16 input-file-button">
+            <input formControlName="photo" type="file" id="photo" name="photo" (change)="uploadFile($event)" #fileInput />
+          </button>
+          <div class="col-sm-6 col-lg-12">
+            <img
+              class="mat-card"
+              [src]="local_data.photo"
+              width="200"
+            />
           </div>
+        </div>
+      
       </div>
     </form>
   </mat-dialog-content>
-</ng-container>
-
-   <!-- case block -->
-    <div class="p-x-24 p-b-24">
-      <ng-container *ngIf="local_data.blocked; else unblocked">
-         <span class="f-w-600"> Sure to unblock</span>
-      </ng-container>
-      <ng-template #unblocked>
-        <span class="f-w-600"> Sure to block </span>
-      </ng-template>
-    </div>
-    
-  
-<!-- 
-<ng-container *ngIf="action === 'Delete'">
+}
+@else {
   <div class="p-x-24 p-b-24">
-    Sure to delete <span class="f-w-600"></span>
+    <br>
+    Sure to {{ local_data.blocked ? 'unblock' : 'block' }} <span class="f-w-600">{{ local_data.firstname }}</span>?
   </div>
-</ng-container> -->
+}
 
-  <!--case archive-->
-
-
+  
 <div mat-dialog-actions class="p-24 p-t-0">
   <button mat-flat-button (click)="doAction()" color="primary">
-    @if(action === 'Block' && local_data.blocked){
-      <span>Unblock</span>
-    } 
-     @else{
-      {{action}}
+    @if(action=='Block' && local_data.blocked) {
+      Unblock
+    } @else {
+      {{action}} 
     }
   </button>
   <button mat-stroked-button color="warn" (click)="closeDialog()">
