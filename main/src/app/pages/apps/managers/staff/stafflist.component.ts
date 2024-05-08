@@ -289,6 +289,8 @@ export class AppStaffDialogContentComponent implements OnInit {
       (managers) => {
         console.log('Managers fetched successfully', managers);
         this.managerSource.data = managers;
+        console.log("this.managerSource.data",this.managerSource.data);
+        
       },
       (error) => {
         console.error('Error fetching academies', error);
