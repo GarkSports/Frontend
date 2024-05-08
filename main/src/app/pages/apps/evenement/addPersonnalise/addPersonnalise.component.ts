@@ -27,6 +27,7 @@ export class AddPersonnaliseComponent {
     selectedOption: string = 'equipe';
     evenement: Evenement = new Evenement(); // Initialize Evenement object
     selectedEquipe: number; // Define selectedEquipe property here
+    selectedEquipe2: Equipe;
     selectedMembers: number[] = []; // Define selectedMembers property here
 
     constructor(
