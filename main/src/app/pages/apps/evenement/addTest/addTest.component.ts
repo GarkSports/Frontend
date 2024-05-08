@@ -73,7 +73,7 @@ export class AddTestComponent {
             if (formData.selectedOption === 'equipe') {
                 request = new TestRequest(this.evenement, formData.equipe, []);
             } else {
-                request = new TestRequest(this.evenement, [], formData.membres);
+                request = new TestRequest(this.evenement, null, formData.membres);
             }
             console.log('Request:', request);
 

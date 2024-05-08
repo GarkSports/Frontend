@@ -14,16 +14,9 @@ export class Evenement {
     description: string;
     statut?: StatutEvenement;
 
-    //Match Amical
-    convocationEquipesMatchAmical?: Equipe[];
 
-    //Evenement personnalisé
-    convocationEquipePersonnalise?: Equipe;
-    convocationMembresPersonnalise?: Adherent[];
-
-    //Test evaulation
-    convocationEquipesTest?: Equipe[];
-    convocationMembresTest?: Adherent[];
+    convocationEquipe?: Equipe;
+    convocationMembres?: Adherent[];
 
     academie?: Academie;
 }

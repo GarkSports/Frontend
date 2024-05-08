@@ -78,10 +78,20 @@
                         </div>
                         <!-- Member selection -->
                         <div *ngIf="selectedOption === 'member'">
+                            <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Equipe</mat-label>
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-select [(ngModel)]="selectedEquipe2" name="equipe" required>
+                                    <mat-option *ngFor="let equipe of equipeList" [value]="equipe">{{ equipe.nom }}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+
+                        <div *ngIf="selectedOption === 'member' && selectedEquipe2">
                             <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Members</mat-label>
                             <mat-form-field appearance="outline" class="w-100">
                                 <mat-select multiple required [(ngModel)]="selectedMembers" name="membres">
-                                    <mat-option *ngFor="let member of memberList" [value]="member.id">{{ member.firstname }} {{ member.lastname }}</mat-option>
+                                    <mat-option *ngFor="let member of selectedEquipe2.adherents" [value]="member.id">{{ member.firstname }} {{ member.lastname }}</mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </div>
