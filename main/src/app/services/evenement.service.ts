@@ -9,6 +9,7 @@ import { PersonnaliseRequest } from 'src/models/dto/PersonnaliseRequest.model';
 import { TestRequest } from 'src/models/dto/TestRequest.model';
 import { MatchAmicalRequest } from 'src/models/dto/MatchAmicalRequest.model';
 import { StatutEvenement } from 'src/models/enums/statutEvenenement.model';
+import { ExtendedEventDTO } from 'src/models/dto/ExtendedEventDTO.model';
 
 @Injectable({
   providedIn: 'root'
@@ -47,6 +48,10 @@ export class EvenementService {
     return this.http.get<Evenement[]>(`${this.apiEvenement}/getAllEvenements`);
   }
 
+  extendEvents(): Observable<ExtendedEventDTO[]> {
+    return this.http.get<ExtendedEventDTO[]>(`${this.apiEvenement}/extendEvents`);
+  }
+
   deleteEvenement(idEvenement: number): Observable<void> {
     const url = `${this.apiEvenement}/deleteEvenement/${idEvenement}`;
     return this.http.delete<void>(url);
@@ -57,5 +62,7 @@ export class EvenementService {
     return this.http.put<Evenement>(url, `"${statutEvenenement}"`, { headers: { 'Content-Type': 'application/json' } });
   }
 
-
+  getMembersByEquipe(idEquipe: number): Observable<Adherent[]> {
+    return this.http.get<Adherent[]>(`${this.apiEvenement}/getMembersByEquipe/${idEquipe}`);
+  }
 }

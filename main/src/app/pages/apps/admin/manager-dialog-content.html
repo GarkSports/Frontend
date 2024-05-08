@@ -1,7 +1,11 @@
-<h2 mat-dialog-title>{{action}}</h2>
+<h2 mat-dialog-title>
+  @if(action=='Block' && local_data.blocked) {
+  Unblock {{ local_data.firstname }} {{ local_data.lastname }}
+} @else {
+  {{action}} {{ local_data.firstname }} {{ local_data.lastname }}
+}</h2>
 
-
-<ng-container *ngIf="action !== 'Delete' && action !== 'Block'">
+  @if(action !== 'Block') {
   <mat-dialog-content *ngIf="action === 'Add' || action ==='Update'" style="max-width: 500px" class="mat-typography m-t-24">
     <form [formGroup]="managerForm">
       <div class="row">
@@ -31,46 +35,28 @@
         </div>
         <div class="col-sm-6 col-lg-12">
           <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Status</mat-label>
-            <select formControlName="role" matNativeControl required id="role" name="role" placeholder="role">
-              <option value="ENTRAINEUR">Manager</option>
-              <option value="MANAGER">coach</option>
-              <option value="STAFF">finance</option>
-            </select>
+            <input formControlName="telephone" type="text" matInput required id="telephone" name="telephone"
+              placeholder="télephone" />
           </mat-form-field>
         </div>
       </div>
     </form>
   </mat-dialog-content>
-</ng-container>
-
-<ng-container *ngIf="action === 'Block'">
-  @if(local_data.blocked){<div class="p-x-24 p-b-24">
-    Sure to unblock <span class="f-w-600"></span>
-  </div>}
-  @else
-  {<div class="p-x-24 p-b-24">
-    Sure to block <span class="f-w-600"></span>
-  </div>}
-  
-</ng-container>
-
-<!-- <ng-container *ngIf="action === 'Delete'">
+}
+@else {
   <div class="p-x-24 p-b-24">
-    Sure to delete <span class="f-w-600"></span>
+    <br>
+    Sure to {{ local_data.blocked ? 'unblock' : 'block' }} <span class="f-w-600">{{ local_data.firstname }}</span>?
   </div>
-</ng-container> -->
+}
 
-  <!--case archive-->
-
-
+  
 <div mat-dialog-actions class="p-24 p-t-0">
   <button mat-flat-button (click)="doAction()" color="primary">
-    @if(action === 'Block' && local_data.blocked){
-      <span>unblock</span>
-    }
-    @else{
-      {{action}}
+    @if(action=='Block' && local_data.blocked) {
+      Unblock
+    } @else {
+      {{action}} 
     }
   </button>
   <button mat-stroked-button color="warn" (click)="closeDialog()">

@@ -5,6 +5,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { EvenementService } from 'src/app/services/evenement.service';
+import { ExtendedEventDTO } from 'src/models/dto/ExtendedEventDTO.model';
 import { StatutEvenement } from 'src/models/enums/statutEvenenement.model';
 import { Evenement } from 'src/models/evenement.model';
 
@@ -21,12 +22,14 @@ export class ListEvenementComponent implements AfterViewInit {
   displayedColumns: string[] = [
     'nom',
     'type',
+    'equipe',
+    'member',
     'date',
     'statut',
     'action'
   ];
 
-  dataSource = new MatTableDataSource<Evenement>([]);
+  dataSource = new MatTableDataSource<ExtendedEventDTO>([]);
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator =
     Object.create(null);
@@ -47,16 +50,18 @@ export class ListEvenementComponent implements AfterViewInit {
   }
 
   getEvenements(): void {
-    this.evenementService.getEvenements().subscribe(
-      (evenements) => {
-        console.log('Evenements fetched successfully', evenements);
-        this.dataSource.data = evenements;
+    this.evenementService.extendEvents().subscribe(
+      (extendedEvents) => {
+        console.log('Extended events fetched successfully', extendedEvents);
+        // Assuming dataSource is defined in your component
+        this.dataSource.data = extendedEvents;
       },
       (error) => {
-        console.error('Error fetching evenements', error);
+        console.error('Error fetching extended events', error);
       }
     );
   }
+
 
   openAddEvenementDialog(): void {
     const dialogRef = this.dialog.open(AddEvenementPopupComponent, {
@@ -77,6 +82,7 @@ export class ListEvenementComponent implements AfterViewInit {
           // Update the local copy of the event with the updated status
           evenement.statut = updatedEvenement.statut;
           // Optionally, you can show a success message or handle the updated event
+          this.getEvenements();
           console.log('Status changed successfully:', updatedEvenement);
         }, error => {
           // Handle errors if any

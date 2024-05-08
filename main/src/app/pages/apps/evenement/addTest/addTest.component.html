@@ -17,7 +17,7 @@
                 <div *ngIf="evenementForm.get('selectedOption')?.value === 'equipe'">
                     <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Equipes</mat-label>
                     <mat-form-field appearance="outline" class="w-100">
-                        <mat-select multiple formControlName="equipe">
+                        <mat-select formControlName="equipe">
                             <mat-option *ngFor="let equipe of equipeList" [value]="equipe.id">{{ equipe.nom }}</mat-option>
                         </mat-select>
                     </mat-form-field>

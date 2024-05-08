@@ -12,4 +12,5 @@ export class User {
     telephone: string;
     nationalite: string;
     photo: string;
+    blocked: boolean;
 }

@@ -248,18 +248,18 @@ export class PaiementComponent implements AfterViewInit {
     });
   }
 
-  openUpdateDialog(paiement: Paiement): void {
-    const dialogRef = this.dialog.open(PaiementDetailsPopupComponent, {
-      data: paiement
-    });
+    openUpdateDialog(paiement: Paiement): void {
+      const dialogRef = this.dialog.open(PaiementDetailsPopupComponent, {
+        data: paiement
+      });
 
-    dialogRef.afterClosed().subscribe(updatedPaiement => {
-      if (updatedPaiement) {
-        // Handle dialog result if needed
-        this.getPaiements();
-      }
-    });
-  }
+      dialogRef.afterClosed().subscribe(updatedPaiement => {
+        if (updatedPaiement) {
+          // Handle dialog result if needed
+          this.getPaiements();
+        }
+      });
+    }
 
   openAddPaiementDialog(): void {
     // Initialize a new instance of Paiement and assign it to the dialog data
