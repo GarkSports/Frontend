@@ -1,0 +1,78 @@
+<h2 class="f-w-500 m-b-24" mat-dialog-title>Update Equipe</h2>
+<mat-dialog-content style="max-width: 600px">
+    <!-- Form fields for updating payment attributes -->
+
+    <div class="d-flex align-items-center m-b-16">
+        <img class="mat-card-avatar" [src]="equipe.logo" class="rounded-circle" width="50" />
+        <button mat-flat-button color="primary" class="m-l-16 input-file-button">
+          <input type="file" id="logo" name="logo" (change)="uploadFile($event)" #fileInput />
+        </button>
+      </div>
+
+    <div class="form-row" style="margin-top: 10px;">
+        <div class="input-container">
+            <mat-form-field appearance="outline">
+                <mat-label>Nom</mat-label>
+                <input matInput type="text" placeholder="Nom" [(ngModel)]="equipe.nom" required />
+            </mat-form-field>
+        </div>
+        <div class="input-container">
+            <mat-form-field appearance="outline">
+                <mat-label>Genre</mat-label>
+                <mat-select [(ngModel)]="equipe.genre" placeholder="Type Abonnement" required>
+                    <mat-option *ngFor="let genre of genreEquipe" [value]="genre">{{ genre }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+
+
+    <div class="form-row">
+        <div class="input-container">
+            <mat-form-field appearance="outline">
+                <mat-label>Groupe Age</mat-label>
+                <input matInput type="text" placeholder="Groupe Age" [(ngModel)]="equipe.groupeAge" required />
+            </mat-form-field>
+        </div>
+        <div class="input-container">
+            <mat-form-field appearance="outline">
+                <mat-label>Couleur</mat-label>
+                <input matInput type="color" placeholder="Couleur" [(ngModel)]="equipe.couleur" required />
+            </mat-form-field>
+        </div>
+    </div>
+
+</mat-dialog-content>
+<mat-dialog-actions>
+    <!-- Buttons for Save and Cancel -->
+    <button mat-raised-button class="cancel-button" (click)="onCancelClick()">Cancel</button>
+    <button mat-raised-button color="primary" [mat-dialog-close]="equipe" class="save-button"
+        (click)="onUpdateClick()">Update</button>
+</mat-dialog-actions>
+
+<style>
+    .form-row {
+        display: flex;
+        margin-bottom: 16px;
+    }
+
+    .input-container {
+        flex: 1;
+        margin-right: 10px;
+    }
+
+    ::ng-deep .mat-dialog-actions button {
+        min-width: 100px;
+    }
+
+    .cancel-button {
+        background-color: #FA9175;
+        /* Custom color */
+        color: white;
+        /* Text color */
+    }
+
+    .save-button {
+        min-width: 100px;
+    }
+</style>

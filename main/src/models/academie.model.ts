@@ -10,7 +10,6 @@ export class Academie {
     fraisAdhesion: number;
     logo: string;
     backgroundImage: string;
-    affiliation: string;
     etat: Etat;
     description: string;
     isArchived: boolean;

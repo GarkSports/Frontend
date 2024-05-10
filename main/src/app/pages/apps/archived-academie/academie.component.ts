@@ -62,7 +62,6 @@ export class ArchivedAcademieComponent implements AfterViewInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result === true) {
         this.deleteAcademie(id); // Call deleteAcademie if result is true
-        window.location.reload();
       }
     });
   }
@@ -75,7 +74,6 @@ export class ArchivedAcademieComponent implements AfterViewInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result === true) {
         this.restoreAcademie(id); // Call restoreAcademie if result is true
-        window.location.reload();
       }
     });
   }
@@ -99,13 +97,14 @@ export class ArchivedAcademieComponent implements AfterViewInit {
     this.academieService.restoreArchivedAcademie(id).subscribe(
       () => {
         console.log('Academy restored successfully');
-        this.getAcademies();
+        this.getAcademies(); // Call getAcademies only after restoration is finished
       },
       (error) => {
         console.error('Error restoring academy', error);
       }
     );
   }
+  
 }
 
 
