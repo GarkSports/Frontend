@@ -103,6 +103,20 @@ export class AppStafflistComponent implements OnInit {
       // }
     });
   }
+
+  // openUpdateDialog(paiement: Paiement): void {
+  //   const dialogRef = this.dialog.open(PaiementDetailsPopupComponent, {
+  //     data: paiement
+  //   });
+
+  //   dialogRef.afterClosed().subscribe(updatedPaiement => {
+  //     if (updatedPaiement) {
+  //       // Handle dialog result if needed
+  //       this.getPaiements();
+  //     }
+  //   });
+  // }
+
   // tslint:disable-next-line - Disables all
   addRowData(managerData: Manager): void {
     this.table.renderRows();
