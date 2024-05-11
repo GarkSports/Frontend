@@ -20,7 +20,18 @@ export class AcademieService {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
     const requestBody = {
-      academie: academieData,
+      academie: {
+        logo: academieData.logo,
+        nom: academieData.nom,
+        type: academieData.type,
+        fraisAdhesion: academieData.fraisAdhesion,
+        etat: academieData.etat,
+        description: academieData.description,
+        rue: academieData.rue,
+        ville: academieData.ville,
+        codePostal: academieData.codePostal,
+        pays: academieData.pays,
+      },
     };
 
     return this.http.post<any>(`${this.apiUrl}/addAcademie/${managerId}`, requestBody, { headers });
@@ -39,7 +50,17 @@ export class AcademieService {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
     const requestBody = {
-      academie: academieData,
+      academie: {
+        logo: academieData.logo,
+        nom: academieData.nom,
+        type: academieData.type,
+        fraisAdhesion: academieData.fraisAdhesion,
+        description: academieData.description,
+        rue: academieData.rue,
+        ville: academieData.ville,
+        codePostal: academieData.codePostal,
+        pays: academieData.pays,
+      },
     };
 
     return this.http.put<any>(`${this.apiUrl}/updateAcademie/${academieId}/${managerId}`, requestBody, { headers });
