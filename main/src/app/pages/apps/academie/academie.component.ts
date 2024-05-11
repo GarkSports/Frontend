@@ -35,7 +35,6 @@ export class AcademieComponent implements AfterViewInit {
     'logo',
     'type',
     'description',
-    'affiliation',
     'fraisAdhesion',
     'etat',
     'editEtat',
@@ -112,18 +111,17 @@ export class AcademieComponent implements AfterViewInit {
         this.updateRowData(result.data);
       } else if (result.event === 'Delete') {
         this.deleteRowData(result.data);
-        window.location.reload();
       }
     });
   }
 
   addRowData(academieData: Academie): void {
-    if (academieData.manager_id) {
+    if (academieData.manager.id) {
       console.log('this is academie data:', academieData);
       this.academieService
         .addAcademie(
           academieData,
-          academieData.manager_id
+          academieData.manager.id
         )
         .subscribe(
           (response) => {
@@ -142,12 +140,11 @@ export class AcademieComponent implements AfterViewInit {
     // Create a copy of the academieData without the manager_id property
     // const academieDataWithoutManagerId = { ...academieData };
     // delete academieDataWithoutManagerId.manager_id;
-    if (academieData.manager_id) {
+    if (academieData.manager.id) {
       const updatedAcademieData = {
         nom: academieData.nom,
         type: academieData.type,
         fraisAdhesion: academieData.fraisAdhesion,
-        affiliation: academieData.affiliation,
         description: academieData.description,
         rue: academieData.rue,
         ville: academieData.ville,
@@ -160,7 +157,7 @@ export class AcademieComponent implements AfterViewInit {
         .updateAcademie(
           updatedAcademie as Academie,
           academieData.id,
-          academieData.manager_id
+          academieData.manager.id
         )
         .subscribe(
           (response) => {
@@ -320,6 +317,11 @@ export class AppAcademieDialogContentComponent {
   ngAfterViewInit(): void {
     this.getManagers(this.local_data.id);
   }
+
+  onManagerChange(managerId: any) {
+    this.local_data.manager = this.managers.find(manager => manager.id === managerId);
+  }
+  
 
   getManagers(academieId: number): void {
     this.academieService.getManagers(academieId).subscribe(

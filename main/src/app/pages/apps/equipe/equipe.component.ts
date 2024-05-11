@@ -1,5 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { AfterViewInit, Component, Inject, ViewChild } from '@angular/core';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { NgForm } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSelectionListChange } from '@angular/material/list';
@@ -9,6 +10,7 @@ import { EquipeService } from 'src/app/services/equipe.service';
 import { Adherent } from 'src/models/adherent.model';
 import { Discipline } from 'src/models/discipline.model';
 import { Entraineur } from 'src/models/entraineur.model';
+import { GenreEquipe } from 'src/models/enums/genreEquie.model';
 import { Equipe } from 'src/models/equipe.model';
 
 @Component({
@@ -52,7 +54,8 @@ export class EquipeComponent implements AfterViewInit {
   constructor(
     public dialog: MatDialog,
     public datePipe: DatePipe,
-    private equipeService: EquipeService
+    private equipeService: EquipeService,
+    private firestorage: AngularFireStorage,
   ) { }
 
   ngAfterViewInit(): void {
@@ -120,6 +123,22 @@ export class EquipeComponent implements AfterViewInit {
       console.error("Equipe is undefined.");
     }
   }
+
+  async uploadFile(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      const path = `academie/${file.name}`;
+      const uploadTask = this.firestorage.upload(path, file);
+      uploadTask.then(async (snapshot) => {
+        const url = await snapshot.ref.getDownloadURL();
+        console.log('Image URL:', url);
+        this.equipe.logo = url; // Update the updatedAcademie.logo with the new URL
+      }).catch(error => {
+        console.error('Error uploading image:', error);
+      });
+    }
+  }
+
 
 
   onDeleteEquipe(equipeId: number): void {
@@ -218,9 +237,78 @@ export class EquipeComponent implements AfterViewInit {
     );
   }
 
+  openUpdateDialog(equipe: Equipe): void {
+    const dialogRef = this.dialog.open(UpdateEquipePopupComponent, {
+      data: equipe
+    });
+
+    dialogRef.afterClosed().subscribe(updatedPaiement => {
+      if (updatedPaiement) {
+        // Handle dialog result if needed
+        this.getEquipes();
+      }
+    });
+  }
+}
+
+@Component({
+  selector: 'app-update-equipe-popup',
+  templateUrl: './updateEquipe.component.html',
+})
+export class UpdateEquipePopupComponent {
+  genreEquipe: string[] = Object.values(GenreEquipe)
+    .filter(value => typeof value === 'string')
+    .map(value => String(value));
+
+  constructor(public dialogRef: MatDialogRef<UpdateEquipePopupComponent>,
+    @Inject(MAT_DIALOG_DATA) public equipe: Equipe, private equipeService: EquipeService, private firestorage: AngularFireStorage,) { }
 
 
 
+  onCancelClick(): void {
+    this.dialogRef.close();
+  }
+  onUpdateClick(): void {
+    if (this.equipe) {
+      const updatedEquipeData = {
+        nom: this.equipe.nom,
+        genre: this.equipe.genre,
+        groupeAge: this.equipe.groupeAge,
+        couleur: this.equipe.couleur,
+        logo: this.equipe.logo,
+      };
+      const updatedEquipe: Partial<Equipe> = { ...updatedEquipeData };
+      this.equipeService.updateEquipe(updatedEquipe as Equipe, this.equipe.id)
+        .subscribe(
+          response => {
+            console.log('Equipe updated:', response);
+            this.dialogRef.close(response); // Close dialog with response
+          },
+          error => {
+            console.error('Error updating payment:', error);
+            // Handle error if necessary
+          }
+        );
+    } else {
+      console.error('Equipe is undefined');
+      // Handle case where paiement is undefined
+    }
+  }
+
+  async uploadFile(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      const path = `academie/${file.name}`;
+      const uploadTask = this.firestorage.upload(path, file);
+      uploadTask.then(async (snapshot) => {
+        const url = await snapshot.ref.getDownloadURL();
+        console.log('Image URL:', url);
+        this.equipe.logo = url; // Update the updatedAcademie.logo with the new URL
+      }).catch(error => {
+        console.error('Error uploading image:', error);
+      });
+    }
+  }
 }
 
 @Component({
@@ -228,7 +316,16 @@ export class EquipeComponent implements AfterViewInit {
   templateUrl: './adherentPopup.component.html',
 })
 export class AdherentPopupComponent {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { adherents: Adherent[] }) { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { adherents: Adherent[] }, private dialogRef: MatDialogRef<AdherentPopupComponent>, private equipeService: EquipeService) { }
+  removeAdherent(adherentId: number): void {
+    this.equipeService.removeAdherentFromEquipe(adherentId).subscribe(() => {
+      // Close the dialog after the adherent is removed
+      this.dialogRef.close();
+    }, error => {
+      // Handle error, if needed
+      console.error('Error removing adherent:', error);
+    });
+  }
 }
 
 
@@ -237,7 +334,16 @@ export class AdherentPopupComponent {
   templateUrl: './entraineurPopup.component.html',
 })
 export class EntraineurPopupComponent {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { entraineurs: Entraineur[] }) { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { entraineurs: Entraineur[] }, private dialogRef: MatDialogRef<AdherentPopupComponent>, private equipeService: EquipeService) { }
+  removeEntraineur(entraineurId: number): void {
+    this.equipeService.removeEntraineurFromEquipe(entraineurId).subscribe(() => {
+      // Close the dialog after the adherent is removed
+      this.dialogRef.close();
+    }, error => {
+      // Handle error, if needed
+      console.error('Error removing adherent:', error);
+    });
+  }
 }
 
 

@@ -347,6 +347,11 @@ export class FullComponent implements OnInit {
 
           ],
         },
+        {
+          displayName: 'Chat',
+          iconName: 'message-2',
+          route: 'apps/chat',
+        },
         // Add other default items for regular users
       ];
     }

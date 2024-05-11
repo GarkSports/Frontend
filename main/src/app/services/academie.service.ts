@@ -32,7 +32,7 @@ export class AcademieService {
   }
 
   getAcademieById(academieId: number): Observable<Academie> {
-    return this.http.get<Academie>(`${this.apiUrl}/getAcademieById/${academieId}`);
+    return this.http.get<Academie>(`${this.apiUrl}/getDetailAcademie/${academieId}`);
   }
 
   updateAcademie(academieData: Academie, academieId: number, managerId: number): Observable<any> {

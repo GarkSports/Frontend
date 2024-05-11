@@ -4,7 +4,7 @@
     <div class="row justify-content-between">
       <div class="col-sm-4">
         <mat-form-field appearance="outline" class="hide-hint">
-          <input matInput placeholder="Search Tickets" />
+          <input matInput (keyup)="applyFilter($any($event.target).value)" placeholder="Recherche" />
           <mat-icon matSuffix>
             <i-tabler name="search" class="icon-20"></i-tabler>
           </mat-icon>
@@ -12,7 +12,7 @@
       </div>
       <div class="col-sm-4 d-flex justify-content-end align-items-center">
         <button mat-flat-button (click)="openDialog('Add', {})" color="primary">
-          Add New Post
+          Ajouter Un Post
         </button>
       </div>
     </div>
@@ -23,11 +23,16 @@
   <mat-card-content>
     <div class="table-responsive">
       <table mat-table [dataSource]="dataSource" class="w-100 f-w-500 no-wrap">
-        
+        <ng-container matColumnDef="createdAt">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Date</th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">
+            {{ element.createdAt }}
+          </td>
+        </ng-container>
 
         <ng-container matColumnDef="title">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Title
+            Titre
           </th>
           <td mat-cell *matCellDef="let element">
             <h6 class="m-0 f-s-16 mat-subtitle-1 f-w-500 m-b-4">{{ element.title }}</h6>
@@ -39,7 +44,7 @@
 
         <ng-container matColumnDef="author">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Assigned To
+            Ajouter Par 
           </th>
           <td mat-cell *matCellDef="let element">
             <div class="d-flex align-items-center">
@@ -51,7 +56,7 @@
 
         <ng-container matColumnDef="category">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            category
+            Discipline
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
             {{ element.category }}
@@ -60,19 +65,14 @@
 
         <ng-container matColumnDef="publicAudience">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            publicAudience
+            Audience
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
             {{ element.publicAudience ? 'Public' : 'Privé' }}
           </td>
         </ng-container>        
 
-        <ng-container matColumnDef="createdAt">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Date</th>
-          <td mat-cell *matCellDef="let element" class="f-s-14">
-            {{ element.createdAt }}
-          </td>
-        </ng-container>
+        
 
         <ng-container matColumnDef="action">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
