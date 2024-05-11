@@ -5,39 +5,37 @@
     <mat-card-content class="b-t-1">
         <mat-stepper #stepper>
             <mat-step>
-                <form class="m-t-24">
-                    <ng-template matStepLabel>Détails</ng-template>
-                    <div class="row">
-                        <!-- Nom -->
-                        <div class="col-md-12">
-                            <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Nom</mat-label>
-                            <mat-form-field appearance="outline" class="w-100">
-                                <input matInput required />
-                            </mat-form-field>
-                        </div>
-                        <!-- Lieu -->
-                        <div class="col-md-12">
-                            <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Lieu</mat-label>
-                            <mat-form-field appearance="outline" class="w-100">
-                                <input matInput required />
-                            </mat-form-field>
-                        </div>
-                        <!-- Date -->
-                        <div class="col-md-12">
-                            <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Date</mat-label>
-                            <mat-form-field appearance="outline" class="w-100">
-                                <input matInput [matDatepicker]="picker" required />
-                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                                <mat-datepicker #picker></mat-datepicker>
-                            </mat-form-field>
-                        </div>
-                        <!-- Description -->
-                        <div class="col-md-12">
-                            <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Description</mat-label>
-                            <mat-form-field appearance="outline" class="w-100">
-                                <textarea matInput required rows="4"></textarea>
-                            </mat-form-field>
-                        </div>
+                <ng-template matStepLabel>Détails</ng-template>
+                <form [formGroup]="matchAmicalForm" class="m-t-24">
+                    <!-- Nom -->
+                    <div class="col-md-12">
+                        <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Nom</mat-label>
+                        <mat-form-field appearance="outline" class="w-100">
+                            <input matInput formControlName="nomEvent" required />
+                        </mat-form-field>
+                    </div>
+                    <!-- Lieu -->
+                    <div class="col-md-12">
+                        <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Lieu</mat-label>
+                        <mat-form-field appearance="outline" class="w-100">
+                            <input matInput formControlName="lieu" required />
+                        </mat-form-field>
+                    </div>
+                    <!-- Date -->
+                    <div class="col-md-12">
+                        <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Date</mat-label>
+                        <mat-form-field appearance="outline" class="w-100">
+                            <input matInput [matDatepicker]="picker" formControlName="date" required />
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <!-- Description -->
+                    <div class="col-md-12">
+                        <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Description</mat-label>
+                        <mat-form-field appearance="outline" class="w-100">
+                            <textarea matInput formControlName="description" required rows="4"></textarea>
+                        </mat-form-field>
                     </div>
                     <div class="text-right">
                         <button mat-flat-button color="primary" matStepperNext>Next</button>
@@ -46,32 +44,63 @@
             </mat-step>
 
             <mat-step>
-                <form class="m-t-24">
-                    <ng-template matStepLabel>Convocation</ng-template>
-                    <div class="radio-container">
-                        <!-- Radio buttons for equipe selection -->
-                        <div *ngFor="let equipe of equipeList" class="radio-input-container">
-                            <mat-radio-button [value]="equipe.id" class="radio-button"
-                                (change)="onEquipeSelect(equipe.id)">
-                                {{ equipe.nom }}
-                                <input type="time" class="time-input" [disabled]="selectedEquipe !== equipe.id" />
-                            </mat-radio-button>
+                <ng-template matStepLabel>Convocation</ng-template>
+                <form [formGroup]="matchAmicalForm" class="m-t-24">
+                    <div class="checkbox-container">
+                        <!-- Checkboxes for equipe selection -->
+                        <div *ngFor="let equipe of equipeList" class="checkbox-input-container">
+                            <div class="d-flex align-items-center">
+                                <mat-checkbox [value]="equipe.id.toString()" class="checkbox-button" (click)="onEquipeSelect(equipe.id)"
+                                    [checked]="selectedEquipeId === equipe.id">
+                                    {{ equipe.nom }}
+                                </mat-checkbox>
+                                <div class="horaire-input" *ngIf="selectedEquipeId === equipe.id">
+                                    <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Horaire for {{ equipe.nom }}</mat-label>
+                                    <mat-form-field appearance="outline" class="w-100">
+                                        <input matInput formControlName="horaire" type="time" required />
+                                    </mat-form-field>
+                                    
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="d-flex align-items-center justify-content-between" style="margin-top: 70px;">
                         <button mat-flat-button color="warn" matStepperPrevious>
                             Back
                         </button>
-                        <button mat-flat-button color="primary" (click)="stepper.reset()">Finish</button>
+                        <button mat-flat-button color="primary" type="button" (click)="onSubmit()">Finish</button>
                     </div>
                 </form>
+                
             </mat-step>
         </mat-stepper>
     </mat-card-content>
 </mat-card>
 
 
+
+
 <style>
+    .checkbox-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.checkbox-input-container {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.checkbox-input-container .d-flex {
+    justify-content: center;
+    align-items: center;
+}
+
+.horaire-input {
+    margin-left: 10px; /* Adjust the spacing between checkbox and input */
+}
+
     .radio-container {
         display: flex;
         flex-direction: column;

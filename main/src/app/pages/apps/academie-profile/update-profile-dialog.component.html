@@ -19,14 +19,14 @@
   <div class="form-row">
     <div class="input-container">
       <mat-form-field appearance="outline">
-        <mat-label>Affiliation</mat-label>
-        <input matInput [(ngModel)]="updatedAcademie.affiliation" placeholder="Affiliation" />
+        <mat-label>Description</mat-label>
+        <input matInput [(ngModel)]="updatedAcademie.description" placeholder="Description" />
       </mat-form-field>
     </div>
     <div class="input-container">
       <mat-form-field appearance="outline">
-        <mat-label>Description</mat-label>
-        <input matInput [(ngModel)]="updatedAcademie.description" placeholder="Description" />
+        <mat-label>Rue</mat-label>
+        <input matInput [(ngModel)]="updatedAcademie.rue" placeholder="Rue" />
       </mat-form-field>
     </div>
   </div>
@@ -34,16 +34,17 @@
   <div class="form-row">
     <div class="input-container">
       <mat-form-field appearance="outline">
-        <mat-label>Rue</mat-label>
-        <input matInput [(ngModel)]="updatedAcademie.rue" placeholder="Rue" />
-      </mat-form-field>
-    </div>
-    <div class="input-container">
-      <mat-form-field appearance="outline">
         <mat-label>Ville</mat-label>
         <input matInput [(ngModel)]="updatedAcademie.ville" placeholder="Ville" />
       </mat-form-field>
     </div>
+    <div class="input-container">
+      <mat-form-field appearance="outline">
+        <mat-label>Pays</mat-label>
+        <input matInput [(ngModel)]="updatedAcademie.pays" placeholder="Pays" />
+      </mat-form-field>
+    </div>
+
   </div>
 
   <div class="form-row">
@@ -51,12 +52,6 @@
       <mat-form-field appearance="outline">
         <mat-label>Code Postal</mat-label>
         <input matInput [(ngModel)]="updatedAcademie.codePostal" placeholder="Code Postal" />
-      </mat-form-field>
-    </div>
-    <div class="input-container">
-      <mat-form-field appearance="outline">
-        <mat-label>Pays</mat-label>
-        <input matInput [(ngModel)]="updatedAcademie.pays" placeholder="Pays" />
       </mat-form-field>
     </div>
   </div>

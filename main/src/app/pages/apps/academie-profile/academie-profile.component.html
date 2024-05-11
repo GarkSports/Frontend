@@ -83,10 +83,11 @@
                                                 <input matInput type="text" [value]="academie.description" readonly />
                                             </mat-form-field>
                                             <!-- input -->
-                                            <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Affiliation
+                                            <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Frais
                                                 academie</mat-label>
                                             <mat-form-field appearance="outline" class="w-100" color="primary">
-                                                <input matInput type="text" [value]="academie.affiliation" readonly />
+                                                <input matInput type="number" [value]="academie.fraisAdhesion"
+                                                    readonly />
                                             </mat-form-field>
                                         </div>
                                         <div class="col-sm-6">
@@ -96,15 +97,6 @@
                                             <mat-form-field appearance="outline" class="w-100" color="primary">
                                                 <input matInput type="text" [value]="academie.etat" readonly />
                                             </mat-form-field>
-                                            <!-- input -->
-                                            <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Frais
-                                                academie</mat-label>
-                                            <mat-form-field appearance="outline" class="w-100" color="primary">
-                                                <input matInput type="number" [value]="academie.fraisAdhesion"
-                                                    readonly />
-                                            </mat-form-field>
-                                        </div>
-                                        <div class="col-12">
                                             <!-- input -->
                                             <mat-label class="mat-subtitle-2 f-w-600 m-b-8 d-block">Address</mat-label>
                                             <mat-form-field appearance="outline" class="w-100" color="primary">

@@ -36,6 +36,11 @@ export class PaiementComponent implements AfterViewInit {
   dataSource = new MatTableDataSource<Paiement>([]);
   paiementList: Paiement[] = [];
   paiement: Paiement;
+  selectedSortingOption: string;
+  sortingOptions = [
+    { value: 'asc', viewValue: 'Ascendant' },
+    { value: 'desc', viewValue: 'Descendant' }
+  ];
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
   constructor(public dialog: MatDialog, public datePipe: DatePipe, private paiementService: PaiementService) { }
@@ -43,6 +48,25 @@ export class PaiementComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
   }
+
+  applySorting() {
+    if (this.selectedSortingOption === 'asc') {
+      this.dataSource.data.sort((a, b) => {
+        const memberA = `${a.adherent?.firstname} ${a.adherent?.lastname}`.toLowerCase();
+        const memberB = `${b.adherent?.firstname} ${b.adherent?.lastname}`.toLowerCase();
+        return memberA.localeCompare(memberB);
+      });
+    } else if (this.selectedSortingOption === 'desc') {
+      this.dataSource.data.sort((a, b) => {
+        const memberA = `${a.adherent?.firstname} ${a.adherent?.lastname}`.toLowerCase();
+        const memberB = `${b.adherent?.firstname} ${b.adherent?.lastname}`.toLowerCase();
+        return memberB.localeCompare(memberA);
+      });
+    }
+    // After sorting, reassign the sorted data to the dataSource
+    this.dataSource = new MatTableDataSource<Paiement>(this.dataSource.data);
+  }
+  
 
   applyFilter(filterValue: string): void {
     // Convert filter value to lowercase for case-insensitive comparison
@@ -130,6 +154,7 @@ export class PaiementComponent implements AfterViewInit {
     this.selectedType = null;
     this.selectedStatut = null;
     this.selectedEquipe = null;
+    this.selectedSortingOption = '';
 
     // Apply filters again to refresh the data
     this.applyFilter('');
@@ -223,18 +248,18 @@ export class PaiementComponent implements AfterViewInit {
     });
   }
 
-  openUpdateDialog(paiement: Paiement): void {
-    const dialogRef = this.dialog.open(PaiementDetailsPopupComponent, {
-      data: paiement
-    });
+    openUpdateDialog(paiement: Paiement): void {
+      const dialogRef = this.dialog.open(PaiementDetailsPopupComponent, {
+        data: paiement
+      });
 
-    dialogRef.afterClosed().subscribe(updatedPaiement => {
-      if (updatedPaiement) {
-        // Handle dialog result if needed
-        this.getPaiements();
-      }
-    });
-  }
+      dialogRef.afterClosed().subscribe(updatedPaiement => {
+        if (updatedPaiement) {
+          // Handle dialog result if needed
+          this.getPaiements();
+        }
+      });
+    }
 
   openAddPaiementDialog(): void {
     // Initialize a new instance of Paiement and assign it to the dialog data

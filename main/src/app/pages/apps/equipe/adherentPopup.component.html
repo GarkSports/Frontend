@@ -8,6 +8,7 @@
           <th>Lastname</th>
           <th>Email</th>
           <th>Phone</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -16,6 +17,11 @@
           <td>{{ adherent.lastname }}</td>
           <td>{{ adherent.email }}</td>
           <td>{{ adherent.telephone }}</td>
+          <td>
+            <button mat-icon-button color="warn" (click)="removeAdherent(adherent.id)">
+              <mat-icon>delete_outline</mat-icon>
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>

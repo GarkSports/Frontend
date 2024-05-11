@@ -1,42 +1,43 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { Observable, map } from 'rxjs';
 import { Academie } from 'src/models/academie.model';
 import { Manager } from 'src/models/manager.model';
+import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdminService {
-  private apiUrl = 'http://localhost:8089/admin';
-  private apiUrlManager = 'http://localhost:8089/random';
+  private apiUrl =  environment.apiUrl+'admin';
+  private apiUrlManager =  environment.apiUrl+'random';
 
   constructor(private http: HttpClient) { }
 
   addManager(managerData: Manager): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-  
+
     const requestBody = {
       email: managerData.email,
       firstname: managerData.firstname,
       lastname: managerData.lastname,
-      role: managerData.role,
-      adresse:managerData.adresse
+      adresse:managerData.adresse,
+      telephone:managerData.telephone,
     };
       console.log("this is service",requestBody);
 
     return this.http.post<any>(`${this.apiUrl}/add-manager`, requestBody, { withCredentials: true, headers });
-    
+
   }
-  
+
 
   getManagers(): Observable<Manager[]> {
-    return this.http.get<Manager[]>(`${this.apiUrl}/get-all-users`, { withCredentials: true });
+    return this.http.get<Manager[]>(`${this.apiUrl}/get-managers`, { withCredentials: true });
   }
 
   getManagerById(ManagerId: number): Observable<Academie> {
     return this.http.get<Academie>(`${this.apiUrl}/getAcademieById/${ManagerId}`,{ withCredentials: true });
-  }  
+  }
 
   updateManager(managerData: Manager): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
@@ -51,19 +52,37 @@ export class AdminService {
     return this.http.delete<any>(`${this.apiUrl}/archive-user?id=${ManagerId}`, {withCredentials: true});
   }
 
-  blockManager(ManagerId: number): Observable<any> {
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+ 
+  blockManager(ManagerId: number): Observable<{ success: boolean, message?: string, error?: string }> {
     console.log(ManagerId);
-
-    return this.http.put<any>(`${this.apiUrl}/block-user?id=${ManagerId}`, {withCredentials: true,headers});
+    return this.http.put(`${this.apiUrl}/block-user?id=${ManagerId}`, null, { responseType: 'text', observe: 'response', withCredentials: true })
+      .pipe(
+        map((response: HttpResponse<string>) => {
+          if (response.status === 200) {
+            return { success: true, message: response.body || '' };
+          } else {
+            return { success: false, error: response.body || '' };
+          }
+        })
+      );
   }
-
-  unBlockManager(ManagerId: number): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/unblock-user?id=${ManagerId}`,{ withCredentials: true });
+  
+  unblockManager(ManagerId: number): Observable<{ success: boolean, message?: string, error?: string }> {
+    console.log(ManagerId);
+    return this.http.put(`${this.apiUrl}/unblock-user?id=${ManagerId}`, null, { responseType: 'text', observe: 'response', withCredentials: true })
+      .pipe(
+        map((response: HttpResponse<string>) => {
+          if (response.status === 200) {
+            return { success: true, message: response.body || '' };
+          } else {
+            return { success: false, error: response.body || '' };
+          }
+        })
+      );
   }
 
   getManagerDetails(ManagerId: number): Observable<Manager> {
-    
+
     return this.http.get<Manager>(`${this.apiUrl}/getManagerDetails?id=${ManagerId}`,{ withCredentials: true });
   }
 }

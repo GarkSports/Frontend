@@ -1,7 +1,7 @@
 <h2 mat-dialog-title>{{action}}</h2>
 
 <!-- it was <ng-container *ngIf="action !== 'Delete' && action !== 'Block'">  -->
-<ng-container *ngIf="action !== 'Block'">
+<ng-container *ngIf="action !== 'Delete'">
   <mat-dialog-content *ngIf="action === 'Add' || action ==='Update'" style="max-width: 500px" class="mat-typography m-t-24">
     <form [formGroup]="managerForm">
       <div class="row">
@@ -16,7 +16,7 @@
         <div class="col-sm-6 col-lg-12">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Permissions</mat-label>
-            <mat-select formControlName="permission" multiple required id="permissions" name="permissions" placeholder="Permissions">
+            <mat-select formControlName="permissions" multiple required id="permissions" name="permissions" placeholder="Permissions">
               <mat-option *ngFor="let permission of permissions" [value]="permission">{{ permission }}</mat-option>
             </mat-select>
           </mat-form-field>
