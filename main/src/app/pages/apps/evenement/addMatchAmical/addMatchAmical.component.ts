@@ -5,11 +5,14 @@ import {
     FormsModule,
     ReactiveFormsModule,
     Validators,
+    FormControl,
 } from '@angular/forms';
 import { MaterialModule } from 'src/app/material.module';
 import { CommonModule } from '@angular/common';
 import { EvenementService } from 'src/app/services/evenement.service';
 import { Equipe } from 'src/models/equipe.model';
+import { Evenement } from 'src/models/evenement.model'; // Import Evenement model
+import { MatchAmicalRequest } from 'src/models/dto/MatchAmicalRequest.model';
 
 @Component({
     selector: 'add-matchamical',
@@ -19,7 +22,7 @@ import { Equipe } from 'src/models/equipe.model';
 })
 export class AddMatchAmicalComponent {
     equipeList: Equipe[] = [];
-    selectedEquipes: number[] = [];
+    selectedEquipeId: number; // Changed from selectedEquipes: number[] to selectedEquipeId: number
     matchAmicalForm: FormGroup;
 
     constructor(
@@ -31,6 +34,7 @@ export class AddMatchAmicalComponent {
             lieu: ['', Validators.required],
             date: ['', Validators.required],
             description: ['', Validators.required],
+            horaire: [''] // Add the 'horaire' form control here
         });
     }
 
@@ -41,41 +45,27 @@ export class AddMatchAmicalComponent {
     getEquipes(): void {
         this.eventService.getEquipes().subscribe(equipes => {
             this.equipeList = equipes;
-            this.createHoraireControls();
         });
     }
-
-    createHoraireControls(): void {
-        // Remove previous horaire controls
-        Object.keys(this.matchAmicalForm.controls).forEach(key => {
-            if (key.startsWith('horaire')) {
-                this.matchAmicalForm.removeControl(key);
-            }
-        });
-    
-        // Add new horaire controls for each equipe
-        this.equipeList.forEach(equipe => {
-            this.matchAmicalForm.addControl('horaire' + equipe.id, this.formBuilder.control('', Validators.required));
-        });
-    }
-    
 
     onSubmit(): void {
-        if (this.selectedEquipes.length > 0) {
-            // Form is valid and at least one equipe is selected
+        if (this.selectedEquipeId) { // Changed condition to check for selectedEquipeId
+            // Form is valid and equipe is selected
             const formData = this.matchAmicalForm.value;
-            const selectedEquipesHoraire = this.selectedEquipes.map(equipeId => ({
-                equipeId,
-                horaire: formData['horaire' + equipeId]
-            }));
-    
-            const matchAmicalRequest = {
-                evenement: formData,
-                equipesHoraire: selectedEquipesHoraire
-            };
-    
+            const matchAmicalRequest = new MatchAmicalRequest(
+                new Evenement(), // Changed to use an empty Evenement constructor
+                this.selectedEquipeId,
+                formData.horaire
+            );
+
+            // Set the properties of the Evenement object
+            matchAmicalRequest.evenement.nomEvent = formData.nomEvent;
+            matchAmicalRequest.evenement.lieu = formData.lieu;
+            matchAmicalRequest.evenement.date = formData.date;
+            matchAmicalRequest.evenement.description = formData.description;
+
             console.log('Form Data:', matchAmicalRequest); // Log the form data
-    
+
             this.eventService.addMatchAmical(matchAmicalRequest).subscribe(
                 (response) => {
                     console.log('Friendly match added successfully:', response);
@@ -88,21 +78,11 @@ export class AddMatchAmicalComponent {
                 }
             );
         } else {
-            console.error('Form is invalid or no equipe selected');
+            console.error('No equipe selected');
         }
     }
-    
-    
 
-    onEquipeSelect(equipeId: number, isChecked: boolean): void {
-        if (isChecked) {
-            this.selectedEquipes.push(equipeId);
-        } else {
-            const index = this.selectedEquipes.indexOf(equipeId);
-            if (index !== -1) {
-                this.selectedEquipes.splice(index, 1);
-            }
-        }
+    onEquipeSelect(equipeId: number): void { // Changed parameters of onEquipeSelect function
+        this.selectedEquipeId = equipeId; // Changed selectedEquipes to selectedEquipeId
     }
 }
-

@@ -30,7 +30,6 @@ export class AcademieProfileComponent {
     const academieData = {
       nom: this.academie.nom,
       fraisAdhesion: this.academie.fraisAdhesion,
-      affiliation: this.academie.affiliation,
       description: this.academie.description,
       rue: this.academie.rue,
       ville: this.academie.ville,
