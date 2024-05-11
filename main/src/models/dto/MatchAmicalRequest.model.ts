@@ -1,13 +1,14 @@
 import { Evenement } from "../evenement.model";
-import { EquipeHoraireDTO } from "./EquipeHoraireDTO.model";
 
 
 export class MatchAmicalRequest {
   evenement: Evenement;
-  equipesHoraire: EquipeHoraireDTO[];
+  equipeId: number;
+  horaire: string;
 
-  constructor(evenement: Evenement, equipesHoraire: EquipeHoraireDTO[]) {
+  constructor(evenement: Evenement, equipeId: number, horaire: string) {
     this.evenement = evenement;
-    this.equipesHoraire = equipesHoraire;
+    this.equipeId = equipeId;
+    this.horaire = horaire;
   }
 }

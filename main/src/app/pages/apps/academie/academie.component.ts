@@ -35,7 +35,6 @@ export class AcademieComponent implements AfterViewInit {
     'logo',
     'type',
     'description',
-    'affiliation',
     'fraisAdhesion',
     'etat',
     'editEtat',
@@ -112,7 +111,6 @@ export class AcademieComponent implements AfterViewInit {
         this.updateRowData(result.data);
       } else if (result.event === 'Delete') {
         this.deleteRowData(result.data);
-        window.location.reload();
       }
     });
   }
@@ -147,7 +145,6 @@ export class AcademieComponent implements AfterViewInit {
         nom: academieData.nom,
         type: academieData.type,
         fraisAdhesion: academieData.fraisAdhesion,
-        affiliation: academieData.affiliation,
         description: academieData.description,
         rue: academieData.rue,
         ville: academieData.ville,

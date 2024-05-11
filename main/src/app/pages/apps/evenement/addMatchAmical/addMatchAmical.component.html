@@ -49,17 +49,17 @@
                     <div class="checkbox-container">
                         <!-- Checkboxes for equipe selection -->
                         <div *ngFor="let equipe of equipeList" class="checkbox-input-container">
-                            <div class="d-flex align-items-center"> <!-- Wrap both checkbox and input in a flex container -->
-                                <mat-checkbox [value]="equipe.id.toString()" class="checkbox-button"
-                                    (change)="onEquipeSelect(equipe.id, $event.checked)">
+                            <div class="d-flex align-items-center">
+                                <mat-checkbox [value]="equipe.id.toString()" class="checkbox-button" (click)="onEquipeSelect(equipe.id)"
+                                    [checked]="selectedEquipeId === equipe.id">
                                     {{ equipe.nom }}
                                 </mat-checkbox>
-                                <!-- Input field for horaire -->
-                                <div class="horaire-input" *ngIf="selectedEquipes.includes(equipe.id)">
+                                <div class="horaire-input" *ngIf="selectedEquipeId === equipe.id">
                                     <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Horaire for {{ equipe.nom }}</mat-label>
                                     <mat-form-field appearance="outline" class="w-100">
-                                        <input matInput [formControlName]="'horaire' + equipe.id" type="time" required />
+                                        <input matInput formControlName="horaire" type="time" required />
                                     </mat-form-field>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -71,18 +71,12 @@
                         <button mat-flat-button color="primary" type="button" (click)="onSubmit()">Finish</button>
                     </div>
                 </form>
+                
             </mat-step>
-            
-            
-            
-            
-            
-            
-
-
         </mat-stepper>
     </mat-card-content>
 </mat-card>
+
 
 
 

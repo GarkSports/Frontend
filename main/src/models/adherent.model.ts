@@ -10,6 +10,7 @@ export class Adherent extends User {
     academie?: Academie;
     paiement?: Paiement;
     nomEquipe: string;
+    equipeId: number;
     statutAdherent: StatutAdherent;
     creationDate: Date;
     paiementDate: Date;

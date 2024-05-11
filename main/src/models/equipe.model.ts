@@ -11,6 +11,8 @@ export class Equipe {
     genre: GenreEquipe;
     groupeAge: string;
     couleur: string;
+    codeEquipe: string;
+    logo: string;
     discipline?: Discipline;
     adherents?: Adherent[];
     entraineurs?: Entraineur[];
