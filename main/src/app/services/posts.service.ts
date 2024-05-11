@@ -14,7 +14,7 @@ import {environment} from "../../environments/environment";
 
     blogPosts: any[] = [];
 
-    constructor(private http: HttpClient, private cookieService: CookieService) { }
+    constructor(private http: HttpClient) { }
 
 
     public getPosts(): Observable<BlogPosts[]>{

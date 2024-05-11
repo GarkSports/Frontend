@@ -20,6 +20,11 @@ export const navItems: NavItem[] = [
     ],
   },
   {
+    displayName: 'Chat',
+    iconName: 'message-2',
+    route: 'apps/chat',
+  },
+  {
     displayName: 'Dashboard',
     iconName: 'home',
     route: '/dashboards/dashboard1',
