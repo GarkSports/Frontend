@@ -1,0 +1,25 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches:
+      - production
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install sshpass
+        run: sudo apt-get install -y sshpass
+
+      - name: SSH into VPS and update code
+        run: |
+          sshpass -p ${{ secrets.VPS_PASS }} ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ubuntu@5.196.15.147 "mkdir test && cd /root/test && git clone https://github.com/Gark-Academy/GarkAcademy2024-Admin"
+
+      # - name: Restart Docker Compose
+      #   run: |
+      #     sshpass -p ${{ secrets.VPS_PASS }} ssh -o StrictHostKeyChecking=no ubuntu@102.211.209.62 "cd /root && sudo docker compose down && sudo docker compose up -d --build"
