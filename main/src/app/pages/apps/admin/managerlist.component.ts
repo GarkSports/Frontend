@@ -50,7 +50,10 @@ export class AppManagerlistComponent implements OnInit {
   sortOrder: string = 'asc'; // default sorting order
 
   ngOnInit(): void {
+    this.dataSource = new MatTableDataSource<Manager>([]);
+
     this.fetchData();
+    this.getManagers();
     //this.sortData();
   }
 
@@ -64,6 +67,18 @@ export class AppManagerlistComponent implements OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  getManagers(): void {
+    this.adminService.getManagers().subscribe(
+      (managers) => {
+        console.log('Managers fetched successfully', managers);
+        this.dataSource.data = managers;
+      },
+      (error) => {
+        console.error('Error fetching academies', error);
+      }
+    );
   }
   
   fetchData() {
@@ -79,10 +94,8 @@ export class AppManagerlistComponent implements OnInit {
   ngAfterViewInit(): void {
     this.adminService.getManagers().subscribe(managers => {
       this.dataSource.data = managers;
-      this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
       console.log(managers);
-
     });
   }
 
@@ -107,6 +120,7 @@ export class AppManagerlistComponent implements OnInit {
         this.addRowData(result.data.managerData);
       } else if (result.event === 'Update') {
         this.updateRowData(result.data);
+        console.log("helloo");
       } else if (result.event === 'Delete') {
         this.deleteRowData(result.data);
       } else if (result.event === 'Block') {
@@ -114,6 +128,8 @@ export class AppManagerlistComponent implements OnInit {
       } else if (result.event === 'UnBlock') {
         this.unblockRowData(result.data);
       }
+      this.getManagers();
+
     });
   }
 
@@ -130,18 +146,7 @@ export class AppManagerlistComponent implements OnInit {
   // }
 
   updateRowData(row_obj: Manager): boolean | any {
-    this.dataSource.data = this.dataSource.data.filter((value, key) => {
-      if (value.id === row_obj.id) {
-        
-        value.firstname = row_obj.firstname;
-        value.email = row_obj.email;
-        value.roleName = row_obj.roleName;
-        value.telephone = row_obj.telephone;
-        value.blocked = row_obj.blocked;
-
-      }
-      return true;
-    });
+   
   }
   
   deleteRowData(deletedData: any) {
@@ -164,17 +169,7 @@ export class AppManagerlistComponent implements OnInit {
       item.id === unblockedData.id ? { ...item, blocked: false } : item
     );
   }
-  getManagers(): void {
-    this.adminService.getManagers().subscribe(
-      (managers) => {
-        console.log('Managers fetched successfully', managers);
-        this.dataSource.data = managers;
-      },
-      (error) => {
-        console.error('Error fetching academies', error);
-      }
-    );
-  }
+  
 }
 
  
@@ -190,6 +185,8 @@ export class AppManagerDialogContentComponent implements OnInit {
   managerForm: FormGroup;
   firstnameValue: string;
 
+  dataSource = new MatTableDataSource<Manager>([]);
+
   constructor(
     public dialogRef: MatDialogRef<AppManagerDialogContentComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: Manager,
@@ -203,6 +200,7 @@ export class AppManagerDialogContentComponent implements OnInit {
       this.initManagerForm();
     }
   }
+  displayedData: any[] = [];
 
   ngOnInit(): void {
     this.initManagerForm();
@@ -217,6 +215,26 @@ export class AppManagerDialogContentComponent implements OnInit {
       telephone: [this.local_data.telephone, Validators.required]
     });
   }
+  getManagers(): void {
+    this.adminService.getManagers().subscribe(
+      (managers) => {
+        console.log('Managers fetched successfully', managers);
+        this.dataSource.data = managers;
+      },
+      (error) => {
+        console.error('Error fetching academies', error);
+      }
+    );
+  }
+
+  fetchData() {
+    // Call your service to fetch the data
+    this.adminService.getManagers().subscribe(data => {
+      this.displayedData = data;
+      this.dataSource = new MatTableDataSource(this.displayedData);
+      //this.dataSource.sort = this.sort;
+    });
+  }
 
   doAction(): void {
     if (this.action === 'Add') {
@@ -224,8 +242,6 @@ export class AppManagerDialogContentComponent implements OnInit {
         
         (response) => {
           console.log(this.managerForm.value);
-
-          // Handle successful response
           console.log('Manager added:', response);
           this.dialogRef.close(true);
         },
@@ -240,11 +256,13 @@ export class AppManagerDialogContentComponent implements OnInit {
       if (this.managerForm.valid) {
         const updatedManager = this.managerForm.value;
         updatedManager.id = this.local_data.id; // Set the id of the manager to be updated
+        
         this.adminService.updateManager(updatedManager).subscribe(
           (response) => {
             console.log('Manager updated successfully', response);
             console.log('Manager updated:', response);
-            this.dialogRef.close(true);          },
+            this.dialogRef.close(true);             
+          },
           (error) => {
             console.error('Error updating manager', error);
           }
@@ -258,7 +276,7 @@ export class AppManagerDialogContentComponent implements OnInit {
           (response) => {
             if (response.success) {
               console.log('Manager unblocked successfully', response.message);
-              this.dialogRef.close({ event: 'Unblock' });
+              this.dialogRef.close(true);
             } else {
               console.error('Error unblocking manager', response.error);
               this.dialogRef.close({ event: 'Error' });
@@ -275,10 +293,10 @@ export class AppManagerDialogContentComponent implements OnInit {
           (response) => {
             if (response.success) {
               console.log('Manager blocked successfully', response.message);
-              this.dialogRef.close({ event: 'Block' });
+              this.dialogRef.close(true);             
             } else {
               console.error('Error blocking manager', response.error);
-              this.dialogRef.close({ event: 'Error' });
+              this.dialogRef.close(true);             
             }
           },
           (error) => {

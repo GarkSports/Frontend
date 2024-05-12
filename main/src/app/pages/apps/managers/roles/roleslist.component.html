@@ -1,29 +1,25 @@
   <!-- table -->
-  <mat-card class="cardWithShadow">
-    <mat-card-content>
-      
-      <div class="table-responsive">
-        <div class="row" style="margin-left:2px ;">
-            <div class="col-sm-6" style="margin-top: 15px;">LISTE DES ROLES</div>
-            <div class="col-sm-6 d-flex justify-content-end">
-                <div class="d-flex align-items-center" style="margin-right: 30px;">
-                    <mat-form-field appearance="outline" class="hide-hint">
-                        <input matInput (keyup)="applyFilter($any($event.target).value)" placeholder="rechercher" />
-                        <mat-icon matSuffix>
-                            <i-tabler name="search" class="icon-20"></i-tabler>
-                        </mat-icon>
-                    </mat-form-field>
-                </div>
-                <div class="d-flex align-items-center" style="margin-right: 30px;">
-                    <button mat-flat-button (click)="openDialog('Add', {})" color="primary">
-                        <mat-icon matSuffix>
-                            <i-tabler name="plus" class="icon-20"></i-tabler>
-                        </mat-icon>
-                        Ajouter
-                    </button>
-                </div>
-            </div>
+  <mat-card class="cardWithShadow gray-background">
+    <mat-card-content class="p-24 gray-background">
+      <div class="row justify-content-between">
+        <div class="col-lg-6">
+          <h2>LISTE DES ROLES</h2>
         </div>
+        <div class="col-lg-6 d-flex align-items-center justify-content-end">
+          <mat-form-field appearance="outline" class="w-50 hide-hint mr-2" style="margin-right: 10px;">
+            <input matInput placeholder="Rechercher" (keyup)="applyFilter($any($event.target).value)" />
+            <mat-icon matSuffix>
+              <i-tabler name="search" class="icon-20"></i-tabler>
+            </mat-icon>
+          </mat-form-field>
+          <button mat-flat-button (click)="openDialog('Add', {})" color="primary">
+            <mat-icon matSuffix>
+              <i-tabler name="plus" class="icon-20"></i-tabler>
+          </mat-icon>
+          Ajouter
+      </button>
+        
+      </div>
    
     
       
@@ -102,9 +98,37 @@
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
         </table>
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons class="gray-background"></mat-paginator>
       </div>
   
-      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
-      </mat-paginator>
     </mat-card-content>
   </mat-card>
+
+  <style>
+    .text-danger {
+      color: red;
+    }
+  
+    .custom-select {
+      /* background color for the select */
+      background-color: red;
+      /* border color */
+      border: 1px solid #cccccc;
+      /* border radius */
+      border-radius: 4px;
+      /* color for the text */
+      color: #333333;
+      /* font size */
+      font-size: 14px;
+      /* padding */
+      padding: 5px 10px;
+    }
+  
+    .gray-background {
+      background-color: #FAFAFA;
+    }
+  
+    .no-shadow {
+      box-shadow: none;
+    }
+  </style>

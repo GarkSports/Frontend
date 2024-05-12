@@ -26,37 +26,17 @@
               <i-tabler name="search" class="icon-20"></i-tabler>
             </mat-icon>
           </mat-form-field>
-          <!-- dropdown -->
-          <button mat-button [matMenuTriggerFor]="menu">
-            <div class="d-flex align-items-center">
-              Recent Chats
-              <i-tabler name="chevron-down" class="icon-20 m-l-4"></i-tabler>
-            </div>
-          </button>
-          <mat-menu #menu="matMenu" class="cardWithShadow">
-            <button mat-menu-item>
-              <span>Sort by Time</span>
-            </button>
-            <button mat-menu-item>
-              <span>Sort by Unread</span>
-            </button>
-            <button mat-menu-item>
-              <span>Mark as all Read</span>
-            </button>
-          </mat-menu>
         </div>
-
         <mat-nav-list class="chat-listing">
-          @for(message of messages; track message.photo) {
-          <mat-list-item role="listitem" (click)="onSelect(message)"
-            [class.bg-light-primary]="message === selectedMessage" lines="2">
+          @for(contact of chatService.contactList; track contact.userId) {
+          <mat-list-item role="listitem" (click)="onSelect(contact.userId)"
+            [class.bg-light-primary]="contact === selectedMessage" lines="2">
             <div class="d-flex align-items-center p-x-16 p-b-4 h-100" matListItemTitle>
-              <img src="{{ message.photo }}" alt="" width="42" class="rounded-circle" />
+              <img src="{{ 'assets/images/profile/user-1.jpg' }}" alt="" width="42" class="rounded-circle" />
               <div class="m-l-16">
                 <h3 class="f-w-600 mat-subtitle-1 f-s-16 lh-sm">
-                  {{ message.from }}
+                  {{ contact.username }}
                 </h3>
-                <p class="f-s-14 m-t-4 m-b-0">{{ message.subject }}</p>
               </div>
             </div>
           </mat-list-item>
@@ -72,7 +52,7 @@
         <mat-icon>short_text</mat-icon>
       </button>
       <div class="d-flex align-items-center">
-        <img src="{{ selectedMessage.photo }}" width="40" class="rounded-circle" />
+        <img src="{{ 'assets/images/profile/user-1.jpg' }}" width="40" class="rounded-circle" />
         <div class="mat-subtitle-1 f-s-16 f-w-600 m-b-0 m-l-16">
           {{ selectedMessage.from }}
         </div>
@@ -92,20 +72,20 @@
     <!-- ------------------------------------------- -->
     <ng-scrollbar style="height: calc(100vh - 390px)" class="position-relative">
       <mat-card-content class="chat-middle-box p-24">
-        @for(c of selectedMessage.chat; track c) {
-        @if(c.type === 'odd') {
+        @for(c of selectedDiscussion; track c) {
+        @if(c.senderId === selectedContact) {
         <div class="chat-list odd">
           <div class="chat-message m-b-15">
             <div class="chat-block bg-light-primary p-10 rounded d-flex align-items-center">
               <span>
-                <img src="{{ selectedMessage.photo }}" class="rounded-circle" width="40" />
+                <img src="{{ 'assets/images/profile/user-1.jpg' }}" class="rounded-circle" width="40" />
               </span>
               <span class="m-l-16 mat-subheading-1 m-b-0 f-w-400 lh-md">{{
-                c.msg
+                c.message
                 }}</span>
             </div>
             <p class="chat-date text-muted mat-h5 f-s-12 m-t-5 m-b-0">
-              {{ c.date | date }}
+              {{ c.timestamp | date }}
             </p>
           </div>
         </div>
@@ -114,10 +94,10 @@
           <div class="chat-message m-b-15">
             <div
               class="chat-block bg-light-accent lh-md p-10 rounded d-flex align-items-center mat-subheading-1 f-w-400 m-b-0">
-              {{ c.msg }}
+              {{ c.message }}
             </div>
             <p class="chat-date text-muted mat-h5 m-0">
-              {{ c.date | date }}
+              {{ c.timestamp | date }}
             </p>
           </div>
         </div>
