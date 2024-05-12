@@ -28,22 +28,35 @@
                 {{ option }}
               </mat-option>
             </mat-select>
+            <mat-error
+              *ngIf="disciplineForm.controls['type'].invalid && (disciplineForm.controls['type'].dirty || disciplineForm.controls['type'].touched)">
+              Type est requis
+            </mat-error>
           </mat-form-field>
         </div>
         <div class="col-lg-6">
           <mat-form-field appearance="outline" class="w-100">
             <input type="number" matInput required id="fraisAdhesion" name="fraisAdhesion"
               [(ngModel)]="local_data.fraisAdhesion" placeholder="Frais d'Adhesion" />
+            <mat-error
+              *ngIf="disciplineForm.controls['fraisAdhesion'].invalid && (disciplineForm.controls['fraisAdhesion'].dirty || disciplineForm.controls['fraisAdhesion'].touched)">
+              Frais Adhesion est requis
+            </mat-error>
           </mat-form-field>
         </div>
         <div class="col-lg-6">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Manager</mat-label>
-            <mat-select required id="manager" name="manager" [ngModel]="local_data.manager?.id" (ngModelChange)="onManagerChange($event)">
+            <mat-select required id="manager" name="manager" [ngModel]="local_data.manager?.id"
+              (ngModelChange)="onManagerChange($event)">
               <mat-option *ngFor="let manager of managers" [value]="manager.id">
                 {{ manager.firstname }} {{ manager.lastname }}
               </mat-option>
             </mat-select>
+            <mat-error
+              *ngIf="disciplineForm.controls['manager'].invalid && (disciplineForm.controls['manager'].dirty || disciplineForm.controls['manager'].touched)">
+              Manager est requis
+            </mat-error>
           </mat-form-field>
         </div>
         <div class="col-lg-6" *ngIf="action === 'Add'">
@@ -54,42 +67,67 @@
                 {{ option }}
               </mat-option>
             </mat-select>
+            <mat-error
+              *ngIf="disciplineForm.controls['etat'].invalid && (disciplineForm.controls['etat'].dirty || disciplineForm.controls['etat'].touched)">
+              Etat est requis
+            </mat-error>
           </mat-form-field>
         </div>
         <div class="col-lg-6">
           <mat-form-field appearance="outline" class="w-100">
             <input type="text" matInput required id="description" name="description"
               [(ngModel)]="local_data.description" placeholder="Description" />
+            <mat-error
+              *ngIf="disciplineForm.controls['description'].invalid && (disciplineForm.controls['description'].dirty || disciplineForm.controls['description'].touched)">
+              Description est requis
+            </mat-error>
           </mat-form-field>
         </div>
         <!-- Adresse -->
         <div class="col-lg-6">
           <mat-form-field appearance="outline" class="w-100">
             <input type="text" matInput required id="rue" name="rue" [(ngModel)]="local_data.rue" placeholder="rue" />
+            <mat-error
+              *ngIf="disciplineForm.controls['rue'].invalid && (disciplineForm.controls['rue'].dirty || disciplineForm.controls['rue'].touched)">
+              Rue est requis
+            </mat-error>
           </mat-form-field>
         </div>
         <div class="col-lg-6">
           <mat-form-field appearance="outline" class="w-100">
             <input type="text" matInput required id="ville" name="ville" [(ngModel)]="local_data.ville"
               placeholder="ville" />
+            <mat-error
+              *ngIf="disciplineForm.controls['ville'].invalid && (disciplineForm.controls['ville'].dirty || disciplineForm.controls['ville'].touched)">
+              Ville est requis
+            </mat-error>
           </mat-form-field>
         </div>
         <div class="col-lg-6">
           <mat-form-field appearance="outline" class="w-100">
             <input type="text" matInput required id="codePostal" name="codePostal" [(ngModel)]="local_data.codePostal"
               placeholder="codePostal" />
+            <mat-error
+              *ngIf="disciplineForm.controls['codePostal'].invalid && (disciplineForm.controls['codePostal'].dirty || disciplineForm.controls['codePostal'].touched)">
+              Code Postal est requis
+            </mat-error>
           </mat-form-field>
         </div>
         <div class="col-lg-6">
           <mat-form-field appearance="outline" class="w-100">
             <input type="text" matInput required id="pays" name="pays" [(ngModel)]="local_data.pays"
               placeholder="pays" />
+            <mat-error
+              *ngIf="disciplineForm.controls['pays'].invalid && (disciplineForm.controls['pays'].dirty || disciplineForm.controls['pays'].touched)">
+              Pays est requis
+            </mat-error>
           </mat-form-field>
         </div>
       </div>
 
       <!-- Add other form fields based on your model properties -->
-      <button mat-flat-button (click)="doAction()" mat-flat-button color="primary" [disabled]="!disciplineForm.valid || uploadingImage">
+      <button mat-flat-button (click)="doAction()" mat-flat-button color="primary"
+        [disabled]="!disciplineForm.valid || uploadingImage">
         <span *ngIf="uploadingImage">Uploading Logo...</span>
         <span *ngIf="!uploadingImage">{{ action }}</span>
       </button>
