@@ -14,9 +14,9 @@ export class ManagerService {
 
   constructor(private http: HttpClient) {}
 
-  addRoleName(roleName: string, permissions: string[]): Observable<any> {
+  addRoleName(name: string, permissions: string[]): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    const requestBody = { roleName, permissions };
+    const requestBody = { name, permissions };
 
     return this.http.post<any>(`${this.apiUrl}/add-role-name`, requestBody, {
       withCredentials: true,
@@ -75,7 +75,7 @@ export class ManagerService {
     };
       console.log("this is service",requestBody);
 
-    return this.http.post<any>(`${this.apiUrl}/add-entraineur`, requestBody, { withCredentials: true, headers });
+    return this.http.post<any>(`${this.apiUrl}/add-coach`, requestBody, { withCredentials: true, headers });
   }
 
   addAdherent(managerData: Manager): Observable<any> {
@@ -84,7 +84,6 @@ export class ManagerService {
       email: managerData.email,
       firstname: managerData.firstname,
       lastname: managerData.lastname,
-      role: managerData.role,
       adresse: managerData.adresse,
       photo:managerData.photo
     };
@@ -100,17 +99,17 @@ export class ManagerService {
 
   updateEntraineur(managerData: Manager): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.put<any>(`${this.apiUrl}/update-manager?id=${managerData.id}`, managerData, {withCredentials: true, headers });
+    return this.http.put<any>(`${this.apiUrl}/update-coach?id=${managerData.id}`, managerData, {withCredentials: true, headers });
   }
 
   updateAdherent(managerData: Manager): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.put<any>(`${this.apiUrl}/update-manager?id=${managerData.id}`, managerData, {withCredentials: true, headers });
+    return this.http.put<any>(`${this.apiUrl}/update-adherent?id=${managerData.id}`, managerData, {withCredentials: true, headers });
   }
 
   updateParent(managerData: Manager): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.put<any>(`${this.apiUrl}/update-manager?id=${managerData.id}`, managerData, {withCredentials: true, headers });
+    return this.http.put<any>(`${this.apiUrl}/update-parent?id=${managerData.id}`, managerData, {withCredentials: true, headers });
   }
   
   getRoleNames(): Observable<RoleName[]> {
