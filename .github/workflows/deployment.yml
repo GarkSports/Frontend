@@ -1,9 +1,6 @@
 name: SSH Deployment
-
 on:
-  push:
-    branches:
-      - production
+  workflow_dispatch: # Manually trigger workflow
 
 jobs:
   deploy:
@@ -12,7 +9,6 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-
     - name: Setup SSH
       uses: webfactory/ssh-agent@v0.5.3
       with:
