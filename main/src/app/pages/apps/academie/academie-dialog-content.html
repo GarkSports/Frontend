@@ -89,8 +89,9 @@
       </div>
 
       <!-- Add other form fields based on your model properties -->
-      <button mat-flat-button (click)="doAction()" mat-flat-button color="primary" [disabled]="!disciplineForm.valid">
-        {{action}}
+      <button mat-flat-button (click)="doAction()" mat-flat-button color="primary" [disabled]="!disciplineForm.valid || uploadingImage">
+        <span *ngIf="uploadingImage">Uploading Logo...</span>
+        <span *ngIf="!uploadingImage">{{ action }}</span>
       </button>
       <button mat-stroked-button color="warn" class="m-l-8" (click)="closeDialog()">
         Cancel
