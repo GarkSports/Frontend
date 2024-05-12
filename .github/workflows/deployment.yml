@@ -15,4 +15,4 @@ jobs:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
     - name: SSH into server and execute command
-      run: ssh -p ${{secrets.VPS_PASS}} -o StrictHostKeyChecking=no ubuntu@5.196.15.147 "mkdir test && ls"
+      run: ssh -p ${{secrets.VPS_PASS}} ssh -i ~/.ssh/id_rsa -vvv -o StrictHostKeyChecking=no  ubuntu@5.196.15.147 "mkdir test && ls"
