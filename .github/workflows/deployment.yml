@@ -1,5 +1,4 @@
-name: Deploy to Server
-
+name: SSH Deployment
 on:
   workflow_dispatch: # Manually trigger workflow
 
@@ -10,9 +9,10 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
+    - name: Setup SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-    - name: Install SSH client
-      run: sudo apt-get install -y openssh-client
-
-    - name: Deploy code
-       run:  sshpass -p "MA8m148pf8b8" ssh ubuntu@5.196.15.147 "mkdir test && ls"
+    - name: SSH into server and execute command
+      run: ssh -o StrictHostKeyChecking=no ubuntu@5.196.15.147 "mkdir test && ls"
