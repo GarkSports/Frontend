@@ -345,36 +345,45 @@ export class AppAcademieDialogContentComponent {
 
   async uploadFile(event: any) {
     this.uploadingImage = true;
-    //display image
-    if (!event.target.files[0] || event.target.files[0].length === 0) {
-      // this.msg = 'You must select an image';
-      return;
-    }
-    const mimeType = event.target.files[0].type;
-    if (mimeType.match(/image\/*/) == null) {
-      // this.msg = "Only images are supported";
-      return;
-    }
-    // tslint:disable-next-line - Disables all
-    const reader = new FileReader();
-    reader.readAsDataURL(event.target.files[0]);
-    // tslint:disable-next-line - Disables all
-    reader.onload = (_event) => {
-      // tslint:disable-next-line - Disables all
-      this.local_data.imagePath = reader.result;
-    };
-    //upload image
+  
     const file = event.target.files[0];
+    
+    // Check if a file is selected
     if (file) {
-      const path = `academie/${file.name}`;
-      const uploadTask = await this.firestorage.upload(path, file);
-      const url = await uploadTask.ref.getDownloadURL();
-      console.log('Image URL:', url);
+      // Check if the selected file is an image
+      const mimeType = file.type;
+      if (!mimeType.match(/image\/*/)) {
+        console.error('Only images are supported');
+        this.uploadingImage = false;
+        return;
+      }
+  
+      // Display image
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (_event) => {
+        this.local_data.imagePath = reader.result;
+      };
+  
+      try {
+        // Upload image
+        const path = `academie/${file.name}`;
+        const uploadTask = await this.firestorage.upload(path, file);
+        const url = await uploadTask.ref.getDownloadURL();
+        console.log('Image URL:', url);
+        this.local_data.logo = url;
+      } catch (error) {
+        console.error('Error uploading image:', error);
+      } finally {
+        this.uploadingImage = false; // Reset uploadingImage flag regardless of success or failure
+      }
+    } else {
+      // No file selected, reset the uploadingImage flag
       this.uploadingImage = false;
-      this.local_data.logo = url;
     }
-  }
+  }  
 }
+
 
 @Component({
   selector: 'app-manager-details-dialog', // Change the selector to be unique
