@@ -15,5 +15,4 @@ jobs:
       run: sudo apt-get install -y openssh-client
 
     - name: Deploy code
-       run: |
-    sshpass -p "MA8m148pf8b8" ssh ubuntu@5.196.15.147 "mkdir test && ls"
+       run:  sshpass -p "MA8m148pf8b8" ssh ubuntu@5.196.15.147 "mkdir test && ls"
