@@ -155,11 +155,11 @@ export class AppRolesDialogContentComponent implements OnInit {
 
   doAction(): void {
     if (this.action === 'Add' && this.managerForm) {
-      const roleName = this.managerForm.get('roleName')?.value; // Add '?' for null check
+      const name = this.managerForm.get('roleName')?.value; // Add '?' for null check
       const permissions = this.managerForm.get('permissions')?.value; // Add '?' for null check
   
   
-      this.managerService.addRoleName(roleName, permissions).subscribe(
+      this.managerService.addRoleName(name, permissions).subscribe(
         (response) => {
           console.log('Role name added:', response);
           this.dialogRef.close(true);
