@@ -47,7 +47,10 @@
     <!-- Buttons for Save and Cancel -->
     <button mat-raised-button class="cancel-button" (click)="onCancelClick()">Cancel</button>
     <button mat-raised-button color="primary" [mat-dialog-close]="equipe" class="save-button"
-        (click)="onUpdateClick()">Update</button>
+        (click)="onUpdateClick()" [disabled]="uploadingImage">
+        <span *ngIf="uploadingImage">Uploading Logo...</span>
+        <span *ngIf="!uploadingImage">Update</span>
+    </button>
 </mat-dialog-actions>
 
 <style>

@@ -92,7 +92,7 @@ export class AcademieComponent implements AfterViewInit {
     );
   }
 
-  
+
   applyFilter(filterValue: string): void {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
@@ -290,6 +290,7 @@ export class AppAcademieDialogContentComponent {
   typeOptions = ['ACADEMY', 'CLUB'];
 
   managers: Manager[] = [];
+  uploadingImage: boolean = false;
 
   constructor(
     public datePipe: DatePipe,
@@ -321,7 +322,7 @@ export class AppAcademieDialogContentComponent {
   onManagerChange(managerId: any) {
     this.local_data.manager = this.managers.find(manager => manager.id === managerId);
   }
-  
+
 
   getManagers(academieId: number): void {
     this.academieService.getManagers(academieId).subscribe(
@@ -343,6 +344,7 @@ export class AppAcademieDialogContentComponent {
   }
 
   async uploadFile(event: any) {
+    this.uploadingImage = true;
     //display image
     if (!event.target.files[0] || event.target.files[0].length === 0) {
       // this.msg = 'You must select an image';
@@ -368,6 +370,7 @@ export class AppAcademieDialogContentComponent {
       const uploadTask = await this.firestorage.upload(path, file);
       const url = await uploadTask.ref.getDownloadURL();
       console.log('Image URL:', url);
+      this.uploadingImage = false;
       this.local_data.logo = url;
     }
   }
