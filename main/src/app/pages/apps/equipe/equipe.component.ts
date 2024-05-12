@@ -44,6 +44,7 @@ export class EquipeComponent implements AfterViewInit {
   entraineurs: Entraineur[] = [];
   genres = ['HOMME', 'FEMME', 'MIXTE'];
   equipeList: Equipe[] = [];
+  uploadingImage: boolean = false;
 
   equipe: Equipe;
 
@@ -125,6 +126,7 @@ export class EquipeComponent implements AfterViewInit {
   }
 
   async uploadFile(event: any) {
+    this.uploadingImage = true;
     const file = event.target.files[0];
     if (file) {
       const path = `academie/${file.name}`;
@@ -133,6 +135,7 @@ export class EquipeComponent implements AfterViewInit {
         const url = await snapshot.ref.getDownloadURL();
         console.log('Image URL:', url);
         this.equipe.logo = url; // Update the updatedAcademie.logo with the new URL
+        this.uploadingImage = false;
       }).catch(error => {
         console.error('Error uploading image:', error);
       });
@@ -259,6 +262,7 @@ export class UpdateEquipePopupComponent {
   genreEquipe: string[] = Object.values(GenreEquipe)
     .filter(value => typeof value === 'string')
     .map(value => String(value));
+    uploadingImage: boolean = false;
 
   constructor(public dialogRef: MatDialogRef<UpdateEquipePopupComponent>,
     @Inject(MAT_DIALOG_DATA) public equipe: Equipe, private equipeService: EquipeService, private firestorage: AngularFireStorage,) { }
@@ -296,6 +300,7 @@ export class UpdateEquipePopupComponent {
   }
 
   async uploadFile(event: any) {
+    this.uploadingImage = true;
     const file = event.target.files[0];
     if (file) {
       const path = `academie/${file.name}`;
@@ -304,6 +309,7 @@ export class UpdateEquipePopupComponent {
         const url = await snapshot.ref.getDownloadURL();
         console.log('Image URL:', url);
         this.equipe.logo = url; // Update the updatedAcademie.logo with the new URL
+        this.uploadingImage = false;
       }).catch(error => {
         console.error('Error uploading image:', error);
       });

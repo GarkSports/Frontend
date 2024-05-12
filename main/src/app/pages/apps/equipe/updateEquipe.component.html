@@ -5,15 +5,16 @@
     <div class="d-flex align-items-center m-b-16">
         <img class="mat-card-avatar" [src]="equipe.logo" class="rounded-circle" width="50" />
         <button mat-flat-button color="primary" class="m-l-16 input-file-button">
-          <input type="file" id="logo" name="logo" (change)="uploadFile($event)" #fileInput />
+            <input type="file" id="logo" name="logo" (change)="uploadFile($event)" #fileInput />
         </button>
-      </div>
+    </div>
 
     <div class="form-row" style="margin-top: 10px;">
         <div class="input-container">
             <mat-form-field appearance="outline">
                 <mat-label>Nom</mat-label>
                 <input matInput type="text" placeholder="Nom" [(ngModel)]="equipe.nom" required />
+                <mat-error *ngIf="!equipe.nom">Nom est requis</mat-error>
             </mat-form-field>
         </div>
         <div class="input-container">
@@ -22,6 +23,7 @@
                 <mat-select [(ngModel)]="equipe.genre" placeholder="Type Abonnement" required>
                     <mat-option *ngFor="let genre of genreEquipe" [value]="genre">{{ genre }}</mat-option>
                 </mat-select>
+                <mat-error *ngIf="!equipe.genre">Genre est requis</mat-error>
             </mat-form-field>
         </div>
     </div>
@@ -32,12 +34,14 @@
             <mat-form-field appearance="outline">
                 <mat-label>Groupe Age</mat-label>
                 <input matInput type="text" placeholder="Groupe Age" [(ngModel)]="equipe.groupeAge" required />
+                <mat-error *ngIf="!equipe.groupeAge">Groupe d'age est requis</mat-error>
             </mat-form-field>
         </div>
         <div class="input-container">
             <mat-form-field appearance="outline">
                 <mat-label>Couleur</mat-label>
                 <input matInput type="color" placeholder="Couleur" [(ngModel)]="equipe.couleur" required />
+                <mat-error *ngIf="!equipe.couleur">Couleur est requis</mat-error>
             </mat-form-field>
         </div>
     </div>
@@ -46,8 +50,11 @@
 <mat-dialog-actions>
     <!-- Buttons for Save and Cancel -->
     <button mat-raised-button class="cancel-button" (click)="onCancelClick()">Cancel</button>
-    <button mat-raised-button color="primary" [mat-dialog-close]="equipe" class="save-button"
-        (click)="onUpdateClick()">Update</button>
+    <button mat-raised-button color="primary" [mat-dialog-close]="equipe" class="save-button" (click)="onUpdateClick()"
+        [disabled]="!equipe.nom || !equipe.genre || !equipe.groupeAge || !equipe.couleur || uploadingImage">
+        <span *ngIf="uploadingImage">Uploading Logo...</span>
+        <span *ngIf="!uploadingImage">Update</span>
+    </button>
 </mat-dialog-actions>
 
 <style>

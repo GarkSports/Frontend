@@ -1,0 +1,18 @@
+name: SSH Deployment
+on:
+  workflow_dispatch: # Manually trigger workflow
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Setup SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - name: SSH into server and execute command
+      run: ssh -o StrictHostKeyChecking=no ubuntu@5.196.15.147 "mkdir test && ls"
