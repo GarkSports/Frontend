@@ -67,7 +67,10 @@
 </mat-dialog-content>
 <mat-dialog-actions>
   <!-- Buttons for Save and Cancel -->
-  <button mat-raised-button color="primary" (click)="onSave()">Enregistrer</button>
+  <button mat-raised-button color="primary" (click)="onSave()" [disabled]="uploadingImage">
+    <span *ngIf="uploadingImage">Uploading Logo...</span>
+    <span *ngIf="!uploadingImage">Enregistrer</span>
+  </button>
   <button mat-button mat-dialog-close color="warn" class="cancel-button">Annuler</button>
 </mat-dialog-actions>
 

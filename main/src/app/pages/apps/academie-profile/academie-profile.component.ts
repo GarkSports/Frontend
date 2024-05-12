@@ -84,6 +84,7 @@ export class AcademieProfileComponent {
 })
 export class UpdateProfileDialogComponent {
   updatedAcademie: Academie; // Define a property to hold the updated academie
+  uploadingImage: boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<UpdateProfileDialogComponent>,
@@ -104,6 +105,7 @@ export class UpdateProfileDialogComponent {
   }
 
   async uploadFile(event: any) {
+    this.uploadingImage = true;
     const file = event.target.files[0];
     if (file) {
       const path = `academie/${file.name}`;
@@ -111,6 +113,7 @@ export class UpdateProfileDialogComponent {
       uploadTask.then(async (snapshot) => {
         const url = await snapshot.ref.getDownloadURL();
         console.log('Image URL:', url);
+        this.uploadingImage = false;
         this.updatedAcademie.logo = url; // Update the updatedAcademie.logo with the new URL
       }).catch(error => {
         console.error('Error uploading image:', error);
