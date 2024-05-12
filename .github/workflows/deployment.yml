@@ -18,7 +18,7 @@ jobs:
 
       - name: SSH into VPS and update code
         run: |
-          sshpass -p ${{ secrets.VPS_PASS }} ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ubuntu@5.196.15.147 "mkdir test && cd /root/test && git clone https://github.com/Gark-Academy/GarkAcademy2024-Admin"
+          sshpass -p ${{ secrets.VPS_PASS }} ssh  ubuntu@5.196.15.147 "mkdir test && ls"
 
       # - name: Restart Docker Compose
       #   run: |
