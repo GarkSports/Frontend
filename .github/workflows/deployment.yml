@@ -11,7 +11,7 @@ jobs:
       uses: actions/checkout@v2
     
     - name: Install sshpass
-    #   run: sudo apt-get install -y sshpass
+       run: sudo apt-get install -y sshpass
     # - name: ssh
     #   run: sudo sshpass -p 'MA8m148pf8b8' ssh -o "StrictHostKeyChecking no" 5.196.15.147 "whoami"
     - name: SSH into VPS and update code
