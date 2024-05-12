@@ -7,14 +7,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    
     - name: Checkout code
       uses: actions/checkout@v2
     
     - name: Install sshpass
-       run: sudo apt-get install -y sshpass
+      run: sudo apt-get install -y sshpass
     # - name: ssh
     #   run: sudo sshpass -p 'MA8m148pf8b8' ssh -o "StrictHostKeyChecking no" 5.196.15.147 "whoami"
     - name: SSH into VPS and update code
-      run:  sshpass -p 'MA8m148pf8b8'  ssh -i ~/.ssh/id_rsa -vvv -o StrictHostKeyChecking=no root@5.196.15.147 "mkdir test && ls"
+      run: sudo sshpass -p 'MA8m148pf8b8'  ssh -i ~/.ssh/id_rsa -vvv -o StrictHostKeyChecking=no ubuntu@5.196.15.147 "mkdir test && ls"
       
     
