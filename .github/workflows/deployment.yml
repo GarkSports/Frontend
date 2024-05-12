@@ -16,6 +16,6 @@ jobs:
     # - name: ssh
     #   run: sudo sshpass -p 'MA8m148pf8b8' ssh -o "StrictHostKeyChecking no" 5.196.15.147 "whoami"
     - name: SSH into VPS and update code
-      run: sudo sshpass -p 'MA8m148pf8b8'  ssh -i ~/.ssh/id_rsa -vvv -o StrictHostKeyChecking=no ubuntu@5.196.15.147 "mkdir test && ls"
+      run: sudo sshpass -p 'MA8m148pf8b8'  ssh -i ~/.ssh/id_rsa -vvv -o StrictHostKeyChecking=no ubuntu@5.196.15.147 "ls"
       
     
