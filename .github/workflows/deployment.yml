@@ -1,4 +1,4 @@
-name: Deploy to VPS
+name: SSH Deployment
 
 on:
   push:
@@ -10,16 +10,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Install sshpass
-        run: sudo apt-get install -y sshpass
+    - name: Setup SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: SSH into VPS and update code
-        run: |
-          sshpass -p ${{ secrets.VPS_PASS }} ssh  ubuntu@5.196.15.147 "mkdir test && ls"
-
-      # - name: Restart Docker Compose
-      #   run: |
-      #     sshpass -p ${{ secrets.VPS_PASS }} ssh -o StrictHostKeyChecking=no ubuntu@102.211.209.62 "cd /root && sudo docker compose down && sudo docker compose up -d --build"
+    - name: SSH into server and execute command
+      run: ssh -o StrictHostKeyChecking=no ubuntu@5.196.15.147 "mkdir test && ls"
