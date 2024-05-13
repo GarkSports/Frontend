@@ -59,7 +59,7 @@ export class AcademieProfileComponent {
         const url = await snapshot.ref.getDownloadURL();
         console.log('Image URL:', url);
         this.academie.backgroundImage = url; // Update the academie.backgroundImage with the new URL
-        
+
         // Call the service method to update the Academie background
         this.academieService.updateAcademieBackground(this.academie.id, url).subscribe(response => {
           console.log(response); // Log the response from the API
@@ -70,7 +70,7 @@ export class AcademieProfileComponent {
         console.error('Error uploading image:', error);
       });
     }
-}
+  }
 
 
 
@@ -117,7 +117,11 @@ export class UpdateProfileDialogComponent {
         this.updatedAcademie.logo = url; // Update the updatedAcademie.logo with the new URL
       }).catch(error => {
         console.error('Error uploading image:', error);
+      }).finally(() => {
+        this.uploadingImage = false; // Reset uploadingImage flag regardless of success or failure
       });
+    } else {
+      this.uploadingImage = false; // Reset uploadingImage flag if no file is selected (canceled)
     }
   }
 }

@@ -125,6 +125,7 @@ export class EquipeComponent implements AfterViewInit {
     }
   }
 
+  // Modify your uploadFile method to call the resetUploadStatus method
   async uploadFile(event: any) {
     this.uploadingImage = true;
     const file = event.target.files[0];
@@ -135,10 +136,13 @@ export class EquipeComponent implements AfterViewInit {
         const url = await snapshot.ref.getDownloadURL();
         console.log('Image URL:', url);
         this.equipe.logo = url; // Update the updatedAcademie.logo with the new URL
-        this.uploadingImage = false;
       }).catch(error => {
         console.error('Error uploading image:', error);
+      }).finally(() => {
+        this.uploadingImage = false; // Reset uploadingImage flag regardless of success or failure
       });
+    } else {
+      this.uploadingImage = false; // Reset uploadingImage flag if no file is selected (canceled)
     }
   }
 
@@ -262,7 +266,7 @@ export class UpdateEquipePopupComponent {
   genreEquipe: string[] = Object.values(GenreEquipe)
     .filter(value => typeof value === 'string')
     .map(value => String(value));
-    uploadingImage: boolean = false;
+  uploadingImage: boolean = false;
 
   constructor(public dialogRef: MatDialogRef<UpdateEquipePopupComponent>,
     @Inject(MAT_DIALOG_DATA) public equipe: Equipe, private equipeService: EquipeService, private firestorage: AngularFireStorage,) { }
@@ -312,7 +316,11 @@ export class UpdateEquipePopupComponent {
         this.uploadingImage = false;
       }).catch(error => {
         console.error('Error uploading image:', error);
+      }).finally(() => {
+        this.uploadingImage = false; // Reset uploadingImage flag regardless of success or failure
       });
+    } else {
+      this.uploadingImage = false; // Reset uploadingImage flag if no file is selected (canceled)
     }
   }
 }
