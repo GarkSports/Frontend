@@ -84,6 +84,7 @@ export class ManagerService {
       email: managerData.email,
       firstname: managerData.firstname,
       lastname: managerData.lastname,
+      role:managerData.role,
       adresse: managerData.adresse,
       photo:managerData.photo
     };
@@ -125,7 +126,7 @@ export class ManagerService {
   }
 
   getManagers(): Observable<Manager[]> {
-    return this.http.get<Manager[]>(`${this.apiUrl}/get-all-users`, { withCredentials: true });
+    return this.http.get<Manager[]>(`${this.apiUrl}/get-users`, { withCredentials: true });
   }
 
   getManagerById(ManagerId: number): Observable<Academie> {
