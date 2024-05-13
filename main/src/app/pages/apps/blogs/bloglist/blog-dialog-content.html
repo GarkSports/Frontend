@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>{{action}}</h2>
 
-@if(action !== 'Delete') {
+@if(action !== 'Supprimer') {
 <mat-dialog-content style="max-width: 600px" class="mat-typography m-t-24">
   <form #postForm="ngForm">
     <div class="row">
@@ -13,7 +13,7 @@
             id="title"
             name="title"
             [(ngModel)]="local_data.title"
-            placeholder="post title"
+            placeholder="Ajouter Un Titre"
           />
         </mat-form-field>
       </div>
@@ -40,7 +40,7 @@
             id="subtitle"
             name="subtitle"
             [(ngModel)]="local_data.subtitle"
-            placeholder="post subtitle"
+            placeholder="Ajouter Un Sous Titre"
           />
         </mat-form-field>
       </div>
@@ -53,37 +53,37 @@
             id="body"
             name="body"
             [(ngModel)]="local_data.body"
-            placeholder="ADD TEXT TO POST BODY"
+            placeholder="Ajouter Une Publication "
           />
         </mat-form-field>
       </div>
       <div class="col-sm-6 col-lg-12">
         <mat-form-field appearance="outline" class="w-100">
-          <mat-label>category</mat-label>
-          <select
+          <mat-label>Catégorie</mat-label>
+          <mat-select
             matNativeControl
             required
-            name="category"
+            name="Catégorie"
             [(ngModel)]="local_data.category"
           >
-            <option value="football">Football</option>
-            <option value="basketball">Basketball</option>
-            <option value="Tennis">Tennis</option>
-          </select>
+            <mat-option value="football">Football</mat-option>
+            <mat-option value="basketball">Basketball</mat-option>
+            <mat-option value="Tennis">Tennis</mat-option>
+          </mat-select>
         </mat-form-field>
       </div>
       <div class="col-sm-6 col-lg-12">
         <mat-form-field appearance="outline" class="w-100">
-          <mat-label>PublicAudience</mat-label>
-          <select
+          <mat-label>Visibilité</mat-label>
+          <mat-select
             matNativeControl
             required
-            name="publicAudience"
+            name="PublicAudience"
             [(ngModel)]="local_data.publicAudience"
           >
-            <option [ngValue]="0">Privé</option>
-            <option [ngValue]="1">Public</option>
-          </select>
+            <mat-option [value]="0">Privé</mat-option>
+            <mat-option [value]="1">Public</mat-option>
+          </mat-select>
         </mat-form-field>
       </div>
     </div>
@@ -91,7 +91,7 @@
 </mat-dialog-content>
 } @else {
 <div class="p-x-24 p-b-24">
-  Sure to delete <span class="f-w-600">{{local_data.title}}</span>?
+  Confirmez-vous la suppression ? <span class="f-w-600">{{local_data.title}}</span>?
 </div>
 }
 
@@ -101,6 +101,6 @@
   </button>
    
   <button mat-stroked-button color="warn" (click)="closeDialog()">
-    Cancel
+    Annulé
   </button>
 </div>
