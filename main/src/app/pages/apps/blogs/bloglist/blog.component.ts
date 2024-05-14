@@ -9,6 +9,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { BlogPosts } from 'src/models/posts.model';
 import { PostsService } from 'src/app/services/posts.service';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { EquipeService } from 'src/app/services/equipe.service';
+import { Discipline } from 'src/models/discipline.model';
 
 
 
@@ -25,6 +27,8 @@ export class AppBloglistComponent implements AfterViewInit {
   Closed = -1;
   Inprogress = -1;
   Open = -1;
+  
+
 
   displayedColumns: string[] = [
  'createdAt',
@@ -34,13 +38,16 @@ export class AppBloglistComponent implements AfterViewInit {
     'publicAudience',
     'action',
   ];
+
+  
   
   
   dataSource = new MatTableDataSource<BlogPosts>([]);
-
+ 
   constructor(
     public dialog: MatDialog,
-    public postservice: PostsService
+    public postservice: PostsService,
+   
     ) {}
 
   ngOnInit(): void {
@@ -70,6 +77,8 @@ export class AppBloglistComponent implements AfterViewInit {
       }
     );
   }
+
+  
 
   applyFilter(filterValue: string): void {
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -158,14 +167,23 @@ export class AppBlogDialogContentComponent {
   action: string;
   // tslint:disable-next-line - Disables all
   local_data: any;
+  disciplines: Discipline[] = [];
 
   constructor(
     private firestorage: AngularFireStorage,
     public dialogRef: MatDialogRef<AppBlogDialogContentComponent>,
+    private equipeService: EquipeService,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: BlogPosts
   ) {
     this.local_data = { ...data };
     this.action = this.local_data.action;
+    this.getDisciplines();
+
+  }
+
+  getDisciplines(): void {
+    this.equipeService.getDisciplines()
+      .subscribe(disciplines => this.disciplines = disciplines);
   }
 
   doAction(): void {

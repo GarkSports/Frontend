@@ -59,16 +59,12 @@
       </div>
       <div class="col-sm-6 col-lg-12">
         <mat-form-field appearance="outline" class="w-100">
-          <mat-label>Catégorie</mat-label>
-          <mat-select
-            matNativeControl
-            required
-            name="Catégorie"
-            [(ngModel)]="local_data.category"
+          <mat-label>Discipline</mat-label>
+          <mat-select  matNativeControl   required  name="Catégorie" [(ngModel)]="local_data.category"
           >
-            <mat-option value="football">Football</mat-option>
-            <mat-option value="basketball">Basketball</mat-option>
-            <mat-option value="Tennis">Tennis</mat-option>
+          <mat-option *ngFor="let discipline of disciplines" [value]="discipline.nom">
+            {{ discipline.nom }}
+        </mat-option>
           </mat-select>
         </mat-form-field>
       </div>
@@ -80,6 +76,7 @@
             required
             name="PublicAudience"
             [(ngModel)]="local_data.publicAudience"
+            required
           >
             <mat-option [value]="0">Privé</mat-option>
             <mat-option [value]="1">Public</mat-option>
@@ -96,7 +93,7 @@
 }
 
 <div mat-dialog-actions class="p-24 p-t-0">
-  <button mat-flat-button (click)="doAction()" color="primary" [disabled]="!local_data.title || !local_data.subtitle || !local_data.body || !local_data.category">
+  <button mat-flat-button (click)="doAction()" color="primary" [disabled]="!local_data.title || !local_data.subtitle || !local_data.body || !local_data.category ">
     {{action}}
   </button>
    

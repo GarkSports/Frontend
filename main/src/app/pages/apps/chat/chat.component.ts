@@ -15,8 +15,8 @@ export class AppChatComponent implements OnInit {
 
   // MESSAGE
   selectedMessage: any;
-  selectedDiscussion: any;
-  selectedContact: number;
+  selectedDiscussion: ChatDTO[];
+  selectedContact: ChatContactDTO;
 
 
   public messages: Array<any> = messages;
@@ -36,7 +36,7 @@ export class AppChatComponent implements OnInit {
         
         // If there are discussions available, select the first one
         if (this.chatService.contactList.length > 0) {
-          const firstDiscussionId = this.chatService.contactList[0].userId;
+          const firstDiscussionId = this.chatService.contactList[0];
           this.onSelect(firstDiscussionId);
         }
       });
@@ -45,7 +45,7 @@ export class AppChatComponent implements OnInit {
       console.log('ngOnInit OK');
     }
   }
-  
+  @ViewChild('chatContainer', { static: false }) chatContainer: ElementRef;
 
   
 
@@ -57,18 +57,18 @@ export class AppChatComponent implements OnInit {
   }
 
   // tslint:disable-next-line - Disables all
-  onSelect(message: number): void {
-    console.log('eeeeeeeeeeeee', message);
-  this.selectedMessage = message;
+  onSelect(contact: ChatContactDTO): void {
+    console.log('eeeeeeeeeeeee', contact);
+  this.selectedMessage = contact.username;
   
   // Call the service method to get the discussion
-  this.chatService.getDiscussion(message).subscribe((d: ChatDTO[]) => {
+  this.chatService.getDiscussion(contact.userId).subscribe((d: ChatDTO[]) => {
     // Update the discussion list in the service
     this.chatService.discussionList = d;
     
     // Assign the discussion list to selectedDiscussion
     this.selectedDiscussion = this.chatService.discussionList;
-    this.selectedContact = message;
+    this.selectedContact = contact;
     
     // Log the discussion list (optional)
     console.log('this.selectedMessage', this.selectedDiscussion);
@@ -82,11 +82,11 @@ export class AppChatComponent implements OnInit {
   
     if (this.msg !== '') {
       console.log('sending message');
-      this.chatService.sendMessage(this.selectedContact, this.msg).subscribe(
+      this.chatService.sendMessage(this.selectedContact.userId, this.msg).subscribe(
         () => {
           console.log('Message sent successfully');
           // Refresh the discussion after sending the message
-          this.chatService.getDiscussion(this.selectedContact).subscribe((d: ChatDTO[]) => {
+          this.chatService.getDiscussion(this.selectedContact.userId).subscribe((d: ChatDTO[]) => {
             // Update the discussion list in the service
             this.chatService.discussionList = d;
             
@@ -105,6 +105,12 @@ export class AppChatComponent implements OnInit {
     }
   
     this.myInput.nativeElement.value = '';
+    this.scrollToBottom();
+  }
+  scrollToBottom(): void {
+    try {
+      this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
+    } catch(err) { }
   }
   
 }
