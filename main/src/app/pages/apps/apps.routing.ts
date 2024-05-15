@@ -60,6 +60,7 @@ export const AppsRoutes: Routes = [
       },
       {
         path: 'calendar',
+        canActivate: [isManagerGuard],
         component: AppFullcalendarComponent,
         data: {
           title: 'Calendar',
