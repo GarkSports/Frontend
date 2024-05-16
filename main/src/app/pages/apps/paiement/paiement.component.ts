@@ -66,7 +66,7 @@ export class PaiementComponent implements AfterViewInit {
     // After sorting, reassign the sorted data to the dataSource
     this.dataSource = new MatTableDataSource<Paiement>(this.dataSource.data);
   }
-  
+
 
   applyFilter(filterValue: string): void {
     // Convert filter value to lowercase for case-insensitive comparison
@@ -155,9 +155,14 @@ export class PaiementComponent implements AfterViewInit {
     this.selectedStatut = null;
     this.selectedEquipe = null;
     this.selectedSortingOption = '';
+    this.getPaiements();
 
     // Apply filters again to refresh the data
     this.applyFilter('');
+  }
+
+  formatEnumValue(value: string): string {
+    return value.replace(/_/g, ' ');
   }
 
   ngOnInit(): void {
@@ -248,18 +253,18 @@ export class PaiementComponent implements AfterViewInit {
     });
   }
 
-    openUpdateDialog(paiement: Paiement): void {
-      const dialogRef = this.dialog.open(PaiementDetailsPopupComponent, {
-        data: paiement
-      });
+  openUpdateDialog(paiement: Paiement): void {
+    const dialogRef = this.dialog.open(PaiementDetailsPopupComponent, {
+      data: paiement
+    });
 
-      dialogRef.afterClosed().subscribe(updatedPaiement => {
-        if (updatedPaiement) {
-          // Handle dialog result if needed
-          this.getPaiements();
-        }
-      });
-    }
+    dialogRef.afterClosed().subscribe(updatedPaiement => {
+      if (updatedPaiement) {
+        // Handle dialog result if needed
+        this.getPaiements();
+      }
+    });
+  }
 
   openAddPaiementDialog(): void {
     // Initialize a new instance of Paiement and assign it to the dialog data

@@ -16,12 +16,8 @@
         </div>
         <div class="col-lg-6">
           <mat-form-field appearance="outline" class="w-100">
-            <input type="text" matInput required id="description" name="description"
-              [(ngModel)]="local_data.description" placeholder="Description" />
-            <mat-error
-              *ngIf="disciplineForm.controls['description'].invalid && (disciplineForm.controls['description'].dirty || disciplineForm.controls['description'].touched)">
-              Description est requis
-            </mat-error>
+            <input type="text" matInput id="description" name="description" [(ngModel)]="local_data.description"
+              placeholder="Description" />
           </mat-form-field>
         </div>
       </div>

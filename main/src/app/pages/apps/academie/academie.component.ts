@@ -20,6 +20,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { AcademieHistory } from 'src/models/academieHistory.models';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { User } from 'src/models/user.model';
+import { AcademieType } from 'src/models/enums/academie-type.model';
+import { Etat } from 'src/models/enums/etat.model';
 
 @Component({
   templateUrl: './academie.component.html',
@@ -43,6 +45,94 @@ export class AcademieComponent implements AfterViewInit {
     'etatHistory',
     'action',
   ];
+  selectedSortingOption: string;
+  selectedType: string | null = null;
+  selectedEtat: string | null = null;
+  typeOptions: string[] = Object.values(AcademieType).filter(value => typeof value === 'string').map(value => String(value));
+  etatOptions2: string[] = Object.values(Etat).filter(value => typeof value === 'string').map(value => String(value));
+  sortingOptions = [
+    { value: 'asc', viewValue: 'Ascendant' },
+    { value: 'desc', viewValue: 'Descendant' }
+  ];
+
+  applySorting() {
+    if (this.selectedSortingOption === 'asc') {
+      this.dataSource.data.sort((a, b) => {
+        const academieA = `${a.nom}`.toLowerCase();
+        const academieB = `${b.nom}`.toLowerCase();
+        return academieA.localeCompare(academieB);
+      });
+    } else if (this.selectedSortingOption === 'desc') {
+      this.dataSource.data.sort((a, b) => {
+        const academieA = `${a.nom}`.toLowerCase();
+        const academieB = `${b.nom}`.toLowerCase();
+        return academieB.localeCompare(academieA);
+      });
+    }
+    // After sorting, reassign the sorted data to the dataSource
+    this.dataSource = new MatTableDataSource<Academie>(this.dataSource.data);
+  }
+
+  // Helper function to check if a value matches the filter
+  matchesFilter(value: any, filter: string): boolean {
+    // Convert value to string if it's not already
+    const stringValue = value ? value.toString().toLowerCase() : '';
+    // Check if the string value contains the filter value
+    return stringValue.includes(filter);
+  }
+
+  applyFilterByType(): void {
+    // Apply the filter by Equipe if selectedEquipe is not null
+    if (this.selectedType !== null) {
+      // Convert filter value to lowercase for case-insensitive comparison
+      const filter = this.selectedType.trim().toLowerCase();
+
+      // Set filter function for data source
+      this.dataSource.filterPredicate = (data: Academie, filter: string) => {
+        // Check if Equipe matches the selected Equipe
+        return this.matchesFilter(data.type, filter);
+      };
+
+      // Apply the filter
+      this.dataSource.filter = filter;
+    } else {
+      // Reset the filter if selectedEquipe is null
+      this.applyFilter('');
+    }
+  }
+
+  applyFilterByEtat(): void {
+    // Apply the filter by Equipe if selectedEquipe is not null
+    if (this.selectedEtat !== null) {
+      // Convert filter value to lowercase for case-insensitive comparison
+      const filter = this.selectedEtat.trim().toLowerCase();
+
+      // Set filter function for data source
+      this.dataSource.filterPredicate = (data: Academie, filter: string) => {
+        // Check if Equipe matches the selected Equipe
+        return this.matchesFilter(data.etat, filter);
+      };
+
+      // Apply the filter
+      this.dataSource.filter = filter;
+    } else {
+      // Reset the filter if selectedEquipe is null
+      this.applyFilter('');
+    }
+  }
+
+  resetFilters(): void {
+    // Reset selected filters
+    this.selectedType = null;
+    this.selectedEtat = null;
+    this.selectedSortingOption = '';
+    this.getAcademies();
+
+    // Apply filters again to refresh the data
+    this.applyFilter('');
+  }
+
+
 
   getEtatColor(etat: string): { backgroundColor: string } {
     switch (etat) {
@@ -345,9 +435,9 @@ export class AppAcademieDialogContentComponent {
 
   async uploadFile(event: any) {
     this.uploadingImage = true;
-  
+
     const file = event.target.files[0];
-    
+
     // Check if a file is selected
     if (file) {
       // Check if the selected file is an image
@@ -357,14 +447,14 @@ export class AppAcademieDialogContentComponent {
         this.uploadingImage = false;
         return;
       }
-  
+
       // Display image
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = (_event) => {
         this.local_data.imagePath = reader.result;
       };
-  
+
       try {
         // Upload image
         const path = `academie/${file.name}`;
@@ -381,7 +471,7 @@ export class AppAcademieDialogContentComponent {
       // No file selected, reset the uploadingImage flag
       this.uploadingImage = false;
     }
-  }  
+  }
 }
 
 
