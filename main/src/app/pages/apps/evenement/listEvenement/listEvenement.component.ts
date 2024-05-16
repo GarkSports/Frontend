@@ -4,9 +4,11 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { EquipeService } from 'src/app/services/equipe.service';
 import { EvenementService } from 'src/app/services/evenement.service';
-import { ExtendedEventDTO } from 'src/models/dto/ExtendedEventDTO.model';
+import { EvenementType } from 'src/models/enums/evenementType';
 import { StatutEvenement } from 'src/models/enums/statutEvenenement.model';
+import { Equipe } from 'src/models/equipe.model';
 import { Evenement } from 'src/models/evenement.model';
 
 @Component({
@@ -19,17 +21,27 @@ export class ListEvenementComponent implements AfterViewInit {
   selectedComponent: string = '/apps/listevenement';
   statutOptions: string[] = Object.values(StatutEvenement).filter(value => typeof value === 'string').map(value => String(value));
 
+  typeEventsFilter: string[] = Object.values(EvenementType).filter(value => typeof value === 'string').map(value => String(value));
+  equipes: Equipe[] = [];
+
+
+  selectedEventTypes: string[] = [];
+  selectedEquipes: string[] = [];
+
+  showCheckboxes1: boolean = true;
+  showCheckboxes2: boolean = true;
+
+
   displayedColumns: string[] = [
     'nom',
     'type',
     'equipe',
-    'member',
     'date',
     'statut',
     'action'
   ];
 
-  dataSource = new MatTableDataSource<ExtendedEventDTO>([]);
+  dataSource = new MatTableDataSource<Evenement>([]);
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator =
     Object.create(null);
@@ -37,27 +49,115 @@ export class ListEvenementComponent implements AfterViewInit {
   constructor(
     public dialog: MatDialog,
     public datePipe: DatePipe,
-    public evenementService: EvenementService
+    public evenementService: EvenementService,
+    public equipeService: EquipeService,
   ) { }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
     this.getEvenements();
+    this.getEquipes();
   }
+
+  applyFilterByType(filterValue: string): void {
+    if (this.selectedEventTypes.includes(filterValue)) {
+      // If the filter value is already selected, remove it from the selectedEventTypes array
+      this.selectedEventTypes = this.selectedEventTypes.filter(type => type !== filterValue);
+    } else {
+      // Otherwise, add the filter value to the selectedEventTypes array
+      this.selectedEventTypes.push(filterValue);
+    }
+
+    // Set the filter predicate based on the selected event types
+    this.dataSource.filterPredicate = (event: Evenement) => {
+      // Check if event.type is not undefined
+      if (event.type !== undefined) {
+        // If no types are selected, show all events
+        if (this.selectedEventTypes.length === 0) {
+          return true;
+        } else {
+          // Check if the event type matches any of the selected types
+          return this.selectedEventTypes.includes(event.type.toString());
+        }
+      }
+      // Return false if event.type is undefined
+      return false;
+    };
+
+    // Apply the filter value as an empty string to trigger the filterPredicate
+    this.dataSource.filter = 'applyFilter';
+  }
+
+  applyFilterByEquipe(filterValue: string): void {
+    if (this.selectedEquipes.includes(filterValue)) {
+        // If the filter value is already selected, remove it from the selectedEquipes array
+        this.selectedEquipes = this.selectedEquipes.filter(equipe => equipe !== filterValue);
+    } else {
+        // Otherwise, add the filter value to the selectedEquipes array
+        this.selectedEquipes.push(filterValue);
+    }
+
+    // Set the filter predicate based on the selected teams
+    this.dataSource.filterPredicate = (event: Evenement) => {
+        // Check if event.equipe is not undefined
+        if (event.convocationEquipe !== undefined && event.convocationEquipe?.nom !== undefined) {
+            // If no teams are selected, show all events
+            if (this.selectedEquipes.length === 0) {
+                return true;
+            } else {
+                // Check if the event equipe matches any of the selected teams
+                return this.selectedEquipes.includes(event.convocationEquipe.nom);
+            }
+        }
+        // Return false if event.equipe is undefined
+        return false;
+    };
+
+    // Apply the filter value as an empty string to trigger the filterPredicate
+    this.dataSource.filter = 'applyFilter';
+}
+
+
+
+
+
+
+
 
   applyFilter(filterValue: string): void {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
+  toggleCheckboxesVisibility1() {
+    this.showCheckboxes1 = !this.showCheckboxes1;
+  }
+
+  toggleCheckboxesVisibility2() {
+    this.showCheckboxes2 = !this.showCheckboxes2;
+  }
+
   getEvenements(): void {
-    this.evenementService.extendEvents().subscribe(
-      (extendedEvents) => {
-        console.log('Extended events fetched successfully', extendedEvents);
+    this.evenementService.getEvenements().subscribe(
+      (evenements) => {
+        console.log('evenements fetched successfully', evenements);
         // Assuming dataSource is defined in your component
-        this.dataSource.data = extendedEvents;
+        this.dataSource.data = evenements;
       },
       (error) => {
-        console.error('Error fetching extended events', error);
+        console.error('Error fetching evenements', error);
+      }
+    );
+  }
+
+  getEquipes(): void {
+    this.equipeService.getEquipes().subscribe(
+      (equipes) => {
+        console.log('equipes fetched successfully', equipes);
+        // Assuming dataSource is defined in your component
+        this.equipes = equipes;
+      },
+      (error) => {
+        console.error('Error fetching equipes', error);
       }
     );
   }
