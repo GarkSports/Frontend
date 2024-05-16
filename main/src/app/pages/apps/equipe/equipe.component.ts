@@ -36,6 +36,92 @@ export class EquipeComponent implements AfterViewInit {
     'action'
   ];
 
+  selectedSortingOption: string;
+  selectedGenreEquipe: string | null = null;
+  selectedDiscipline: string | null = null;
+  genreEquipeOptions: string[] = Object.values(GenreEquipe).filter(value => typeof value === 'string').map(value => String(value));
+  sortingOptions = [
+    { value: 'asc', viewValue: 'Ascendant' },
+    { value: 'desc', viewValue: 'Descendant' }
+  ];
+
+  applySorting() {
+    if (this.selectedSortingOption === 'asc') {
+      this.dataSource.data.sort((a, b) => {
+        const equipeA = `${a.nom}`.toLowerCase();
+        const equipeB = `${b.nom}`.toLowerCase();
+        return equipeA.localeCompare(equipeB);
+      });
+    } else if (this.selectedSortingOption === 'desc') {
+      this.dataSource.data.sort((a, b) => {
+        const equipeA = `${a.nom}`.toLowerCase();
+        const equipeB = `${b.nom}`.toLowerCase();
+        return equipeB.localeCompare(equipeA);
+      });
+    }
+    // After sorting, reassign the sorted data to the dataSource
+    this.dataSource = new MatTableDataSource<Equipe>(this.dataSource.data);
+  }
+
+  // Helper function to check if a value matches the filter
+  matchesFilter(value: any, filter: string): boolean {
+    // Convert value to string if it's not already
+    const stringValue = value ? value.toString().toLowerCase() : '';
+    // Check if the string value contains the filter value
+    return stringValue.includes(filter);
+  }
+
+  applyFilterByGenreEquipe(): void {
+    // Apply the filter by Equipe if selectedEquipe is not null
+    if (this.selectedGenreEquipe !== null) {
+      // Convert filter value to lowercase for case-insensitive comparison
+      const filter = this.selectedGenreEquipe.trim().toLowerCase();
+
+      // Set filter function for data source
+      this.dataSource.filterPredicate = (data: Equipe, filter: string) => {
+        // Check if Equipe matches the selected Equipe
+        return this.matchesFilter(data.genre, filter);
+      };
+
+      // Apply the filter
+      this.dataSource.filter = filter;
+    } else {
+      // Reset the filter if selectedEquipe is null
+      this.applyFilter('');
+    }
+  }
+
+  applyFilterByDiscipline(): void {
+    // Apply the filter by Equipe if selectedEquipe is not null
+    if (this.selectedDiscipline !== null) {
+      // Convert filter value to lowercase for case-insensitive comparison
+      const filter = this.selectedDiscipline.trim().toLowerCase();
+
+      // Set filter function for data source
+      this.dataSource.filterPredicate = (data: Equipe, filter: string) => {
+        // Check if Equipe matches the selected Equipe
+        return this.matchesFilter(data.discipline?.nom, filter);
+      };
+
+      // Apply the filter
+      this.dataSource.filter = filter;
+    } else {
+      // Reset the filter if selectedEquipe is null
+      this.applyFilter('');
+    }
+  }
+
+  resetFilters(): void {
+    // Reset selected filters
+    this.selectedGenreEquipe = null;
+    this.selectedDiscipline = null;
+    this.selectedSortingOption = '';
+    this.getEquipes();
+
+    // Apply filters again to refresh the data
+    this.applyFilter('');
+  }
+
   dataSource = new MatTableDataSource<Equipe>([]);
 
   members: Adherent[] = [];
