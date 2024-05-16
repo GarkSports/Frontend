@@ -9,7 +9,6 @@ import { PersonnaliseRequest } from 'src/models/dto/PersonnaliseRequest.model';
 import { TestRequest } from 'src/models/dto/TestRequest.model';
 import { MatchAmicalRequest } from 'src/models/dto/MatchAmicalRequest.model';
 import { StatutEvenement } from 'src/models/enums/statutEvenenement.model';
-import { ExtendedEventDTO } from 'src/models/dto/ExtendedEventDTO.model';
 
 @Injectable({
   providedIn: 'root'
@@ -46,10 +45,6 @@ export class EvenementService {
 
   getEvenements(): Observable<Evenement[]> {
     return this.http.get<Evenement[]>(`${this.apiEvenement}/getAllEvenements`);
-  }
-
-  extendEvents(): Observable<ExtendedEventDTO[]> {
-    return this.http.get<ExtendedEventDTO[]>(`${this.apiEvenement}/extendEvents`);
   }
 
   deleteEvenement(idEvenement: number): Observable<void> {

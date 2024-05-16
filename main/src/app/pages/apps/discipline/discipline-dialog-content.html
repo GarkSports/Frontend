@@ -7,48 +7,26 @@
       <div class="row">
         <div class="col-lg-6">
           <mat-form-field appearance="outline" class="w-100">
-            <input
-              type="text"
-              matInput
-              required
-              id="nom"
-              name="nom"
-              [(ngModel)]="local_data.nom"
-              placeholder="Nom"
-            />
+            <input type="text" matInput required id="nom" name="nom" [(ngModel)]="local_data.nom" placeholder="Nom" />
+            <mat-error
+              *ngIf="disciplineForm.controls['nom'].invalid && (disciplineForm.controls['nom'].dirty || disciplineForm.controls['nom'].touched)">
+              Nom est requis
+            </mat-error>
           </mat-form-field>
         </div>
         <div class="col-lg-6">
           <mat-form-field appearance="outline" class="w-100">
-            <input
-              type="text"
-              matInput
-              required
-              id="description"
-              name="description"
-              [(ngModel)]="local_data.description"
-              placeholder="Description"
-            />
+            <input type="text" matInput id="description" name="description" [(ngModel)]="local_data.description"
+              placeholder="Description" />
           </mat-form-field>
         </div>
       </div>
       <!-- Add other form fields based on your model properties -->
 
-      <button
-        mat-flat-button
-        (click)="doAction()"
-        mat-flat-button
-        color="primary"
-        [disabled]="!disciplineForm.valid"
-      >
+      <button mat-flat-button (click)="doAction()" mat-flat-button color="primary" [disabled]="!disciplineForm.valid">
         {{action}}
       </button>
-      <button
-        mat-stroked-button
-        color="warn"
-        class="m-l-8"
-        (click)="closeDialog()"
-      >
+      <button mat-stroked-button color="warn" class="m-l-8" (click)="closeDialog()">
         Cancel
       </button>
     </form>

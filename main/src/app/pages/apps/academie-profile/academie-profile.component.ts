@@ -59,7 +59,7 @@ export class AcademieProfileComponent {
         const url = await snapshot.ref.getDownloadURL();
         console.log('Image URL:', url);
         this.academie.backgroundImage = url; // Update the academie.backgroundImage with the new URL
-        
+
         // Call the service method to update the Academie background
         this.academieService.updateAcademieBackground(this.academie.id, url).subscribe(response => {
           console.log(response); // Log the response from the API
@@ -70,7 +70,7 @@ export class AcademieProfileComponent {
         console.error('Error uploading image:', error);
       });
     }
-}
+  }
 
 
 
@@ -84,6 +84,7 @@ export class AcademieProfileComponent {
 })
 export class UpdateProfileDialogComponent {
   updatedAcademie: Academie; // Define a property to hold the updated academie
+  uploadingImage: boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<UpdateProfileDialogComponent>,
@@ -104,6 +105,7 @@ export class UpdateProfileDialogComponent {
   }
 
   async uploadFile(event: any) {
+    this.uploadingImage = true;
     const file = event.target.files[0];
     if (file) {
       const path = `academie/${file.name}`;
@@ -111,10 +113,15 @@ export class UpdateProfileDialogComponent {
       uploadTask.then(async (snapshot) => {
         const url = await snapshot.ref.getDownloadURL();
         console.log('Image URL:', url);
+        this.uploadingImage = false;
         this.updatedAcademie.logo = url; // Update the updatedAcademie.logo with the new URL
       }).catch(error => {
         console.error('Error uploading image:', error);
+      }).finally(() => {
+        this.uploadingImage = false; // Reset uploadingImage flag regardless of success or failure
       });
+    } else {
+      this.uploadingImage = false; // Reset uploadingImage flag if no file is selected (canceled)
     }
   }
 }

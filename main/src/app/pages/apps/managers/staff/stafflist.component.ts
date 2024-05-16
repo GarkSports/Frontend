@@ -14,6 +14,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Role,RoleArray  } from 'src/models/enums/role.model';
 import { RoleName, RoleNameArray } from 'src/models/roleName.models';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-staff-list',
@@ -43,6 +44,8 @@ export class AppStafflistComponent implements OnInit {
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator =
   Object.create(null);
+  @ViewChild(MatSort, { static: true }) sort: MatSort = Object.create(null);
+
   roleNames: string[] = [];
 
 
@@ -50,10 +53,35 @@ export class AppStafflistComponent implements OnInit {
               public datePipe: DatePipe,
               public managerService: ManagerService){}
 
+
+  displayedData: any[] = [];
+
   ngOnInit(): void {
     this.dataSource = new MatTableDataSource<Manager>([]);
     this.fetchRoleNames();
+    this.getManagers();
     //this.table.renderRows();
+  }
+
+  getManagers(): void {
+    this.managerService.getManagers().subscribe(
+      (managers) => {
+        console.log('Managers fetched successfully', managers);
+        this.dataSource.data = managers;
+      },
+      (error) => {
+        console.error('Error fetching academies', error);
+      }
+    );
+  }
+
+  fetchData() {
+    // Call your service to fetch the data
+    this.managerService.getManagers().subscribe(data => {
+      this.displayedData = data;
+      this.dataSource = new MatTableDataSource(this.displayedData);
+      this.dataSource.sort = this.sort;
+    });
   }
 
   fetchRoleNames(): void {
@@ -80,7 +108,7 @@ export class AppStafflistComponent implements OnInit {
     this.dataSource.filter = val.trim().toLowerCase();
     return this.dataSource.filteredData.length;
   }
-
+  
   openDialog(action: string, obj: any): void {
     obj.action = action;
     const dialogRef = this.dialog.open(AppStaffDialogContentComponent, {
@@ -90,20 +118,24 @@ export class AppStafflistComponent implements OnInit {
     //here we will just reload or display the changes instantly but the real work will be in the dialog
     dialogRef.afterClosed().subscribe((result) => {
       if (result.event === 'Add') {
-        this.addRowData(result.data.managerData); // add the user in the page just display it 
+        this.addRowData(result.data.managerData);
       } else if (result.event === 'Update') {
         this.updateRowData(result.data);
-      // } else if (result.event === 'Delete') {
-      //   this.deleteRowData(result.data);
-      } else if (result.event === 'Block'){
+      } else if (result.event === 'Delete') {
+        this.deleteRowData(result.data);
+      } else if (result.event === 'Block') {
         this.blockRowData(result.data);
+      } else if (result.event === 'UnBlock') {
+        this.unblockRowData(result.data);
       }
-      // else if (result.event === 'UnBlock'){
-      //   this.unblockRowData(result.data.managerData);
-      // }
+      this.getManagers();
+
     });
   }
 
+  deleteRowData(deletedData: any) {
+    this.displayedData = this.displayedData.filter(item => item.id !== deletedData.id);
+  }
   // openUpdateDialog(paiement: Paiement): void {
   //   const dialogRef = this.dialog.open(PaiementDetailsPopupComponent, {
   //     data: paiement
@@ -185,17 +217,6 @@ export class AppStafflistComponent implements OnInit {
     // );
   }
 
-  getManagers(): void {
-    this.managerService.getManagers().subscribe(
-      (managers) => {
-        console.log('Managers fetched successfully', managers);
-        this.dataSource.data = managers;
-      },
-      (error) => {
-        console.error('Error fetching academies', error);
-      }
-    );
-  }
 }
  
 @Component({
@@ -241,9 +262,11 @@ export class AppStaffDialogContentComponent implements OnInit {
 
   }
   
+  displayedData: any[] = [];
+
   ngOnInit(): void {
     this.initManagerForm();
-    this.dataSource = new MatTableDataSource<string>([]);
+    //this.dataSource = new MatTableDataSource<string>([]);
     this.getOnlyRoleNames();
   }
   
@@ -280,15 +303,14 @@ export class AppStaffDialogContentComponent implements OnInit {
   
   initManagerForm(): void {
     this.managerForm = this.formBuilder.group({
-      firstname: [this.local_data.firstname, Validators.required],
-      lastname: [this.local_data.lastname, Validators.required],
-      email: [this.local_data.email, [Validators.required, Validators.email]],
-      adresse: [this.local_data.adresse, Validators.required],
+      firstname: [this.local_data.firstname],
+      lastname: [this.local_data.lastname],
+      email: [this.local_data.email, [Validators.email]], // Remove Validators.required
+      adresse: [this.local_data.adresse],
       role: [this.local_data.role, Validators.required],
       roleName: this.local_data.role === 'ADHERENT' || 'PARENT' ? null : [this.local_data.roleName],
-      photo: [null] 
-      });
-
+      photo: [null]
+    });
   }
 
   // fetchRoleNames(): void {
@@ -312,98 +334,55 @@ export class AppStaffDialogContentComponent implements OnInit {
     );
   }
 
+  fetchData() {
+    // Call your service to fetch the data
+    this.managerService.getManagers().subscribe(data => {
+      this.displayedData = data;
+      this.dataSource = new MatTableDataSource(this.displayedData);
+      //this.dataSource.sort = this.sort;
+    });
+  }
 
   doAction(): void {
     if (this.action === 'Add') {
       const role = this.managerForm.get('role')?.value;
       this.sendRequestBasedOnRole(role);
     }
-  else if (this.action === 'Update') {
-    // Handle Update action
-    if (this.managerForm.valid) {
-      const updatedManager = this.managerForm.value;
-      updatedManager.id = this.local_data.id; // Set the id of the manager to be updated
-      var role = updatedManager.role;
-      switch(role){
-        case 'STAFF':
-          if (this.managerForm.valid) {
-          this.managerService.updateStaff(this.managerForm.value).subscribe(
-            (response) => {
-              console.log(this.managerForm.value); // Handle successful response
-              console.log('Manager updated:', response);
-              this.dialogRef.close(true);
-              this.getManagers();
-            },
-            (error) => {
-              // Handle error
-              console.error('Error adding manager:', error);
-            }
-          );
-        } else {
-          console.error('Form is not valid. Please fill out all required fields.');
+    else if (this.action === 'Update') {
+      
+        const updatedManager = this.managerForm.value;
+        updatedManager.id = this.local_data.id; // Set the id of the manager to be updated
+        const role = updatedManager.role;
+        let updateObservable;
+        switch(role){
+          case 'STAFF':
+            updateObservable = this.managerService.updateStaff(updatedManager);
+            break;
+          case 'ENTRAINEUR':
+            updateObservable = this.managerService.updateEntraineur(updatedManager);
+            break;
+          case 'ADHERENT':
+            updateObservable = this.managerService.updateAdherent(updatedManager);
+            break;
+          case 'PARENT':
+            updateObservable = this.managerService.updateParent(updatedManager);
+            break;
+          default:
+            console.error('Invalid role:', role);
+            return; // Exit function if role is invalid
         }
-          break;
-      case 'ENTRAINEUR':
-        if (this.managerForm.valid) {
-        this.managerService.updateEntraineur(this.managerForm.value).subscribe(
+        updateObservable.subscribe(
           (response) => {
-            console.log(this.managerForm.value); // Handle successful response
-            console.log('Manager added:', response);
+            console.log('Manager updated:', response);
             this.dialogRef.close(true);
           },
           (error) => {
-            // Handle error
-            console.error('Error adding manager:', error);
+            console.error('Error updating manager:', error);
           }
         );
-      } else {
-        console.error('Form is not valid. Please fill out all required fields.');
-      }
-        break;
-      case 'ADHERENT':
-        if (this.managerForm.valid) {
-        this.managerService.updateAdherent(this.managerForm.value).subscribe(
-          (response) => {
-            console.log(this.managerForm.value); // Handle successful response
-            console.log('adherent added:', response);
-            this.dialogRef.close(true);
-          },
-          (error) => {
-            // Handle error
-            console.error('Error adding manager:', error);
-            // Also, log the error object
-            console.log(error);
-          }
-        );
-      } else {
-        console.error('Form is not valid. Please fill out all required fields.');
-      }
-        break;
-      case 'PARENT':
-        if (this.managerForm.valid) {
-        this.managerService.updateParent(this.managerForm.value).subscribe(
-          (response) => {
-            console.log(this.managerForm.value); // Handle successful response
-            console.log('adherent added:', response);
-            this.dialogRef.close(true);
-          },
-          (error) => {
-            // Handle error
-            console.error('Error adding manager:', error);
-            // Also, log the error object
-            console.log(error);
-          }
-        );
-      } else {
-        console.error('Form is not valid. Please fill out all required fields.');
-      }
-        break;
-      default:
-        break;
-    
-      } 
+      
     }
-  }
+    
   if (this.action === 'Block') {
     const blockAction = this.local_data.blocked ? 'unBlockManager' : 'blockManager';
     this.managerService[blockAction](this.local_data.id).subscribe(
@@ -512,9 +491,9 @@ export class AppStaffDialogContentComponent implements OnInit {
       const url = await uploadTask.ref.getDownloadURL();
       console.log('Image URL:', url);
       this.local_data.photo = url;
-      this.managerForm.patchValue({
-        photo: url
-      });
+      // this.managerForm.patchValue({
+      //   photo: url
+      // });
     }
   }
   
