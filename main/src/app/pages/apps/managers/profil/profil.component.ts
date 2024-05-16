@@ -8,7 +8,7 @@ import {
 import { MatPaginator } from '@angular/material/paginator';
 import { Manager } from 'src/models/manager.model';
 import { ManagerService } from 'src/app/services/manager.service';
-import { DatePipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Academie } from 'src/models/academie.model';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Roles } from 'src/models/roles.model';
@@ -17,8 +17,8 @@ import { TablerIconsModule } from 'angular-tabler-icons';
 
 @Component({
   selector: 'app-profil',
-  standalone: true,
-  imports: [MaterialModule, TablerIconsModule, ReactiveFormsModule],
+  
+  //imports: [MaterialModule, TablerIconsModule, ReactiveFormsModule],
   templateUrl: './profil.component.html',
 })
 
@@ -26,9 +26,11 @@ export class AppProfilComponent implements OnInit {
   managerForm: FormGroup;
   local_data: any;
   action: string;
-
+  equipes: string[];
   dataSource = new MatTableDataSource<string>([]);
   managerSource = new MatTableDataSource<Manager>([]);
+  //dataSource = new MatTableDataSource<Manager>([]);
+  userRole: string = '';
 
   constructor(
     private dialog: MatDialog, 
@@ -37,9 +39,10 @@ export class AppProfilComponent implements OnInit {
     private formBuilder: FormBuilder
   ) {
     this.local_data = { ...data };
-    //this.action = this.local_data.action;
-    console.log("data", this.local_data); // Log local_data instead of data
-  
+    this.userRole = this.local_data.role;
+    console.log("data", this.local_data);
+    console.log("userRole", this.userRole);
+    
     this.initManagerForm();
   }
   
@@ -49,6 +52,12 @@ export class AppProfilComponent implements OnInit {
     this.dataSource = new MatTableDataSource<string>([]);
     this.getProfil();
     console.log("this.local_data",this.local_data);
+    const userRole = this.local_data.role;
+    if (userRole === 'ADHERENT') {
+      // Do something based on the role
+      console.log('User role is ADHERENT');
+    }
+    console.log("userRole", userRole);
     
   }
 
@@ -69,7 +78,11 @@ export class AppProfilComponent implements OnInit {
         this.local_data = profil;
         console.log("this.local_data.data", this.local_data);
         console.log("local_data lastname", this.local_data.lastname);
+        this.userRole = this.local_data.role;
+        console.log("userRole", this.userRole);
+
         this.initManagerForm();
+
       },
       (error) => {
         console.error('Error fetching academies', error);
@@ -83,6 +96,11 @@ export class AppProfilComponent implements OnInit {
         firstname: [this.local_data.firstname, Validators.required],
         lastname: [this.local_data.lastname, Validators.required],
         email: [this.local_data.email, Validators.required],
+        adresse: [this.local_data.adresse, Validators.required],
+        telephone: [this.local_data.telephone, Validators.required],
+        roleName: [this.local_data.roleName, Validators.required],
+        nationalite: [this.local_data.nationalite, Validators.required],
+        niveauScolaire: [this.local_data.niveauScolaire, Validators.required],
 
         });
   

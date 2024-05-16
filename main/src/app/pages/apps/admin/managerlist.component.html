@@ -6,41 +6,41 @@
         <div class="row">
           <div class="col-lg-4">
             <mat-form-field appearance="outline" class="w-100 hide-hint gray-background">
-              <mat-label>Filtrer par nom</mat-label>
-
-                  <mat-select >
-                  <mat-option value="asc">De A à Z</mat-option>
-                  <mat-option value="desc">De Z à A</mat-option>
+              <mat-label>Trier par Membre</mat-label>
+              <mat-select [(ngModel)]="selectedSortingOption" (selectionChange)="applySorting()">
+                <mat-option *ngFor="let sortingOption of sortingOptions" [value]="sortingOption.value">{{ sortingOption.viewValue }}</mat-option>
               </mat-select>
           </mat-form-field>
           
           </div>
           <div class="col-lg-4">
             <mat-form-field appearance="outline" class="w-100 hide-hint gray-background">
-              <mat-label>Filtrer par équipe</mat-label>
-
-              <mat-select >
-                  <mat-option value="asc">De A à Z</mat-option>
-                  <mat-option value="desc">De Z à A</mat-option>
+              <mat-label>Filtrer par académie</mat-label>
+              <mat-select [(ngModel)]="selectedAcademie" (selectionChange)="applyFilterByAcademie()">
+                <mat-option *ngFor="let academie of academieOptions" [value]="academie">{{ academie }}</mat-option>
               </mat-select>
           </mat-form-field>
           
           </div>
-          <div class="col-lg-4">
+          <div class="col-lg-3">
             <mat-form-field appearance="outline" class="w-100 hide-hint gray-background">
-              <mat-label>Filtrer par équipe</mat-label>
-
-              <mat-select>
-                  <mat-option value="asc">De A à Z</mat-option>
-                  <mat-option value="desc">De Z à A</mat-option>
+              <mat-label>Filtrer par statut</mat-label>
+              <mat-select [(ngModel)]="selectedStatut" (selectionChange)="applyFilterByStatut()">
+                <mat-option *ngFor="let statut of statutOptions" [value]="statut">
+                  @if(statut==='true'){
+                    Bloqué                  
+                  }
+                  @else {
+                    Activé
+                  }
+                </mat-option>
               </mat-select>
-          </mat-form-field>
-          
-          </div>
+            </mat-form-field>
+          </div>          
           
         </div>
         <div class="col-lg-1 d-flex align-items-center justify-content-end">
-          <button mat-icon-button color="primary" style="color: gray;">
+          <button mat-icon-button color="primary" (click)="resetFilters()" style="color: gray;">
             <mat-icon>refresh</mat-icon>
           </button>
         </div>
@@ -98,9 +98,7 @@
               Academie
             </th>
             <td mat-cell *matCellDef="let element" class="f-s-14">
-              @if(element.academie){
-                {{ element.academie.nom }}
-              }
+                {{ element.academie?.nom }}
             </td>
           </ng-container>
 
@@ -110,6 +108,24 @@
             </th>
             <td mat-cell *matCellDef="let element" class="f-s-14">
             {{ element.telephone }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="telephone2">
+            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+              Téléphone 2
+            </th>
+            <td mat-cell *matCellDef="let element" class="f-s-14">
+            {{ element.telephone2 }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="adresse">
+            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+              Adresse
+            </th>
+            <td mat-cell *matCellDef="let element" class="f-s-14">
+            {{ element.adresse }}
             </td>
           </ng-container>
   
