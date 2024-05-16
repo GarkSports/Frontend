@@ -13,6 +13,7 @@ import { Equipe } from 'src/models/equipe.model';
 import { Adherent } from 'src/models/adherent.model';
 import { PersonnaliseRequest } from 'src/models/dto/PersonnaliseRequest.model';
 import { Evenement } from 'src/models/evenement.model';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'add-personnalise',
@@ -32,7 +33,8 @@ export class AddPersonnaliseComponent {
 
     constructor(
         private _formBuilder: FormBuilder,
-        private eventService: EvenementService
+        private eventService: EvenementService,
+        private router: Router
     ) {}
 
     ngOnInit(): void {
@@ -90,6 +92,7 @@ export class AddPersonnaliseComponent {
                     console.log('Evenement personnalisé added successfully:', response);
                     // Reset the form after successful submission
                     this.evenementForm.reset();
+                    this.router.navigate(['/apps/listevenement']);
                 },
                 (error) => {
                     console.error('Error adding evenement personnalisé:', error);
