@@ -14,12 +14,26 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ManagerService } from 'src/app/services/manager.service';
 import { MatSelectChange } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
+import { StatutManager } from 'src/models/enums/statutManager';
+import { AcademieService } from 'src/app/services/academie.service';
 
 @Component({
   selector: 'app-manager-list',
   templateUrl: './managerlist.component.html',
 })
 export class AppManagerlistComponent implements OnInit {
+
+  statutOptions: string[] = ['true', 'false'];
+  selectedAcademie: string | null = null;
+  academieOptions: string[] = [];
+  selectedSortingOption: string | null = null;
+  selectedStatut: string | null = null;
+  sortingOptions = [
+    { value: 'asc', viewValue: 'Ascendant' },
+    { value: 'desc', viewValue: 'Descendant' }
+  ];
+
+
   @ViewChild(MatTable, { static: true }) table: MatTable<any> =
     Object.create(null);
   searchText: any;
@@ -32,7 +46,9 @@ export class AppManagerlistComponent implements OnInit {
     'firstname',
     'email',
     'telephone',   
+    'telephone2',
     'academie',
+    'adresse',
     'status',
     'action',
   ];
@@ -44,29 +60,145 @@ export class AppManagerlistComponent implements OnInit {
 
   constructor(public dialog: MatDialog,
               public datePipe: DatePipe,
-              public adminService: AdminService){}
+              public adminService: AdminService,
+              public academieService: AcademieService){}
 
   displayedData: any[] = [];
-  sortOrder: string = 'asc'; // default sorting order
+  //sortOrder: string = 'asc'; // default sorting order
 
   ngOnInit(): void {
-    this.dataSource = new MatTableDataSource<Manager>([]);
-
+    //this.dataSource = new MatTableDataSource<Manager>([]);
+    this.getAcademies();
     this.fetchData();
     this.getManagers();
     //this.sortData();
   }
 
-  applyFilter(filterValue: string) {
-    // Convert the filter value to lowercase
-    filterValue = filterValue.trim().toLowerCase();
-    // Apply the filter to the dataSource
-    this.dataSource.filter = filterValue;
+  applyFilterByStatut(): void {
+    // Apply the filter by Statut if selectedStatut is not null
+    if (this.selectedStatut !== null) {
+      // Convert the selectedStatut to lowercase for case-insensitive comparison
+      const filter = this.selectedStatut.trim().toLowerCase();
   
-    // Reset the sort after filtering
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
+      // Set filter function for data source
+      this.dataSource.filterPredicate = (data: Manager, filter: string) => {
+        // Check if the statut matches the filter value exactly
+        return data.blocked.toString().toLowerCase() === filter;
+      };
+  
+      // Apply the filter
+      this.dataSource.filter = filter;
+    } else {
+      // Reset the filter if selectedStatut is null
+      this.applyFilter('');
     }
+  }
+
+  applySorting() {
+    if (this.selectedSortingOption === 'asc') {
+      this.dataSource.data.sort((a, b) => {
+        const memberA = `${a.firstname} ${a.lastname}`.toLowerCase();
+        const memberB = `${b.firstname} ${b.lastname}`.toLowerCase();
+        return memberA.localeCompare(memberB);
+      });
+    } else if (this.selectedSortingOption === 'desc') {
+      this.dataSource.data.sort((a, b) => {
+        const memberA = `${a.firstname} ${a.lastname}`.toLowerCase();
+        const memberB = `${b.firstname} ${b.lastname}`.toLowerCase();
+        return memberB.localeCompare(memberA);
+      });
+    }
+    // After sorting, reassign the sorted data to the dataSource
+    this.dataSource = new MatTableDataSource<Manager>(this.dataSource.data);
+  }
+
+//   matchesFilter(value: string | undefined, filter: string): boolean {
+//   if (value === undefined || value === null) {
+//     return false;
+//   }
+
+//   return value.includes(filter);
+// }
+
+matchesFilter(value: any, filter: string): boolean {
+  // Convert value to string if it's not already
+  const stringValue = value ? value.toString().toLowerCase() : '';
+  // Check if the string value contains the filter value
+  return stringValue.includes(filter);
+}
+
+getAcademies(): void {
+  this.academieService.getAcademies().subscribe((academies: Academie[]) => {
+    this.academieOptions = academies.map((academie: Academie) => academie.nom);
+  });
+}
+
+  applyFilterByAcademie(): void {
+    // Apply the filter by Academie if selectedAcademie is not null
+    if (this.selectedAcademie !== null) {
+      // Convert filter value to lowercase for case-insensitive comparison
+      const filter = this.selectedAcademie.trim().toLowerCase();
+  
+      // Set filter function for data source
+      this.dataSource.filterPredicate = (data: Manager, filter: string) => {
+        // Check if Academie matches the selected Academie
+        return this.matchesFilter(data.academie?.nom, filter);
+      };
+  
+      // Apply the filter
+      this.dataSource.filter = filter;
+    } else {
+      // Reset the filter if selectedAcademie is null
+      this.applyFilter('');
+    }
+  }
+
+  applyFilter(filterValue: string): void {
+    // Convert filter value to lowercase for case-insensitive comparison
+    const filter = filterValue.trim().toLowerCase();
+  
+    // Split the filter value into individual words
+    const filterWords = filter.split(' ');
+  
+    // Set filter function for data source
+    this.dataSource.filterPredicate = (data: Manager, filter: string) => {
+      // Check if any attribute matches all the filter words
+      return filterWords.every(word =>
+        this.matchesFilter(data.firstname, word) ||
+        this.matchesFilter(data.lastname, word) ||
+        this.matchesFilter([data.firstname,data.lastname],  word) ||
+        this.matchesFilter(data.email, word) ||
+        this.matchesFilter(data.telephone, word) ||
+        this.matchesFilter(data.adresse, word) ||
+        this.matchesFilter(data.nomEquipe, word) ||
+        this.matchesFilter(data.role, word) ||
+        this.matchesFilter(data.roleName, word)
+      );
+    };
+  
+    this.dataSource.filter = filter;
+  }
+
+  // applyFilter(filterValue: string) {
+  //   // Convert the filter value to lowercase
+  //   filterValue = filterValue.trim().toLowerCase();
+  //   // Apply the filter to the dataSource
+  //   this.dataSource.filter = filterValue;
+  
+  //   // Reset the sort after filtering
+  //   if (this.dataSource.paginator) {
+  //     this.dataSource.paginator.firstPage();
+  //   }
+  // }
+
+  resetFilters(): void {
+    // Reset selected filters
+    this.selectedAcademie = null;
+    this.selectedStatut = null;
+    this.selectedSortingOption = '';
+
+    // Apply filters again to refresh the data
+    this.applyFilter('');
   }
 
   getManagers(): void {
@@ -184,6 +316,7 @@ export class AppManagerDialogContentComponent implements OnInit {
   local_data: any;
   managerForm: FormGroup;
   firstnameValue: string;
+  isPasswordVisible: boolean = false;
 
   dataSource = new MatTableDataSource<Manager>([]);
 
@@ -212,8 +345,14 @@ export class AppManagerDialogContentComponent implements OnInit {
       lastname: [this.local_data.lastname, Validators.required],
       email: [this.local_data.email, [Validators.required, Validators.email]],
       adresse: [this.local_data.adresse, Validators.required],
-      telephone: [this.local_data.telephone, Validators.required]
+      telephone: [this.local_data.telephone, Validators.required],
+      telephone2: [this.local_data.telephone2],
+      password: ['', [Validators.required]]
+
     });
+  }
+  togglePasswordVisibility(): void {
+    this.isPasswordVisible = !this.isPasswordVisible;
   }
   getManagers(): void {
     this.adminService.getManagers().subscribe(
@@ -253,7 +392,7 @@ export class AppManagerDialogContentComponent implements OnInit {
    
     } else if (this.action === 'Update') {
       // Handle Update action
-      if (this.managerForm.valid) {
+      
         const updatedManager = this.managerForm.value;
         updatedManager.id = this.local_data.id; // Set the id of the manager to be updated
         
@@ -267,7 +406,7 @@ export class AppManagerDialogContentComponent implements OnInit {
             console.error('Error updating manager', error);
           }
         );
-      }
+      
     } 
     else if (this.action === 'Block') {
       if (this.local_data.blocked) {

@@ -11,10 +11,13 @@ import { ManagerService } from 'src/app/services/manager.service';
 import { DatePipe } from '@angular/common';
 import { Academie } from 'src/models/academie.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Role,RoleArray  } from 'src/models/enums/role.model';
+import { Role, RoleArray } from 'src/models/enums/role.model';
 import { RoleName, RoleNameArray } from 'src/models/roleName.models';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { MatSort } from '@angular/material/sort';
+import { Observable, forkJoin } from 'rxjs';
+import { PaiementService } from 'src/app/services/paiement.service';
+import { Equipe } from 'src/models/equipe.model';
 
 @Component({
   selector: 'app-staff-list',
@@ -23,44 +26,174 @@ import { MatSort } from '@angular/material/sort';
 export class AppStafflistComponent implements OnInit {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> =
     Object.create(null);
-  searchText: any;
-  totalCount = -1;
-  Closed = -1;
-  Inprogress = -1;
-  Open = -1;
 
   displayedColumns: string[] = [
     'photo',
     'firstname',
     'email',
     'roleName',
-    'telephone',   
+    'telephone',
     'equipe',
+    'adresse',
     'status',
     'action',
   ];
-  
+
   dataSource = new MatTableDataSource<Manager>([]);
 
+  statutOptions: string[] = ['true', 'false'];
+  selectedEquipe: string | null = null;
+  nomEquipeOptions: string[] = [];
+  rolesOptions: string[] = [];
+  selectedSortingOption: string | null = null;
+  selectedStatut: string | null = null;
+  sortingOptions = [
+    { value: 'asc', viewValue: 'Ascendant' },
+    { value: 'desc', viewValue: 'Descendant' },
+  ];
+
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator =
-  Object.create(null);
+    Object.create(null);
   @ViewChild(MatSort, { static: true }) sort: MatSort = Object.create(null);
 
+  action: string;
+  local_data: any;
   roleNames: string[] = [];
+  managerForm: FormGroup;
 
-
-  constructor(public dialog: MatDialog,
-              public datePipe: DatePipe,
-              public managerService: ManagerService){}
-
-
+  constructor(
+    public dialog: MatDialog,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: Manager,
+    public datePipe: DatePipe,
+    public managerService: ManagerService,
+    private formBuilder: FormBuilder,
+    private paiementService: PaiementService
+  ) {
+    this.local_data = { ...data };
+    this.action = this.local_data.action;
+  }
   displayedData: any[] = [];
 
   ngOnInit(): void {
     this.dataSource = new MatTableDataSource<Manager>([]);
     this.fetchRoleNames();
     this.getManagers();
-    //this.table.renderRows();
+    this.getEquipeNames();
+   // this.getRolesOptions();
+  }
+
+  applyFilterByStatut(): void {
+    // Apply the filter by Statut if selectedStatut is not null
+    if (this.selectedStatut !== null) {
+      // Convert the selectedStatut to lowercase for case-insensitive comparison
+      const filter = this.selectedStatut.trim().toLowerCase();
+
+      // Set filter function for data source
+      this.dataSource.filterPredicate = (data: Manager, filter: string) => {
+        // Check if the statut matches the filter value exactly
+        return data.blocked.toString().toLowerCase() === filter;
+      };
+
+      // Apply the filter
+      this.dataSource.filter = filter;
+    } else {
+      // Reset the filter if selectedStatut is null
+      this.applyFilter('');
+    }
+  }
+  
+  // getRolesOptions(): void {
+  //   this.managerService.getOnlyRoleNames().subscribe((roles: RoleName[]) => {
+  //     this.rolesOptions = roles.map((role: RoleName) => role);
+  //   });
+  // }
+  
+
+  getEquipeNames(): void {
+    this.paiementService.getEquipes().subscribe((equipes: Equipe[]) => {
+      this.nomEquipeOptions = equipes.map((equipe: Equipe) => equipe.nom);
+    });
+  }
+
+  applyFilterByEquipe(): void {
+    // Apply the filter by Equipe if selectedEquipe is not null
+    if (this.selectedEquipe !== null) {
+      // Convert filter value to lowercase for case-insensitive comparison
+      const filter = this.selectedEquipe.trim().toLowerCase();
+
+      // Set filter function for data source
+      this.dataSource.filterPredicate = (data: Manager, filter: string) => {
+        // Check if Equipe matches the selected Equipe
+        return this.matchesFilter(data.nomEquipe, filter);
+      };
+
+      // Apply the filter
+      this.dataSource.filter = filter;
+    } else {
+      // Reset the filter if selectedEquipe is null
+      this.applyFilter('');
+    }
+  }
+
+  matchesFilter(value: any, filter: string): boolean {
+    // Convert value to string if it's not already
+    const stringValue = value ? value.toString().toLowerCase() : '';
+    // Check if the string value contains the filter value
+    return stringValue.includes(filter);
+  }
+
+  applyFilter(filterValue: string): void {
+    // Convert filter value to lowercase for case-insensitive comparison
+    const filter = filterValue.trim().toLowerCase();
+  
+    // Split the filter value into individual words
+    const filterWords = filter.split(' ');
+  
+    // Set filter function for data source
+    this.dataSource.filterPredicate = (data: Manager, filter: string) => {
+      // Check if any attribute matches all the filter words
+      return filterWords.every(word =>
+        this.matchesFilter(data.firstname, word) ||
+        this.matchesFilter(data.lastname, word) ||
+        this.matchesFilter([data.firstname,data.lastname],  word) ||
+        this.matchesFilter(data.email, word) ||
+        this.matchesFilter(data.telephone, word) ||
+        this.matchesFilter(data.adresse, word) ||
+        this.matchesFilter(data.nomEquipe, word) ||
+        this.matchesFilter(data.role, word) ||
+        this.matchesFilter(data.roleName, word)
+      );
+    };
+  
+    this.dataSource.filter = filter;
+  }
+
+  applySorting() {
+    if (this.selectedSortingOption === 'asc') {
+      this.dataSource.data.sort((a, b) => {
+        const memberA = `${a.firstname} ${a.lastname}`.toLowerCase();
+        const memberB = `${b.firstname} ${b.lastname}`.toLowerCase();
+        return memberA.localeCompare(memberB);
+      });
+    } else if (this.selectedSortingOption === 'desc') {
+      this.dataSource.data.sort((a, b) => {
+        const memberA = `${a.firstname} ${a.lastname}`.toLowerCase();
+        const memberB = `${b.firstname} ${b.lastname}`.toLowerCase();
+        return memberB.localeCompare(memberA);
+      });
+    }
+    // After sorting, reassign the sorted data to the dataSource
+    this.dataSource = new MatTableDataSource<Manager>(this.dataSource.data);
+  }
+
+  resetFilters(): void {
+    // Reset selected filters
+    this.selectedEquipe = null;
+    this.selectedStatut = null;
+    this.selectedSortingOption = '';
+
+    // Apply filters again to refresh the data
+    this.applyFilter('');
   }
 
   getManagers(): void {
@@ -75,118 +208,164 @@ export class AppStafflistComponent implements OnInit {
     );
   }
 
-  fetchData() {
-    // Call your service to fetch the data
-    this.managerService.getManagers().subscribe(data => {
-      this.displayedData = data;
-      this.dataSource = new MatTableDataSource(this.displayedData);
-      this.dataSource.sort = this.sort;
-    });
-  }
-
   fetchRoleNames(): void {
-    this.managerService.getRoleNames().subscribe(roleNames => {
+    this.managerService.getRoleNames().subscribe((roleNames) => {
       //this.roleNames = roleNames;
       this.dataSource.paginator = this.paginator;
-
     });
   }
 
   ngAfterViewInit(): void {
-    this.managerService.getManagers().subscribe(managers => {
+    this.managerService.getManagers().subscribe((managers) => {
       this.dataSource.data = managers;
       this.dataSource.paginator = this.paginator;
       console.log(managers);
     });
   }
 
-  applyFilter(filterValue: string): void {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  initManagerForm(): void {
+    this.managerForm = this.formBuilder.group({
+      firstname: [this.local_data.firstname, Validators.required],
+      lastname: [this.local_data.lastname, Validators.required],
+      email: [this.local_data.email, [Validators.required, Validators.email]], // Add Validators.required
+      adresse: [this.local_data.adresse, Validators.required],
+      role: [this.local_data.role, Validators.required],
+      roleName: [
+        this.local_data.role !== 'ADHERENT' && this.local_data.role !== 'PARENT'
+          ? this.local_data.roleName
+          : null,
+        this.local_data.role !== 'ADHERENT' && this.local_data.role !== 'PARENT'
+          ? Validators.required
+          : null,
+      ],
+      photo: [null, Validators.required],
+    });
   }
 
-  btnCategoryClick(val: string): number {
-    this.dataSource.filter = val.trim().toLowerCase();
-    return this.dataSource.filteredData.length;
-  }
-  
   openDialog(action: string, obj: any): void {
     obj.action = action;
     const dialogRef = this.dialog.open(AppStaffDialogContentComponent, {
-      data: obj
+      data: { ...obj, managerForm: this.managerForm },
     });
 
     //here we will just reload or display the changes instantly but the real work will be in the dialog
     dialogRef.afterClosed().subscribe((result) => {
-      if (result.event === 'Add') {
-        this.addRowData(result.data.managerData);
-      } else if (result.event === 'Update') {
-        this.updateRowData(result.data);
-      } else if (result.event === 'Delete') {
-        this.deleteRowData(result.data);
-      } else if (result.event === 'Block') {
-        this.blockRowData(result.data);
-      } else if (result.event === 'UnBlock') {
-        this.unblockRowData(result.data);
+      if (result && result.event) {
+        if (result.event === 'Add') {
+          this.addRowData(result.data);
+        } else if (result.event === 'Update') {
+          this.updateRowData(result.data);
+        } else if (result.event === 'Delete') {
+          this.deleteRowData(result.data);
+        } else if (result.event === 'Block') {
+          this.blockRowData(result.data);
+        } else if (result.event === 'UnBlock') {
+          this.unblockRowData(result.data);
+        }
+        this.getManagers();
       }
-      this.getManagers();
-
     });
+  }
+  showRoleInput: boolean = false;
+  onRoleChange(event: Event) {
+    const selectedValue = (event.target as HTMLSelectElement).value;
+    this.showRoleInput =
+      selectedValue === 'STAFF' || selectedValue === 'ENTRAINEUR';
+    // this.sendRequestBasedOnRole(selectedValue);
+    console.log('selectedValue', selectedValue);
   }
 
   deleteRowData(deletedData: any) {
-    this.displayedData = this.displayedData.filter(item => item.id !== deletedData.id);
+    this.displayedData = this.displayedData.filter(
+      (item) => item.id !== deletedData.id
+    );
   }
-  // openUpdateDialog(paiement: Paiement): void {
-  //   const dialogRef = this.dialog.open(PaiementDetailsPopupComponent, {
-  //     data: paiement
-  //   });
 
-  //   dialogRef.afterClosed().subscribe(updatedPaiement => {
-  //     if (updatedPaiement) {
-  //       // Handle dialog result if needed
-  //       this.getPaiements();
-  //     }
-  //   });
-  // }
-
-  // tslint:disable-next-line - Disables all
   addRowData(managerData: Manager): void {
-    this.table.renderRows();
-    // const d = new Date();
-    // this.managerService.addStaff(managerData).subscribe(
-    //   (response) => {
-    //     console.log('Manager added successfully1', response);
-    //     this.getManagers(); // Refresh the data after adding
-    //     this.table.renderRows();
-    //   },
-    //   (error) => {
-    //     console.error('Error adding Manager', error); // Handle error, if needed
-    //   }
-    // );
-    //this.table.renderRows();
+    // const role = this.managerForm.get('role')?.value;
+    // this.sendRequestBasedOnRole(role);
+    // console.log("role",role);
   }
+  // sendRequestBasedOnRole(role: string) {
+  //   switch (role) {
+  //     case 'STAFF':
+  //       if (this.managerForm.valid) {
+  //       this.managerService.addStaff(this.managerForm.value).subscribe(
+  //         (response) => {
+  //           console.log(this.managerForm.value); // Handle successful response
+  //           console.log('Manager added:', response);
+  //         },
+  //         (error) => {
+  //           // Handle error
+  //           console.error('Error adding manager:', error);
+  //         }
+  //       );
+  //     } else {
+  //       console.error('Form is not valid. Please fill out all required fields.');
+  //     }
+  //       break;
+  //     case 'ENTRAINEUR':
+  //       if (this.managerForm.valid) {
+  //       this.managerService.addEntraineur(this.managerForm.value).subscribe(
+  //         (response) => {
+  //           console.log(this.managerForm.value); // Handle successful response
+  //           console.log('Manager added:', response);
+  //         },
+  //         (error) => {
+  //           // Handle error
+  //           console.error('Error adding manager:', error);
+  //         }
+  //       );
+  //     } else {
+  //       console.error('Form is not valid. Please fill out all required fields.');
+  //     }
+  //       break;
+  //       case 'ADHERENT':
+  //         if (this.managerForm.valid) {
+  //           this.managerService.addAdherent(this.managerForm.value).subscribe(
+  //             (response) => {
+  //               console.log(this.managerForm.value); // Handle successful response
+  //               console.log('adherent added:', response);
+  //             },
+  //             (error) => {
+  //               // Handle error
+  //               console.error('Error adding manager:', error);
+  //             }
+  //           );
+  //         } else {
+  //           console.error('Form is not valid. Please fill out all required fields.');
+  //         }
+  //         break;
+
+  //     case 'PARENT':
+  //       // this.getParentData();
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  //}
 
   // tslint:disable-next-line - Disables all
   updateRowData(managerData: Manager): void {
     this.table.renderRows();
-  //   this.managerService.updateManager(managerData).subscribe(
-  //   (response)=>{
-  //     console.log('Manager updated successfully', response);
-  //     this.getManagers();
-  //   },
-  //   (error)=> {
-  //     console.error('Error archiving academie', error);
-  //   }
-  //  )
+    //   this.managerService.updateManager(managerData).subscribe(
+    //   (response)=>{
+    //     console.log('Manager updated successfully', response);
+    //     this.getManagers();
+    //   },
+    //   (error)=> {
+    //     console.error('Error archiving academie', error);
+    //   }
+    //  )
   }
- 
+
   // tslint:disable-next-line - Disables all
   // deleteRowData(managerData: Manager): boolean | any {
   //   this.dataSource.data = this.dataSource.data.filter((value, key) => {
   //     return value.id !== managerData.id;
   //   });
   // }
-  
+
   blockRowData(managerData: Manager): void {
     this.table.renderRows();
     // this.managerService.blockManager(managerData.id).subscribe(
@@ -201,9 +380,8 @@ export class AppStafflistComponent implements OnInit {
     //   }
     // );
   }
-  
 
-  unblockRowData(managerData: Manager): void{
+  unblockRowData(managerData: Manager): void {
     this.table.renderRows();
     // this.managerService.unBlockManager(managerData.id).subscribe(
     //   (response) => {
@@ -216,9 +394,8 @@ export class AppStafflistComponent implements OnInit {
     //   }
     // );
   }
-
 }
- 
+
 @Component({
   // tslint:disable-next-line - Disables all
   selector: 'app-dialog-content',
@@ -230,38 +407,35 @@ export class AppStaffDialogContentComponent implements OnInit {
   local_data: any;
   managerForm: FormGroup;
   firstnameValue: string;
-  roles: string[];  
+  roles: string[];
   roleNames: string[];
-  photo: string;
 
   dataSource = new MatTableDataSource<string>([]);
   managerSource = new MatTableDataSource<Manager>([]);
 
-
   constructor(
     public dialogRef: MatDialogRef<AppStaffDialogContentComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: Manager,
+    @Optional()
+    @Inject(MAT_DIALOG_DATA)
+    public data: { managerForm: FormGroup; data: Manager },
     private firestorage: AngularFireStorage,
     private formBuilder: FormBuilder,
     private managerService: ManagerService
   ) {
     this.local_data = { ...data };
-    this.action = this.local_data.action ;
-    if (this.action === 'Update') {
-      this.initManagerForm();
-    }
+    this.action = this.local_data.action;
   }
 
   showRoleInput: boolean = false;
-
-
+  photo: string;
   onRoleChange(event: Event) {
     const selectedValue = (event.target as HTMLSelectElement).value;
-    this.showRoleInput = selectedValue === 'STAFF' || selectedValue === 'ENTRAINEUR';
-    this.sendRequestBasedOnRole(selectedValue);
-
+    this.showRoleInput =
+      selectedValue === 'STAFF' || selectedValue === 'ENTRAINEUR';
+    //this.sendRequestBasedOnRole(selectedValue);
+    console.log('role', selectedValue);
   }
-  
+
   displayedData: any[] = [];
 
   ngOnInit(): void {
@@ -269,7 +443,7 @@ export class AppStaffDialogContentComponent implements OnInit {
     //this.dataSource = new MatTableDataSource<string>([]);
     this.getOnlyRoleNames();
   }
-  
+
   getOnlyRoleNames(): void {
     this.managerService.getOnlyRoleNames().subscribe(
       (roleNames) => {
@@ -284,15 +458,12 @@ export class AppStaffDialogContentComponent implements OnInit {
     );
   }
 
-
-
   ngAfterViewInit(): void {
     this.managerService.getOnlyRoleNames().subscribe(
       (roleNames) => {
         console.log('Managers fetched successfully', roleNames);
         this.dataSource.data = roleNames;
         console.log(roleNames);
-        
       },
       (error) => {
         console.error('Error fetching academies', error);
@@ -300,33 +471,28 @@ export class AppStaffDialogContentComponent implements OnInit {
     );
   }
 
-  
   initManagerForm(): void {
     this.managerForm = this.formBuilder.group({
-      firstname: [this.local_data.firstname],
-      lastname: [this.local_data.lastname],
-      email: [this.local_data.email, [Validators.email]], // Remove Validators.required
-      adresse: [this.local_data.adresse],
+      firstname: [this.local_data.firstname, Validators.required],
+      lastname: [this.local_data.lastname, Validators.required],
+      email: [this.local_data.email, [Validators.required, Validators.email]], // Add Validators.required
+      adresse: [this.local_data.adresse, Validators.required],
       role: [this.local_data.role, Validators.required],
-      roleName: this.local_data.role === 'ADHERENT' || 'PARENT' ? null : [this.local_data.roleName],
-      photo: [null]
+      roleName: [
+          this.local_data.role === 'ADHERENT' || this.local_data.role === 'PARENT'
+            ? null
+            : this.local_data.roleName
+      ],
+      photo: [this.local_data.photo],
+      telephone: [this.local_data.telephone, Validators.required],
     });
   }
-
-  // fetchRoleNames(): void {
-  //   this.managerService.getRoleNames().subscribe(roleNames => {
-  //     this.roleNames = roleNames;
-  //     console.log(roleNames);
-  //   });
-  // }
 
   getManagers(): void {
     this.managerService.getManagers().subscribe(
       (managers) => {
         console.log('Managers fetched successfully', managers);
         this.managerSource.data = managers;
-        console.log("this.managerSource.data",this.managerSource.data);
-        
       },
       (error) => {
         console.error('Error fetching academies', error);
@@ -334,135 +500,119 @@ export class AppStaffDialogContentComponent implements OnInit {
     );
   }
 
-  fetchData() {
-    // Call your service to fetch the data
-    this.managerService.getManagers().subscribe(data => {
-      this.displayedData = data;
-      this.dataSource = new MatTableDataSource(this.displayedData);
-      //this.dataSource.sort = this.sort;
-    });
-  }
-
   doAction(): void {
     if (this.action === 'Add') {
       const role = this.managerForm.get('role')?.value;
-      this.sendRequestBasedOnRole(role);
-    }
-    else if (this.action === 'Update') {
-      
-        const updatedManager = this.managerForm.value;
-        updatedManager.id = this.local_data.id; // Set the id of the manager to be updated
-        const role = updatedManager.role;
-        let updateObservable;
-        switch(role){
-          case 'STAFF':
-            updateObservable = this.managerService.updateStaff(updatedManager);
-            break;
-          case 'ENTRAINEUR':
-            updateObservable = this.managerService.updateEntraineur(updatedManager);
-            break;
-          case 'ADHERENT':
-            updateObservable = this.managerService.updateAdherent(updatedManager);
-            break;
-          case 'PARENT':
-            updateObservable = this.managerService.updateParent(updatedManager);
-            break;
-          default:
-            console.error('Invalid role:', role);
-            return; // Exit function if role is invalid
-        }
-        updateObservable.subscribe(
-          (response) => {
-            console.log('Manager updated:', response);
-            this.dialogRef.close(true);
-          },
-          (error) => {
-            console.error('Error updating manager:', error);
-          }
-        );
-      
-    }
-    
-  if (this.action === 'Block') {
-    const blockAction = this.local_data.blocked ? 'unBlockManager' : 'blockManager';
-    this.managerService[blockAction](this.local_data.id).subscribe(
-      (response: any) => {
-        console.log('Manager action successful', response);
-        this.dialogRef.close({ event: this.action });
-      },
-      (error: any) => {
-        console.error('Error', error);
-        this.dialogRef.close({ event: this.action });
-      }
-    );
-  }
-   else {
-    this.dialogRef.close({ event: 'Cancel' });
-  }
-}
-  
-  sendRequestBasedOnRole(role: string) {
-    switch (role) {
-      case 'STAFF':
-        if (this.managerForm.valid) {
-        this.managerService.addStaff(this.managerForm.value).subscribe(
-          (response) => {
-            console.log(this.managerForm.value); // Handle successful response
-            console.log('Manager added:', response);
-            this.dialogRef.close(true);
-          },
-          (error) => {
-            // Handle error
-            console.error('Error adding manager:', error);
-          }
-        );
-      } else {
-        console.error('Form is not valid. Please fill out all required fields.');
-      }
-        break;
-      case 'ENTRAINEUR':
-        if (this.managerForm.valid) {
-        this.managerService.addEntraineur(this.managerForm.value).subscribe(
-          (response) => {
-            console.log(this.managerForm.value); // Handle successful response
-            console.log('Manager added:', response);
-            this.dialogRef.close(true);
-          },
-          (error) => {
-            // Handle error
-            console.error('Error adding manager:', error);
-          }          
-        );
-      } else {
-        console.error('Form is not valid. Please fill out all required fields.');
-      }
-        break;
-        case 'ADHERENT':
+      console.log('role', role);
+      const addedManager = this.managerForm.value;
+
+      let addObservable = new Observable<any>();
+      switch (role) {
+        case 'STAFF':
           if (this.managerForm.valid) {
-            this.managerService.addAdherent(this.managerForm.value).subscribe(
-              (response) => {
-                console.log(this.managerForm.value); // Handle successful response
-                console.log('adherent added:', response);
-                this.dialogRef.close(true);
-              },
-              (error) => {
-                // Handle error
-                console.error('Error adding manager:', error);
-              }
-            );
+            const managerWithPhoto = { ...addedManager, photo: this.photo };
+
+            addObservable = this.managerService.addStaff(managerWithPhoto);
+            console.log('photo 2', this.photo);
           } else {
-            console.error('Form is not valid. Please fill out all required fields.');
+            console.error(
+              'Form is not valid. Please fill out all required fields.'
+            );
           }
           break;
-        
-      case 'PARENT':
-        // this.getParentData();
-        break;
-      default:
-        break;
+        case 'ENTRAINEUR':
+          if (this.managerForm.valid) {
+            const managerWithPhoto = { ...addedManager, photo: this.photo };
+            addObservable = this.managerService.addEntraineur(managerWithPhoto);
+          } else {
+            console.error(
+              'Form is not valid. Please fill out all required fields.'
+            );
+          }
+          break;
+        case 'ADHERENT':
+          if (this.managerForm.valid) {
+            const managerWithPhoto = { ...addedManager, photo: this.photo };
+            addObservable = this.managerService.addAdherent(managerWithPhoto);
+          } else {
+            console.error(
+              'Form is not valid. Please fill out all required fields.'
+            );
+          }
+          break;
+
+        case 'PARENT':
+          break;
+
+        default:
+          console.error('Invalid role:', role);
+          return; // Exit function if role is invalid
+      }
+      addObservable.subscribe(
+        (response) => {
+          console.log('Manager updated:', response);
+          this.dialogRef.close({ event: this.action });
+        },
+        (error) => {
+          console.error('Error updating manager:', error);
+        }
+      );
+    } else if (this.action === 'Update') {
+      const updatedManager = this.managerForm.value;
+      updatedManager.id = this.local_data.id; // Set the id of the manager to be updated
+      updatedManager.photo = this.local_data.photo
+      const role = updatedManager.role;
+      let updateObservable;
+      switch (role) {
+        case 'STAFF':
+          //const staffWithPhoto = { ...updatedManager, photo: this.photo2 };
+          updateObservable = this.managerService.updateStaff(updatedManager);
+          break;
+        case 'ENTRAINEUR':
+          //const entraineurWithPhoto = { ...updatedManager, photo: this.photo2 };
+          updateObservable = this.managerService.updateEntraineur(updatedManager);
+          break;
+        case 'ADHERENT':
+          const adherentWithPhoto = { ...updatedManager, photo: this.photo };
+
+          updateObservable = this.managerService.updateAdherent(adherentWithPhoto);
+          break;
+        case 'PARENT':
+          const parentWithPhoto = { ...updatedManager, photo: this.photo };
+
+          updateObservable = this.managerService.updateParent(parentWithPhoto);
+          break;
+        default:
+          console.error('Invalid role:', role);
+          return; // Exit function if role is invalid
+      }
+      updateObservable.subscribe(
+        (response) => {
+          console.log('Manager updated:', response);
+          this.dialogRef.close({ event: this.action });
+        },
+        (error) => {
+          console.error('Error updating manager:', error);
+        }
+      );
+    } else if (this.action === 'Block') {
+      const blockAction = this.local_data.blocked
+        ? 'unBlockManager'
+        : 'blockManager';
+      this.managerService[blockAction](this.local_data.id).subscribe(
+        (response: any) => {
+          console.log('Manager action successful', response);
+          this.dialogRef.close({ event: this.action });
+        },
+        (error: any) => {
+          console.error('Error', error);
+          this.dialogRef.close({ event: this.action });
+        }
+      );
+    } else {
+      this.dialogRef.close({ event: 'Cancel' });
     }
   }
-
 
   async uploadFile(event: any) {
     //display image
@@ -485,37 +635,16 @@ export class AppStaffDialogContentComponent implements OnInit {
     };
     //upload image
     const file = event.target.files[0];
-    if(file){
+    if (file) {
       const path = `academie/${file.name}`;
       const uploadTask = await this.firestorage.upload(path, file);
       const url = await uploadTask.ref.getDownloadURL();
       console.log('Image URL:', url);
       this.local_data.photo = url;
-      // this.managerForm.patchValue({
-      //   photo: url
-      // });
+      this.photo = url;
+      console.log('photo 2', this.photo);
     }
   }
-  
-
-     
-     
-    
-    // } else if (this.action === 'Delete') {
-    //   // Handle Delete action
-    //   this.managerService.deleteManager(this.local_data.id).subscribe(
-    //     (response) => {
-    //       console.log('Manager deleted successfully', response);
-    //       this.dialogRef.close({ event: this.action, data: this.local_data.id });
-    //     },
-    //     (error) => {
-    //       console.error('Error deleting manager', error);
-    //       // i should display another dialogRef showing that the request wasn't successfull
-    //       this.dialogRef.close({ event: this.action});
-    //     }
-    //   );
-  
-  
 
   closeDialog(): void {
     this.dialogRef.close({ event: 'Cancel' });

@@ -23,6 +23,8 @@ export class AdminService {
       lastname: managerData.lastname,
       adresse:managerData.adresse,
       telephone:managerData.telephone,
+      telephone2:managerData.telephone2,
+      password:managerData.password
     };
       console.log("this is service",requestBody);
 
