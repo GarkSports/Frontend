@@ -15,6 +15,7 @@ import { ManagerService } from 'src/app/services/manager.service';
 import { MatSelectChange } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
 import { StatutManager } from 'src/models/enums/statutManager';
+import { AcademieService } from 'src/app/services/academie.service';
 
 @Component({
   selector: 'app-manager-list',
@@ -59,14 +60,15 @@ export class AppManagerlistComponent implements OnInit {
 
   constructor(public dialog: MatDialog,
               public datePipe: DatePipe,
-              public adminService: AdminService){}
+              public adminService: AdminService,
+              public academieService: AcademieService){}
 
   displayedData: any[] = [];
   //sortOrder: string = 'asc'; // default sorting order
 
   ngOnInit(): void {
-    this.dataSource = new MatTableDataSource<Manager>([]);
-
+    //this.dataSource = new MatTableDataSource<Manager>([]);
+    this.getAcademies();
     this.fetchData();
     this.getManagers();
     //this.sortData();
@@ -123,6 +125,12 @@ matchesFilter(value: any, filter: string): boolean {
   const stringValue = value ? value.toString().toLowerCase() : '';
   // Check if the string value contains the filter value
   return stringValue.includes(filter);
+}
+
+getAcademies(): void {
+  this.academieService.getAcademies().subscribe((academies: Academie[]) => {
+    this.academieOptions = academies.map((academie: Academie) => academie.nom);
+  });
 }
 
   applyFilterByAcademie(): void {

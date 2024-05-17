@@ -7,4 +7,5 @@ export class Manager extends User {
     academie?: Academie;
     roleName?: string;
     permissions?: string[];
+    nomEquipe: string;
 }

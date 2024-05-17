@@ -10,9 +10,9 @@
               <mat-select [(ngModel)]="selectedSortingOption" (selectionChange)="applySorting()">
                 <mat-option *ngFor="let sortingOption of sortingOptions" [value]="sortingOption.value">{{ sortingOption.viewValue }}</mat-option>
               </mat-select>
-          </mat-form-field>
-          
+          </mat-form-field>         
           </div>
+
           <div class="col-lg-4">
             <mat-form-field appearance="outline" class="w-100 hide-hint gray-background">
               <mat-label>Filtrer par académie</mat-label>
@@ -20,9 +20,9 @@
                 <mat-option *ngFor="let academie of academieOptions" [value]="academie">{{ academie }}</mat-option>
               </mat-select>
           </mat-form-field>
-          
           </div>
-          <div class="col-lg-3">
+
+          <div class="col-lg-4">
             <mat-form-field appearance="outline" class="w-100 hide-hint gray-background">
               <mat-label>Filtrer par statut</mat-label>
               <mat-select [(ngModel)]="selectedStatut" (selectionChange)="applyFilterByStatut()">
@@ -58,7 +58,7 @@
         </div>
         <div class="col-lg-6 d-flex align-items-center justify-content-end">
           <mat-form-field appearance="outline" class="w-50 hide-hint mr-2" style="margin-right: 10px;">
-            <input matInput placeholder="Rechercher" (keyup)="applyFilter($any($event.target).value)" />
+            <input matInput placeholder="Rechercher Manager" (keyup)="applyFilter($any($event.target).value)" />
             <mat-icon matSuffix>
               <i-tabler name="search" class="icon-20"></i-tabler>
             </mat-icon>
