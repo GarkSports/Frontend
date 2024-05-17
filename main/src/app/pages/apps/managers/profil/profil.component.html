@@ -11,7 +11,9 @@
                   <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Nom</mat-label> 
                   <mat-form-field appearance="outline" class="w-50"> 
                     <input formControlName="lastname" matColumnDef="lastname" id="lastname"  matInput/> 
-
+                    <mat-icon matPrefix class="op-5">
+                      <i-tabler name="user" class="icon-20 d-flex"></i-tabler>
+                    </mat-icon>                     
                   </mat-form-field> 
               </div> 
                   <div class="col-sm-6"> 
@@ -84,20 +86,34 @@
                 </mat-form-field>
               </div>
             </div>
-
+       
+            <div *ngIf="userRole === 'ADHERENT'" class="row">
+              <div class="col-sm-12 d-flex align-items-center">
+                <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Niveau scolaire</mat-label>
+              </div>
+              <div class="col-sm-12">
+                <mat-form-field appearance="outline" class="w-100">
+                  <input formControlName="niveauScolaire" matInput placeholder="Bac"/>
+                </mat-form-field>
+              </div>
+            </div>
+            
             <div class="row">
               <div class="col-sm-12 d-flex align-items-center">
                 <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16"
-                  >Niveau scolaire</mat-label
+                  >equipe</mat-label
                 >
               </div>
               <div class="col-sm-12">
                 <mat-form-field appearance="outline" class="w-100">
-                  <input matInput placeholder="Bac" />
+                  <!-- <input formControlName="equipe" matColumnDef="equipe" matInput/> -->
+                  <select formControlName="equipe" matNativeControl required id="equipes" name="equipes" placeholder="Equipe">
+                    <option *ngFor="let equipe of equipes" [value]="equipe">{{ equipe }}</option>
+                  </select>
                 </mat-form-field>
               </div>
             </div>
-
+          
         </form>
       </mat-card-content>
     </mat-card>
