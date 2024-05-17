@@ -9,6 +9,7 @@ import { PersonnaliseRequest } from 'src/models/dto/PersonnaliseRequest.model';
 import { TestRequest } from 'src/models/dto/TestRequest.model';
 import { MatchAmicalRequest } from 'src/models/dto/MatchAmicalRequest.model';
 import { StatutEvenement } from 'src/models/enums/statutEvenenement.model';
+import { CompetitionRequest } from 'src/models/dto/CompetitonRequest.model';
 
 @Injectable({
   providedIn: 'root'
@@ -27,8 +28,8 @@ export class EvenementService {
     return this.http.get<Adherent[]>(`${this.apiUrl}/getAllAdherents`, { withCredentials: true });
   }
 
-  addCompetition(evenement: Evenement): Observable<Evenement> {
-    return this.http.post<Evenement>(`${this.apiEvenement}/addCompetition`, evenement, { withCredentials: true });
+  addCompetition(request: CompetitionRequest): Observable<Evenement> {
+    return this.http.post<Evenement>(`${this.apiEvenement}/addCompetition`, request, { withCredentials: true });
   }
 
   addPersonnalise(request: PersonnaliseRequest): Observable<Evenement> {

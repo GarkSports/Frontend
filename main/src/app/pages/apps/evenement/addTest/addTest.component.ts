@@ -26,8 +26,10 @@ export class AddTestComponent {
     equipeList: Equipe[] = [];
     memberList: Adherent[] = [];
     evenement: Evenement = new Evenement();
-    selectedEquipe: number[] = [];
-    selectedMembers: number[] = [];
+    selectedOption: string = 'equipe';
+    selectedEquipe: number; // Define selectedEquipe property here
+    selectedEquipe2: Equipe;
+    selectedMembers: number[] = []; // Define selectedMembers property here
 
     constructor(
         private formBuilder: FormBuilder,
@@ -43,7 +45,6 @@ export class AddTestComponent {
 
     initializeForm(): void {
         this.evenementForm = this.formBuilder.group({
-            selectedOption: ['equipe'],
             nom: ['', Validators.required],
             date: ['', Validators.required],
             horraire: ['', Validators.required],
@@ -64,6 +65,10 @@ export class AddTestComponent {
         });
     }
 
+    changeOption(option: string): void {
+        this.selectedOption = option;
+    }
+
     onSubmit(): void {
         if (this.evenementForm.valid) {
             const formData = this.evenementForm.value;
@@ -72,21 +77,22 @@ export class AddTestComponent {
             this.evenement.heure = formData.horraire;
 
             let request: TestRequest;
-            if (formData.selectedOption === 'equipe') {
-                request = new TestRequest(this.evenement, formData.equipe, []);
+            if (this.selectedOption === 'equipe') {
+                request = new TestRequest(this.evenement, this.selectedEquipe, []);
             } else {
-                request = new TestRequest(this.evenement, null, formData.membres);
+                request = new TestRequest(this.evenement, null, this.selectedMembers);
             }
-            console.log('Request:', request);
 
             this.eventService.addTest(request).subscribe(
                 (response) => {
-                    console.log('Evenement test added successfully:', response);
+                    console.log('Test added successfully:', response);
+                    // Reset the form after successful submission
                     this.evenementForm.reset();
                     this.router.navigate(['/apps/listevenement']);
                 },
                 (error) => {
-                    console.error('Error adding evenement test:', error);
+                    console.error('Error adding test:', error);
+                    // Handle error
                 }
             );
         } else {
