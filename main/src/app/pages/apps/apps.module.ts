@@ -18,6 +18,7 @@ import * as TablerIcons from 'angular-tabler-icons/icons';
 
 //Chat
 import { AppChatComponent } from './chat/chat.component';
+import { AppChatDialogContentComponent } from './chat/chat.component';
 //Contact
 import { AppContactDialogContentComponent } from './contact/contact.component';
 import { AppContactComponent } from './contact/contact.component';
@@ -170,6 +171,7 @@ import { NavbarComponent } from './evenement/navbar/navbar.component';
     AcademieProfileComponent,
     UpdateProfileDialogComponent,
     AppChatComponent,
+    AppChatDialogContentComponent,
     AppPermissionComponent,
     AppNotesComponent,
     AppTodoComponent,
