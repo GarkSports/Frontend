@@ -13,6 +13,7 @@ import { Equipe } from 'src/models/equipe.model';
 import { Adherent } from 'src/models/adherent.model';
 import { Evenement } from 'src/models/evenement.model';
 import { TestRequest } from 'src/models/dto/TestRequest.model';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'add-test',
@@ -30,7 +31,8 @@ export class AddTestComponent {
 
     constructor(
         private formBuilder: FormBuilder,
-        private eventService: EvenementService
+        private eventService: EvenementService,
+        private router: Router
     ) {}
 
     ngOnInit(): void {
@@ -81,6 +83,7 @@ export class AddTestComponent {
                 (response) => {
                     console.log('Evenement test added successfully:', response);
                     this.evenementForm.reset();
+                    this.router.navigate(['/apps/listevenement']);
                 },
                 (error) => {
                     console.error('Error adding evenement test:', error);

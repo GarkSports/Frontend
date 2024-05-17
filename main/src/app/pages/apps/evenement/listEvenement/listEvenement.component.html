@@ -1,108 +1,141 @@
 <app-navbar></app-navbar>
 
-<mat-card class="cardWithShadow">
-    <mat-card-content class="p-24">
-        <div class="row justify-content-between">
-            <div class="col-lg-4">
-                <mat-form-field appearance="outline" class="w-100 hide-hint">
-                    <input matInput placeholder="Search Evenement" (keyup)="applyFilter($any($event.target).value)" />
-                    <mat-icon matSuffix>
-                        <i-tabler name="search" class="icon-20"></i-tabler>
-                    </mat-icon>
-                </mat-form-field>
-            </div>
-            <div class="col-lg-4 d-flex align-items-center justify-content-end">
-                <button mat-flat-button color="primary" (click)="openAddEvenementDialog()">
-                    Ajouter Evenement
-                </button>
-            </div>
-        </div>
-    </mat-card-content>
-</mat-card>
-
-<mat-card class="cardWithShadow">
-    <mat-card-content class="p-24">
-        <div class="table-responsive">
-            <table mat-table [dataSource]="dataSource" class="w-100">
-                <!-- Column definitions -->
-
-                <!-- Column: nom -->
-                <ng-container matColumnDef="nom">
-                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Nom</th>
-                    <td mat-cell *matCellDef="let element" class="f-w-600 mat-subtitle-1 f-s-16 m-t-0">
-                        {{ element.event.nomEvent }}
-                    </td>
-                </ng-container>
-
-
-                <!-- Column: type -->
-                <ng-container matColumnDef="type">
-                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Type</th>
-                    <td mat-cell *matCellDef="let element" class="f-w-600 mat-subtitle-1 f-s-16 m-t-0">
-                        {{ element.event.type }}
-                    </td>
-                </ng-container>
-
-                <!-- Column: equipe -->
-                <ng-container matColumnDef="equipe">
-                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Equipe</th>
-                    <td mat-cell *matCellDef="let element" class="f-w-600 mat-subtitle-1 f-s-16 m-t-0">
-                        {{ element.equipe?.nom || element.adherent?.nomEquipe || '' }}
-                    </td>
-                </ng-container>
-
-                <!-- Column: member -->
-                <ng-container matColumnDef="member">
-                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Member</th>
-                    <td mat-cell *matCellDef="let element" class="f-w-600 mat-subtitle-1 f-s-16 m-t-0">
-                        {{ element.adherent?.firstname || '' }} {{ element.adherent?.lastname || '' }}
-                    </td>
-                </ng-container>
-
-                <!-- Column: lieu -->
-                <ng-container matColumnDef="date">
-                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Date</th>
-                    <td mat-cell *matCellDef="let element" class="f-w-600 mat-subtitle-1 f-s-16 m-t-0">
-                        {{ element.event.date }}
-                    </td>
-                </ng-container>
-
-                <!-- Column: lieu -->
-                <ng-container matColumnDef="statut">
-                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-                        Statut
-                    </th>
-                    <td mat-cell *matCellDef="let element" class="f-s-14">
-                        <mat-form-field appearance="outline" class="smaller-select">
-                            <mat-label>Statut</mat-label>
-                            <mat-select [(ngModel)]="element.event.statut" class="custom-select"
-                                (selectionChange)="onStatusChange(element.event)"
-                                [style.background-color]="getBackgroundColor(element.event.statut)"
-                                [style.color]="getTextColor(element.statut)">
-                                <mat-option *ngFor="let status of statutOptions" [value]="status">{{ status
-                                    }}</mat-option>
-                            </mat-select>
+<div class="row mt-3">
+    <div class="col-lg-9">
+        <mat-card class="cardWithShadow gray-background">
+            <mat-card-content class="p-24">
+                <div class="row justify-content-between gray-background">
+                    <div class="col-lg-6">
+                        <h2>Liste des Evenements</h2>
+                    </div>
+                    <div class="col-lg-6 d-flex align-items-center justify-content-end">
+                        <mat-form-field appearance="outline" class="w-50 hide-hint mr-2" style="margin-right: 10px;">
+                            <input matInput placeholder="Search Evenement"
+                                (keyup)="applyFilter($any($event.target).value)" />
+                            <mat-icon matSuffix>
+                                <i-tabler name="search" class="icon-20"></i-tabler>
+                            </mat-icon>
                         </mat-form-field>
-                    </td>
-                </ng-container>
-
-                <ng-container matColumnDef="action">
-                    <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Action</th>
-                    <td mat-cell *matCellDef="let element">
-                        <button mat-icon-button color="warn" (click)="onDeleteEvenement(element.event.id)">
-                            <mat-icon>delete_outline</mat-icon>
+                        <button mat-flat-button (click)="openAddEvenementDialog()" color="primary">
+                            <mat-icon>add</mat-icon> Ajouter
                         </button>
-                    </td>
-                </ng-container>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table mat-table [dataSource]="dataSource" class="w-100 gray-background">
+                        <!-- Column definitions -->
 
-                <!-- Table rows -->
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-            </table>
-            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
-        </div>
-    </mat-card-content>
-</mat-card>
+                        <!-- Column: nom -->
+                        <ng-container matColumnDef="nom">
+                            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Nom</th>
+                            <td mat-cell *matCellDef="let element" class="f-w-600 mat-subtitle-1 f-s-16 m-t-0">
+                                {{ element.nomEvent }}
+                            </td>
+                        </ng-container>
+
+
+                        <!-- Column: type -->
+                        <ng-container matColumnDef="type">
+                            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Type</th>
+                            <td mat-cell *matCellDef="let element" class="f-w-600 mat-subtitle-1 f-s-16 m-t-0">
+                                {{ element.type }}
+                            </td>
+                        </ng-container>
+
+                        <!-- Column: equipe -->
+                        <ng-container matColumnDef="equipe">
+                            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Equipe</th>
+                            <td mat-cell *matCellDef="let element" class="f-w-600 mat-subtitle-1 f-s-16 m-t-0">
+                                {{ element.convocationEquipe?.nom }}
+                            </td>
+                        </ng-container>
+
+                        <!-- Column: lieu -->
+                        <ng-container matColumnDef="date">
+                            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Date</th>
+                            <td mat-cell *matCellDef="let element" class="f-w-600 mat-subtitle-1 f-s-16 m-t-0">
+                                {{ element.date }}
+                            </td>
+                        </ng-container>
+
+                        <!-- Column: lieu -->
+                        <ng-container matColumnDef="statut">
+                            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+                                Statut
+                            </th>
+                            <td mat-cell *matCellDef="let element" class="f-s-14">
+                                <mat-form-field appearance="outline" class="smaller-select">
+                                    <mat-label>Statut</mat-label>
+                                    <mat-select [(ngModel)]="element.statut" class="custom-select"
+                                        (selectionChange)="onStatusChange(element)"
+                                        [style.background-color]="getBackgroundColor(element.statut)"
+                                        [style.color]="getTextColor(element.statut)">
+                                        <mat-option *ngFor="let status of statutOptions" [value]="status">{{ status
+                                            }}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Action</th>
+                            <td mat-cell *matCellDef="let element">
+                                <button mat-icon-button color="warn" (click)="onDeleteEvenement(element.id)">
+                                    <mat-icon>delete_outline</mat-icon>
+                                </button>
+                            </td>
+                        </ng-container>
+
+                        <!-- Table rows -->
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                    </table>
+                    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                        class="gray-background"></mat-paginator>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <div class="col-lg-3">
+        <mat-card [ngClass]="{'smallerContent': !showCheckboxes1}" class="cardWithShadow gray-background">
+            <mat-card-content class="p-24">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h3>Filtre par evenement</h3>
+                    <button mat-icon-button (click)="toggleCheckboxesVisibility1()">
+                        <mat-icon>{{ showCheckboxes1 ? 'expand_less' : 'expand_more' }}</mat-icon>
+                    </button>
+                </div>
+                <div *ngIf="showCheckboxes1">
+                    <div *ngFor="let eventType of typeEventsFilter">
+                        <mat-checkbox (change)="applyFilterByType(eventType)"
+                            [checked]="selectedEventTypes.includes(eventType)">
+                            {{ eventType }}
+                        </mat-checkbox>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+        <mat-card [ngClass]="{'smallerContent': !showCheckboxes2}" class="cardWithShadow gray-background">
+            <mat-card-content class="p-24">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h3>Filtre par equipe</h3>
+                    <button mat-icon-button (click)="toggleCheckboxesVisibility2()">
+                        <mat-icon>{{ showCheckboxes2 ? 'expand_less' : 'expand_more' }}</mat-icon>
+                    </button>
+                </div>
+                <div *ngIf="showCheckboxes2">
+                    <div *ngFor="let equipe of equipes">
+                        <mat-checkbox (change)="applyFilterByEquipe(equipe.nom)"
+                            [checked]="selectedEventTypes.includes(equipe.nom)">
+                            {{ equipe.nom }}
+                        </mat-checkbox>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
+
 
 
 <style>
@@ -123,5 +156,19 @@
         font-size: 14px;
         /* padding */
         padding: 5px 10px;
+    }
+
+    .smallerContent {
+        max-height: 100px;
+        /* Adjust the max-height as needed */
+        overflow: hidden;
+        /* Hide overflow content */
+        transition: max-height 0.3s ease;
+        /* Smooth transition animation */
+    }
+
+    .gray-background {
+        background-color: #FAFAFA;
+        /*testing color blue: FAFAFA 0000FF*/
     }
 </style>

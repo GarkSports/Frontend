@@ -13,6 +13,7 @@
                             <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Nom</mat-label>
                             <mat-form-field appearance="outline" class="w-100">
                                 <input matInput required placeholder="Nom" formControlName="nom" />
+                                <mat-error *ngIf="evenementForm.get('nom')?.invalid && evenementForm.get('nom')?.touched">Nom is required</mat-error>
                             </mat-form-field>
                         </div>
                         <!-- Lieu -->
@@ -20,6 +21,7 @@
                             <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Lieu</mat-label>
                             <mat-form-field appearance="outline" class="w-100">
                                 <input matInput required placeholder="Lieu" formControlName="lieu" />
+                                <mat-error *ngIf="evenementForm.get('lieu')?.invalid && evenementForm.get('lieu')?.touched">Lieu is required</mat-error>
                             </mat-form-field>
                         </div>
                         <!-- Date -->
@@ -29,6 +31,7 @@
                                 <input matInput [matDatepicker]="picker" required formControlName="date" />
                                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                                 <mat-datepicker #picker></mat-datepicker>
+                                <mat-error *ngIf="evenementForm.get('date')?.invalid && evenementForm.get('date')?.touched">Date is required</mat-error>
                             </mat-form-field>
                         </div>
                         <!-- Horraire -->
@@ -36,6 +39,7 @@
                             <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Horraire</mat-label>
                             <mat-form-field appearance="outline" class="w-100">
                                 <input matInput required type="time" formControlName="horraire" />
+                                <mat-error *ngIf="evenementForm.get('horraire')?.invalid && evenementForm.get('horraire')?.touched">Horraire is required</mat-error>
                             </mat-form-field>
                         </div>
                         <!-- Description -->
@@ -43,6 +47,7 @@
                             <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Description</mat-label>
                             <mat-form-field appearance="outline" class="w-100">
                                 <textarea matInput required rows="4" formControlName="description"></textarea>
+                                <mat-error *ngIf="evenementForm.get('description')?.invalid && evenementForm.get('description')?.touched">Description is required</mat-error>
                             </mat-form-field>
                         </div>
                     </div>
@@ -71,7 +76,7 @@
                         <div *ngIf="selectedOption === 'equipe'">
                             <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Equipe</mat-label>
                             <mat-form-field appearance="outline" class="w-100">
-                                <mat-select required [(ngModel)]="selectedEquipe" name="equipe">
+                                <mat-select required [(ngModel)]="selectedEquipe" name="equipe" required>
                                     <mat-option *ngFor="let equipe of equipeList" [value]="equipe.id">{{ equipe.nom }}</mat-option>
                                 </mat-select>
                             </mat-form-field>
@@ -90,7 +95,7 @@
                         <div *ngIf="selectedOption === 'member' && selectedEquipe2">
                             <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Members</mat-label>
                             <mat-form-field appearance="outline" class="w-100">
-                                <mat-select multiple required [(ngModel)]="selectedMembers" name="membres">
+                                <mat-select multiple required [(ngModel)]="selectedMembers" name="membres" required>
                                     <mat-option *ngFor="let member of selectedEquipe2.adherents" [value]="member.id">{{ member.firstname }} {{ member.lastname }}</mat-option>
                                 </mat-select>
                             </mat-form-field>
@@ -100,7 +105,7 @@
                         <button mat-flat-button color="warn" matStepperPrevious>
                             Back
                         </button>
-                        <button mat-flat-button color="primary" (click)="onSubmit()">Finish</button>
+                        <button mat-flat-button color="primary" (click)="onSubmit()" [disabled]="!evenementForm.valid">Finish</button>
                     </div>
                 </form>
             </mat-step>

@@ -117,7 +117,7 @@
               <mat-select [(ngModel)]="element.adherent.statutAdherent" (selectionChange)="onStatusChange(element)"
                 class="custom-select" [style.background-color]="getBackgroundColor(element.adherent.statutAdherent)"
                 [style.color]="getTextColor(element.adherent.statutAdherent)">
-                <mat-option *ngFor="let status of statutOptions" [value]="status">{{ status }}</mat-option>
+                <mat-option *ngFor="let status of statutOptions" [value]="status">{{ formatEnumValue(status) }}</mat-option>
               </mat-select>
             </mat-form-field>
           </td>
