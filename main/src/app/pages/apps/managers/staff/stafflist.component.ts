@@ -145,21 +145,26 @@ export class AppStafflistComponent implements OnInit {
   applyFilter(filterValue: string): void {
     // Convert filter value to lowercase for case-insensitive comparison
     const filter = filterValue.trim().toLowerCase();
-
+  
+    // Split the filter value into individual words
+    const filterWords = filter.split(' ');
+  
     // Set filter function for data source
     this.dataSource.filterPredicate = (data: Manager, filter: string) => {
-      // Check if any attribute matches the filter value
-      return (
-        this.matchesFilter(data.firstname, filter) ||
-        this.matchesFilter(data.lastname, filter) ||
-        this.matchesFilter(data.email, filter) ||
-        this.matchesFilter(data.telephone, filter) ||
-        this.matchesFilter(data.adresse, filter) ||
-        this.matchesFilter(data.nomEquipe, filter) ||
-        this.matchesFilter(data.role, filter) || 
-        this.matchesFilter(data.roleName, filter) 
+      // Check if any attribute matches all the filter words
+      return filterWords.every(word =>
+        this.matchesFilter(data.firstname, word) ||
+        this.matchesFilter(data.lastname, word) ||
+        this.matchesFilter([data.firstname,data.lastname],  word) ||
+        this.matchesFilter(data.email, word) ||
+        this.matchesFilter(data.telephone, word) ||
+        this.matchesFilter(data.adresse, word) ||
+        this.matchesFilter(data.nomEquipe, word) ||
+        this.matchesFilter(data.role, word) ||
+        this.matchesFilter(data.roleName, word)
       );
     };
+  
     this.dataSource.filter = filter;
   }
 
