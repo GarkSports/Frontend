@@ -1,4 +1,5 @@
 import { Academie } from "./academie.model";
+import { StatutManager } from "./enums/statutManager";
 import { User } from "./user.model";
 
 export class Manager extends User {
@@ -6,4 +7,5 @@ export class Manager extends User {
     academie?: Academie;
     roleName?: string;
     permissions?: string[];
+    nomEquipe: string;
 }

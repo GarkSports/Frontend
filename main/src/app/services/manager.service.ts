@@ -49,6 +49,7 @@ export class ManagerService {
       role:managerData.role,
       roleName: managerData.roleName,
       adresse:managerData.adresse,
+      telephone: managerData.telephone,
       photo:managerData.photo
     };
       console.log("this is service",requestBody);
