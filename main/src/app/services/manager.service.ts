@@ -6,6 +6,7 @@ import { Manager } from 'src/models/manager.model';
 import { RoleName } from 'src/models/roleName.models';
 import {environment} from "../../environments/environment";
 import { ChangePasswordChange } from 'src/models/changePassword.model';
+import { User } from 'src/models/user.model';
 
 @Injectable({
   providedIn: 'root'

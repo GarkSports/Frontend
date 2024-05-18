@@ -90,11 +90,9 @@ export class AppProfilComponent implements OnInit {
         console.log('profil fetched successfully', profil);
         this.managerSource.data = profil;
         this.local_data = profil;
-        console.log('this.local_data.data', this.local_data);
-        console.log('local_data lastname', this.local_data.lastname);
+
         this.userRole = this.local_data.role;
-        console.log('userRole', this.userRole);
-        console.log("password",this.local_data.password);
+
 
         this.initManagerForm();
       },

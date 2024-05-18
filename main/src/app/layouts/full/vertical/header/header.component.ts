@@ -4,9 +4,12 @@ import {
   EventEmitter,
   Input,
   ViewEncapsulation,
+  OnInit,
+  Inject,
+  Optional,
 } from '@angular/core';
 import { CoreService } from 'src/app/services/core.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { navItems } from '../sidebar/sidebar-data';
 import { TranslateService } from '@ngx-translate/core';
 import { TablerIconsModule } from 'angular-tabler-icons';
@@ -16,6 +19,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { AuthService } from 'src/app/services/auth.service';
+import { ManagerService } from 'src/app/services/manager.service';
+import { Manager } from 'src/models/manager.model';
+import { MatTableDataSource } from '@angular/material/table';
+import { User } from 'src/models/user.model';
 
 
 interface notifications {
@@ -54,7 +61,7 @@ interface quicklinks {
   templateUrl: './header.component.html',
   encapsulation: ViewEncapsulation.None,
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
 
   @Input() showToggle = true;
   @Input() toggleChecked = false;
@@ -63,6 +70,8 @@ export class HeaderComponent {
   @Output() toggleCollapsed = new EventEmitter<void>();
 
   showFiller = false;
+  managerSource = new MatTableDataSource<User>([]);
+  local_data: any;
 
   public selectedLanguage: any = {
     language: 'English',
@@ -97,11 +106,14 @@ export class HeaderComponent {
 
   constructor(
     private vsidenav: CoreService,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: User,
     public dialog: MatDialog,
     private translate: TranslateService,
-    private authService: AuthService
+    private authService: AuthService,
+    private managerService: ManagerService
   ) {
     translate.setDefaultLang('en');
+    this.local_data = { ...data };
   }
 
   // ngOnInit() {
@@ -109,12 +121,31 @@ export class HeaderComponent {
   //   this.firstname = this.authService.getFirstname();
   // }
 
+  ngOnInit(): void {
+    this.getProfil();
+  }
+
   openDialog() {
     const dialogRef = this.dialog.open(AppSearchDialogComponent);
 
     dialogRef.afterClosed().subscribe((result) => {
       console.log(`Dialog result: ${result}`);
     });
+  }
+
+  getProfil(): void {
+    this.managerService.getProfil().subscribe(
+      (profil) => {
+        console.log('profil fetched successfully', profil);
+        this.managerSource.data = profil;
+        this.local_data = profil;      
+        console.log("firstname", this.managerSource.data);
+        
+      },
+      (error) => {
+        console.error('Error fetching profil', error);
+      }
+    );
   }
 
   changeLanguage(lang: any): void {
