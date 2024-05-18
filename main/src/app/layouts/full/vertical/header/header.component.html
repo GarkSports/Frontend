@@ -83,21 +83,28 @@
   <!-- profile Dropdown -->
   <!-- --------------------------------------------------------------- -->
   <button mat-icon-button [matMenuTriggerFor]="profilemenu" aria-label="Notifications">
-    <img src="/assets/images/profile/user-1.jpg" class="rounded-circle object-cover icon-35 profile-dd" width="35" />
+    <img     [src]="local_data.photo ? local_data.photo : '/assets/images/profile/user-1.jpg'" 
+    class="rounded-circle object-cover icon-35 profile-dd" width="35" />
   </button>
   <mat-menu #profilemenu="matMenu" class="topbar-dd cardWithShadow">
-    <ng-scrollbar class="position-relative" style="height: 647px">
+    <!-- <ng-scrollbar class="position-relative" style="height: 647px"> -->
       <div class="p-x-32 p-y-16">
         <h6 class="f-s-16 f-w-600 m-0 mat-subtitle-1">User Profile</h6>
 
-        <div class="d-flex align-items-center p-b-24 b-b-1 m-t-16">
-          <img src="/assets/images/profile/user-1.jpg" class="rounded-circle" width="95" />
-          <div class="m-l-16">
-            <h6 class="f-s-14 f-w-600 m-0 mat-subtitle-1">Mathew Anderson</h6>
-            <span class="f-s-14 d-block m-b-4">Designer</span>
+        <div class="d-flex align-items-center p-b-24 b-b-1 m-t-16" *ngIf="local_data" >
+          <img     [src]="local_data.photo ? local_data.photo : '/assets/images/profile/user-1.jpg'" 
+          class="rounded-circle object-cover  profile-dd" width="70" height="70"/>
+          <div class="m-l-16" >
+            <h6 class="f-s-14 f-w-600 m-0 mat-subtitle-1">{{local_data.firstname}} {{local_data.lastname}}</h6>
+            <span class="f-s-14 d-block m-b-4">
+              @if(local_data.roleName){
+                {{local_data.roleName}}
+              }
+              {{local_data.role}}
+            </span>
             <span class="d-flex align-items-center">
               <i-tabler name="mail" class="icon-15 m-r-4"></i-tabler>
-              info&#64;modernize.com
+              {{local_data.email}}
             </span>
           </div>
         </div>
@@ -119,28 +126,13 @@
           </div>
         </a>
         }
-
-        <!-- upgrade -->
-        <div class="p-24 overflow-hidden bg-light-primary rounded position-relative m-y-16">
-          <div class="d-flex align-items-center">
-            <div>
-              <h5 class="f-s-18 m-0 f-w-600 m-b-12 mat-subtitle-1">
-                Unlimited <br />
-                Access
-              </h5>
-              <button mat-flat-button color="primary">Upgrade</button>
-            </div>
-            <div class="m-l-auto">
-              <img src="/assets/images/backgrounds/unlimited-bg.png" alt="upgrade-bg" class="upgrade-bg" />
-            </div>
-          </div>
-        </div>
       </div>
-
-      <div class="p-y-12 p-x-32">
-        <a [routerLink]="['/authentication/side-login']" (click)="logout()" mat-stroked-button color="primary"
-          class="w-100">Logout</a>
-      </div>
-    </ng-scrollbar>
+      
+    <!-- </ng-scrollbar> -->
+    <div class="p-y-12 p-x-32">
+      <a [routerLink]="['/authentication/side-login']" (click)="logout()" mat-stroked-button 
+      style ="background-color: #B0E53C; color:white; border-color:white" 
+        class="w-100">Logout</a>
+    </div>
   </mat-menu>
 </mat-toolbar>
