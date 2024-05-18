@@ -445,6 +445,26 @@ export class AppManagerDialogContentComponent implements OnInit {
         );
       }
     }
+    else if (this.action === 'Delete') {
+     
+        // User is currently blocked, so we need to unblock
+        this.adminService.deleteManager(this.local_data.id).subscribe(
+          (response) => {
+            if (response.success) {
+              console.log('Manager deleting successfully', response.message);
+              this.dialogRef.close(true);
+            } else {
+              console.error('Error deleting manager', response.error);
+              this.dialogRef.close(true);             
+            }
+          },
+          (error) => {
+            console.error('Error deleting manager', error);
+            this.dialogRef.close({ event: 'Error' });
+          }
+        );
+    }
+      
   }
   
 
