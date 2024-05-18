@@ -244,6 +244,10 @@ export class FullComponent implements OnInit {
     this.authService.logout().subscribe(
       response => {
         console.log(response); // Handle success response
+        if(localStorage){
+          localStorage.removeItem('jwtToken');
+        }
+        
       },
       error => {
         console.error(error); // Handle error response
