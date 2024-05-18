@@ -53,6 +53,8 @@ export class AppManagerlistComponent implements OnInit {
     'action',
   ];
   dataSource = new MatTableDataSource<Manager>([]);
+  profil: Manager | null = null;
+
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
   @ViewChild(MatSort, { static: true }) sort: MatSort = Object.create(null);
@@ -68,7 +70,7 @@ export class AppManagerlistComponent implements OnInit {
 
   ngOnInit(): void {
     //this.dataSource = new MatTableDataSource<Manager>([]);
-    this.getAcademies();
+    this.getAcademiesNames();
     this.fetchData();
     this.getManagers();
     //this.sortData();
@@ -127,9 +129,11 @@ matchesFilter(value: any, filter: string): boolean {
   return stringValue.includes(filter);
 }
 
-getAcademies(): void {
+getAcademiesNames(): void {
   this.academieService.getAcademies().subscribe((academies: Academie[]) => {
     this.academieOptions = academies.map((academie: Academie) => academie.nom);
+    console.log("academie.nom",this.academieOptions);
+    
   });
 }
 
@@ -203,12 +207,12 @@ getAcademies(): void {
 
   getManagers(): void {
     this.adminService.getManagers().subscribe(
-      (managers) => {
-        console.log('Managers fetched successfully', managers);
-        this.dataSource.data = managers;
+      (profil: Manager[]) => {
+        console.log('Profile fetched successfully', profil);
+        this.dataSource.data = profil;
       },
       (error) => {
-        console.error('Error fetching academies', error);
+        console.error('Error fetching profile', error);
       }
     );
   }
@@ -446,7 +450,6 @@ export class AppManagerDialogContentComponent implements OnInit {
       }
     }
     else if (this.action === 'Delete') {
-     
         // User is currently blocked, so we need to unblock
         this.adminService.deleteManager(this.local_data.id).subscribe(
           (response) => {
