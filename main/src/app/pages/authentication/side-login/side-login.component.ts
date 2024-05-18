@@ -28,25 +28,25 @@ export class AppSideLoginComponent {
     private http: HttpClient,
     private authService: AuthService
   ) {
-    if (localStorage.getItem('jwtToken')) {
-      this.authService.checkIfManager().subscribe((isManager) => {
-        if (isManager) {
-          // Navigate to manager page
-          this.router.navigate(['/apps/profil']);
-        } else {
-          // Check if the user is an admin
-          this.authService.checkIfAdmin().subscribe((isAdmin) => {
-            if (isAdmin) {
-              // Navigate to admin page
-              this.router.navigate(['/dashboards/dashboard1']);
-            } else {
-              // Navigate to default page for regular users
-              this.router.navigate(['/authentication/side-login']);
-            }
-          });
-        }
-      });
-    }
+    // if (localStorage.getItem('jwtToken')) {
+    //   this.authService.checkIfManager().subscribe((isManager) => {
+    //     if (isManager) {
+    //       // Navigate to manager page
+    //       this.router.navigate(['/apps/profil']);
+    //     } else {
+    //       // Check if the user is an admin
+    //       this.authService.checkIfAdmin().subscribe((isAdmin) => {
+    //         if (isAdmin) {
+    //           // Navigate to admin page
+    //           this.router.navigate(['/dashboards/dashboard1']);
+    //         } else {
+    //           // Navigate to default page for regular users
+    //           this.router.navigate(['/authentication/side-login']);
+    //         }
+    //       });
+    //     }
+    //   });
+    // }
   }
 
   form = new FormGroup({
