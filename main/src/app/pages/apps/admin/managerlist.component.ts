@@ -156,21 +156,26 @@ getAcademies(): void {
   applyFilter(filterValue: string): void {
     // Convert filter value to lowercase for case-insensitive comparison
     const filter = filterValue.trim().toLowerCase();
-
+  
+    // Split the filter value into individual words
+    const filterWords = filter.split(' ');
+  
     // Set filter function for data source
     this.dataSource.filterPredicate = (data: Manager, filter: string) => {
-      // Check if any attribute matches the filter value
-      return (
-        this.matchesFilter(data.firstname, filter) ||
-        this.matchesFilter(data.lastname, filter) ||
-        this.matchesFilter(data.email, filter) ||
-        this.matchesFilter(data.telephone2, filter) ||
-        this.matchesFilter(data.telephone, filter) ||
-        this.matchesFilter(data.adresse, filter) ||
-        this.matchesFilter(data.academie?.nom, filter) 
-
+      // Check if any attribute matches all the filter words
+      return filterWords.every(word =>
+        this.matchesFilter(data.firstname, word) ||
+        this.matchesFilter(data.lastname, word) ||
+        this.matchesFilter([data.firstname,data.lastname],  word) ||
+        this.matchesFilter(data.email, word) ||
+        this.matchesFilter(data.telephone, word) ||
+        this.matchesFilter(data.adresse, word) ||
+        this.matchesFilter(data.nomEquipe, word) ||
+        this.matchesFilter(data.role, word) ||
+        this.matchesFilter(data.roleName, word)
       );
     };
+  
     this.dataSource.filter = filter;
   }
 
@@ -311,6 +316,7 @@ export class AppManagerDialogContentComponent implements OnInit {
   local_data: any;
   managerForm: FormGroup;
   firstnameValue: string;
+  isPasswordVisible: boolean = false;
 
   dataSource = new MatTableDataSource<Manager>([]);
 
@@ -340,8 +346,13 @@ export class AppManagerDialogContentComponent implements OnInit {
       email: [this.local_data.email, [Validators.required, Validators.email]],
       adresse: [this.local_data.adresse, Validators.required],
       telephone: [this.local_data.telephone, Validators.required],
-      telephone2: [this.local_data.telephone2, Validators.required]
+      telephone2: [this.local_data.telephone2],
+      password: ['', [Validators.required]]
+
     });
+  }
+  togglePasswordVisibility(): void {
+    this.isPasswordVisible = !this.isPasswordVisible;
   }
   getManagers(): void {
     this.adminService.getManagers().subscribe(

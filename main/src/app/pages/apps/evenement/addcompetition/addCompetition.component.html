@@ -3,49 +3,114 @@
         <mat-card-title class="m-b-0">Add Competition</mat-card-title>
     </mat-card-header>
     <mat-card-content class="b-t-1">
-        <form [formGroup]="competitionForm" (ngSubmit)="onSubmit()">
-            <div class="row">
-                <!-- Nom -->
-                <div class="col-md-12">
-                    <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Nom</mat-label>
-                    <mat-form-field appearance="outline" class="w-100">
-                        <input matInput formControlName="nom" required />
-                    </mat-form-field>
-                </div>
-                <!-- Lieu -->
-                <div class="col-md-12">
-                    <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Lieu</mat-label>
-                    <mat-form-field appearance="outline" class="w-100">
-                        <input matInput formControlName="lieu" required />
-                    </mat-form-field>
-                </div>
-                <!-- Date -->
-                <div class="col-md-6">
-                    <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Date</mat-label>
-                    <mat-form-field appearance="outline" class="w-100">
-                        <input matInput [matDatepicker]="picker" formControlName="date" required />
-                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                        <mat-datepicker #picker></mat-datepicker>
-                    </mat-form-field>
-                </div>
-                <!-- Horraire -->
-                <div class="col-md-6">
-                    <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Horraire</mat-label>
-                    <mat-form-field appearance="outline" class="w-100">
-                        <input matInput formControlName="horraire" required type="time" />
-                    </mat-form-field>
-                </div>
-                <!-- Description -->
-                <div class="col-md-12">
-                    <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Description</mat-label>
-                    <mat-form-field appearance="outline" class="w-100">
-                        <textarea matInput formControlName="description" required rows="4"></textarea>
-                    </mat-form-field>
-                </div>
-            </div>
-            <div class="text-right">
-                <button mat-flat-button color="primary" type="submit" [disabled]="!competitionForm.valid">Finish</button>
-            </div>
-        </form>
+                <form id="firstForm" class="m-t-24">
+                    <div>
+                        <!-- Radio buttons for selection -->
+                        <div class="radio-buttons-container">
+                            <mat-radio-group [(ngModel)]="selectedOption" name="selectedOption"
+                                style="margin-bottom: 20px;">
+                                <mat-radio-button value="equipe" [checked]="selectedOption === 'equipe'"
+                                    (click)="changeOption('equipe')">Equipe</mat-radio-button>
+                                <mat-radio-button value="member" [checked]="selectedOption === 'member'"
+                                    (click)="changeOption('member')">Member</mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+
+                        <!-- Equipe selection -->
+                        <div *ngIf="selectedOption === 'equipe'">
+                            <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Equipe</mat-label>
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-select required [(ngModel)]="selectedEquipe" name="equipe" required>
+                                    <mat-option *ngFor="let equipe of equipeList" [value]="equipe.id">{{ equipe.nom
+                                        }}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <!-- Member selection -->
+                        <div *ngIf="selectedOption === 'member'">
+                            <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Equipe</mat-label>
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-select [(ngModel)]="selectedEquipe2" name="equipe" required>
+                                    <mat-option *ngFor="let equipe of equipeList" [value]="equipe">{{ equipe.nom
+                                        }}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+
+                        <div *ngIf="selectedOption === 'member' && selectedEquipe2">
+                            <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Members</mat-label>
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-select multiple required [(ngModel)]="selectedMembers" name="membres" required>
+                                    <mat-option *ngFor="let member of selectedEquipe2.adherents" [value]="member.id">{{
+                                        member.firstname }} {{ member.lastname }}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </form>
+                <form [formGroup]="evenementForm" class="m-t-24">
+                    <ng-template matStepLabel>Détails</ng-template>
+                    <div class="row">
+                        <!-- Nom -->
+                        <div class="col-md-12">
+                            <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Nom</mat-label>
+                            <mat-form-field appearance="outline" class="w-100">
+                                <input matInput required placeholder="Nom" formControlName="nom" />
+                                <mat-error *ngIf="evenementForm.get('nom')?.invalid && evenementForm.get('nom')?.touched">Nom is required</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <!-- Lieu -->
+                        <div class="col-md-12">
+                            <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Lieu</mat-label>
+                            <mat-form-field appearance="outline" class="w-100">
+                                <input matInput required placeholder="Lieu" formControlName="lieu" />
+                                <mat-error *ngIf="evenementForm.get('lieu')?.invalid && evenementForm.get('lieu')?.touched">Lieu is required</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <!-- Date -->
+                        <div class="col-md-6">
+                            <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Date</mat-label>
+                            <mat-form-field appearance="outline" class="w-100">
+                                <input matInput [matDatepicker]="picker" required formControlName="date" />
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                                <mat-error *ngIf="evenementForm.get('date')?.invalid && evenementForm.get('date')?.touched">Date is required</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <!-- Horraire -->
+                        <div class="col-md-6">
+                            <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Horraire</mat-label>
+                            <mat-form-field appearance="outline" class="w-100">
+                                <input matInput required type="time" formControlName="horraire" />
+                                <mat-error *ngIf="evenementForm.get('horraire')?.invalid && evenementForm.get('horraire')?.touched">Horraire is required</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <!-- Description -->
+                        <div class="col-md-12">
+                            <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Description</mat-label>
+                            <mat-form-field appearance="outline" class="w-100">
+                                <textarea matInput required rows="4" formControlName="description"></textarea>
+                                <mat-error *ngIf="evenementForm.get('description')?.invalid && evenementForm.get('description')?.touched">Description is required</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <button mat-flat-button color="primary" (click)="onSubmit()"
+                            [disabled]="!evenementForm.valid">Finish</button>
+                    </div>
+                </form>
     </mat-card-content>
 </mat-card>
+
+<style>
+    .radio-buttons-container {
+        display: flex;
+        justify-content: center;
+    }
+
+    #firstForm {
+        margin-bottom: -20px;
+        /* Remove bottom margin */
+    }
+</style>
