@@ -168,6 +168,7 @@ export class AppBlogDialogContentComponent {
   // tslint:disable-next-line - Disables all
   local_data: any;
   disciplines: Discipline[] = [];
+  uploadingImage: boolean = false;
 
   constructor(
     private firestorage: AngularFireStorage,
@@ -195,6 +196,7 @@ export class AppBlogDialogContentComponent {
   }
 
   async uploadFile(event: any) {
+    this.uploadingImage = true;
     //display image
     if (!event.target.files[0] || event.target.files[0].length === 0) {
       // this.msg = 'You must select an image';
@@ -221,6 +223,7 @@ export class AppBlogDialogContentComponent {
       const url = await uploadTask.ref.getDownloadURL();
       console.log('Image URL:', url);
       this.local_data.imageUrl = url;
+      this.uploadingImage = false;
     }
   }
 }

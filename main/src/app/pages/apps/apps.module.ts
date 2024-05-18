@@ -119,6 +119,11 @@ import { AddEvenementPopupComponent, ListEvenementComponent } from './evenement/
 import { NavbarComponent } from './evenement/navbar/navbar.component';
 
 
+
+//notification
+import {initializeApp} from 'firebase/app';
+initializeApp(environment.firebaseConfig);
+
 @NgModule({
   imports: [
     FullCalendarModule,
