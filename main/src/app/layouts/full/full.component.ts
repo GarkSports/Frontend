@@ -244,6 +244,10 @@ export class FullComponent implements OnInit {
     this.authService.logout().subscribe(
       response => {
         console.log(response); // Handle success response
+        if(localStorage){
+          localStorage.removeItem('jwtToken');
+        }
+        
       },
       error => {
         console.error(error); // Handle error response
@@ -266,48 +270,55 @@ export class FullComponent implements OnInit {
           route: 'apps/managers',
         },
         {
+          displayName: 'Academies',
+          iconName: 'building',
+          route: 'apps/academie',
+        },
+        {
           displayName: 'Archived Academies',
           iconName: 'building',
           route: 'apps/archivedacademie',
         },
         {
-          displayName: 'Discipline',
+          displayName: 'Disciplines',
           iconName: 'medal',
           route: 'apps/discipline',
         },
-        {
-          displayName: 'Academie',
-          iconName: 'building',
-          route: 'apps/academie',
-        },
+        
 
       ];
     } else if (userRole === 'MANAGER') {
       this.navItems = [
         {
-          displayName: 'Profil',
-          iconName: 'user-circle',
-          route: 'apps/profil',
-        },
-        {
-          displayName: 'Academie Profile',
+          displayName: 'Tableau de board',
           iconName: 'building',
           route: 'apps/academieprofile',
         },
         {
-          displayName: 'Staff',
-          iconName: 'user-circle',
-          route: 'apps/staff',
+          displayName: 'Planification',
+          iconName: 'calendar-event',
+          route: 'apps/calendrier',
         },
         {
-          displayName: 'Roles',
+          displayName: 'Utilisateurs',
           iconName: 'user-circle',
-          route: 'apps/roles',
-        },
-        {
-          displayName: 'Equipe',
-          iconName: 'users',
-          route: 'apps/equipe',
+          children: [
+            {
+              displayName: 'Staff',
+              iconName: 'point',
+              route: 'apps/staff',
+            },
+            {
+              displayName: 'Equipe',
+              iconName: 'point',
+              route: 'apps/equipe',
+            },
+            {
+              displayName: 'roles',
+              iconName: 'point',
+              route: 'apps/roles',
+            },
+          ],
         },
         {
           displayName: 'Paiement',
@@ -315,15 +326,28 @@ export class FullComponent implements OnInit {
           route: 'apps/paiement',
         },
         {
+          displayName: 'Comptabilité',
+          iconName: 'credit-card',
+        },
+        {
+          displayName: 'Boite de réception',
+          iconName: 'message-2',
+          route: 'apps/chat',
+        },
+        {
+          displayName: 'Statistiques',
+          iconName: 'message-2',
+        },
+        {
+          displayName: 'Collecte',
+          iconName: 'credit-card',
+        },
+        {
           displayName: 'Discipline Manager',
           iconName: 'medal',
           route: 'apps/disciplinemanager',
         },
-        {
-          displayName: 'Calendrier',
-          iconName: 'calendar-event',
-          route: 'apps/calendrier',
-        },
+        
         {
           displayName: 'List Evenement',
           iconName: 'star',
@@ -347,11 +371,7 @@ export class FullComponent implements OnInit {
 
           ],
         },
-        {
-          displayName: 'Chat',
-          iconName: 'message-2',
-          route: 'apps/chat',
-        },
+        
         // Add other default items for regular users
       ];
     }

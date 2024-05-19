@@ -13,6 +13,7 @@ import { EvenementService } from 'src/app/services/evenement.service';
 import { Equipe } from 'src/models/equipe.model';
 import { Evenement } from 'src/models/evenement.model'; // Import Evenement model
 import { MatchAmicalRequest } from 'src/models/dto/MatchAmicalRequest.model';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'add-matchamical',
@@ -27,7 +28,8 @@ export class AddMatchAmicalComponent {
 
     constructor(
         private formBuilder: FormBuilder,
-        private eventService: EvenementService
+        private eventService: EvenementService,
+        private router: Router
     ) {
         this.matchAmicalForm = this.formBuilder.group({
             nomEvent: ['', Validators.required],
@@ -71,6 +73,8 @@ export class AddMatchAmicalComponent {
                     console.log('Friendly match added successfully:', response);
                     // Reset the form after successful submission
                     this.matchAmicalForm.reset();
+                    this.router.navigate(['/apps/listevenement']);
+                    
                 },
                 (error) => {
                     console.error('Error adding friendly match:', error);

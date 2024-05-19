@@ -3,6 +3,7 @@ import {
   Output,
   EventEmitter,
   Input,
+  OnInit,
 } from '@angular/core';
 import { CoreService } from 'src/app/services/core.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -13,6 +14,9 @@ import { TablerIconsModule } from 'angular-tabler-icons';
 import { MaterialModule } from 'src/app/material.module';
 import { BrandingComponent } from '../../vertical/sidebar/branding.component';
 import { FormsModule } from '@angular/forms';
+import { ManagerService } from 'src/app/services/manager.service';
+import { Manager } from 'src/models/manager.model';
+import { MatTableDataSource } from '@angular/material/table';
 
 
 interface notifications {
@@ -50,7 +54,7 @@ interface quicklinks {
   imports: [RouterModule, TablerIconsModule, MaterialModule, BrandingComponent],
   templateUrl: './header.component.html',
 })
-export class AppHorizontalHeaderComponent {
+export class AppHorizontalHeaderComponent{
   @Input() showToggle = true;
   @Input() toggleChecked = false;
   @Output() toggleMobileNav = new EventEmitter<void>();
@@ -98,6 +102,7 @@ export class AppHorizontalHeaderComponent {
     translate.setDefaultLang('en');
   }
 
+
   openDialog() {
     const dialogRef = this.dialog.open(AppHorizontalSearchDialogComponent);
 
@@ -105,6 +110,7 @@ export class AppHorizontalHeaderComponent {
       console.log(`Dialog result: ${result}`);
     });
   }
+
 
   changeLanguage(lang: any): void {
     this.translate.use(lang.code);

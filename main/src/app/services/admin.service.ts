@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Academie } from 'src/models/academie.model';
 import { Manager } from 'src/models/manager.model';
 import {environment} from "../../environments/environment";
+import { map } from 'rxjs/operators';
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +26,8 @@ export class AdminService {
       lastname: managerData.lastname,
       adresse:managerData.adresse,
       telephone:managerData.telephone,
+      telephone2:managerData.telephone2,
+      password:managerData.password
     };
       console.log("this is service",requestBody);
 
@@ -48,10 +53,18 @@ export class AdminService {
     return this.http.put<any>(`${this.apiUrl}/changeEtat?id=${ManagerId}`, {withCredentials: true});
   }
 
-  deleteManager(ManagerId: number): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/archive-user?id=${ManagerId}`, {withCredentials: true});
+  deleteManager(ManagerId: number): Observable<{ success: boolean, message?: string, error?: string }> {
+    return this.http.delete(`${this.apiUrl}/archive-user?id=${ManagerId}`, { responseType: 'text', withCredentials: true, observe: 'response' })
+      .pipe(
+        map((response: HttpResponse<string>) => {
+          if (response.status === 200) {
+            return { success: true, message: response.body || '' };
+          } else {
+            return { success: false, error: response.body || '' };
+          }
+        })
+      );
   }
-
  
   blockManager(ManagerId: number): Observable<{ success: boolean, message?: string, error?: string }> {
     console.log(ManagerId);
