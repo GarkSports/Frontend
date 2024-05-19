@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row ">
   @for(blogPost of PostsService.blogPosts; track blogPost.id) {
   @if(blogPost.featuredPost) {
   <div
@@ -55,9 +55,9 @@
     </mat-card>
   </div>
   } @else {
-  <div class="col-sm-6 col-lg-4">
+  <div class="col-sm-6 col-lg-4 ">
     <mat-card
-      class="cardWithShadow card2 position-relative card-hover cursor-pointer "
+      class="cardWithShadow card2 position-relative card-hover cursor-pointer gray-background"
       (click)="selectBlog(blogPost.id)"
     >
       

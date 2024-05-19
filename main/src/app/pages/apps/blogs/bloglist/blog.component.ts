@@ -9,6 +9,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { BlogPosts } from 'src/models/posts.model';
 import { PostsService } from 'src/app/services/posts.service';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { EquipeService } from 'src/app/services/equipe.service';
+import { Discipline } from 'src/models/discipline.model';
 
 
 
@@ -25,6 +27,8 @@ export class AppBloglistComponent implements AfterViewInit {
   Closed = -1;
   Inprogress = -1;
   Open = -1;
+  
+
 
   displayedColumns: string[] = [
  'createdAt',
@@ -34,13 +38,16 @@ export class AppBloglistComponent implements AfterViewInit {
     'publicAudience',
     'action',
   ];
+
+  
   
   
   dataSource = new MatTableDataSource<BlogPosts>([]);
-
+ 
   constructor(
     public dialog: MatDialog,
-    public postservice: PostsService
+    public postservice: PostsService,
+   
     ) {}
 
   ngOnInit(): void {
@@ -71,6 +78,8 @@ export class AppBloglistComponent implements AfterViewInit {
     );
   }
 
+  
+
   applyFilter(filterValue: string): void {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
@@ -87,11 +96,11 @@ export class AppBloglistComponent implements AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result.event === 'Add') {
+      if (result.event === 'Ajouter') {
         this.addRowData(result.data);
-      } else if (result.event === 'Update') {
+      } else if (result.event === 'Modifier') {
         this.updateRowData(result.data);
-      } else if (result.event === 'Delete') {
+      } else if (result.event === 'Supprimer') {
         this.deleteRowData(result.data);
       }
     });
@@ -158,14 +167,24 @@ export class AppBlogDialogContentComponent {
   action: string;
   // tslint:disable-next-line - Disables all
   local_data: any;
+  disciplines: Discipline[] = [];
+  uploadingImage: boolean = false;
 
   constructor(
     private firestorage: AngularFireStorage,
     public dialogRef: MatDialogRef<AppBlogDialogContentComponent>,
+    private equipeService: EquipeService,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: BlogPosts
   ) {
     this.local_data = { ...data };
     this.action = this.local_data.action;
+    this.getDisciplines();
+
+  }
+
+  getDisciplines(): void {
+    this.equipeService.getDisciplines()
+      .subscribe(disciplines => this.disciplines = disciplines);
   }
 
   doAction(): void {
@@ -177,6 +196,7 @@ export class AppBlogDialogContentComponent {
   }
 
   async uploadFile(event: any) {
+    this.uploadingImage = true;
     //display image
     if (!event.target.files[0] || event.target.files[0].length === 0) {
       // this.msg = 'You must select an image';
@@ -203,6 +223,7 @@ export class AppBlogDialogContentComponent {
       const url = await uploadTask.ref.getDownloadURL();
       console.log('Image URL:', url);
       this.local_data.imageUrl = url;
+      this.uploadingImage = false;
     }
   }
 }

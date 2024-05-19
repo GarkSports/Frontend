@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ChatContactDTO, ChatDTO } from 'src/models/chat.model';
+import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +10,7 @@ import { ChatContactDTO, ChatDTO } from 'src/models/chat.model';
 export class ChatService {
 
   private apiUrl = 'http://localhost:8089';
+  //private apiUrl =environment.apiUrl;
 
     contactList: ChatContactDTO[] = [];
     discussionList: ChatDTO[] = [];
