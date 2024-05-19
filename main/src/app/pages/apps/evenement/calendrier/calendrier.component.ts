@@ -72,13 +72,14 @@ export class CalendrierComponent implements OnInit {
       (this.selectedTeams.length === 0 || this.selectedTeams.includes(event.convocationEquipe?.nom)) &&
       (!this.selectedDate || this.isSameDate(event.date, this.selectedDate))
     ).map(event => ({
-      title: `${event.nomEvent} - ${event.type}`, // Only include nomEvent as title
+      title: `${event.nomEvent} - ${event.type}`,
       start: event.date,
-      backgroundColor: '#B7EE3E',
-      borderColor: '#B7EE3E',
+      backgroundColor: event.statut == 'Annulé' ? '#FF1354' : '#B7EE3E', // Set background color based on event type
+      borderColor: event.statut == 'Annulé' ? '#FF1354' : '#B7EE3E',
       textColor: '#000000',
     }));
   }
+
 
   renderEventContent(info: { event: any; }) {
     return {
@@ -105,7 +106,7 @@ export class CalendrierComponent implements OnInit {
     console.log('Selected teams after filter:', this.selectedTeams);
     this.filterEvents();
   }
-  
+
   applyDateFilter(selectedDate: Date): void {
     this.selectedDate = selectedDate;
     this.filterEvents();
