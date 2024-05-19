@@ -14,9 +14,6 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Roles } from 'src/models/roles.model';
 import { MaterialModule } from 'src/app/material.module';
 import { TablerIconsModule } from 'angular-tabler-icons';
-import {getMessaging, getToken, onMessage} from 'firebase/messaging';
-import { environment } from 'src/app/pages/api/environment';
-import { PostsService } from 'src/app/services/posts.service';
 
 @Component({
   selector: 'app-profil',
@@ -29,7 +26,7 @@ export class AppProfilComponent implements OnInit {
   managerForm: FormGroup;
   local_data: any;
   action: string;
-  sendtoken: PostsService;
+  
 
   dataSource = new MatTableDataSource<string>([]);
   managerSource = new MatTableDataSource<Manager>([]);
@@ -46,30 +43,14 @@ export class AppProfilComponent implements OnInit {
   
     this.initManagerForm();
   }
-  requestPermission(){
-    const messaging = getMessaging();
-    
-    getToken(messaging,{vapidKey:environment.firebaseConfig.vpaidKey}).then(
-      (currentToken) =>{
-        if(currentToken){
-          console.log("you have token");
-          console.log(currentToken);
-          onMessage(messaging, (payload) => {
-            console.log('Message received. ', payload);
-          });
-        }else{
-          console.log("problem token");
-        }
-      }
-    )
-  }
+
 
   ngOnInit(): void {
     this.initManagerForm();
     this.dataSource = new MatTableDataSource<string>([]);
     this.getProfil();
     console.log("this.local_data",this.local_data);
-    this.requestPermission()
+    
     
   }
 

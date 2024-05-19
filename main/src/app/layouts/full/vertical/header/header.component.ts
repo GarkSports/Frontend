@@ -16,13 +16,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { AuthService } from 'src/app/services/auth.service';
+import { MessagingService } from 'src/app/services/messaging.service';
 
 
-interface notifications {
-  id: number;
-  img: string;
+export interface Notification {
   title: string;
-  subtitle: string;
+  body: string;
+  image: string;
 }
 
 interface profiledd {
@@ -53,6 +53,7 @@ interface quicklinks {
   imports: [RouterModule, CommonModule, NgScrollbarModule, TablerIconsModule, MaterialModule],
   templateUrl: './header.component.html',
   encapsulation: ViewEncapsulation.None,
+  providers:[MessagingService]
 })
 export class HeaderComponent {
 
@@ -95,13 +96,28 @@ export class HeaderComponent {
     },
   ];
 
+  notifications: Notification[] = [];
+
+
   constructor(
     private vsidenav: CoreService,
     public dialog: MatDialog,
     private translate: TranslateService,
-    private authService: AuthService
+    private authService: AuthService,
+    private messagingService: MessagingService
   ) {
     translate.setDefaultLang('en');
+  }
+
+  ngOnInit() {
+    this.messagingService.notifications$.subscribe(notifications => {
+      this.notifications = notifications.map(notification => ({
+        title: notification.title || 'No Title',
+        body: notification.body || 'No Body',
+        image: notification.image || "/assets/images/breadcrumb/emailSv.png"
+
+      }));
+    });
   }
 
   // ngOnInit() {
@@ -133,38 +149,38 @@ export class HeaderComponent {
     );
   }
 
-  notifications: notifications[] = [
-    {
-      id: 1,
-      img: '/assets/images/profile/user-1.jpg',
-      title: 'Roman Joined the Team!',
-      subtitle: 'Congratulate him',
-    },
-    {
-      id: 2,
-      img: '/assets/images/profile/user-2.jpg',
-      title: 'New message received',
-      subtitle: 'Salma sent you new message',
-    },
-    {
-      id: 3,
-      img: '/assets/images/profile/user-3.jpg',
-      title: 'New Payment received',
-      subtitle: 'Check your earnings',
-    },
-    {
-      id: 4,
-      img: '/assets/images/profile/user-4.jpg',
-      title: 'Jolly completed tasks',
-      subtitle: 'Assign her new tasks',
-    },
-    {
-      id: 5,
-      img: '/assets/images/profile/user-5.jpg',
-      title: 'Roman Joined the Team!',
-      subtitle: 'Congratulate him',
-    },
-  ];
+  // notifications: notifications[] = [
+  //   {
+  //     id: 1,
+  //     img: '/assets/images/profile/user-1.jpg',
+  //     title: 'Roman Joined the Team!',
+  //     subtitle: 'Congratulate him',
+  //   },
+  //   {
+  //     id: 2,
+  //     img: '/assets/images/profile/user-2.jpg',
+  //     title: 'New message received',
+  //     subtitle: 'Salma sent you new message',
+  //   },
+  //   {
+  //     id: 3,
+  //     img: '/assets/images/profile/user-3.jpg',
+  //     title: 'New Payment received',
+  //     subtitle: 'Check your earnings',
+  //   },
+  //   {
+  //     id: 4,
+  //     img: '/assets/images/profile/user-4.jpg',
+  //     title: 'Jolly completed tasks',
+  //     subtitle: 'Assign her new tasks',
+  //   },
+  //   {
+  //     id: 5,
+  //     img: '/assets/images/profile/user-5.jpg',
+  //     title: 'Roman Joined the Team!',
+  //     subtitle: 'Congratulate him',
+  //   },
+  // ];
 
   profiledd: profiledd[] = [
     {

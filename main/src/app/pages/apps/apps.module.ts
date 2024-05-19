@@ -106,9 +106,7 @@ import { DeleteEventConfirmationDialogComponent } from './evenement/listEvenemen
 import { UpdateEquipePopupComponent } from './equipe/equipe.component';
 
 
-import { AngularFireModule } from '@angular/fire/compat'; // Update import path
-import { AngularFireStorageModule } from '@angular/fire/compat/storage'; // Update import path
-import { environment } from '../api/environment';
+
 import { AppBlogDialogContentComponent, AppBloglistComponent } from './blogs/bloglist/blog.component';
 import { AppManagerDialogContentComponent, AppManagerlistComponent } from './admin/managerlist.component';
 import { AppStaffDialogContentComponent, AppStafflistComponent } from './managers/staff/stafflist.component';
@@ -120,15 +118,12 @@ import { NavbarComponent } from './evenement/navbar/navbar.component';
 
 
 
-//notification
-import {initializeApp} from 'firebase/app';
-initializeApp(environment.firebaseConfig);
+
 
 @NgModule({
   imports: [
     FullCalendarModule,
-    AngularFireStorageModule,
-    AngularFireModule.initializeApp(environment.firebaseConfig),
+  
     CommonModule,
     RouterModule.forChild(AppsRoutes),
     MaterialModule,
