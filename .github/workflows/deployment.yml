@@ -1,9 +1,9 @@
 name: SSH Deployment
 on:
-  push:
-    branches:
-      - production
-  # workflow_dispatch: # Manually trigger workflow
+#   push:
+#     branches:
+#       - production
+   workflow_dispatch: # Manually trigger workflow
 
 jobs:
   deploy:
