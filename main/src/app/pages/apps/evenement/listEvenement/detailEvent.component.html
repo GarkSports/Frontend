@@ -1,27 +1,4 @@
 <div class="evenement-dialog">
-    <h6 mat-dialog-title class="dialog-title">Evenement</h6>
-    <mat-dialog-content class="dialog-content">
-        <table class="evenement-table">
-            <thead>
-                <tr>
-                    <th>Nom Evenement</th>
-                    <th>Type</th>
-                    <th>Heure</th>
-                    <th>Equipe</th>
-                    <th>Statut</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="evenement-item">
-                    <td>{{ evenement.nomEvent }}</td>
-                    <td>{{ formatEnumValue(evenement.type) }}</td>
-                    <td>{{ evenement.date }} {{ evenement.heure.slice(0, 5) }}</td>
-                    <td>{{ evenement.convocationEquipe?.nom }}</td>
-                    <td>{{ evenement.statut }}</td>
-                </tr>
-            </tbody>
-        </table>
-    </mat-dialog-content>
     <h6 mat-dialog-title class="dialog-title">Members</h6>
     <mat-dialog-content class="dialog-content">
         <table class="evenement-table">
