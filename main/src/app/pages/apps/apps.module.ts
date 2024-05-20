@@ -118,6 +118,7 @@ import { AddEvenementPopupComponent, ListEvenementComponent } from './evenement/
 import { NavbarComponent } from './evenement/navbar/navbar.component';
 import { AppProfilComponent } from './managers/profil/profil.component';
 import { UpdateEvenementPopupComponent } from './evenement/listEvenement/listEvenement.component';
+import { EventPopupComponent } from './evenement/calendrier/calendrier.component';
 
 
 @NgModule({
@@ -146,6 +147,7 @@ import { UpdateEvenementPopupComponent } from './evenement/listEvenement/listEve
   ],
   exports: [TablerIconsModule],
   declarations: [
+    EventPopupComponent,
     UpdateEvenementPopupComponent,
     UpdateEquipePopupComponent,
     DeleteEventConfirmationDialogComponent,
