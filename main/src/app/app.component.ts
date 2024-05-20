@@ -11,11 +11,11 @@ export class AppComponent implements OnInit{
 
   title = 'Modernize Angular Admin Tempplate';
 
-  constructor(private messagingService: MessagingService){}
+  constructor(){}
 
   ngOnInit(): void {
-    this.messagingService.requestPermission()
-    this.messagingService.receiveMessage()
+    // this.messagingService.requestPermission()
+    // this.messagingService.receiveMessage()
     
 
     }
