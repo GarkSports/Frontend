@@ -45,7 +45,7 @@ export class EvenementService {
   }
 
   getEvenements(): Observable<Evenement[]> {
-    return this.http.get<Evenement[]>(`${this.apiEvenement}/getAllEvenements`);
+    return this.http.get<Evenement[]>(`${this.apiEvenement}/getAllEvenements`,{ withCredentials: true });
   }
 
   deleteEvenement(idEvenement: number): Observable<void> {
