@@ -34,7 +34,7 @@
                     <div *ngFor="let eventType of typeEventsFilter">
                         <mat-checkbox (change)="applyFilterByType(eventType)"
                             [checked]="selectedEventTypes.includes(eventType)">
-                            {{ eventType }}
+                            {{ formatEnumValue(eventType) }}
                         </mat-checkbox>
                     </div>
                 </div>

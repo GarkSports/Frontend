@@ -5,6 +5,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import { EquipeService } from 'src/app/services/equipe.service';
 import { EvenementService } from 'src/app/services/evenement.service';
+import { EvenementType } from 'src/models/enums/evenementType';
 import { Equipe } from 'src/models/equipe.model';
 import { Evenement } from 'src/models/evenement.model';
 
@@ -91,7 +92,7 @@ export class CalendrierComponent implements OnInit {
       (!this.selectedDate || this.isSameDate(event.date, this.selectedDate))
     ).map(event => ({
       ...event,
-      title: `${event.nomEvent} - ${event.type}`,
+      title: `${event.nomEvent} - ${this.formatEnumValue(event.type)}`,
       start: event.date,
       backgroundColor: event.statut == 'Annulé' ? '#FF1354' : '#B7EE3E', // Set background color based on event type
       borderColor: event.statut == 'Annulé' ? '#FF1354' : '#B7EE3E',
@@ -155,6 +156,10 @@ export class CalendrierComponent implements OnInit {
     this.selectedDate = null;
     this.filterEvents();
   }
+
+  formatEnumValue(value: string): string {
+    return value.replace(/_/g, ' ');
+  }
 }
 
 @Component({
@@ -168,6 +173,10 @@ export class EventPopupComponent {
 
   onCancelClick(): void {
     this.dialogRef.close(false); // Close the dialog with 'false' value
+  }
+
+  formatEnumValue(value: EvenementType | undefined): string {
+    return value ? value.toString().replace(/_/g, ' ') : '';
   }
 }
 
