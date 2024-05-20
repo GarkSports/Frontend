@@ -37,8 +37,8 @@ export function HttpLoaderFactory(http: HttpClient): any {
 }
 
 //notification
-import {initializeApp} from 'firebase/app';
-initializeApp(environment.firebaseConfig);
+// import {initializeApp} from 'firebase/app';
+// initializeApp(environment.firebaseConfig);
 
 @NgModule({
   declarations: [AppComponent, BlankComponent, FilterPipe],
@@ -64,7 +64,7 @@ initializeApp(environment.firebaseConfig);
     AngularFireModule.initializeApp(environment.firebaseConfig),
   ],
   exports: [TablerIconsModule],
-  providers: [AuthService,MessagingService,AsyncPipe],
+  providers: [AuthService,AsyncPipe],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
