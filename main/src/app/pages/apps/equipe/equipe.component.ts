@@ -132,7 +132,8 @@ export class EquipeComponent implements AfterViewInit {
   equipeList: Equipe[] = [];
   uploadingImage: boolean = false;
 
-  equipe: Equipe;
+  equipes: Equipe[] = [];
+  forms: NgForm[] = [];
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator =
     Object.create(null);
@@ -154,12 +155,29 @@ export class EquipeComponent implements AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.equipe = new Equipe();
-    this.equipe.couleur = '#000000';
+    this.equipes.push(this.createEmptyEquipe());
     this.getMembers();
     this.getDisciplines();
     this.getEntraineurs();
     this.getEquipes();
+  }
+
+  createEmptyEquipe(): Equipe {
+    const equipe = new Equipe();
+    equipe.couleur = '#000000';
+    return equipe;
+  }
+
+  areAllFormsValid(): boolean {
+    return this.forms.every(form => form.valid);
+  }
+
+  addEquipeForm(): void {
+    this.equipes.push(this.createEmptyEquipe());
+  }
+
+  removeEquipeForm(index: number): void {
+    this.equipes.splice(index, 1);
   }
 
   getMembers(): void {
@@ -184,35 +202,7 @@ export class EquipeComponent implements AfterViewInit {
     });
   }
 
-  onSubmit(): void {
-    if (this.equipe) {
-      const disciplineId = this.equipe.discipline?.id; // Optional chaining for discipline
-      if (disciplineId !== undefined) {
-        this.equipeService.addEquipe(this.equipe, disciplineId)
-          .subscribe(() => {
-            // Reset form and disable validation
-            this.equipeForm.resetForm();
-
-            // Reset form
-            this.equipe = new Equipe();
-            this.equipe.couleur = '#000000';
-            // Reload equipes
-            this.getEquipes();
-            this.getMembers();
-            this.getEntraineurs();
-            // Render table rows
-            this.table.renderRows();
-          });
-      } else {
-        console.error("Discipline is undefined.");
-      }
-    } else {
-      console.error("Equipe is undefined.");
-    }
-  }
-
-  // Modify your uploadFile method to call the resetUploadStatus method
-  async uploadFile(event: any) {
+  async uploadFile(event: any, equipe: Equipe) {
     this.uploadingImage = true;
     const file = event.target.files[0];
     if (file) {
@@ -221,16 +211,38 @@ export class EquipeComponent implements AfterViewInit {
       uploadTask.then(async (snapshot) => {
         const url = await snapshot.ref.getDownloadURL();
         console.log('Image URL:', url);
-        this.equipe.logo = url; // Update the updatedAcademie.logo with the new URL
+        equipe.logo = url;
       }).catch(error => {
         console.error('Error uploading image:', error);
       }).finally(() => {
-        this.uploadingImage = false; // Reset uploadingImage flag regardless of success or failure
+        this.uploadingImage = false;
       });
     } else {
-      this.uploadingImage = false; // Reset uploadingImage flag if no file is selected (canceled)
+      this.uploadingImage = false;
     }
   }
+
+  onSubmit(): void {
+    for (const equipe of this.equipes) {
+      const disciplineId = equipe.discipline?.id;
+      if (disciplineId !== undefined) {
+        this.equipeService.addEquipe(equipe, disciplineId)
+          .subscribe(() => {
+            this.getEquipes();
+            // Optionally handle success
+          }, error => {
+            console.error('Error adding equipe:', error);
+          });
+      } else {
+        console.error("Discipline is undefined.");
+      }
+    }
+
+    // Reset the form array after submission
+    this.equipes = [this.createEmptyEquipe()];
+  }
+
+
 
 
 

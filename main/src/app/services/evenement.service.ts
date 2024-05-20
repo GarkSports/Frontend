@@ -61,4 +61,8 @@ export class EvenementService {
   getMembersByEquipe(idEquipe: number): Observable<Adherent[]> {
     return this.http.get<Adherent[]>(`${this.apiEvenement}/getMembersByEquipe/${idEquipe}`);
   }
+
+  getMembersByEvent(idEvenement: number): Observable<Adherent[]> {
+    return this.http.get<Adherent[]>(`${this.apiEvenement}/getMembersByEvenement/${idEvenement}`);
+  }
 }

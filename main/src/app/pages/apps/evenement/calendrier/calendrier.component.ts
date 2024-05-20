@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { CalendarOptions } from '@fullcalendar/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { CalendarOptions, EventClickArg } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import { EquipeService } from 'src/app/services/equipe.service';
 import { EvenementService } from 'src/app/services/evenement.service';
 import { Equipe } from 'src/models/equipe.model';
+import { Evenement } from 'src/models/evenement.model';
 
 @Component({
   selector: 'app-add-test',
@@ -15,7 +17,8 @@ export class CalendrierComponent implements OnInit {
     initialView: 'dayGridMonth',
     plugins: [dayGridPlugin, interactionPlugin],
     dateClick: this.handleDateClick.bind(this),
-    events: []
+    eventClick: this.handleEventClick.bind(this),
+    events: [],
   };
 
   // Filter properties
@@ -30,12 +33,27 @@ export class CalendrierComponent implements OnInit {
   selectedDate: Date | null;
 
 
-  constructor(private evenementService: EvenementService, private equipeService: EquipeService) { }
+  constructor(public dialog: MatDialog, private evenementService: EvenementService, private equipeService: EquipeService) { }
 
   ngOnInit(): void {
     this.getEvenements();
     this.getEquipes();
   }
+
+  handleEventClick(info: EventClickArg) {
+    const clickedEvent = info.event._def.extendedProps as Evenement;
+    console.log(clickedEvent); // Log clickedEvent to inspect its contents
+    const dialogRef = this.dialog.open(EventPopupComponent, {
+      data: clickedEvent
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.getEvenements();
+      }
+    });
+  }
+  
+
 
   handleDateClick(arg: DateClickArg) {
     alert('Date clicked: ' + arg.dateStr);
@@ -72,13 +90,15 @@ export class CalendrierComponent implements OnInit {
       (this.selectedTeams.length === 0 || this.selectedTeams.includes(event.convocationEquipe?.nom)) &&
       (!this.selectedDate || this.isSameDate(event.date, this.selectedDate))
     ).map(event => ({
-      title: `${event.nomEvent} - ${event.type}`, // Only include nomEvent as title
+      ...event,
+      title: `${event.nomEvent} - ${event.type}`,
       start: event.date,
-      backgroundColor: '#B7EE3E',
-      borderColor: '#B7EE3E',
+      backgroundColor: event.statut == 'Annulé' ? '#FF1354' : '#B7EE3E', // Set background color based on event type
+      borderColor: event.statut == 'Annulé' ? '#FF1354' : '#B7EE3E',
       textColor: '#000000',
     }));
   }
+
 
   renderEventContent(info: { event: any; }) {
     return {
@@ -105,7 +125,7 @@ export class CalendrierComponent implements OnInit {
     console.log('Selected teams after filter:', this.selectedTeams);
     this.filterEvents();
   }
-  
+
   applyDateFilter(selectedDate: Date): void {
     this.selectedDate = selectedDate;
     this.filterEvents();
@@ -134,6 +154,20 @@ export class CalendrierComponent implements OnInit {
     // Clear the selected date and apply the filter
     this.selectedDate = null;
     this.filterEvents();
+  }
+}
+
+@Component({
+  templateUrl: './eventPopup.component.html',
+})
+export class EventPopupComponent {
+  constructor(
+    public dialogRef: MatDialogRef<EventPopupComponent>,
+    @Inject(MAT_DIALOG_DATA) public evenement: Evenement
+  ) { }
+
+  onCancelClick(): void {
+    this.dialogRef.close(false); // Close the dialog with 'false' value
   }
 }
 
