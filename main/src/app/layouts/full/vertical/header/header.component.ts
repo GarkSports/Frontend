@@ -60,7 +60,6 @@ interface quicklinks {
   imports: [RouterModule, CommonModule, NgScrollbarModule, TablerIconsModule, MaterialModule],
   templateUrl: './header.component.html',
   encapsulation: ViewEncapsulation.None,
-  providers: [MessagingService]
 })
 export class HeaderComponent implements OnInit {
 
@@ -114,7 +113,7 @@ export class HeaderComponent implements OnInit {
     public dialog: MatDialog,
     private translate: TranslateService,
     private authService: AuthService,
-    private messagingService: MessagingService,
+    //private messagingService: MessagingService,
     private managerService: ManagerService
   ) {
     translate.setDefaultLang('en');
@@ -123,14 +122,14 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
     this.getProfil();
-    this.messagingService.notifications$.subscribe(notifications => {
-      this.notifications = notifications.map(notification => ({
-        title: notification.title || 'No Title',
-        body: notification.body || 'No Body',
-        image: notification.image || "/assets/images/breadcrumb/emailSv.png"
+    // this.messagingService.notifications$.subscribe(notifications => {
+    //   this.notifications = notifications.map(notification => ({
+    //     title: notification.title || 'No Title',
+    //     body: notification.body || 'No Body',
+    //     image: notification.image || "/assets/images/breadcrumb/emailSv.png"
 
-      }));
-    });
+    //   }));
+    // });
   }
 
   // ngOnInit() {
