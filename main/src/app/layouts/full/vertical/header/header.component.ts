@@ -19,17 +19,17 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { AuthService } from 'src/app/services/auth.service';
+import { MessagingService } from 'src/app/services/messaging.service';
 import { ManagerService } from 'src/app/services/manager.service';
 import { Manager } from 'src/models/manager.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { User } from 'src/models/user.model';
 
 
-interface notifications {
-  id: number;
-  img: string;
+export interface Notification {
   title: string;
-  subtitle: string;
+  body: string;
+  image: string;
 }
 
 interface profiledd {
@@ -104,26 +104,38 @@ export class HeaderComponent implements OnInit {
     },
   ];
 
+  notifications: Notification[] = [];
+
+
   constructor(
     private vsidenav: CoreService,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: User,
     public dialog: MatDialog,
     private translate: TranslateService,
     private authService: AuthService,
+    //private messagingService: MessagingService,
     private managerService: ManagerService
   ) {
     translate.setDefaultLang('en');
     this.local_data = { ...data };
   }
 
+  ngOnInit() {
+    this.getProfil();
+    // this.messagingService.notifications$.subscribe(notifications => {
+    //   this.notifications = notifications.map(notification => ({
+    //     title: notification.title || 'No Title',
+    //     body: notification.body || 'No Body',
+    //     image: notification.image || "/assets/images/breadcrumb/emailSv.png"
+
+    //   }));
+    // });
+  }
+
   // ngOnInit() {
   //   // Retrieve the user's name from the AuthService or any other service
   //   this.firstname = this.authService.getFirstname();
   // }
-
-  ngOnInit(): void {
-    this.getProfil();
-  }
 
   openDialog() {
     const dialogRef = this.dialog.open(AppSearchDialogComponent);
@@ -138,9 +150,9 @@ export class HeaderComponent implements OnInit {
       (profil) => {
         console.log('profil fetched successfully', profil);
         this.managerSource.data = profil;
-        this.local_data = profil;      
+        this.local_data = profil;
         console.log("firstname", this.managerSource.data);
-        
+
       },
       (error) => {
         console.error('Error fetching profil', error);
@@ -164,38 +176,38 @@ export class HeaderComponent implements OnInit {
     );
   }
 
-  notifications: notifications[] = [
-    {
-      id: 1,
-      img: '/assets/images/profile/user-1.jpg',
-      title: 'Roman Joined the Team!',
-      subtitle: 'Congratulate him',
-    },
-    {
-      id: 2,
-      img: '/assets/images/profile/user-2.jpg',
-      title: 'New message received',
-      subtitle: 'Salma sent you new message',
-    },
-    {
-      id: 3,
-      img: '/assets/images/profile/user-3.jpg',
-      title: 'New Payment received',
-      subtitle: 'Check your earnings',
-    },
-    {
-      id: 4,
-      img: '/assets/images/profile/user-4.jpg',
-      title: 'Jolly completed tasks',
-      subtitle: 'Assign her new tasks',
-    },
-    {
-      id: 5,
-      img: '/assets/images/profile/user-5.jpg',
-      title: 'Roman Joined the Team!',
-      subtitle: 'Congratulate him',
-    },
-  ];
+  // notifications: notifications[] = [
+  //   {
+  //     id: 1,
+  //     img: '/assets/images/profile/user-1.jpg',
+  //     title: 'Roman Joined the Team!',
+  //     subtitle: 'Congratulate him',
+  //   },
+  //   {
+  //     id: 2,
+  //     img: '/assets/images/profile/user-2.jpg',
+  //     title: 'New message received',
+  //     subtitle: 'Salma sent you new message',
+  //   },
+  //   {
+  //     id: 3,
+  //     img: '/assets/images/profile/user-3.jpg',
+  //     title: 'New Payment received',
+  //     subtitle: 'Check your earnings',
+  //   },
+  //   {
+  //     id: 4,
+  //     img: '/assets/images/profile/user-4.jpg',
+  //     title: 'Jolly completed tasks',
+  //     subtitle: 'Assign her new tasks',
+  //   },
+  //   {
+  //     id: 5,
+  //     img: '/assets/images/profile/user-5.jpg',
+  //     title: 'Roman Joined the Team!',
+  //     subtitle: 'Congratulate him',
+  //   },
+  // ];
 
   profiledd: profiledd[] = [
     {

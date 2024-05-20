@@ -18,6 +18,7 @@ import * as TablerIcons from 'angular-tabler-icons/icons';
 
 //Chat
 import { AppChatComponent } from './chat/chat.component';
+import { AppChatDialogContentComponent } from './chat/chat.component';
 //Contact
 import { AppContactDialogContentComponent } from './contact/contact.component';
 import { AppContactComponent } from './contact/contact.component';
@@ -105,9 +106,7 @@ import { DeleteEventConfirmationDialogComponent } from './evenement/listEvenemen
 import { UpdateEquipePopupComponent } from './equipe/equipe.component';
 
 
-import { AngularFireModule } from '@angular/fire/compat'; // Update import path
-import { AngularFireStorageModule } from '@angular/fire/compat/storage'; // Update import path
-import { environment } from '../api/environment';
+
 import { AppBlogDialogContentComponent, AppBloglistComponent } from './blogs/bloglist/blog.component';
 import { AppManagerDialogContentComponent, AppManagerlistComponent } from './admin/managerlist.component';
 import { AppStaffDialogContentComponent, AppStafflistComponent } from './managers/staff/stafflist.component';
@@ -121,11 +120,13 @@ import { UpdateEvenementPopupComponent } from './evenement/listEvenement/listEve
 import { EventPopupComponent } from './evenement/calendrier/calendrier.component';
 
 
+
+
+
 @NgModule({
   imports: [
     FullCalendarModule,
-    AngularFireStorageModule,
-    AngularFireModule.initializeApp(environment.firebaseConfig),
+  
     CommonModule,
     RouterModule.forChild(AppsRoutes),
     MaterialModule,
@@ -175,6 +176,7 @@ import { EventPopupComponent } from './evenement/calendrier/calendrier.component
     AcademieProfileComponent,
     UpdateProfileDialogComponent,
     AppChatComponent,
+    AppChatDialogContentComponent,
     AppPermissionComponent,
     AppNotesComponent,
     AppTodoComponent,

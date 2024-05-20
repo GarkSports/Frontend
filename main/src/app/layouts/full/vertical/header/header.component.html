@@ -48,36 +48,35 @@
   <!-- Notification Dropdown -->
   <!-- --------------------------------------------------------------- -->
   <button mat-icon-button [matMenuTriggerFor]="notificationmenu" aria-label="Notifications">
-    <i-tabler class="d-flex" name="bell" matBadge="1" matBadgeColor="primary"></i-tabler>
+    <i-tabler class="d-flex" name="bell" matBadge="{{ notifications.length }}" matBadgeColor="primary"></i-tabler>
   </button>
   <mat-menu #notificationmenu="matMenu" class="topbar-dd cardWithShadow">
     <div class="d-flex align-items-center p-x-32 p-y-16">
       <h6 class="f-s-16 f-w-600 m-0 mat-subtitle-1">Notifications</h6>
       <span class="m-l-auto">
-        <span class="bg-primary text-white p-x-8 p-y-4 f-w-500 rounded f-s-12">5 new</span>
+        <span class="bg-primary text-white p-x-8 p-y-4 f-w-500 rounded f-s-12">{{ notifications.length }} new</span>
       </span>
     </div>
 
-    @for(notification of notifications; track notification.title) {
-    <button mat-menu-item class="p-x-32 p-y-16">
-      <div class="d-flex align-items-center">
-        <img [src]="notification.img" class="rounded-circle" width="48" />
-        <div class="m-l-16">
-          <h5 class="f-s-14 f-w-600 m-0 mat-subtitle-1">
-            {{ notification.title }}
-          </h5>
-          <span>{{ notification.subtitle }}</span>
+    <ng-container *ngFor="let notification of notifications">
+      <button mat-menu-item class="p-x-32 p-y-16">
+        <div class="d-flex align-items-center">
+          <img [src]="notification.image" class="rounded-circle" width="48" alt="notification" />
+          <div class="m-l-16">
+            <h5 class="f-s-14 f-w-600 m-0 mat-subtitle-1">{{ notification.title }}</h5>
+            <span>{{ notification.body }}</span>
+          </div>
         </div>
-      </div>
-    </button>
-    }
+      </button>
+    </ng-container>
 
-    <div class="p-y-12 p-x-32">
+    <!-- <div class="p-y-12 p-x-32">
       <button mat-stroked-button color="primary" class="w-100">
         See all notifications
       </button>
-    </div>
+    </div> -->
   </mat-menu>
+
 
   <!-- --------------------------------------------------------------- -->
   <!-- profile Dropdown -->
@@ -93,7 +92,7 @@
 
         <div class="d-flex align-items-center p-b-24 b-b-1 m-t-16" *ngIf="local_data" >
           <img     [src]="local_data.photo ? local_data.photo : '/assets/images/profile/user-1.jpg'" 
-          class="rounded-circle object-cover icon-60 profile-dd" width="95" />
+          class="rounded-circle object-cover  profile-dd" width="70" height="70"/>
           <div class="m-l-16" >
             <h6 class="f-s-14 f-w-600 m-0 mat-subtitle-1">{{local_data.firstname}} {{local_data.lastname}}</h6>
             <span class="f-s-14 d-block m-b-4">
