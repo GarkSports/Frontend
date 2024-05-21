@@ -2,6 +2,7 @@ import { Academie } from "./academie.model";
 import { Adherent } from "./adherent.model";
 import { EvenementType } from "./enums/evenementType";
 import { StatutEvenement } from "./enums/statutEvenenement.model";
+import { TypeRepetition } from "./enums/typeRepetition.model";
 import { Equipe } from "./equipe.model";
 
 export class Evenement {
@@ -13,6 +14,10 @@ export class Evenement {
     heure: string;
     description: string;
     statut?: StatutEvenement;
+
+    repetition: boolean;
+    typeRepetition: TypeRepetition;
+    nbRepetition: number;
 
 
     convocationEquipe?: Equipe;

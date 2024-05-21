@@ -14,6 +14,7 @@ import { Equipe } from 'src/models/equipe.model';
 import { Evenement } from 'src/models/evenement.model'; // Import Evenement model
 import { MatchAmicalRequest } from 'src/models/dto/MatchAmicalRequest.model';
 import { Router } from '@angular/router';
+import { TypeRepetition } from 'src/models/enums/typeRepetition.model';
 
 @Component({
     selector: 'add-matchamical',
@@ -25,6 +26,8 @@ export class AddMatchAmicalComponent {
     equipeList: Equipe[] = [];
     selectedEquipeId: number; // Changed from selectedEquipes: number[] to selectedEquipeId: number
     matchAmicalForm: FormGroup;
+    typeRepetitions: string[] = Object.values(TypeRepetition).filter(value => typeof value === 'string').map(value => String(value));
+    selectedTypeRepetition: string;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -36,7 +39,24 @@ export class AddMatchAmicalComponent {
             lieu: ['', Validators.required],
             date: ['', Validators.required],
             description: ['', Validators.required],
-            horaire: [''] // Add the 'horaire' form control here
+            horaire: [''], // Add the 'horaire' form control here
+            repetition: [false, Validators.required],
+            typeRepetition: [''],
+            nbRepetition: [''],
+        });
+        // Subscribe to repetition control value changes to toggle typeRepetition and nbRepetition validation
+        this.matchAmicalForm.get('repetition')!.valueChanges.subscribe((repetition) => {
+            const typeRepetitionControl = this.matchAmicalForm.get('typeRepetition')!;
+            const nbRepetitionControl = this.matchAmicalForm.get('nbRepetition')!; // Add this line
+            if (repetition) {
+                typeRepetitionControl.setValidators(Validators.required);
+                nbRepetitionControl.setValidators(Validators.required); // Add this line
+            } else {
+                typeRepetitionControl.clearValidators();
+                nbRepetitionControl.clearValidators(); // Add this line
+            }
+            typeRepetitionControl.updateValueAndValidity();
+            nbRepetitionControl.updateValueAndValidity(); // Add this line
         });
     }
 
@@ -65,6 +85,10 @@ export class AddMatchAmicalComponent {
             matchAmicalRequest.evenement.lieu = formData.lieu;
             matchAmicalRequest.evenement.date = formData.date;
             matchAmicalRequest.evenement.description = formData.description;
+            matchAmicalRequest.evenement.repetition = formData.repetition;
+            matchAmicalRequest.evenement.typeRepetition = formData.typeRepetition;
+            matchAmicalRequest.evenement.nbRepetition = formData.nbRepetition;
+
 
             console.log('Form Data:', matchAmicalRequest); // Log the form data
 
@@ -74,7 +98,7 @@ export class AddMatchAmicalComponent {
                     // Reset the form after successful submission
                     this.matchAmicalForm.reset();
                     this.router.navigate(['/apps/listevenement']);
-                    
+
                 },
                 (error) => {
                     console.error('Error adding friendly match:', error);
