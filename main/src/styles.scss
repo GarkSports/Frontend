@@ -1,4 +1,93 @@
 /* You can add global styles to this file, and also import other style files */
-
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.mat-mdc-text-field-wrapper {
+  border:0 white !important;
+}
+
+.mdc-notched-outline   {
+  border:0 white !important;
+}
+.ng-star-inserted  {
+  border:0 white !important;
+}
+.mdc-notched-outline--upgraded {
+  border:0 white !important;
+}
+.mdc-notched-outline__notch {
+  border:0 white !important;
+}
+.mdc-notched-outline__leading {
+  border:0 white !important;
+}
+.mdc-notched-outline__trailing {
+  border:0 white !important;
+}
+
+.mat-mdc-form-field {
+  padding:0 0 0 0  !important;
+   width: 261px !important;
+  height: 48px!important;
+
+  border-radius: 42px!important;
+
+  filter: drop-shadow(0px 3px 3px rgba(149,136,136,0.1 ))!important;
+
+  background: #fafafa!important;
+  border:0!important;
+
+}
+.mat-mdc-form-field-type-mat-select {
+  padding:0 0 0 0  !important;
+  width: 261px !important;
+  height: 48px!important;
+
+  border-radius: 42px!important;
+
+  filter: drop-shadow(0px 3px 3px rgba(149,136,136,0.1 ))!important;
+
+  background: #fafafa!important;
+  border:0!important;
+}
+.mat-form-field-appearance-outline{
+  width: 261px !important;
+  height: 48px!important;
+
+  border-radius: 42px!important;
+
+  filter: drop-shadow(0px 3px 3px rgba(149,136,136,0.1 ))!important;
+
+  background: #fafafa!important;
+  border:0!important;
+
+}
+
+//.mat-mdc-select-placeholder {
+//  padding:0 0 0 0  !important;
+//  //width: 261px !important;
+//  //height: 48px!important;
+//  //
+//  //border-radius: 42px!important;
+//  //
+//  //filter: drop-shadow(0px 3px 3px rgba(149,136,136,0.1 ))!important;
+//  //
+//  //background: #fafafa!important;
+//  //border:0!important;
+//}
+//
+//.mat-mdc-form-field-subscript-wrapper {
+//  margin-top:-100px   !important;
+//  //width: 261px !important;
+//  //height: 48px!important;
+//  //
+//  //border-radius: 42px!important;
+//  //
+//  //filter: drop-shadow(0px 3px 3px rgba(149,136,136,0.1 ))!important;
+//  //
+//  //background: #fafafa!important;
+//  //border:0!important;
+//}
+
