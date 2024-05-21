@@ -18,7 +18,7 @@
       </div>
     </div>
     <div class="col-lg-4 col-xl-4 p-0">
-      <div class="p-32 d-flex align-items-start align-items-lg-center justify-content-center h-100">
+      <div class=" d-flex align-items-start align-items-lg-center justify-content-center h-100">
         <div class="row justify-content-center w-100">
           <div class="col-lg-9 max-width-form -mt-20">
             <div class="flex justify-center ">
@@ -35,7 +35,7 @@
             <form class="m-t-30" [formGroup]="form" (ngSubmit)="submit()">
               <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block">Email</mat-label>
 <!--              <mat-form-field appearance="outline" class="w-100" color="primary">-->
-                <input class="w-full py-2.5 px-2 border-black rounded-lg mb-2 mt-1"  formControlName="uname" />
+                <input class="w-full py-2.5 px-2 bg-second border-black rounded-lg mb-2 mt-1"  formControlName="uname" />
 <!--                @if(f['uname'].touched && f['uname'].invalid) {-->
 <!--                <mat-hint class="m-b-16 error-msg">-->
 <!--                  @if(f['uname'].errors && f['uname'].errors['required']) {-->
@@ -48,7 +48,7 @@
               <!-- password -->
               <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block">Mot de Passe</mat-label>
 <!--              <mat-form-field appearance="outline" class="w-100" color="primary">-->
-                <input  class="w-full py-2.5 px-2 border-black rounded-lg mb-2 mt-1"  type="password" formControlName="password" />
+                <input  class="w-full py-2.5 px-2 bg-second border-black rounded-lg mb-2 mt-1"  type="password" formControlName="password" />
 <!--                @if(f['password'].touched && f['password'].invalid) {-->
 <!--                <mat-hint class="m-b-16 error-msg">-->
 <!--                  @if( f['password'].errors && f['password'].errors['required'])-->
@@ -59,8 +59,8 @@
 <!--                }-->
 <!--              </mat-form-field>-->
 
-              <div class="d-flex align-items-center m-b-12">
-                <mat-checkbox color="primary">Se souvenir de cet appareil</mat-checkbox>
+              <div class="d-flex align-items-center m-b-12 mt-4">
+                <mat-checkbox color="primary">Se souvenir de moi</mat-checkbox>
                 <a [routerLink]="['/authentication/side-forgot-pwd']"
                   class="text-main f-w-600 text-decoration-none m-l-auto f-s-14">Mot de passe oublié ?</a>
               </div>
