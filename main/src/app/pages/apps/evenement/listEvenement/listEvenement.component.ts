@@ -117,13 +117,6 @@ export class ListEvenementComponent implements AfterViewInit {
     this.dataSource.filter = 'applyFilter';
   }
 
-
-
-
-
-
-
-
   applyFilter(filterValue: string): void {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
@@ -161,7 +154,6 @@ export class ListEvenementComponent implements AfterViewInit {
       }
     );
   }
-
 
   openAddEvenementDialog(): void {
     const dialogRef = this.dialog.open(AddEvenementPopupComponent, {
@@ -247,6 +239,21 @@ export class ListEvenementComponent implements AfterViewInit {
         this.getEvenements();
       }
     });
+  }
+
+  onDetailsEvenement(evenement: Evenement): void {
+    const dialogRef = this.dialog.open(DetailEventDialogComponent, {
+      data: evenement
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+      }
+    });
+  }
+
+  formatEnumValue(value: string): string {
+    return value.replace(/_/g, ' ');
   }
 }
 
@@ -335,6 +342,20 @@ export class UpdateEvenementPopupComponent {
 
   onCancelClick(): void {
     this.dialogRef.close();
+  }
+}
+
+@Component({
+  templateUrl: './detailEvent.component.html',
+})
+export class DetailEventDialogComponent {
+  constructor(
+    public dialogRef: MatDialogRef<DetailEventDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public evenement: Evenement
+  ) { }
+
+  onCancelClick(): void {
+    this.dialogRef.close(false); // Close the dialog with 'false' value
   }
 }
 

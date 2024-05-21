@@ -118,6 +118,7 @@ import { NavbarComponent } from './evenement/navbar/navbar.component';
 import { AppProfilComponent } from './managers/profil/profil.component';
 import { UpdateEvenementPopupComponent } from './evenement/listEvenement/listEvenement.component';
 import { EventPopupComponent } from './evenement/calendrier/calendrier.component';
+import { DetailEventDialogComponent } from './evenement/listEvenement/listEvenement.component'; 
 
 
 
@@ -148,6 +149,7 @@ import { EventPopupComponent } from './evenement/calendrier/calendrier.component
   ],
   exports: [TablerIconsModule],
   declarations: [
+    DetailEventDialogComponent,
     EventPopupComponent,
     UpdateEvenementPopupComponent,
     UpdateEquipePopupComponent,
