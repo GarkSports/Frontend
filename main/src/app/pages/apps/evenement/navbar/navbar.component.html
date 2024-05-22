@@ -1,12 +1,49 @@
-<mat-card class="cardWithShadow">
-    <mat-toolbar class="navbar">
-      <button mat-button [disabled]="isListEvenementActive" routerLink="/apps/listevenement" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: false}" (click)="setActive('listevenement')">Liste d'événements</button>
-      <button mat-button [disabled]="isCalendrierActive" routerLink="/apps/calendrier" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: false}" (click)="setActive('calendrier')">Calendrier</button>
-    </mat-toolbar>
-  </mat-card>
-  
-  
-  
+<!--<mat-card class="cardWithShadow">-->
+<!--    <mat-toolbar class="navbar">-->
+<!--      <button mat-button >Liste d'événements</button>-->
+<!--      <button mat-button >Calendrier</button>-->
+<!--    </mat-toolbar>-->
+<!--  </mat-card>-->
+<!--  -->
+<!--  -->
+<!--
+Heads up! 👋
+
+Plugins:
+  - @tailwindcss/forms
+-->
+
+<div class="justify-center flex mb-10">
+<!--  <div class="sm:hidden">-->
+<!--    <label for="Tab" class="sr-only">Tab</label>-->
+
+<!--    <select id="Tab" class="w-full rounded-md border-gray-200">-->
+<!--      <option>Settings</option>-->
+<!--      <option>Messages</option>-->
+<!--      <option>Archive</option>-->
+<!--      <option select>Notifications</option>-->
+<!--    </select>-->
+<!--  </div>-->
+
+  <div class="hidden sm:block ">
+    <nav class="flex gap-20 border-2 py-1 px-2 rounded-3xl border-second " aria-label="Tabs">
+      <button
+        [disabled]="isListEvenementActive" routerLink="/apps/listevenement" [routerLinkActive]="'bg-black  py-2 px-5 '" [routerLinkActiveOptions]="{exact: false}" (click)="setActive('listevenement')"
+        class="shrink-0 rounded-3xl text-lg  px-4  font-bold text-second hover:bg-gray-50 hover:text-black  "
+      >
+        Evénements
+      </button>
+      <button
+        [disabled]="isCalendrierActive" routerLink="/apps/calendrier" [routerLinkActive]="'bg-black   py-2 px-5 '"  [routerLinkActiveOptions]="{exact: false}" (click)="setActive('calendrier')"
+        class="shrink-0  rounded-3xl text-lg  px-4  font-bold text-second hover:bg-third hover:text-black  "
+      >
+        Calendrier
+      </button>
+
+
+    </nav>
+  </div>
+</div>
 
 
 

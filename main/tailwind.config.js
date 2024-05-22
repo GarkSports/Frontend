@@ -13,6 +13,7 @@ module.exports = {
     extend: {
       colors: {
         main: '#b7ef3f',
+        mainHover: '#b8e06a',
         second: '#e9e9e9',
         third: '#fafafa',
         fourth: '#FF0054',
