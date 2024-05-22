@@ -17,16 +17,19 @@
   }"
     class="menu-list-item"
   >
-    <div class=" row">
-      <div class="ml-3 col-1"><i-tabler
+<!--    <div class=" row">-->
+<!--      <div class="ml-3 col-1">-->
+        <i-tabler
         class=" routeIcon"
         name="{{ item.iconName }}"
         matListItemIcon
-      ></i-tabler></div>
-      <div class="col">
-        <span class="hide-menu  ">{{ item.displayName | translate }}</span></div>
+      ></i-tabler>
+<!--      </div>-->
+<!--      <div class="col">-->
+        <span class="hide-menu  ">{{ item.displayName | translate }}</span>
+<!--      </div>-->
 
-    </div>
+<!--    </div>-->
     @if (item.children && item.children.length) {
       <span class="arrow-icon" fxFlex>
     <span fxFlex></span>
