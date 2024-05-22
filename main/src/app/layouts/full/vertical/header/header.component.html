@@ -95,7 +95,7 @@
         <h6 class="f-s-16 f-w-600 m-0 mat-subtitle-1">User Profile</h6>
 
         <div class="d-flex align-items-center p-b-24 b-b-1 m-t-16" *ngIf="local_data" >
-          <img     [src]="local_data.photo ? local_data.photo : '/assets/images/profile/user-1.jpg'"
+          <img     [src]="local_data.photo |defaultImage : local_data.firstname : local_data.lastname "
           class="rounded-circle object-cover  profile-dd" width="70" height="70"/>
           <div class="m-l-16" >
             <h6 class="f-s-14 f-w-600 m-0 mat-subtitle-1">{{local_data.firstname}} {{local_data.lastname}}</h6>

@@ -1,16 +1,12 @@
-<div class="row">
-  <div class="col-sm-6">
-    <div *ngIf="academie" class="bg-second px-4  h-full rounded-3xl"
-              [ngStyle]="{'background-image': 'url(' + academie.backgroundImage + ')', 'background-size': 'cover', 'background-repeat': 'no-repeat', 'background-position': 'center top'}">
-      <div class="absolute inset-0 bg-gradient-to-r from-black to-transparent opacity-75 rounded-3xl ml-3.5"></div>
-      <div class="relative ">
-        <div class="pt-2 px-2 text-white row" *ngIf="academie" >
-          <div class="col">
+<div class="row mt-4">
+  <div class="col-lg-8">
+    <div class="shadow-none h-full  card rounded-3xl  overflow-hidden"
+         [ngStyle]="{'background-image': 'url(' + academie.backgroundImage + ')', 'background-size': 'cover', 'background-repeat': 'no-repeat', 'background-position': 'center top'}">
+      <div class="absolute  inset-0 bg-gradient-to-r from-black to-transparent opacity-75 rounded-3xl  ml-3.5"></div>
 
-            <span class="text-lg font-bold">  {{academie.nom|titlecase}}</span>
-            <p> Modifier votre Academie</p>
-          </div>
-          <div class="col flex justify-end">
+      <div class="p-32 p-b-0">
+        <div class="row -mt-12">
+          <div class="col flex justify-end pt-4">
             <button mat-icon-button class="upload-background-button"
                     [style.color]="academie.backgroundImage ? 'white' : 'black'"
                     (click)="fileInput.click()">
@@ -18,17 +14,29 @@
             </button>
           </div>
         </div>
-        <div class="text-center mt-12 ">
-          <div class="justify-center flex">
-            <img [src]="academie.logo" class="rounded-circle" width="120"/>
-          </div>
-          <div class="justify-center flex mt-4">
-            <button  class="rounded-3xl shadow-sm text-black bg-main py-2 px-4 font-semibold hover:bg-mainHover hover:shadow-md"
-                    (click)="openUpdateProfileDialog()">
-              Update profile
+        <div class="row justify-content-between">
+          <div class="col-sm-6">
+            <mat-card-title> <span class="text-white">
+          {{ academie.nom|titlecase }}
+            </span></mat-card-title>
+            <mat-card-subtitle class="mat-body-1 m-t-16 text-white lh-24 m-b-24"
+            >Votre Dahsboard Ultime
+            </mat-card-subtitle
+            >
+            <button
+              class="rounded-3xl shadow-sm text-black bg-main py-2 px-4 font-semibold hover:bg-mainHover hover:shadow-md"
+              (click)="openUpdateProfileDialog()">
+              Modifier
             </button>
-
           </div>
+          <div class="col-sm-5">
+            <img
+              [src]="academie.logo"
+              alt="welcome"
+              width="200" class="welcome-img"
+            />
+          </div>
+
           <div class="m-t-24">
             <!-- Updated button to have transparent background and picture icon -->
 
@@ -38,25 +46,67 @@
         </div>
       </div>
     </div>
-  </div>
-  <div class="col-sm-6">
-    <div class="bg-third px-4 py-5 rounded-3xl h-full">
-      <div class="">
 
-        <h1 class="text-black font-bold text-lg">Informations Academie</h1>
-        <form class="m-t-24" *ngIf="academie">
-          <div class="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-8">
-            <div class="font-bold " > Type</div>
-            <div >{{academie.type}}</div>
-            <div class="font-bold mt-4" > Description</div>
-            <div  class="  mt-4" >{{academie.description}}</div>
-            <div class="font-bold mt-4" > Frais d'adhésion</div>
-            <div class="mt-4  " >{{academie.fraisAdhesion}}</div>
-            <div class="font-bold mt-4" >Address</div>
-            <div class="  mt-4" > {{academie.codePostal + ' ' + academie.rue + ' ' + academie.ville + ' ' + academie.pays}}</div>
+  </div>
+  <div class="col-lg-4">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="card h-full bg-third px-4 py-2 rounded-3xl ">
+          <div class="p-t-32">
+    <span class="bg-light-primary rounded icon-40 d-flex align-items-center justify-content-center">
+      <img src="assets/images/svgs/icon-paypal.svg" alt="paypal"/>
+    </span>
+
+            <mat-card-subtitle class="mat-body-1 p-b-4 m-t-24"
+            >Paiements
+            </mat-card-subtitle>
+            <h5 class="mat-subtitle-1 m-t-4 f-w-600"> 678,298 DT</h5>
+
+            <div class="d-flex align-items-center m-t-16">
+              <button
+                mat-mini-fab
+                class="bg-light-success text-success shadow-none icon-27"
+              >
+                <i-tabler name="arrow-up-left" class="icon-20"></i-tabler>
+              </button>
+              <div class="mat-body-1 f-w-600 m-l-12">+9%</div>
+            </div>
           </div>
-        </form>
+        </div>
+
+      </div>
+      <div class="col-sm-6">
+        <app-products></app-products>
       </div>
     </div>
   </div>
+  <div class="col-lg-4 mt-4">
+    <app-revenue-updates-two></app-revenue-updates-two>
+  </div>
+  <div class="col-lg-4 mt-4">
+    <app-sales-overview></app-sales-overview>
+  </div>
+  <div class="col-lg-4 mt-4">
+    <div class="row">
+      <div class="col-sm-6 mt-4">
+        <app-total-earnings></app-total-earnings>
+      </div>
+      <div class="col-sm-6 mt-4">
+        <app-sales-profit></app-sales-profit>
+      </div>
+      <div class="col-12 mt-4">
+        <app-monthly-earnings-two></app-monthly-earnings-two>
+      </div>
+    </div>
+  </div>
+<!--  <div class="col-lg-4 mt-4">-->
+<!--    <app-weekly-stats></app-weekly-stats>-->
+<!--  </div>-->
+<!--  <div class="col-lg-4 mt-4">-->
+<!--    <app-yearly-sales></app-yearly-sales>-->
+<!--  </div>-->
+<!--  <div class="col-lg-4 mt-4">-->
+<!--    <app-payment-gateways></app-payment-gateways>-->
+<!--  </div> -->
 </div>
+

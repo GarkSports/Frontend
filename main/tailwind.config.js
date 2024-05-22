@@ -14,6 +14,7 @@ module.exports = {
       colors: {
         main: '#b7ef3f',
         mainHover: '#b8e06a',
+        mainHover2: 'rgba(184,224,106,0.54)',
         second: '#e9e9e9',
         third: '#fafafa',
         fourth: '#FF0054',
