@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { EquipeService } from 'src/app/services/equipe.service';
 import { EvenementService } from 'src/app/services/evenement.service';
 import { Adherent } from 'src/models/adherent.model';
+import { UpdateEvenementRequest } from 'src/models/dto/UpdateEvenementRequest.model';
 import { EvenementType } from 'src/models/enums/evenementType';
 import { StatutEvenement } from 'src/models/enums/statutEvenenement.model';
 import { Equipe } from 'src/models/equipe.model';
@@ -314,6 +315,7 @@ export class DeleteEventConfirmationDialogComponent {
 })
 export class UpdateEvenementPopupComponent {
   memberList: Adherent[] = [];
+  memberIds: number[] = [];
   constructor(public dialogRef: MatDialogRef<UpdateEvenementPopupComponent>,
     @Inject(MAT_DIALOG_DATA) public evenement: Evenement, private evenementService: EvenementService) { }
 
@@ -321,6 +323,7 @@ export class UpdateEvenementPopupComponent {
 
   ngOnInit(): void {
     this.getMembersByEvenement();
+    this.extractMemberIds();
   }
 
   getMembersByEvenement(): void {
@@ -338,7 +341,38 @@ export class UpdateEvenementPopupComponent {
     }
   }
 
+  extractMemberIds(): void {
+    if (this.evenement.convocationMembres && Array.isArray(this.evenement.convocationMembres)) {
+      this.memberIds = this.evenement.convocationMembres.map(member => member.id);
+    } else {
+      console.error('convocationMembres is undefined or not an array');
+    }
+  }
 
+  updateEvenement(): void {
+    const request: UpdateEvenementRequest = {
+      evenement: this.evenement,
+      idMembres: this.memberIds
+    };
+
+    if (this.evenement.id !== undefined) {
+      this.evenementService.updateEvenement(this.evenement.id, request).subscribe(
+        (updatedEvenement: Evenement) => {
+          console.log('Evenement updated successfully:', updatedEvenement);
+          this.dialogRef.close(updatedEvenement);
+        },
+        (error: any) => {
+          console.error('Error updating evenement:', error);
+        }
+      );
+    } else {
+      console.error('Evenement ID is undefined');
+    }
+  }
+
+  isValidForm(): boolean {
+    return !!this.evenement.nomEvent && !!this.evenement.lieu && !!this.evenement.date && !!this.evenement.heure;
+  }
 
   onCancelClick(): void {
     this.dialogRef.close();

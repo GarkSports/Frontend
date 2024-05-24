@@ -10,6 +10,7 @@ import { TestRequest } from 'src/models/dto/TestRequest.model';
 import { MatchAmicalRequest } from 'src/models/dto/MatchAmicalRequest.model';
 import { StatutEvenement } from 'src/models/enums/statutEvenenement.model';
 import { CompetitionRequest } from 'src/models/dto/CompetitonRequest.model';
+import { UpdateEvenementRequest } from 'src/models/dto/UpdateEvenementRequest.model';
 
 @Injectable({
   providedIn: 'root'
@@ -64,5 +65,19 @@ export class EvenementService {
 
   getMembersByEvent(idEvenement: number): Observable<Adherent[]> {
     return this.http.get<Adherent[]>(`${this.apiEvenement}/getMembersByEvenement/${idEvenement}`);
+  }
+
+  updateEvenement(evenementId: number, evenementData: UpdateEvenementRequest): Observable<Evenement> {
+    const requestBody = {
+      evenement: {
+        nomEvent: evenementData.evenement.nomEvent,
+        lieu: evenementData.evenement.lieu,
+        date: evenementData.evenement.date,
+        heure: evenementData.evenement.heure,
+      },
+      idMembres: evenementData.idMembres,
+    };
+    const url = `${this.apiEvenement}/updateEvenement/${evenementId}`;
+    return this.http.put<Evenement>(url, requestBody, { withCredentials: true });
   }
 }

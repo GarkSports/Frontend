@@ -41,7 +41,7 @@ export class AddMatchAmicalComponent {
             description: ['', Validators.required],
             horaire: [''], // Add the 'horaire' form control here
             repetition: [false, Validators.required],
-            typeRepetition: [''],
+            typeRepetition: [TypeRepetition.SEMAINE, Validators.required],
             nbRepetition: [''],
         });
         // Subscribe to repetition control value changes to toggle typeRepetition and nbRepetition validation

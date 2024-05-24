@@ -5,6 +5,7 @@
             <thead>
                 <tr>
                     <th>Nom Evenement</th>
+                    <th>Lieu</th>
                     <th>Type</th>
                     <th>Heure</th>
                     <th>Equipe</th>
@@ -14,6 +15,7 @@
             <tbody>
                 <tr class="evenement-item">
                     <td>{{ evenement.nomEvent }}</td>
+                    <td>{{ evenement.lieu }}</td>
                     <td>{{ formatEnumValue(evenement.type) }}</td>
                     <td>{{ evenement.date }} {{ evenement.heure.slice(0, 5) }}</td>
                     <td>{{ evenement.convocationEquipe?.nom }}</td>
