@@ -1,3 +1,4 @@
+// app-chat.component.ts
 import { Component, ViewChild, ElementRef, OnInit, Inject, Optional } from '@angular/core';
 import { messages } from './chat-data';
 import { ChatService } from 'src/app/services/chat.service';
@@ -14,8 +15,6 @@ import { ManagerService } from 'src/app/services/manager.service';
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss'],
 })
-
-
 export class AppChatComponent implements OnInit {
   sidePanelOpened = true;
   msg = '';
@@ -25,17 +24,13 @@ export class AppChatComponent implements OnInit {
   selectedDiscussion: ChatDTO[];
   selectedContact: ChatContactDTO;
 
-
   public messages: Array<any> = messages;
-  // tslint:disable-next-line - Disables all
-  // messages: Object[] = messages;
 
   constructor(
     public chatService: ChatService,
     public dialog: MatDialog,
-  ) {
+  ) {}
 
-  }
   ngOnInit(): void {
     try {   
       console.log('ngOnInit');
@@ -48,46 +43,29 @@ export class AppChatComponent implements OnInit {
           this.onSelect(firstDiscussionId);
         }
       });
-    }
-    finally {
+    } finally {
       console.log('ngOnInit OK');
     }
   }
+
   @ViewChild('chatContainer', { static: false }) chatContainer: ElementRef;
-
-  
-
-  @ViewChild('myInput', { static: true }) myInput: ElementRef =
-    Object.create(null);
+  @ViewChild('myInput', { static: true }) myInput: ElementRef = Object.create(null);
 
   isOver(): boolean {
     return window.matchMedia(`(max-width: 960px)`).matches;
   }
 
-  // tslint:disable-next-line - Disables all
   onSelect(contact: ChatContactDTO): void {
-    console.log('eeeeeeeeeeeee', contact);
-  this.selectedMessage = contact.username;
-  
-  // Call the service method to get the discussion
-  this.chatService.getDiscussion(contact.userId).subscribe((d: ChatDTO[]) => {
-    // Update the discussion list in the service
-    this.chatService.discussionList = d;
-    
-    // Assign the discussion list to selectedDiscussion
-    this.selectedDiscussion = this.chatService.discussionList;
-    this.selectedContact = contact;
-    
-    // Log the discussion list (optional)
-    console.log('this.selectedMessage', this.selectedDiscussion);
-  });
-  
+    console.log('Selected contact', contact);
+    this.selectedMessage = contact.username;
 
+    this.chatService.getDiscussion(contact.userId).subscribe((d: ChatDTO[]) => {
+      this.chatService.discussionList = d;
+      this.selectedDiscussion = this.chatService.discussionList;
+      this.selectedContact = contact;
+      console.log('Selected discussion', this.selectedDiscussion);
+    });
   }
-
-  // applyFilter(filterValue: string): void {
-  //   this.dataSource.filter = filterValue.trim().toLowerCase();
-  // }
 
   openDialog(action: string, obj: any): void {
     obj.action = action;
@@ -98,97 +76,157 @@ export class AppChatComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result.event === 'Ajouter') {
         this.addRowData(result.data);
-      } 
+      }
     });
   }
-  addRowData(data: any) {
-    
+
+  addRowData(data: any): void {
     this.sendMessage(data.receiver, data.msg);
-    
   }
 
   OnAddMsg(): void {
     this.msg = this.myInput.nativeElement.value;
-  
-    this.sendMessage(this.selectedContact.userId, this.msg);
-  
+    this.sendMessage([this.selectedContact.userId], this.msg);
     this.myInput.nativeElement.value = '';
-  
   }
 
-  private sendMessage(userId: number, message: string): void {
+  private sendMessage(receiversId: number[], message: string): void {
     if (message !== '') {
-      console.log('sending message');
-      this.chatService.sendMessage(userId, message).subscribe(
+      console.log('Sending message', message);
+      this.chatService.sendMessage(receiversId, message).subscribe(
         () => {
           console.log('Message sent successfully');
-          // Refresh the discussion after sending the message
-          this.chatService.getDiscussion(userId).subscribe((d: ChatDTO[]) => {
-            // Update the discussion list in the service
-            this.chatService.discussionList = d;
-            
-            // Assign the discussion list to selectedDiscussion
-            this.selectedDiscussion = this.chatService.discussionList;
-            
-            // Log the discussion list (optional)
-            console.log('this.selectedMessage', this.selectedDiscussion);
-            this.ngOnInit();
-          });
+          this.refreshDiscussion(receiversId[0]);
+          this.ngOnInit();
         },
         (error) => {
           console.error('Error occurred while sending message:', error);
-          // Handle error if needed
         }
       );
     }
+  }
+
+  private refreshDiscussion(userId: number): void {
+    this.chatService.getDiscussion(userId).subscribe((d: ChatDTO[]) => {
+      this.chatService.discussionList = d;
+      this.selectedDiscussion = this.chatService.discussionList;
+      console.log('Updated discussion', this.selectedDiscussion);
+    });
   }
 }
 
 @Component({
-    selector: 'app-dialog-content',
-    templateUrl: 'chat-dialog-content.html',
-    
+  selector: 'app-dialog-content',
+  templateUrl: 'chat-dialog-content.html',
 })
-  export class AppChatDialogContentComponent {
-    action: string;
-    // tslint:disable-next-line - Disables all
-    local_data: any;
-    msg = '';
+export class AppChatDialogContentComponent {
+  action: string;
+  local_data: any;
+  friendslist: any[] = [];
+  uniqueRoles: string[] = [];
+  uniqueNomEquipes: string[] = [];
+  selectedRole: string = '';
+  selectedNomEquipe: string = '';
+  filteredFriendsList: any[] = [];
+  selectedFriends: any[] = [];
+  allTeamMembersSelected: boolean = false;
 
-   
-    friendslist: any[] = [];
-
-    constructor(
-      public dialogRef: MatDialogRef<AppChatDialogContentComponent>,
-      private managerService: ManagerService,
-      @Optional() @Inject(MAT_DIALOG_DATA) public data: ChatContactDTO
-    ) {
-      this.local_data = { ...data };
-      this.action = this.local_data.action;
-      this.getManager();
-  
-    }
-
-    getManager(): void {
-      this.managerService.getManagers().subscribe(
-        (managers) => {
-          console.log('Managers fetched successfully', managers);
-          this.friendslist = managers;
-          console.log('this.friendslist.data fetched successfully', this.friendslist);
-        },
-        (error) => {
-          console.error('Error fetching academies', error);
-        }
-      );
-    }
-
-    doAction(): void {
-      this.dialogRef.close({ event: this.action, data: this.local_data });
-    }
-  
-    closeDialog(): void {
-      this.dialogRef.close({ event: 'Cancel' });
-    }
-
+  constructor(
+    public dialogRef: MatDialogRef<AppChatDialogContentComponent>,
+    private managerService: ManagerService,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: ChatContactDTO
+  ) {
+    this.local_data = { ...data };
+    this.action = this.local_data.action;
+    this.getManager();
   }
 
+  getManager(): void {
+    this.managerService.getManagers().subscribe(
+      (managers) => {
+        this.friendslist = managers;
+        this.uniqueRoles = [...new Set(this.friendslist.map(friend => friend.role))];
+        this.uniqueNomEquipes = [...new Set(this.friendslist.map(friend => friend.nomEquipe))];
+        this.applyFilters();
+      },
+      (error) => {
+        console.error('Error fetching managers', error);
+      }
+    );
+  }
+
+  applyFilters(): void {
+    this.filteredFriendsList = this.friendslist;
+
+    if (this.selectedRole) {
+      this.filteredFriendsList = this.filteredFriendsList.filter(friend => friend.role === this.selectedRole);
+    }
+
+    if (this.selectedRole === 'ADHERENT' && this.selectedNomEquipe) {
+      this.filteredFriendsList = this.filteredFriendsList.filter(friend => friend.nomEquipe === this.selectedNomEquipe);
+    }
+  }
+
+  onRoleChange(): void {
+    this.selectedNomEquipe = ''; // Reset the nomEquipe filter when role changes
+    this.applyFilters();
+  }
+
+  onNomEquipeChange(): void {
+    this.applyFilters();
+  }
+
+  isSelected(friend: any): boolean {
+    return this.selectedFriends.some(selected => selected.id === friend.id);
+  }
+
+  toggleSelection(friend: any): void {
+    const index = this.selectedFriends.findIndex(selected => selected.id === friend.id);
+    if (index === -1) {
+      this.selectedFriends.push(friend);
+    } else {
+      this.selectedFriends.splice(index, 1);
+    }
+    this.local_data.receiver = this.selectedFriends.map(friend => friend.id);
+    console.log("zzzz",this.local_data.receiver);
+  }
+
+  getSelectedFriends(): any[] {
+    return this.selectedFriends;
+  }
+
+  selectAllTeamMembers(): void {
+    if (this.selectedNomEquipe) {
+      if (this.allTeamMembersSelected) {
+        // Deselect all team members
+        this.filteredFriendsList.forEach(friend => {
+          if (friend.nomEquipe === this.selectedNomEquipe) {
+            const index = this.selectedFriends.findIndex(selected => selected.id === friend.id);
+            if (index !== -1) {
+              this.selectedFriends.splice(index, 1);
+            }
+          }
+        });
+      } else {
+        // Select all team members
+        this.filteredFriendsList.forEach(friend => {
+          if (friend.nomEquipe === this.selectedNomEquipe && !this.isSelected(friend)) {
+            this.selectedFriends.push(friend);
+          }
+        });
+      }
+      // Update the flag
+      this.allTeamMembersSelected = !this.allTeamMembersSelected;
+      // Update the local_data.receiver with the IDs of all selected friends
+      this.local_data.receiver = this.selectedFriends.map(friend => friend.id);
+    }
+  }
+
+  doAction(): void {
+    this.dialogRef.close({ event: this.action, data: this.local_data });
+  }
+
+  closeDialog(): void {
+    this.dialogRef.close({ event: 'Cancel' });
+  }
+}

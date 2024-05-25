@@ -1,38 +1,63 @@
 <h2 mat-dialog-title>
-    Nouveau Message
-  </h2>
-  <mat-dialog-content style="max-width: 800px" class="mat-typography p-24">
-    <form #postForm="ngForm">
-      <div class="col-sm-12 col-lg-12">
-        <mat-form-field appearance="outline" class="w-100"> 
-          <mat-label>receiver</mat-label>
-          <mat-select matNativeControl required name="receiver" [(ngModel)]="local_data.receiver" class="full-width">
-            <mat-option *ngFor="let receiver of friendslist" [value]="receiver.id">
-              {{ receiver.firstname }} {{receiver.lastname}}     
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-      <div class="col-sm-12 col-lg-12 gray-background">
-        <mat-form-field appearance="outline" class="w-100">
-          <mat-label>Message</mat-label>
-          <input matInput placeholder="Ajouter message"  required name="msg" [(ngModel)]="local_data.msg"  />
-          <button mat-icon-button matSuffix color="primary" [disabled]="!local_data.msg || !local_data.receiver" (click)="doAction()">
-            <mat-icon>send</mat-icon>
-          </button>
-        </mat-form-field>
-      </div>
-    </form>
-  </mat-dialog-content>
-  
-  <div mat-dialog-actions class="p-24 p-t-0">
-    <button mat-flat-button (click)="doAction()" color="primary" [disabled]="!local_data.receiver || !local_data.msg  ">
-      {{action}}
-    </button>
-    <button mat-stroked-button color="warn" (click)="closeDialog()">
-      Annulé
-    </button>
+  Nouveau Message
+</h2>
+<mat-dialog-content style="width: 800px" class="mat-typography p-24">
+  <form #postForm="ngForm">
+    
+        <div class="row">  <div class="col-sm-6 col-lg-6">  <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Filter by Role</mat-label>
+              <mat-select [(ngModel)]="selectedRole" name="role" (selectionChange)="onRoleChange()">
+                <mat-option *ngFor="let role of uniqueRoles" [value]="role">{{ role }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+    
+          <div *ngIf="selectedRole === 'ADHERENT'" class="col-sm-6 col-lg-6">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Filter by Equipe</mat-label>
+              <mat-select [(ngModel)]="selectedNomEquipe" name="nomEquipe" (selectionChange)="onNomEquipeChange()">
+                <mat-option *ngFor="let nomEquipe of uniqueNomEquipes" [value]="nomEquipe">{{ nomEquipe }}</mat-option>
+              </mat-select>
+              
+            </mat-form-field>
+          </div>
+          <div *ngIf="selectedRole === 'ADHERENT'" class="col-sm-6 col-lg-6">
+          <button mat-button (click)="selectAllTeamMembers()">Sélectionner toute l'équipe</button>
+          </div>
+
+
+          <div mat-dialog-actions class="p-16 p-t-0">
+          </div>
+          
+        </div>
+        <h3> Selectionner Au Moins Un Contact</h3>
+          <!-- <ul>
+            <li *ngFor="let friend of getSelectedFriends()">{{ friend.firstname }} {{ friend.lastname }}</li>
+          </ul>  -->
+
+    <div *ngFor="let friend of filteredFriendsList">
+      <mat-checkbox [checked]="isSelected(friend)" (change)="toggleSelection(friend)">
+        {{ friend.firstname }} {{ friend.lastname }} - {{ friend.role }} - {{ friend.nomEquipe }}
+      </mat-checkbox>
+    </div>
+    
+  </form>
+</mat-dialog-content>
+
+<div mat-dialog-actions class="p-24 p-t-0">
+  <div class="col-sm-12 col-lg-12 gray-background">
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Message</mat-label>
+      <input matInput placeholder="Ajouter message" [(ngModel)]="local_data.msg" name="msg" required />
+      <button mat-icon-button matSuffix color="primary" [disabled]="!local_data.msg || !local_data.receiver" (click)="doAction()">
+        <mat-icon>send</mat-icon>
+      </button>
+    </mat-form-field>
   </div>
-
-
-  
+  <button mat-flat-button (click)="doAction()" color="primary" [disabled]="!local_data.receiver || !local_data.msg">
+    {{ action }}
+  </button>
+  <button mat-stroked-button color="warn" (click)="closeDialog()">
+    Annulé
+  </button>
+</div>
