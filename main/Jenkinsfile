@@ -1,6 +1,6 @@
 pipeline {
     environment {
-        registry = "khaledsd/garkclub_frontend"
+        registry = "khaledsd/spr01-front"
         registryCredential = 'docker2'
         dockerImage = ''
     }
@@ -23,35 +23,13 @@ pipeline {
             }
         }
 
-        stage('Trigger PipelineJob2') {
-            steps {
-                script {
-                        build job: 'CD pipe/main', wait: false
-                }
-            }
-        }
-      /*    stage('Run') {
-            steps {
-                script {
-                    dockerImage.run("-p 4250:4200 ")
-                }
-            }
-        }
-    stage('SSH Connection') {
-
-            steps {
-                script {
-                     def remote = [:]
-                    remote.name = 'server-kali'
-                    remote.host = '192.168.56.103'
-                    remote.user = 'kali'
-                    remote.password = 'kali'
-                    remote.allowAnyHosts = true
-                    sshCommand remote: remote, command: 'bash deploy.sh'
-
-                }
-            }
-        }*/
+//         stage('Trigger PipelineJob2') {
+//             steps {
+//                 script {
+//                         build job: 'CD pipe/main', wait: false
+//                 }
+//             }
+//         }
 
 
     }
