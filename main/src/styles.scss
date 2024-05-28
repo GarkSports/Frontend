@@ -106,6 +106,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   border:0!important;
   border-bottom: 0!important;
   border-right:0!important;
+
 }
 .fc-scrollgrid{
   background:$third_color!important;
@@ -175,7 +176,6 @@ td{
 }
 
 .fc-event{
-  background:#E8F8C6!important;
   border:0!important;
   filter: drop-shadow(0px 3px 3px rgba(0,0,0,0.16 ));
 
@@ -186,3 +186,27 @@ td{
 .mat-mdc-dialog-container .mdc-dialog__surface {
   border-radius: 33px !important;
 }
+.fc-event-title.fc-sticky {
+  position: relative !important;
+  padding-left: 9px !important; /* Adjust to give space for the rectangle */
+}
+
+.fc-event-title.fc-sticky::before {
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  width: 5px !important; /* Width of the rectangle */
+  height: 25px !important; /* Height of the rectangle */
+  background-color: $primary-color !important; /* Change to desired color */
+  border-radius: 7px 0 0 7px;
+}
+
+.fc-event-title.fc-sticky::after {
+  content: ">" !important;
+  color:black;
+  font-weight: bold;
+  margin-left: 8px !important; /* Adjust spacing as needed */
+}
+

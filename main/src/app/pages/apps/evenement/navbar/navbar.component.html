@@ -1,17 +1,3 @@
-<!--<mat-card class="cardWithShadow">-->
-<!--    <mat-toolbar class="navbar">-->
-<!--      <button mat-button >Liste d'événements</button>-->
-<!--      <button mat-button >Calendrier</button>-->
-<!--    </mat-toolbar>-->
-<!--  </mat-card>-->
-<!--  -->
-<!--  -->
-<!--
-Heads up! 👋
-
-Plugins:
-  - @tailwindcss/forms
--->
 
 <div class="justify-center flex mb-10">
 <!--  <div class="sm:hidden">-->
@@ -29,13 +15,13 @@ Plugins:
     <nav class="flex gap-20 border-2 py-1 px-2 rounded-3xl border-second " aria-label="Tabs">
       <button
         [disabled]="isListEvenementActive" routerLink="/apps/listevenement" [routerLinkActive]="'bg-black  py-2 px-5 '" [routerLinkActiveOptions]="{exact: false}" (click)="setActive('listevenement')"
-        class="shrink-0 rounded-3xl text-lg  px-4  font-bold text-second hover:bg-gray-50 hover:text-black  "
+        class="shrink-0 rounded-3xl   px-4  font-bold text-second hover:bg-gray-50 hover:text-black  "
       >
         Evénements
       </button>
       <button
         [disabled]="isCalendrierActive" routerLink="/apps/calendrier" [routerLinkActive]="'bg-black   py-2 px-5 '"  [routerLinkActiveOptions]="{exact: false}" (click)="setActive('calendrier')"
-        class="shrink-0  rounded-3xl text-lg  px-4  font-bold text-second hover:bg-third hover:text-black  "
+        class="shrink-0  rounded-3xl    px-4  font-bold text-second hover:bg-third hover:text-black  "
       >
         Calendrier
       </button>
@@ -47,43 +33,3 @@ Plugins:
 
 
 
-
-
-
-<style>
-.navbar {
-  display: flex;
-  justify-content: center;
-  padding: 10px 0; /* Add padding for spacing */
-  background-color: #FAFAFA; /* White background color */
-}
-
-.navbar button {
-  color: #B0E53C; /* Primary color for button text */
-  font-weight: bold; /* Button font weight */
-  background-color: transparent; /* Transparent background */
-  border: 0px solid #B0E53C; /* Add border */
-  border-radius: 5px; /* Rounded corners */
-  padding: 8px 16px; /* Add padding for spacing */
-  transition: background-color 0.3s, color 0.3s; /* Add transition effect */
-}
-
-.navbar button:hover:not(:disabled),
-.navbar button:focus:not(:disabled) {
-  background-color: #B0E53C; /* Primary color background on hover and focus */
-  color: #ffffff; /* White text color on hover and focus */
-}
-
-.navbar button:disabled {
-  background-color: #e0e0e0; /* Light gray background color when disabled */
-  color: #9e9e9e; /* Medium gray text color when disabled */
-  cursor: not-allowed; /* Change cursor to not-allowed when disabled */
-}
-
-.active-link {
-  font-weight: bold;
-}
-
-
-
-</style>

@@ -46,6 +46,9 @@ export class AddCompetitionComponent {
         this.getMembers();
     }
 
+  setEquipe2(event:any){
+    this.selectedEquipe2 = this.equipeList.filter(equipe => equipe.id == event.target.value)[0];
+  }
     initializeForm(): void {
         this.evenementForm = this.formBuilder.group({
             nom: ['', Validators.required],
@@ -54,8 +57,8 @@ export class AddCompetitionComponent {
             horraire: ['', Validators.required],
             description: ['', Validators.required],
             repetition: [false, Validators.required],
-            typeRepetition: [''],
-            nbRepetition: [''],
+          typeRepetition: ['SEMAINE'],
+          nbRepetition: ['0'],
             equipe: [''],
             membres: ['']
         });
