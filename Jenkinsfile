@@ -9,16 +9,18 @@ pipeline {
        stage('Build') {
             steps {
                 script {
-                   dockerImage = docker.build registry + ":$BUILD_NUMBER"
+                bat 'echo "helo" '
+//                    dockerImage = docker.build registry + ":$BUILD_NUMBER"
                 }
             }
         }
         stage('Push') {
             steps {
                 script {
-                    docker.withRegistry( '', registryCredential ) {
-                                            dockerImage.push()
-                                        }
+                bat 'echo "helo" '
+//                     docker.withRegistry( '', registryCredential ) {
+//                                             dockerImage.push()
+//                                         }
                 }
             }
         }
