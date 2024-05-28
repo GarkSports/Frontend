@@ -9,7 +9,14 @@ pipeline {
        stage('Build') {
             steps {
                 script {
-                bat 'docker build -t $registry:$BUILD_NUMBER .'
+                bat 'docker build -t spr01-front .'
+                }
+            }
+        }
+       stage('Tag') {
+            steps {
+                script {
+                bat 'docker tag spr01-front khaledsd/spr01-front'
                 }
             }
         }
