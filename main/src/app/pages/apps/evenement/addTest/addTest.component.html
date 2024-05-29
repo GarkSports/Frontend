@@ -62,6 +62,15 @@
                                     is required</mat-error>
                             </mat-form-field>
                         </div>
+                        <div class="col-md-12">
+                            <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Lieu</mat-label>
+                            <mat-form-field appearance="outline" class="w-100">
+                                <input matInput required placeholder="Lieu" formControlName="lieu" />
+                                <mat-error
+                                    *ngIf="evenementForm.get('lieu')?.invalid && evenementForm.get('lieu')?.touched">Lieu
+                                    is required</mat-error>
+                            </mat-form-field>
+                        </div>
                         <!-- Date -->
                         <div class="col-md-6">
                             <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Date</mat-label>

@@ -1,5 +1,6 @@
 import { Academie } from "./academie.model";
 import { Adherent } from "./adherent.model";
+import { ConvocationEntrainement } from "./convocationEntrainement.model";
 import { Discipline } from "./discipline.model";
 import { Entraineur } from "./entraineur.model";
 import { GenreEquipe } from "./enums/genreEquie.model";
@@ -18,4 +19,7 @@ export class Equipe {
     entraineurs?: Entraineur[];
     academie?: Academie;
     dateMatchAmical: string;
+
+    convocations?: ConvocationEntrainement[];
+
 }

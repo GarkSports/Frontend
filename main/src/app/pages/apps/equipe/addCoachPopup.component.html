@@ -12,6 +12,23 @@
   </mat-selection-list>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-button [mat-dialog-close]="selectedCoachs">OK</button>
-  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button class="save-button" [mat-dialog-close]="selectedCoachs">OK</button>
+  <button mat-button class="cancel-button" mat-dialog-close>Cancel</button>
 </mat-dialog-actions>
+
+
+<style>
+      .cancel-button {
+        background-color: #FA9175;
+        /* Custom color */
+        color: white;
+        /* Text color */
+    }
+
+    .save-button {
+        background-color: #B0E53C;
+        /* Custom color */
+        color: white;
+        /* Text color */
+    }
+</style>

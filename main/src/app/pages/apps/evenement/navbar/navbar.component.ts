@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 export class NavbarComponent {
   isListEvenementActive: boolean = false;
   isCalendrierActive: boolean = false;
+  isEntrainementActive: boolean = false;
 
   constructor(private router: Router) {
     // Check the initial route on component initialization
@@ -18,6 +19,7 @@ export class NavbarComponent {
     const currentRoute = this.router.url;
     this.isListEvenementActive = currentRoute.includes('/apps/listevenement');
     this.isCalendrierActive = currentRoute.includes('/apps/calendrier');
+    this.isEntrainementActive = currentRoute.includes('/apps/entrainement');
   }
 
   setActive(tab: string) {
@@ -25,6 +27,9 @@ export class NavbarComponent {
       this.router.navigateByUrl('/apps/listevenement');
     } else if (tab === 'calendrier') {
       this.router.navigateByUrl('/apps/calendrier');
+    }
+    else if (tab === 'entrainement') {
+      this.router.navigateByUrl('/apps/entrainement');
     }
   }
 }
