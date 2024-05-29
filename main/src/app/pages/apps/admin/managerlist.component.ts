@@ -16,6 +16,7 @@ import { MatSelectChange } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
 import { StatutManager } from 'src/models/enums/statutManager';
 import { AcademieService } from 'src/app/services/academie.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-manager-list',
@@ -54,7 +55,8 @@ export class AppManagerlistComponent implements OnInit {
   ];
   dataSource = new MatTableDataSource<Manager>([]);
   profil: Manager | null = null;
-
+  action: string;
+  local_data: any;
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
   @ViewChild(MatSort, { static: true }) sort: MatSort = Object.create(null);
@@ -63,17 +65,21 @@ export class AppManagerlistComponent implements OnInit {
   constructor(public dialog: MatDialog,
               public datePipe: DatePipe,
               public adminService: AdminService,
-              public academieService: AcademieService){}
+              public academieService: AcademieService,
+              private route: ActivatedRoute,
+              ){}
 
   displayedData: any[] = [];
   //sortOrder: string = 'asc'; // default sorting order
 
   ngOnInit(): void {
-    //this.dataSource = new MatTableDataSource<Manager>([]);
-    this.getAcademiesNames();
-    this.fetchData();
-    this.getManagers();
-    //this.sortData();
+    this.route.queryParams.subscribe(params => {
+      this.action = params['action'];
+      this.local_data = { ...params };
+      this.getAcademiesNames();
+      this.fetchData();
+      this.getManagers();
+    });
   }
 
   applyFilterByStatut(): void {
@@ -114,13 +120,6 @@ export class AppManagerlistComponent implements OnInit {
     this.dataSource = new MatTableDataSource<Manager>(this.dataSource.data);
   }
 
-//   matchesFilter(value: string | undefined, filter: string): boolean {
-//   if (value === undefined || value === null) {
-//     return false;
-//   }
-
-//   return value.includes(filter);
-// }
 
 matchesFilter(value: any, filter: string): boolean {
   // Convert value to string if it's not already
@@ -183,18 +182,6 @@ getAcademiesNames(): void {
     this.dataSource.filter = filter;
   }
 
-  // applyFilter(filterValue: string) {
-  //   // Convert the filter value to lowercase
-  //   filterValue = filterValue.trim().toLowerCase();
-  //   // Apply the filter to the dataSource
-  //   this.dataSource.filter = filterValue;
-  
-  //   // Reset the sort after filtering
-  //   if (this.dataSource.paginator) {
-  //     this.dataSource.paginator.firstPage();
-  //   }
-  // }
-
   resetFilters(): void {
     // Reset selected filters
     this.selectedAcademie = null;
@@ -244,6 +231,19 @@ getAcademiesNames(): void {
     return this.dataSource.filteredData.length;
   }
 
+  openFormPage(action: string, obj: any): void {
+    const queryParams = new URLSearchParams({
+      action,
+      ...obj
+    }).toString();
+    const url = `/apps/managerForm?${queryParams}`;
+    window.open(url, '_blank');
+    if(window.closed){
+      this.getManagers();
+    }
+  }
+
+
   openDialog(action: string, obj: any): void {
     obj.action = action;
     const dialogRef = this.dialog.open(AppManagerDialogContentComponent, {
@@ -251,61 +251,13 @@ getAcademiesNames(): void {
     });
 
     //here we will just reload or display the changes instantly but the real work will be in the dialog
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result.event === 'Add') {
-        this.addRowData(result.data.managerData);
-      } else if (result.event === 'Update') {
-        this.updateRowData(result.data);
-        console.log("helloo");
-      } else if (result.event === 'Delete') {
-        this.deleteRowData(result.data);
-      } else if (result.event === 'Block') {
-        this.blockRowData(result.data);
-      } else if (result.event === 'UnBlock') {
-        this.unblockRowData(result.data);
-      }
+    dialogRef.afterClosed().subscribe(() => {
+      
       this.getManagers();
 
     });
   }
 
-  
-  // tslint:disable-next-line - Disables all
-  addRowData(newData: any) {
-    this.displayedData = [...this.displayedData, newData];
-  }
-  
-  // updateRowData(updatedData: any) {
-  //   this.displayedData = this.displayedData.map(item =>
-  //     item.id === updatedData.id ? updatedData : item
-  //   );
-  // }
-
-  updateRowData(row_obj: Manager): boolean | any {
-   
-  }
-  
-  deleteRowData(deletedData: any) {
-    this.displayedData = this.displayedData.filter(item => item.id !== deletedData.id);
-  }
-  
-  blockRowData(blockedData: any) {
-    this.displayedData = this.displayedData.map(item =>
-      item.id === blockedData.id ? { ...item, blocked: true } : item
-    );
-  }
-  // blockRowData(local_data: Manager) {
-  //   this.displayedData = this.displayedData.map(item =>
-  //     item.id === local_data.blocked ? { ...item, blocked: true } : item
-  //   );
-  // }
-  
-  unblockRowData(unblockedData: any) {
-    this.displayedData = this.displayedData.map(item =>
-      item.id === unblockedData.id ? { ...item, blocked: false } : item
-    );
-  }
-  
 }
 
  
@@ -315,7 +267,7 @@ getAcademiesNames(): void {
   templateUrl: 'manager-dialog-content.html',
 })
 // tslint:disable-next-line - Disables all
-export class AppManagerDialogContentComponent implements OnInit {
+export class AppManagerDialogContentComponent {
   action: string;
   local_data: any;
   managerForm: FormGroup;
@@ -333,31 +285,12 @@ export class AppManagerDialogContentComponent implements OnInit {
   ) {
     this.local_data = { ...data };
     this.action = this.local_data.action ;
-    if (this.action === 'Update') {
-      this.initManagerForm();
-    }
+  
   }
   displayedData: any[] = [];
 
-  ngOnInit(): void {
-    this.initManagerForm();
-  }
 
-  initManagerForm(): void {
-    this.managerForm = this.formBuilder.group({
-      firstname: [this.local_data.firstname, Validators.required],
-      lastname: [this.local_data.lastname, Validators.required],
-      email: [this.local_data.email, [Validators.required, Validators.email]],
-      adresse: [this.local_data.adresse, Validators.required],
-      telephone: [this.local_data.telephone, Validators.required],
-      telephone2: [this.local_data.telephone2],
-      password: ['', [Validators.required]]
 
-    });
-  }
-  togglePasswordVisibility(): void {
-    this.isPasswordVisible = !this.isPasswordVisible;
-  }
   getManagers(): void {
     this.adminService.getManagers().subscribe(
       (managers) => {
@@ -380,39 +313,7 @@ export class AppManagerDialogContentComponent implements OnInit {
   }
 
   doAction(): void {
-    if (this.action === 'Add') {
-      this.adminService.addManager(this.managerForm.value).subscribe(
-        
-        (response) => {
-          console.log(this.managerForm.value);
-          console.log('Manager added:', response);
-          this.dialogRef.close(true);
-        },
-        (error) => {
-          // Handle error
-          console.error('Error adding manager:', error);
-        }
-      );
-   
-    } else if (this.action === 'Update') {
-      // Handle Update action
-      
-        const updatedManager = this.managerForm.value;
-        updatedManager.id = this.local_data.id; // Set the id of the manager to be updated
-        
-        this.adminService.updateManager(updatedManager).subscribe(
-          (response) => {
-            console.log('Manager updated successfully', response);
-            console.log('Manager updated:', response);
-            this.dialogRef.close(true);             
-          },
-          (error) => {
-            console.error('Error updating manager', error);
-          }
-        );
-      
-    } 
-    else if (this.action === 'Block') {
+    if (this.action === 'Block') {
       if (this.local_data.blocked) {
         // User is currently blocked, so we need to unblock
         this.adminService.unblockManager(this.local_data.id).subscribe(

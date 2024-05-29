@@ -3,6 +3,7 @@
 # Compiled output
 /dist
 /tmp
+/.scannerwork
 /out-tsc
 /bazel-out
 
