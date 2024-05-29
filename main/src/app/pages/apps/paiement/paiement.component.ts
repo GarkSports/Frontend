@@ -1,4 +1,4 @@
-import { Component, Inject, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, Inject, ViewChild, AfterViewInit, OnInit } from '@angular/core';
 import { MatTableDataSource, MatTable } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -10,6 +10,7 @@ import { Adherent } from 'src/models/adherent.model';
 import { PaiementHistory } from 'src/models/paiementHistory.model';
 import { StatutAdherent } from 'src/models/enums/statutAdherent.model';
 import { Equipe } from 'src/models/equipe.model';
+import { Router } from '@angular/router';
 
 @Component({
   templateUrl: './paiement.component.html',
@@ -43,7 +44,7 @@ export class PaiementComponent implements AfterViewInit {
   ];
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator = Object.create(null);
 
-  constructor(public dialog: MatDialog, public datePipe: DatePipe, private paiementService: PaiementService) { }
+  constructor(public dialog: MatDialog, public datePipe: DatePipe, private paiementService: PaiementService, private router: Router) { }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
@@ -271,16 +272,7 @@ export class PaiementComponent implements AfterViewInit {
     const newPaiement: Paiement = new Paiement();
     newPaiement.adherent = new Adherent(); // Ensure adherent is initialized
 
-    const dialogRef = this.dialog.open(AddPaiementPopupComponent, {
-      data: newPaiement // Pass the initialized Paiement object to the dialog
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        // Handle dialog result if needed
-        this.getPaiements();
-      }
-    });
+    this.router.navigate(['/apps/addPaiement']);
   }
 
   openPaymentHistoryPopup(adherentId: number): void {
@@ -352,26 +344,30 @@ export class PaiementDetailsPopupComponent {
 
 
 @Component({
+  selector: 'app-add-paiement',
   templateUrl: './addPaiement.component.html',
 })
-export class AddPaiementPopupComponent {
-  paiement: Paiement = new Paiement(); // Initialize an empty Paiement object
+export class AddPaiementPopupComponent implements OnInit {
+  paiement: Paiement = new Paiement();
   members: Adherent[] = [];
   typeAbonnements: TypeAbonnement[] = [TypeAbonnement.Annuel, TypeAbonnement.Mensuel, TypeAbonnement.Trimestriel];
 
-  constructor(
-    public dialogRef: MatDialogRef<AddPaiementPopupComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any, // Inject any data if needed
-    private paiementService: PaiementService
-  ) { }
+  constructor(private router: Router, private paiementService: PaiementService) { }
 
   ngOnInit(): void {
     this.getMembers();
   }
 
   isFormValid(): boolean {
-    // Vérifier si tous les champs obligatoires sont remplis et s'ils ont des valeurs valides
-    return (this.paiement.montant !== undefined && this.paiement.montant >= 0 && this.paiement.montant !== null) && (this.paiement.reste === undefined || this.paiement.reste >= 0) && this.paiement.typeAbonnement !== undefined && this.paiement.adherent !== undefined && (this.paiement.dateDebut !== undefined && this.paiement.dateDebut !== null) && (this.paiement.dateFin !== undefined && this.paiement.dateFin !== null) && (this.paiement.datePaiement !== undefined && this.paiement.datePaiement !== null);
+    return (
+      (this.paiement.montant !== undefined && this.paiement.montant >= 0 && this.paiement.montant !== null) &&
+      (this.paiement.reste === undefined || this.paiement.reste >= 0) &&
+      this.paiement.typeAbonnement !== undefined &&
+      this.paiement.adherent !== undefined &&
+      (this.paiement.dateDebut !== undefined && this.paiement.dateDebut !== null) &&
+      (this.paiement.dateFin !== undefined && this.paiement.dateFin !== null) &&
+      (this.paiement.datePaiement !== undefined && this.paiement.datePaiement !== null)
+    );
   }
 
   getTypeAbonnementName(type: TypeAbonnement): string {
@@ -393,10 +389,7 @@ export class AddPaiementPopupComponent {
 
   getDateFin(): void {
     if (this.paiement.dateDebut && this.paiement.typeAbonnement !== undefined) {
-      // Clone the dateDebut to avoid modifying it directly
       const dateFin = new Date(this.paiement.dateDebut);
-
-      // Set the date based on subscription type
       switch (this.paiement.typeAbonnement) {
         case TypeAbonnement.Mensuel:
           dateFin.setMonth(dateFin.getMonth() + 1);
@@ -411,16 +404,14 @@ export class AddPaiementPopupComponent {
           console.error('Invalid subscription type');
           return;
       }
-
-      // Ensure day does not exceed the last day of the month
       dateFin.setDate(Math.min(dateFin.getDate(), new Date(dateFin.getFullYear(), dateFin.getMonth() + 1, 0).getDate()));
-
       this.paiement.dateFin = dateFin;
     }
   }
 
   onCancelClick(): void {
-    this.dialogRef.close();
+    // Handle cancellation logic, such as navigating back to the previous page
+    this.router.navigate(['/apps/paiement']);
   }
 
   onSaveClick(): void {
@@ -439,14 +430,15 @@ export class AddPaiementPopupComponent {
       this.paiementService.addPaiement(newPaiement as Paiement, this.paiement.adherent.id)
         .subscribe(response => {
           console.log('Payment added:', response);
-          this.dialogRef.close(response); // Close dialog with response if needed
+          // Handle success, such as showing a success message or navigating to a different page
+          this.router.navigate(['/apps/paiement']);
         }, error => {
           console.error('Error adding payment:', error);
-          // Handle error if necessary
+          // Handle error, such as showing an error message or allowing the user to retry
         });
     } else {
       console.error('Paiement adherent is undefined');
-      // Handle case where adherent is undefined
+      // Handle case where adherent is undefined, such as showing an error message
     }
   }
 }

@@ -2,6 +2,7 @@
     <mat-toolbar class="navbar">
       <button mat-button [disabled]="isListEvenementActive" routerLink="/apps/listevenement" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: false}" (click)="setActive('listevenement')">Liste d'événements</button>
       <button mat-button [disabled]="isCalendrierActive" routerLink="/apps/calendrier" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: false}" (click)="setActive('calendrier')">Calendrier</button>
+      <button mat-button [disabled]="isEntrainementActive" routerLink="/apps/entrainement" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: false}" (click)="setActive('entrainement')">Entrainement</button>
     </mat-toolbar>
   </mat-card>
   

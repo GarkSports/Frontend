@@ -2,33 +2,51 @@
 <mat-dialog-content style="max-width: 600px">
     <!-- Form fields for updating event attributes -->
     <div class="form-row" style="margin-top: 10px;">
-        <div class="input-container">
-            <mat-form-field appearance="outline">
+        <div class="input-container" style="width: 100%;">
+            <mat-form-field appearance="outline" style="width: 100%;">
                 <mat-label>Nom</mat-label>
                 <input matInput type="text" placeholder="Nom" [(ngModel)]="evenement.nomEvent" required />
                 <mat-error *ngIf="!evenement.nomEvent">Nom est requis</mat-error>
             </mat-form-field>
         </div>
-    </div>
-
-    <div class="form-row">
-        <div class="input-container">
-            <mat-form-field appearance="outline">
+        <div class="input-container" style="width: 100%;">
+            <mat-form-field appearance="outline" style="width: 100%;">
                 <mat-label>Lieu</mat-label>
-                <input matInput type="text" placeholder="Lieu" [(ngModel)]="evenement.lieu" required />
-                <mat-error *ngIf="!evenement.lieu">Lieu est requis</mat-error>
+                <input matInput type="text" [(ngModel)]="evenement.lieu" required />
+                <mat-error *ngIf="!evenement.date">Lieu est requis</mat-error>
             </mat-form-field>
         </div>
     </div>
 
-    <!-- New mat-select for members -->
+
     <div class="form-row">
         <div class="input-container">
             <mat-form-field appearance="outline">
+                <mat-label>Date</mat-label>
+                <input matInput [matDatepicker]="picker" [(ngModel)]="evenement.date" required />
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                <mat-error *ngIf="!evenement.date">Date est requis</mat-error>
+            </mat-form-field>
+        </div>
+        <div class="input-container">
+            <mat-form-field appearance="outline">
+                <mat-label>Heure</mat-label>
+                <input matInput type="time" [(ngModel)]="evenement.heure" required />
+                <mat-error *ngIf="!evenement.heure">Heure est requis</mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+    
+
+    <!-- New mat-select for members -->
+    <div class="form-row">
+        <div class="input-container" style="width: 100%;">
+            <mat-form-field appearance="outline" style="width: 100%;">
                 <mat-label>Membres</mat-label>
-                <mat-select [(ngModel)]="evenement.convocationMembres" multiple>
+                <mat-select [(ngModel)]="memberIds" multiple>
                     <mat-option *ngFor="let member of memberList" [value]="member.id">
-                        {{ member.firstname }}
+                        {{ member.firstname }} {{ member.lastname }}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
@@ -37,6 +55,7 @@
 </mat-dialog-content>
 <mat-dialog-actions>
     <!-- Buttons for Save and Cancel -->
+    <button mat-raised-button color="primary" (click)="updateEvenement()" [disabled]="!isValidForm()">Save</button>
     <button mat-raised-button class="cancel-button" (click)="onCancelClick()">Cancel</button>
 </mat-dialog-actions>
 
@@ -63,6 +82,9 @@
     }
 
     .save-button {
-        min-width: 100px;
+        background-color: #4CAF50;
+        /* Custom color */
+        color: white;
+        /* Text color */
     }
 </style>
