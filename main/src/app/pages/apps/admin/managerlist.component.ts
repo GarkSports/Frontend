@@ -16,7 +16,7 @@ import { MatSelectChange } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
 import { StatutManager } from 'src/models/enums/statutManager';
 import { AcademieService } from 'src/app/services/academie.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-manager-list',
@@ -65,21 +65,35 @@ export class AppManagerlistComponent implements OnInit {
   constructor(public dialog: MatDialog,
               public datePipe: DatePipe,
               public adminService: AdminService,
+              @Optional() @Inject(MAT_DIALOG_DATA) public data: Manager,
               public academieService: AcademieService,
               private route: ActivatedRoute,
-              ){}
+              private router: Router
+              ){
+                this.local_data = { ...data };
+    this.action = this.local_data.action;
+              }
 
   displayedData: any[] = [];
   //sortOrder: string = 'asc'; // default sorting order
 
   ngOnInit(): void {
+    this.dataSource = new MatTableDataSource<Manager>([]);
+
     this.route.queryParams.subscribe(params => {
+      this.dataSource = new MatTableDataSource<Manager>([]);
+
       this.action = params['action'];
       this.local_data = { ...params };
       this.getAcademiesNames();
       this.fetchData();
       this.getManagers();
     });
+  }
+
+
+  onUpdate(manager: Manager) {
+    this.router.navigate(['/managerForm', manager.id]);
   }
 
   applyFilterByStatut(): void {
@@ -234,14 +248,15 @@ getAcademiesNames(): void {
   openFormPage(action: string, obj: any): void {
     const queryParams = new URLSearchParams({
       action,
-      ...obj
+      id: obj.id
     }).toString();
     const url = `/apps/managerForm?${queryParams}`;
     window.open(url, '_blank');
-    if(window.closed){
+    if (window.closed) {
       this.getManagers();
     }
   }
+  
 
 
   openDialog(action: string, obj: any): void {

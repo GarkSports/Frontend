@@ -76,11 +76,14 @@ export class AppStaffformContentComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
       this.action = params['action'];
-      this.local_data = { ...params };
-      this.initManagerForm();
+      const id = params['id'];
+        this.getFormManagerById(id);
       this.getOnlyRoleNames();
+      this.initManagerForm();
+
     });
   }
+
 
   ngOnDestroy(): void {
     this.broadcastChannel.postMessage('staffFormClosed');
@@ -114,20 +117,34 @@ export class AppStaffformContentComponent implements OnInit, OnDestroy {
     );
   }
 
-  initManagerForm(): void {
+  getFormManagerById(id: string): void {
+    this.managerService.getFormManagerById(id).subscribe(
+      (manager) => {
+        this.local_data = manager; // Store the fetched manager data
+        console.log("name", manager.firstname);
+        console.log("this.local_data", this.local_data);
+        this.initManagerForm(manager); // Initialize the form with the fetched manager data
+      },
+      (error) => {
+        console.error('Error fetching manager', error);
+      }
+    );
+  }
+
+  initManagerForm(manager?: Manager): void {
     this.managerForm = this.formBuilder.group({
-      firstname: [this.local_data.firstname, Validators.required],
-      lastname: [this.local_data.lastname, Validators.required],
-      email: [this.local_data.email, [Validators.required, Validators.email]], // Add Validators.required
-      adresse: [this.local_data.adresse, Validators.required],
-      role: [this.local_data.role, Validators.required],
+      firstname: [manager?.firstname || '', Validators.required],
+      lastname: [manager?.lastname || '', Validators.required],
+      email: [manager?.email || '', [Validators.required, Validators.email]],
+      adresse: [manager?.adresse || '', Validators.required],
+      role: [manager?.role, Validators.required],
       roleName: [
-        this.local_data.role === 'ADHERENT' || this.local_data.role === 'PARENT'
+        manager?.role === Role.ADHERENT || manager?.role === Role.PARENT
           ? null
-          : this.local_data.roleName,
+          : manager?.roleName,
       ],
-      photo: [this.local_data.photo],
-      telephone: [this.local_data.telephone, Validators.required],
+      photo: [manager?.photo],
+      telephone: [manager?.telephone, Validators.required],
     });
   }
 

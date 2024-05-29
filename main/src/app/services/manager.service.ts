@@ -151,6 +151,10 @@ export class ManagerService {
     return this.http.get<Academie>(`${this.apiUrl}/getAcademieById/${ManagerId}`,  { withCredentials: true });
   }
 
+  getFormManagerById(id: string): Observable<Manager> {
+    return this.http.get<Manager>(`${this.apiUrl}/getFormManagerById/${id}`);
+  }
+
   changeEtat(ManagerId: number): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/changeEtat?id=${ManagerId}`, {withCredentials: true});
   }
