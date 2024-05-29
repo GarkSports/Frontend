@@ -24,6 +24,7 @@ import { ManagerService } from 'src/app/services/manager.service';
 import { Manager } from 'src/models/manager.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { User } from 'src/models/user.model';
+import { WebSocketService } from 'src/app/services/web-socket-service.service';
 
 
 export interface Notification {
@@ -114,6 +115,7 @@ export class HeaderComponent implements OnInit {
     private translate: TranslateService,
     private authService: AuthService,
     //private messagingService: MessagingService,
+    private webSocketService: WebSocketService,
     private managerService: ManagerService
   ) {
     translate.setDefaultLang('en');
@@ -130,6 +132,46 @@ export class HeaderComponent implements OnInit {
 
     //   }));
     // });
+
+      // Open connection with server socket
+      let stompClient = this.webSocketService.connect();
+      stompClient.connect({ withCredentials: true }, (frame: any) => {
+        const userEmail = 'haythemdaoud99@gmail.com';
+
+        // Subscribe to notification topic
+                  stompClient.subscribe('/queue/reply/' + userEmail , (notifications: { body: any[string];  }) => {
+                    console.log("notification recu",notifications);
+                    console.log("notification recu",notifications.body);
+                    console.log("notification recu",notifications.body.title);
+
+
+        // Update notifications attribute with the recent messsage sent from the server
+              // Parse the notifications body as JSON
+              let parsedNotification;
+              try {
+                parsedNotification = JSON.parse(notifications.body);
+              } catch (e) {
+                console.error("Failed to parse notification body", e);
+                return;
+              }
+      
+              // Validate that parsedNotification is an object
+              if (parsedNotification && typeof parsedNotification === 'object') {
+                // Update notifications attribute with the recent message sent from the server
+                this.notifications.push({
+                  title: parsedNotification.title || 'No Title',
+                  body: parsedNotification.body || 'No Body',
+                  image: parsedNotification.image || "/assets/images/breadcrumb/emailSv.png"
+                });
+              } else {
+                console.error("Parsed notification is not an object", parsedNotification);
+              }
+            });
+                          
+               
+              });
+  
+
   }
 
   // ngOnInit() {
