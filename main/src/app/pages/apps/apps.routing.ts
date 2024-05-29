@@ -24,7 +24,7 @@ import { AcademieComponent } from './academie/academie.component';
 import { AppBloglistComponent } from './blogs/bloglist/blog.component';
 import { AcademieProfileComponent } from './academie-profile/academie-profile.component';
 import { EquipeComponent } from './equipe/equipe.component';
-import { PaiementComponent } from './paiement/paiement.component';
+import { AddPaiementPopupComponent, PaiementComponent } from './paiement/paiement.component';
 import { ArchivedAcademieComponent } from './archived-academie/academie.component';
 import { AppManagerlistComponent } from './admin/managerlist.component';
 import { AppStafflistComponent } from './managers/staff/stafflist.component';
@@ -80,6 +80,18 @@ export const AppsRoutes: Routes = [
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
             { title: 'Calendar' },
+          ],
+        },
+      },
+      {
+        path: 'addPaiement',
+        canActivate: [isManagerGuard],
+        component: AddPaiementPopupComponent,
+        data: {
+          title: 'Paiement',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Paiement' },
           ],
         },
       },
