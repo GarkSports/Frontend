@@ -119,6 +119,9 @@ import { AppProfilComponent } from './managers/profil/profil.component';
 import { UpdateEvenementPopupComponent } from './evenement/listEvenement/listEvenement.component';
 import { EventPopupComponent } from './evenement/calendrier/calendrier.component';
 import { DetailEventDialogComponent } from './evenement/listEvenement/listEvenement.component'; 
+import { EntrainementComponent } from './evenement/entrainement/entrainement.component';
+import { AddHeureDialogComponent } from './evenement/entrainement/entrainement.component';
+import { UpdateHeureDialogComponent } from './evenement/entrainement/entrainement.component';
 
 
 
@@ -149,6 +152,9 @@ import { DetailEventDialogComponent } from './evenement/listEvenement/listEvenem
   ],
   exports: [TablerIconsModule],
   declarations: [
+    UpdateHeureDialogComponent,
+    AddHeureDialogComponent,
+    EntrainementComponent,
     DetailEventDialogComponent,
     EventPopupComponent,
     UpdateEvenementPopupComponent,
