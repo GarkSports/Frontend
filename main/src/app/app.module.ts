@@ -26,11 +26,19 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AuthService } from './services/auth.service';
 import { AppProfilComponent } from './pages/apps/managers/profil/profil.component';
-
+import { AngularFireModule } from '@angular/fire/compat'; // Update import path
+import { AngularFireStorageModule } from '@angular/fire/compat/storage'; // Update import path
+import { environment } from './pages/api/environment';
+import { AsyncPipe } from '@angular/common';
+import { MessagingService } from './services/messaging.service';
 
 export function HttpLoaderFactory(http: HttpClient): any {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
+
+//notification
+// import {initializeApp} from 'firebase/app';
+// initializeApp(environment.firebaseConfig);
 
 @NgModule({
   declarations: [AppComponent, BlankComponent, FilterPipe],
@@ -52,9 +60,11 @@ export function HttpLoaderFactory(http: HttpClient): any {
     }),
     NgScrollbarModule,
     FullComponent,
+    AngularFireStorageModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
   ],
   exports: [TablerIconsModule],
-  providers: [AuthService],
+  providers: [AuthService,AsyncPipe],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

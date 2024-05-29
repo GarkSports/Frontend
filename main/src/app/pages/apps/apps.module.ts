@@ -18,6 +18,7 @@ import * as TablerIcons from 'angular-tabler-icons/icons';
 
 //Chat
 import { AppChatComponent } from './chat/chat.component';
+import { AppChatDialogContentComponent } from './chat/chat.component';
 //Contact
 import { AppContactDialogContentComponent } from './contact/contact.component';
 import { AppContactComponent } from './contact/contact.component';
@@ -105,9 +106,7 @@ import { DeleteEventConfirmationDialogComponent } from './evenement/listEvenemen
 import { UpdateEquipePopupComponent } from './equipe/equipe.component';
 
 
-import { AngularFireModule } from '@angular/fire/compat'; // Update import path
-import { AngularFireStorageModule } from '@angular/fire/compat/storage'; // Update import path
-import { environment } from '../api/environment';
+
 import { AppBlogDialogContentComponent, AppBloglistComponent } from './blogs/bloglist/blog.component';
 import { AppManagerDialogContentComponent, AppManagerlistComponent,  } from './admin/managerlist.component';
 import { AppStaffDialogContentComponent, AppStafflistComponent } from './managers/staff/stafflist.component';
@@ -117,6 +116,9 @@ import { CalendrierComponent } from './evenement/calendrier/calendrier.component
 import { AddEvenementPopupComponent, ListEvenementComponent } from './evenement/listEvenement/listEvenement.component';
 import { NavbarComponent } from './evenement/navbar/navbar.component';
 import { AppProfilComponent } from './managers/profil/profil.component';
+import { UpdateEvenementPopupComponent } from './evenement/listEvenement/listEvenement.component';
+import { EventPopupComponent } from './evenement/calendrier/calendrier.component';
+import { DetailEventDialogComponent } from './evenement/listEvenement/listEvenement.component'; 
 import { AppEvaluationComponent } from './evaluation/evaluation.component';
 import { AppStaffformContentComponent, NotificationDialogComponent } from './managers/staff/staffform.component';
 import { AppManagerFormComponent } from './admin/managerform.component';
@@ -125,8 +127,7 @@ import { AppManagerFormComponent } from './admin/managerform.component';
 @NgModule({
   imports: [
     FullCalendarModule,
-    AngularFireStorageModule,
-    AngularFireModule.initializeApp(environment.firebaseConfig),
+  
     CommonModule,
     RouterModule.forChild(AppsRoutes),
     MaterialModule,
@@ -148,6 +149,9 @@ import { AppManagerFormComponent } from './admin/managerform.component';
   ],
   exports: [TablerIconsModule],
   declarations: [
+    DetailEventDialogComponent,
+    EventPopupComponent,
+    UpdateEvenementPopupComponent,
     UpdateEquipePopupComponent,
     DeleteEventConfirmationDialogComponent,
     NavbarComponent,
@@ -174,6 +178,7 @@ import { AppManagerFormComponent } from './admin/managerform.component';
     AcademieProfileComponent,
     UpdateProfileDialogComponent,
     AppChatComponent,
+    AppChatDialogContentComponent,
     AppPermissionComponent,
     AppNotesComponent,
     AppTodoComponent,

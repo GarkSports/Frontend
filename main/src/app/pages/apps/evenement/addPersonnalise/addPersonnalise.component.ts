@@ -14,6 +14,7 @@ import { Adherent } from 'src/models/adherent.model';
 import { PersonnaliseRequest } from 'src/models/dto/PersonnaliseRequest.model';
 import { Evenement } from 'src/models/evenement.model';
 import { Router } from '@angular/router';
+import { TypeRepetition } from 'src/models/enums/typeRepetition.model';
 
 @Component({
     selector: 'add-personnalise',
@@ -30,6 +31,8 @@ export class AddPersonnaliseComponent {
     selectedEquipe: number; // Define selectedEquipe property here
     selectedEquipe2: Equipe;
     selectedMembers: number[] = []; // Define selectedMembers property here
+    typeRepetitions: string[] = Object.values(TypeRepetition).filter(value => typeof value === 'string').map(value => String(value));
+    selectedTypeRepetition: string;
 
     constructor(
         private _formBuilder: FormBuilder,
@@ -50,6 +53,9 @@ export class AddPersonnaliseComponent {
             date: ['', Validators.required],
             horraire: ['', Validators.required],
             description: ['', Validators.required],
+            repetition: [false, Validators.required],
+            typeRepetition: [''],
+            nbRepetition: [''],
             equipe: [''],
             membres: ['']
         });
@@ -79,6 +85,9 @@ export class AddPersonnaliseComponent {
             this.evenement.date = formData.date;
             this.evenement.heure = formData.horraire;
             this.evenement.description = formData.description;
+            this.evenement.repetition = formData.repetition;
+            this.evenement.typeRepetition = formData.typeRepetition;
+            this.evenement.nbRepetition = formData.nbRepetition;
 
             let request: PersonnaliseRequest;
             if (this.selectedOption === 'equipe') {

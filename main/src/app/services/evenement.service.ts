@@ -45,7 +45,7 @@ export class EvenementService {
   }
 
   getEvenements(): Observable<Evenement[]> {
-    return this.http.get<Evenement[]>(`${this.apiEvenement}/getAllEvenements`);
+    return this.http.get<Evenement[]>(`${this.apiEvenement}/getAllEvenements`,{ withCredentials: true });
   }
 
   deleteEvenement(idEvenement: number): Observable<void> {
@@ -60,5 +60,9 @@ export class EvenementService {
 
   getMembersByEquipe(idEquipe: number): Observable<Adherent[]> {
     return this.http.get<Adherent[]>(`${this.apiEvenement}/getMembersByEquipe/${idEquipe}`);
+  }
+
+  getMembersByEvent(idEvenement: number): Observable<Adherent[]> {
+    return this.http.get<Adherent[]>(`${this.apiEvenement}/getMembersByEvenement/${idEvenement}`);
   }
 }
