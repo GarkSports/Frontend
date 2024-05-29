@@ -284,6 +284,11 @@ export class FullComponent implements OnInit {
           iconName: 'medal',
           route: 'apps/discipline',
         },
+        {
+          displayName: 'Boite de réception',
+          iconName: 'message-2',
+          route: 'apps/chat',
+        },
         
 
       ];

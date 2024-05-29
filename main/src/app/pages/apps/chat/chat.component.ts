@@ -8,7 +8,9 @@ import {
   MatDialogRef,
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { ManagerService } from 'src/app/services/manager.service';
+import { AppProfilComponent } from '../managers/profil/profil.component';
 
 @Component({
   selector: 'app-chat',
@@ -16,8 +18,12 @@ import { ManagerService } from 'src/app/services/manager.service';
   styleUrls: ['./chat.component.scss'],
 })
 export class AppChatComponent implements OnInit {
+
   sidePanelOpened = true;
   msg = '';
+  local_data: any;
+  userRole: string = '';
+  
 
   // MESSAGE
   selectedMessage: any;
@@ -28,24 +34,43 @@ export class AppChatComponent implements OnInit {
 
   constructor(
     public chatService: ChatService,
-    public dialog: MatDialog,
-  ) {}
+    private router: Router,
+    private managerService: ManagerService,
+  ) {
+    
+  }
 
   ngOnInit(): void {
     try {   
-      console.log('ngOnInit');
+      console.log('ngOnInit',);
       this.chatService.fetchContactList().subscribe((c: ChatContactDTO[]) => {
         this.chatService.contactList = c;
+        this.getManagerProfil();
         
         // If there are discussions available, select the first one
         if (this.chatService.contactList.length > 0) {
           const firstDiscussionId = this.chatService.contactList[0];
           this.onSelect(firstDiscussionId);
         }
+        
+        
       });
     } finally {
       console.log('ngOnInit OK');
     }
+  }
+
+  getManagerProfil(): void {
+    this.managerService.getProfil().subscribe(
+      (profil) => {
+        this.local_data = profil;
+
+        this.userRole = this.local_data.role;
+      },
+      (error) => {
+        console.error('Error fetching profil', error);
+      }
+    );
   }
 
   @ViewChild('chatContainer', { static: false }) chatContainer: ElementRef;
@@ -68,17 +93,16 @@ export class AppChatComponent implements OnInit {
   }
 
   openDialog(action: string, obj: any): void {
-    obj.action = action;
-    const dialogRef = this.dialog.open(AppChatDialogContentComponent, {
-      data: obj,
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result.event === 'Ajouter') {
-        this.addRowData(result.data);
-      }
-    });
+    if(this.userRole ==='ADMIN'){
+      this.router.navigate(['apps/adminnewmessage'], { state: { data: obj } });
+    }else if(this.userRole ==='MANAGER'){
+      this.router.navigate(['apps/newmessage'], { state: { data: obj } });
+    }
+    
   }
+
+    
+  
 
   addRowData(data: any): void {
     this.sendMessage(data.receiver, data.msg);
@@ -113,6 +137,20 @@ export class AppChatComponent implements OnInit {
       console.log('Updated discussion', this.selectedDiscussion);
     });
   }
+
+  deleteDiscussion() {
+    this.chatService.deleteDiscussion(this.selectedContact.userId).subscribe(
+    () => {
+      console.log('Discussion deleted successfully');
+      this.ngOnInit();
+
+    },
+    (error) => {
+      console.log('Discussion deleted failed');
+    
+    });
+    }
+
 }
 
 @Component({
@@ -223,6 +261,19 @@ export class AppChatDialogContentComponent {
   }
 
   doAction(): void {
+    if (this.selectedFriends.length > 0) {
+      const firstGroupId = this.selectedFriends[0].groupid;
+      const allSameGroup = this.selectedFriends.every(friend => friend.groupid === firstGroupId);
+      
+      if (allSameGroup) {
+        this.local_data.groupid = firstGroupId;
+      } else {
+        this.local_data.groupid = null; // or handle the mismatch case as needed
+      }
+    } else {
+      this.local_data.groupid = null;
+    }
+
     this.dialogRef.close({ event: this.action, data: this.local_data });
   }
 

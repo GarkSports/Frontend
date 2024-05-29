@@ -4,7 +4,9 @@
 <mat-dialog-content style="width: 800px" class="mat-typography p-24">
   <form #postForm="ngForm">
     
-        <div class="row">  <div class="col-sm-6 col-lg-6">  <mat-form-field appearance="outline" class="w-100">
+        <div class="row">  
+          <div class="col-sm-2 col-lg-4">  
+            <mat-form-field appearance="outline" class="w-100">
               <mat-label>Filter by Role</mat-label>
               <mat-select [(ngModel)]="selectedRole" name="role" (selectionChange)="onRoleChange()">
                 <mat-option *ngFor="let role of uniqueRoles" [value]="role">{{ role }}</mat-option>
@@ -12,21 +14,17 @@
             </mat-form-field>
           </div>
     
-          <div *ngIf="selectedRole === 'ADHERENT'" class="col-sm-6 col-lg-6">
-            <mat-form-field appearance="outline" class="w-100">
+          <div  class="col-sm-2 col-lg-4">
+            <mat-form-field  appearance="outline" class="w-100">
               <mat-label>Filter by Equipe</mat-label>
-              <mat-select [(ngModel)]="selectedNomEquipe" name="nomEquipe" (selectionChange)="onNomEquipeChange()">
-                <mat-option *ngFor="let nomEquipe of uniqueNomEquipes" [value]="nomEquipe">{{ nomEquipe }}</mat-option>
+              <mat-select [(ngModel)]="selectedNomEquipe" name="nomEquipe" [disabled]="selectedRole !== 'ADHERENT'" (selectionChange)="onNomEquipeChange()">
+                <mat-option *ngFor="let nomEquipe of uniqueNomEquipes"  [value]="nomEquipe">{{ nomEquipe }}</mat-option>
               </mat-select>
               
             </mat-form-field>
           </div>
-          <div *ngIf="selectedRole === 'ADHERENT'" class="col-sm-6 col-lg-6">
-          <button mat-button (click)="selectAllTeamMembers()">Sélectionner toute l'équipe</button>
-          </div>
-
-
-          <div mat-dialog-actions class="p-16 p-t-0">
+          <div  class="col-sm-2 col-lg-4">
+          <button mat-button [disabled]="selectedRole !== 'ADHERENT'" (click)="selectAllTeamMembers()">Sélectionner toute l'équipe</button>
           </div>
           
         </div>

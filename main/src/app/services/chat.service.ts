@@ -29,6 +29,10 @@ export class ChatService {
       return this.http.post<ChatDTO>(`${this.apiUrl}/chat/send`, { receiversId, message }, { withCredentials: true });
     }
 
+    public deleteDiscussion(userId: number){
+      return this.http.delete(`${this.apiUrl}/chat/user/${userId}`, { withCredentials: true });
+    }
+
 
     
 }
