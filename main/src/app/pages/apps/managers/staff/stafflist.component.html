@@ -70,7 +70,7 @@
 
 <!--            </mat-icon>-->
 <!--          </mat-form-field>-->
-          <button (click)="openDialog('Add', {})" class="bg-main font-bold rounded-3xl h-9 pt-1 px-1  shadow-md text-white">
+          <button (click)="openFormPage('Add', {})" class="bg-main font-bold rounded-3xl h-9 pt-1 px-1  shadow-md text-white">
             <div class="row ">
               <div class="col-1 ml-2">
                 <i-tabler name="plus" class="icon-20"></i-tabler>
@@ -183,7 +183,7 @@
 
             </th>
             <td mat-cell *matCellDef="let element" class="action-link">
-              <a (click)="openDialog('Update', element)" class="m-r-10 cursor-pointer">
+              <a (click)="openFormPage('Update', element)" class="m-r-10 cursor-pointer">
                 <i-tabler name="edit" class="icon-18"></i-tabler>
               </a>
               <a (click)="openDialog('Block', element)" class="m-r-10 cursor-pointer">

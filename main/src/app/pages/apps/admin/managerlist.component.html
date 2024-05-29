@@ -63,7 +63,7 @@
               <i-tabler name="search" class="icon-20"></i-tabler>
             </mat-icon>
           </mat-form-field>
-          <button mat-flat-button (click)="openDialog('Add', {})" color="primary">
+          <button mat-flat-button (click)="openFormPage('Add', {})" color="primary">
             <mat-icon matSuffix>
               <i-tabler name="plus" class="icon-20"></i-tabler>
           </mat-icon>
@@ -152,7 +152,7 @@
               Action
             </th>
             <td mat-cell *matCellDef="let element" class="action-link">
-              <a (click)="openDialog('Update', element)" class="m-r-10 cursor-pointer">
+              <a (click)="openFormPage('Update', element)" class="m-r-10 cursor-pointer">
                 <i-tabler name="edit" class="icon-18"></i-tabler>
               </a>
               <a (click)="openDialog('Block', element)" class="m-r-10 cursor-pointer">

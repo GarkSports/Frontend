@@ -314,7 +314,12 @@ export class FullComponent implements OnInit {
               route: 'apps/equipe',
             },
             {
-              displayName: 'roles',
+              displayName: 'Evaluation',
+              iconName: 'point',
+              route: 'apps/evaluation',
+            },
+            {
+              displayName: 'Roles',
               iconName: 'point',
               route: 'apps/roles',
             },

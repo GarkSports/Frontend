@@ -108,7 +108,7 @@ import { UpdateEquipePopupComponent } from './equipe/equipe.component';
 
 
 import { AppBlogDialogContentComponent, AppBloglistComponent } from './blogs/bloglist/blog.component';
-import { AppManagerDialogContentComponent, AppManagerlistComponent } from './admin/managerlist.component';
+import { AppManagerDialogContentComponent, AppManagerlistComponent,  } from './admin/managerlist.component';
 import { AppStaffDialogContentComponent, AppStafflistComponent } from './managers/staff/stafflist.component';
 import { AppRolesDialogContentComponent, AppRoleslistComponent } from './managers/roles/roleslist.component';
 import { FullCalendarModule } from '@fullcalendar/angular';
@@ -119,9 +119,9 @@ import { AppProfilComponent } from './managers/profil/profil.component';
 import { UpdateEvenementPopupComponent } from './evenement/listEvenement/listEvenement.component';
 import { EventPopupComponent } from './evenement/calendrier/calendrier.component';
 import { DetailEventDialogComponent } from './evenement/listEvenement/listEvenement.component'; 
-
-
-
+import { AppEvaluationComponent } from './evaluation/evaluation.component';
+import { AppStaffformContentComponent, NotificationDialogComponent } from './managers/staff/staffform.component';
+import { AppManagerFormComponent } from './admin/managerform.component';
 
 
 @NgModule({
@@ -224,11 +224,15 @@ import { DetailEventDialogComponent } from './evenement/listEvenement/listEvenem
     AppBlogDialogContentComponent,
     AppManagerlistComponent,
     AppManagerDialogContentComponent,
-    AppStaffDialogContentComponent,
+    AppStaffformContentComponent,
     AppStafflistComponent,
     AppRolesDialogContentComponent,
     AppRoleslistComponent,
-    AppProfilComponent
+    AppProfilComponent,
+    AppEvaluationComponent,
+    NotificationDialogComponent,
+    AppStaffDialogContentComponent,
+    AppManagerFormComponent
   ],
   providers: [DatePipe],
 })
