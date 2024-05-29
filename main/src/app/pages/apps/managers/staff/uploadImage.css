@@ -1,0 +1,56 @@
+.image-upload-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 16px;
+  }
+  
+  .upload-button {
+    margin-bottom: 16px;
+  }
+  
+  .image-preview {
+    width: 200px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .preview-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+  .notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 15px;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 16px;
+    z-index: 1000;
+    opacity: 0.9;
+  }
+  
+  .notification.success {
+    background-color: #4caf50;
+  }
+  
+  .notification.error {
+    background-color: #f44336;
+  }
+  
+  .mat-dialog-container.success h1 {
+    color: #4caf50;
+  }
+  
+  .mat-dialog-container.error h1 {
+    color: #f44336;
+  }
+  
+  

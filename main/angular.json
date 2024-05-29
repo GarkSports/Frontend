@@ -28,7 +28,8 @@
             "styles": [
               "src/styles.scss",
               "src/assets/scss/style.scss",
-              "node_modules/angular-calendar/css/angular-calendar.css"
+              "node_modules/angular-calendar/css/angular-calendar.css",
+              "src/app/pages/apps/managers/staff/uploadImage.css"
             ],
             "scripts": []
           },
