@@ -25,7 +25,7 @@
                                         <img [src]="academie.logo" class="rounded-circle" width="120" />
                                         <div class="m-t-24">
                                             <button mat-flat-button color="primary" class="update-profile-button"
-                                                (click)="openUpdateProfileDialog()">
+                                                routerLink="/apps/update-profile/{{academie.id}}">
                                                 Update profile
                                             </button>
                                             <!-- Updated button to have transparent background and picture icon -->

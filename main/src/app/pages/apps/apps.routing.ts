@@ -41,6 +41,8 @@ import { authGuard } from 'src/app/guards/auth.guard';
 import { isAdminGuard } from 'src/app/guards/is-admin.guard';
 import { isManagerGuard } from 'src/app/guards/is-manager.guard';
 import { EntrainementComponent } from './evenement/entrainement/entrainement.component';
+import { UpdateProfilePageComponent } from './academie-profile/update-profile-page.component';
+import { UpdatePaymentPageComponent } from './paiement/update-payment-page.component';
 // import { AppStafflist2Component } from './managers/staff/stafflist2.component';
 
 
@@ -49,6 +51,28 @@ export const AppsRoutes: Routes = [
     path: '',
     canActivate: [authGuard],
     children: [
+      {
+        path: 'update-payment/:id',
+        component: UpdatePaymentPageComponent ,
+        data: {
+          title: 'Update paiement',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Update paiement' },
+          ],
+        },
+      },
+      {
+        path: 'update-profile/:id',
+        component: UpdateProfilePageComponent ,
+        data: {
+          title: 'Update profile',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Update profile' },
+          ],
+        },
+      },
       {
         path: 'chat',
         component: AppChatComponent,

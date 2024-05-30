@@ -99,8 +99,7 @@ import { ConfirmDialogComponent } from './paiement/paiement.component';
 import { ArchivedAcademieComponent } from './archived-academie/academie.component';
 import { ArchivedAcademieConfirmationDialogComponent } from './archived-academie/academie.component';
 import { ArchivedAcademieConfirmationRestoreDialogComponent } from './archived-academie/academie.component';
-import { DisciplineManagerComponent } from './discipline-manager/discipline.component';
-import { AppDisciplineManagerDialogContentComponent } from './discipline-manager/discipline.component';
+import { AppDisciplineManagerDialogContentComponent, DisciplineManagerComponent } from './discipline-manager/discipline.component';
 import { AppAddDisciplineManagerComponent } from './discipline-manager/add/add.component';
 import { DeleteEventConfirmationDialogComponent } from './evenement/listEvenement/listEvenement.component';
 import { UpdateEquipePopupComponent } from './equipe/equipe.component';
@@ -122,6 +121,8 @@ import { DetailEventDialogComponent } from './evenement/listEvenement/listEvenem
 import { EntrainementComponent } from './evenement/entrainement/entrainement.component';
 import { AddHeureDialogComponent } from './evenement/entrainement/entrainement.component';
 import { UpdateHeureDialogComponent } from './evenement/entrainement/entrainement.component';
+import { UpdateProfilePageComponent } from './academie-profile/update-profile-page.component';
+import { UpdatePaymentPageComponent } from './paiement/update-payment-page.component';
 
 
 
@@ -130,7 +131,6 @@ import { UpdateHeureDialogComponent } from './evenement/entrainement/entrainemen
 @NgModule({
   imports: [
     FullCalendarModule,
-  
     CommonModule,
     RouterModule.forChild(AppsRoutes),
     MaterialModule,
@@ -152,6 +152,10 @@ import { UpdateHeureDialogComponent } from './evenement/entrainement/entrainemen
   ],
   exports: [TablerIconsModule],
   declarations: [
+    AppDisciplineManagerDialogContentComponent,
+    AppDisciplineDialogContentComponent,
+    UpdatePaymentPageComponent,
+    UpdateProfilePageComponent,
     UpdateHeureDialogComponent,
     AddHeureDialogComponent,
     EntrainementComponent,
@@ -165,7 +169,6 @@ import { UpdateHeureDialogComponent } from './evenement/entrainement/entrainemen
     AddEvenementPopupComponent,
     ListEvenementComponent,
     DisciplineManagerComponent,
-    AppDisciplineManagerDialogContentComponent,
     AppAddDisciplineManagerComponent,
     ArchivedAcademieComponent,
     ArchivedAcademieConfirmationDialogComponent,
@@ -209,7 +212,6 @@ import { UpdateHeureDialogComponent } from './evenement/entrainement/entrainemen
     AppEmployeeDialogContentComponent,
     AppAddEmployeeComponent,
     DisciplineComponent,
-    AppDisciplineDialogContentComponent,
     AppAddDisciplineComponent,
     AcademieComponent,
     AppAcademieDialogContentComponent,
