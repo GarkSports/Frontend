@@ -5,6 +5,7 @@ import {
   Optional,
   ViewChild,
   OnDestroy,
+  CUSTOM_ELEMENTS_SCHEMA
 } from '@angular/core';
 import { MatTableDataSource, MatTable } from '@angular/material/table';
 import {
@@ -210,10 +211,23 @@ export class AppStaffformContentComponent implements OnInit, OnDestroy {
       }
       addObservable.subscribe(
         (response) => {
-          console.log('Manager updated:', response);
+          console.log('Manager added:', response);
+          this.showNotification(
+            'Success',
+            'Manager updated successfully!',
+            'success'
+          );
+          setTimeout(() => {
+            if (window.opener) {
+              window.close();
+            } else {
+              window.history.back();
+            }
+          }, 5000);
         },
         (error) => {
-          console.error('Error updating manager:', error);
+          console.error('Error adding manager:', error);
+          this.showNotification('Error', 'Error adding manager', 'error');
         }
       );
     } else if (this.action === 'Update') {

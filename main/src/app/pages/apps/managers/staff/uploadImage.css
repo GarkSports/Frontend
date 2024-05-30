@@ -10,14 +10,27 @@
   }
   
   .image-preview {
-    width: 200px;
-    height: 200px;
+    width: 10px;
+    height: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
     border: 1px solid #ddd;
     border-radius: 8px;
     overflow: hidden;
+  }
+
+
+    .button-container {
+      display: flex;
+      align-items: center;
+      gap: 16px; /* Adjust the gap value as per your preference */
+      margin-bottom: 16px; /* Add some bottom margin for spacing */
+    }
+  
+  
+  .button-container.button {
+    /* Additional button styles if needed */
   }
   
   .preview-image {

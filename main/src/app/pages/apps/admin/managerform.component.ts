@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject, Optional } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ManagerService } from 'src/app/services/manager.service';
 import { ActivatedRoute } from '@angular/router';
@@ -26,6 +26,7 @@ export class AppManagerFormComponent implements OnInit {
     private adminService: AdminService,
     private managerService: ManagerService,
     private route: ActivatedRoute,
+    private dialog: MatDialog
   ) {
 
     this.local_data = { ...data };
@@ -94,28 +95,97 @@ export class AppManagerFormComponent implements OnInit {
       this.adminService.addManager(this.managerForm.value).subscribe(
         (response) => {
           console.log('Manager added:', response);
+          this.showNotification(
+            'Success',
+            'Manager updated successfully!',
+            'success'
+          );
+          setTimeout(() => {
+            if (window.opener) {
+              window.close();
+            } else {
+              window.history.back();
+            }
+          }, 5000);
         },
         (error) => {
           console.error('Error adding manager:', error);
+          this.showNotification('Error', 'Error adding manager', 'error');
         }
       );
     } else if (this.action === 'Update' && this.local_data) {
       const updatedManager = { ...this.managerForm.value, id: this.local_data.id };
       this.adminService.updateManager(updatedManager).subscribe(
         (response) => {
-          console.log('Manager updated successfully', response);
+          console.log('Manager updated:', response);
+          this.showNotification(
+            'Success',
+            'Manager updated successfully!',
+            'success'
+          );
+          setTimeout(() => {
+            if (window.opener) {
+              window.close();
+            } else {
+              window.history.back();
+            }
+          }, 5000);
         },
         (error) => {
           console.error('Error updating manager:', error);
+          this.showNotification('Error', 'Error updating manager', 'error');
         }
       );
     }
+  }
+
+  showNotification(title: string, message: string, type: 'success' | 'error') {
+    this.dialog.open(NotificationDialogComponent, {
+      data: { title, message, type },
+      panelClass: type, // You can use this to apply custom styles based on the type
+    });
   }
 
   cancelAction(): void {
     if (window.opener) {
       window.close();
     } else {
+      window.history.back();
+    }
+  }
+}
+
+@Component({
+  selector: 'app-notification-dialog',
+  template: `
+    <h1 mat-dialog-title>{{ data.title }}</h1>
+    <div mat-dialog-content>{{ data.message }}</div>
+    <div mat-dialog-actions>
+      <button mat-button mat-dialog-close (click)="cancelAction()">OK</button>
+    </div>
+  `,
+  styles: [
+    `
+      h1 {
+        color: #4caf50; /* Default to success color */
+      }
+      .error h1 {
+        color: #f44336; /* Error color */
+      }
+    `,
+  ],
+})
+export class NotificationDialogComponent {
+  constructor(
+    @Inject(MAT_DIALOG_DATA)
+    public data: { title: string; message: string; type: 'success' | 'error' }
+  ) {}
+
+  cancelAction(): void {
+    if (window.opener) {
+      window.close();
+    } else {
+      // Optionally, you can navigate back to the previous page if the window wasn't opened as a popup
       window.history.back();
     }
   }

@@ -3,8 +3,13 @@
       <mat-card class="cardWithShadow theme-card">
         <mat-card-header>
           <mat-card-title class="m-b-0">Informations Générales</mat-card-title>
+          
         </mat-card-header>
+       
         <mat-card-content class="b-t-1">
+          <div class="image-preview" *ngIf="local_data.photo">
+            <img [src]="local_data.photo" alt="Photo Preview" style="width: 100px; height: 100px; margin-left: 220px; margin-bottom: 20px;" class="rounded-full object-cover "/>
+          </div> 
           <form [formGroup]="managerForm">
             <div class="row"> 
                 <div class="col-sm-6"> 
@@ -24,6 +29,7 @@
                         </mat-form-field> 
                     </div> 
                 </div>
+                <br>
             <div class="row">
                 <div class="col-sm-12 d-flex align-items-center">
                   <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Adresse</mat-label>
@@ -40,6 +46,7 @@
                   </mat-form-field>
                 </div>
               </div>
+              <br>
             <div class="row">
               <div class="col-sm-12 d-flex align-items-center">
                 <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16"
@@ -55,7 +62,7 @@
                 </mat-form-field>
               </div>
             </div>
-            
+            <br>
             <div class="row">
                 <div class="col-sm-12 d-flex align-items-center">
                   <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16"
@@ -71,6 +78,7 @@
                   </mat-form-field>
                 </div>
               </div>
+              <br>
               <div class="row">
                 <div class="col-sm-12 d-flex align-items-center">
                   <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Type de Role</mat-label>
@@ -86,6 +94,7 @@
                 </mat-form-field>
               </div>
             </div>
+            <br>
               <div  *ngIf="showRoleInput" class="row">
                 <div class="col-sm-12 d-flex align-items-center">
                   <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Role</mat-label>
@@ -98,28 +107,24 @@
                   </mat-form-field>
                 </div>
               </div>
-          
+              <br>
               <div class="row">
-                <div class="col-lg-12 d-flex justify-content-between">
-                  <div class="image-upload-container">
-                    <button mat-flat-button color="primary" class="upload-button" (click)="fileInput.click()">
+                <div class="col-lg-12 d-flex justify-content-center">
+                  <div class="button-container">
+                    <button style="margin-right:80px;" mat-flat-button color="primary" class="upload-button" (click)="fileInput.click()">
                       Upload Photo
                     </button>
-                    <input formControlName="photo" type="file" id="photo" name="photo" (change)="uploadFile($event)" #fileInput hidden/>
-                    <button mat-flat-button color="primary" (click)="doAction()">
-                      {{ action }}                      
+                    <input type="file" id="photo" name="photo" (change)="uploadFile($event)" #fileInput hidden />
+                    <button style="margin-right:80px;" mat-flat-button color="primary" (click)="doAction()">
+                      {{ action }}
                     </button>
-                      <button mat-flat-button color="warn"  (click)="cancelAction()">
-                        Cancel
-                      </button>
-                    <div class="image-preview" *ngIf="local_data.photo">
-                      <img [src]="local_data.photo" alt="Photo Preview" width="30px" height="30px" class="preview-image"/>
-                    </div>
+                    <button mat-flat-button color="warn" (click)="cancelAction()">
+                      Cancel
+                    </button>
                   </div>
+                  
                 </div>
               </div>
-              
-      
           </form>
         </mat-card-content>
       </mat-card>
