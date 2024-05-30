@@ -74,12 +74,13 @@ export class HeaderComponent implements OnInit {
   managerSource = new MatTableDataSource<User>([]);
   local_data: any;
 
-  public selectedLanguage: any = {
-    language: 'English',
-    code: 'en',
-    type: 'US',
-    icon: '/assets/images/flag/icon-flag-en.svg',
-  };
+  public selectedLanguage: any =
+{
+  language: 'Français',
+  code: 'fr',
+  icon: '/assets/images/flag/icon-flag-fr.svg',
+}
+;
 
   public languages: any[] = [
     {

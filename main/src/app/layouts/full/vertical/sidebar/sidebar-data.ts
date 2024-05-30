@@ -1,4 +1,4 @@
-import { NavItem } from './nav-item/nav-item';
+import {NavItem} from './nav-item/nav-item';
 
 export const navItems: NavItem[] = [
   {
@@ -16,7 +16,7 @@ export const navItems: NavItem[] = [
         iconName: 'point',
         route: 'apps/blog/post',
       },
-      
+
     ],
   },
   {

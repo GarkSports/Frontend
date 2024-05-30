@@ -17,10 +17,10 @@ jobs:
     - name: Install sshpass
       run: sudo apt-get install -y sshpass 
     - name: SSH into VPS and update code front
-      run: sudo sshpass -p ${{secrets.PASSWORD}} ssh -i ~/.ssh/id_rsa -vvv -o StrictHostKeyChecking=no ubuntu@5.196.15.147 "cd GarkAcademy/GarkAcademy2024-Admin && sudo git pull https://khaledsaadouni:${{secrets.TOKEN}}@github.com/Gark-Academy/GarkAcademy2024-Admin production  " 
+      run: sudo sshpass -p ${{secrets.PASSWORD}} ssh -i ~/.ssh/id_rsa -vvv -o StrictHostKeyChecking=no ubuntu@5.196.15.147 "cd GarkAcademy/GarkAcademy2024-Admin && sudo git pull https://khaledsaadouni:${{secrets.TOKEN}}@github.com/khaledsaadouni/GarkAcademyFront main  " 
     - name: SSH into VPS and update code back
       run: sudo sshpass -p ${{secrets.PASSWORD}} ssh -i ~/.ssh/id_rsa -vvv -o StrictHostKeyChecking=no ubuntu@5.196.15.147 "cd GarkAcademy/GarkAcademy2024-Back && sudo git pull https://khaledsaadouni:${{secrets.TOKEN}}@github.com/Gark-Academy/GarkAcademy2024-Back production  " 
     - name: build and run 
-      run: sudo sshpass -p ${{secrets.PASSWORD}} ssh -i ~/.ssh/id_rsa -vvv -o StrictHostKeyChecking=no ubuntu@5.196.15.147 "cd GarkAcademy && sudo docker compose down && sudo docker-compose build --force-rm --no-cache && sudo docker compose up -d  "
+      run: sudo sshpass -p ${{secrets.PASSWORD}} ssh -i ~/.ssh/id_rsa -vvv -o StrictHostKeyChecking=no ubuntu@5.196.15.147 "cd GarkAcademy && sudo docker compose down && sudo docker-compose  up -d --build "
       
     

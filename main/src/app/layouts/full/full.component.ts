@@ -247,7 +247,7 @@ export class FullComponent implements OnInit {
         if(localStorage){
           localStorage.removeItem('jwtToken');
         }
-        
+
       },
       error => {
         console.error(error); // Handle error response
@@ -284,47 +284,37 @@ export class FullComponent implements OnInit {
           iconName: 'medal',
           route: 'apps/discipline',
         },
-        
+
 
       ];
     } else if (userRole === 'MANAGER') {
       this.navItems = [
         {
           displayName: 'Tableau de board',
-          iconName: 'building',
+          iconName: 'layout-dashboard',
           route: 'apps/academieprofile',
         },
         {
           displayName: 'Planification',
           iconName: 'calendar-event',
-          route: 'apps/calendrier',
+          route: 'apps/listevenement',
         },
         {
           displayName: 'Utilisateurs',
-          iconName: 'user-circle',
-          children: [
-            {
-              displayName: 'Staff',
-              iconName: 'point',
-              route: 'apps/staff',
-            },
-            {
-              displayName: 'Equipe',
-              iconName: 'point',
-              route: 'apps/equipe',
-            },
+          iconName: 'users',
+          route: 'apps/staff',
+        },
+        {
+          displayName: 'Equipes',
+          iconName: 'users-group',
+          route: 'apps/equipe',
+        },
+        
             {
               displayName: 'Evaluation',
               iconName: 'point',
               route: 'apps/evaluation',
             },
-            {
-              displayName: 'Roles',
-              iconName: 'point',
-              route: 'apps/roles',
-            },
-          ],
-        },
         {
           displayName: 'Paiement',
           iconName: 'credit-card',
@@ -332,31 +322,36 @@ export class FullComponent implements OnInit {
         },
         {
           displayName: 'Comptabilité',
-          iconName: 'credit-card',
+          iconName: 'moneybag',
         },
         {
-          displayName: 'Boite de réception',
-          iconName: 'message-2',
+          displayName: 'Boîte de réception',
+          iconName: 'messages',
           route: 'apps/chat',
         },
         {
           displayName: 'Statistiques',
-          iconName: 'message-2',
+          iconName: 'chart-dots',
         },
         {
           displayName: 'Collecte',
-          iconName: 'credit-card',
+          iconName: 'coins',
         },
         {
-          displayName: 'Discipline Manager',
+          displayName: 'Disciplines',
           iconName: 'medal',
           route: 'apps/disciplinemanager',
         },
-        
+
+        // {
+        //   displayName: 'List Evenement',
+        //   iconName: 'star',
+        //   route: 'apps/listevenement',
+        // },
         {
-          displayName: 'List Evenement',
-          iconName: 'star',
-          route: 'apps/listevenement',
+          displayName: 'Roles',
+          iconName: 'lock-access',
+          route: 'apps/roles',
         },
         {
           displayName: 'Blog',
@@ -376,7 +371,7 @@ export class FullComponent implements OnInit {
 
           ],
         },
-        
+
         // Add other default items for regular users
       ];
     }
