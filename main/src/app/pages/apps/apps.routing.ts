@@ -24,7 +24,7 @@ import { AcademieComponent } from './academie/academie.component';
 import { AppBloglistComponent } from './blogs/bloglist/blog.component';
 import { AcademieProfileComponent } from './academie-profile/academie-profile.component';
 import { EquipeComponent } from './equipe/equipe.component';
-import { PaiementComponent } from './paiement/paiement.component';
+import { AddPaiementPopupComponent, PaiementComponent } from './paiement/paiement.component';
 import { ArchivedAcademieComponent } from './archived-academie/academie.component';
 import { AppManagerlistComponent } from './admin/managerlist.component';
 import { AppStafflistComponent } from './managers/staff/stafflist.component';
@@ -40,6 +40,10 @@ import { ListEvenementComponent } from './evenement/listEvenement/listEvenement.
 import { authGuard } from 'src/app/guards/auth.guard';
 import { isAdminGuard } from 'src/app/guards/is-admin.guard';
 import { isManagerGuard } from 'src/app/guards/is-manager.guard';
+import { EntrainementComponent } from './evenement/entrainement/entrainement.component';
+import { AppEvaluationComponent } from 'src/app/pages/apps/evaluation/evaluation.component';
+import { AppStaffformContentComponent } from './managers/staff/staffform.component';
+import { AppManagerFormComponent } from './admin/managerform.component';
 // import { AppStafflist2Component } from './managers/staff/stafflist2.component';
 
 
@@ -60,6 +64,17 @@ export const AppsRoutes: Routes = [
         },
       },
       {
+        path: 'entrainement',
+        component: EntrainementComponent,
+        data: {
+          title: 'Entrainement',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Entrainement' },
+          ],
+        },
+      },
+      {
         path: 'calendar',
         canActivate: [isManagerGuard],
         component: AppFullcalendarComponent,
@@ -68,6 +83,18 @@ export const AppsRoutes: Routes = [
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
             { title: 'Calendar' },
+          ],
+        },
+      },
+      {
+        path: 'addPaiement',
+        canActivate: [isManagerGuard],
+        component: AddPaiementPopupComponent,
+        data: {
+          title: 'Paiement',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Paiement' },
           ],
         },
       },
@@ -176,6 +203,30 @@ export const AppsRoutes: Routes = [
         },
       },
       {
+        path: 'staffForm',
+        canActivate: [isManagerGuard],
+        component: AppStaffformContentComponent,
+        data: {
+          title: 'Staff',
+          urls: [
+            { title: 'Staff', url: '/dashboards/dashboard1' },
+            { title: 'Staff' },
+          ],
+        },
+      },
+      {
+        path: 'managerForm',
+        canActivate: [isAdminGuard],
+        component: AppManagerFormComponent,
+        data: {
+          title: 'Manager',
+          urls: [
+            { title: 'Manager', url: '/dashboards/dashboard1' },
+            { title: 'Manager' },
+          ],
+        },
+      },
+      {
         path: 'roles',
         canActivate: [isManagerGuard],
         component: AppRoleslistComponent,
@@ -184,6 +235,18 @@ export const AppsRoutes: Routes = [
           urls: [
             { title: 'Roles', url: '/dashboards/dashboard1' },
             { title: 'Roles' },
+          ],
+        },
+      },
+      {
+        path: 'evaluation',
+        canActivate: [isManagerGuard],
+        component: AppEvaluationComponent,
+        data: {
+          title: 'Evaluation',
+          urls: [
+            { title: 'Evaluation', url: '/dashboards/dashboard1' },
+            { title: 'Evaluation' },
           ],
         },
       },
@@ -199,17 +262,17 @@ export const AppsRoutes: Routes = [
           ],
         },
       },
-      {
-        path: 'contacts',
-        component: AppContactComponent,
-        data: {
-          title: 'Contacts',
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Contacts' },
-          ],
-        },
-      },
+      // {
+      //   path: 'contacts',
+      //   component: AppContactComponent,
+      //   data: {
+      //     title: 'Contacts',
+      //     urls: [
+      //       { title: 'Dashboard', url: '/dashboards/dashboard1' },
+      //       { title: 'Contacts' },
+      //     ],
+      //   },
+      // },
       {
         path: 'courses',
         component: AppCoursesComponent,

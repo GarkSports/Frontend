@@ -52,10 +52,11 @@ export class AddTestComponent {
     initializeForm(): void {
         this.evenementForm = this.formBuilder.group({
             nom: ['', Validators.required],
+            lieu: ['', Validators.required],
             date: ['', Validators.required],
             horraire: ['', Validators.required],
             repetition: [false, Validators.required],
-            typeRepetition: ['SEMAINE'],
+            typeRepetition: [TypeRepetition.SEMAINE, Validators.required],
             nbRepetition: ['0'],
             equipe: [''],
             membres: ['']
@@ -82,6 +83,7 @@ export class AddTestComponent {
         if (this.evenementForm.valid) {
             const formData = this.evenementForm.value;
             this.evenement.nomEvent = formData.nom;
+            this.evenement.lieu = formData.lieu;
             this.evenement.date = formData.date;
             this.evenement.heure = formData.horraire;
             this.evenement.repetition = formData.repetition;

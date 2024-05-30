@@ -1,0 +1,47 @@
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.cards-container.vertical-layout {
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.col-sm-6, .col-lg-4 {
+  max-width: 30%;
+  flex: 0 0 30%;
+}
+
+.cardWithShadow {
+  margin-bottom: 16px;
+}
+
+.evaluation-form-container {
+  display: none; /* Hide the form by default */
+  position: fixed;
+  top: 80px; /* Adjust top position as needed */
+  right: 100px; /* Adjust right position as needed */
+  width: 600px; /* Adjust width as needed */
+  max-height: 80vh; /* Limit the maximum height of the form */
+  padding: 16px;
+  z-index: 1000; /* Ensure the form is above other content */
+  overflow-y: auto; /* Add vertical scrolling to the form */
+}
+
+.evaluation-form-container.show-form {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  overflow-y: auto;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+}

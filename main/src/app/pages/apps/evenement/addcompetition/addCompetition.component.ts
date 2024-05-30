@@ -57,8 +57,8 @@ export class AddCompetitionComponent {
             horraire: ['', Validators.required],
             description: ['', Validators.required],
             repetition: [false, Validators.required],
-          typeRepetition: ['SEMAINE'],
-          nbRepetition: ['0'],
+            typeRepetition: [TypeRepetition.SEMAINE, Validators.required],
+            nbRepetition: ['0'],
             equipe: [''],
             membres: ['']
         });

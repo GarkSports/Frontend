@@ -108,7 +108,7 @@ import { UpdateEquipePopupComponent } from './equipe/equipe.component';
 
 
 import { AppBlogDialogContentComponent, AppBloglistComponent } from './blogs/bloglist/blog.component';
-import { AppManagerDialogContentComponent, AppManagerlistComponent } from './admin/managerlist.component';
+import { AppManagerDialogContentComponent, AppManagerlistComponent,  } from './admin/managerlist.component';
 import { AppStaffDialogContentComponent, AppStafflistComponent } from './managers/staff/stafflist.component';
 import { AppRolesDialogContentComponent, AppRoleslistComponent } from './managers/roles/roleslist.component';
 import { FullCalendarModule } from '@fullcalendar/angular';
@@ -118,6 +118,9 @@ import { NavbarComponent } from './evenement/navbar/navbar.component';
 import { AppProfilComponent } from './managers/profil/profil.component';
 import { UpdateEvenementPopupComponent } from './evenement/listEvenement/listEvenement.component';
 import { EventPopupComponent } from './evenement/calendrier/calendrier.component';
+import { EntrainementComponent } from './evenement/entrainement/entrainement.component';
+import { AddHeureDialogComponent } from './evenement/entrainement/entrainement.component';
+import { UpdateHeureDialogComponent } from './evenement/entrainement/entrainement.component';
 import { DetailEventDialogComponent } from './evenement/listEvenement/listEvenement.component';
 import {AppEmployeeSalaryComponent} from "../../components/dashboard1/employee-salary/employee-salary.component";
 import {AppSalesOverviewComponent} from "../../components/dashboard2/sales-overview/sales-overview.component";
@@ -142,7 +145,9 @@ import {AppWelcomeCardComponent} from "../../components/dashboard2/welcome-card/
 import {AppYearlySalesComponent} from "../../components/dashboard2/yearly-sales/yearly-sales.component";
 
 
-
+import { AppEvaluationComponent } from './evaluation/evaluation.component';
+import { AppStaffformContentComponent, NotificationDialogComponent } from './managers/staff/staffform.component';
+import { AppManagerFormComponent } from './admin/managerform.component';
 
 
 @NgModule({
@@ -187,6 +192,9 @@ import {AppYearlySalesComponent} from "../../components/dashboard2/yearly-sales/
   ],
   exports: [TablerIconsModule],
   declarations: [
+    UpdateHeureDialogComponent,
+    AddHeureDialogComponent,
+    EntrainementComponent,
     DetailEventDialogComponent,
     EventPopupComponent,
     UpdateEvenementPopupComponent,
@@ -262,11 +270,15 @@ import {AppYearlySalesComponent} from "../../components/dashboard2/yearly-sales/
     AppBlogDialogContentComponent,
     AppManagerlistComponent,
     AppManagerDialogContentComponent,
-    AppStaffDialogContentComponent,
+    AppStaffformContentComponent,
     AppStafflistComponent,
     AppRolesDialogContentComponent,
     AppRoleslistComponent,
-    AppProfilComponent
+    AppProfilComponent,
+    AppEvaluationComponent,
+    NotificationDialogComponent,
+    AppStaffDialogContentComponent,
+    AppManagerFormComponent
   ],
   providers: [DatePipe],
 })
