@@ -13,10 +13,10 @@ import {TablerIconsModule} from "angular-tabler-icons";
           <div class="col-2 pt-2">
             <i-tabler name="arrow-left" class="d-flex"></i-tabler>
           </div>
-          <div class="col  flex justify-center ml-8">
+          <div class="col  flex justify-center ">
             <a href="/">
               <img
-                src="./assets/images/logos/Gark_s Primary Logo - Vibrant Green .png"
+                src="./assets/images/logos/logo-gark.png"
                 class="h-10 "
                 alt="logo"
               />

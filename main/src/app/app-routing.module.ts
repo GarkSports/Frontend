@@ -2,11 +2,12 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { BlankComponent } from './layouts/blank/blank.component';
 import { FullComponent } from './layouts/full/full.component';
+import {HomeComponent} from "./pages/apps/home/home.component";
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'authentication/side-login',
+    component: HomeComponent,
     pathMatch: 'full',
   },
   {
