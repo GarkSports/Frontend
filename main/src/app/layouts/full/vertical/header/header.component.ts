@@ -106,6 +106,8 @@ export class HeaderComponent implements OnInit {
   ];
 
   notifications: Notification[] = [];
+  unreadCount = 0;
+  private audio: HTMLAudioElement;
 
 
   constructor(
@@ -116,37 +118,28 @@ export class HeaderComponent implements OnInit {
     private authService: AuthService,
     //private messagingService: MessagingService,
     private webSocketService: WebSocketService,
-    private managerService: ManagerService
+    private managerService: ManagerService,
   ) {
     translate.setDefaultLang('en');
     this.local_data = { ...data };
+    this.audio = new Audio("/assets/images/notif.mp3");
   }
 
   ngOnInit() {
     this.getProfil();
-    // this.messagingService.notifications$.subscribe(notifications => {
-    //   this.notifications = notifications.map(notification => ({
-    //     title: notification.title || 'No Title',
-    //     body: notification.body || 'No Body',
-    //     image: notification.image || "/assets/images/breadcrumb/emailSv.png"
 
-    //   }));
-    // });
 
-      // Open connection with server socket
       let stompClient = this.webSocketService.connect();
       stompClient.connect({ withCredentials: true }, (frame: any) => {
-        const userEmail = 'haythemdaoud99@gmail.com';
+        const userEmail = this.local_data.username;
+        console.log(userEmail);
 
-        // Subscribe to notification topic
+
                   stompClient.subscribe('/queue/reply/' + userEmail , (notifications: { body: any[string];  }) => {
                     console.log("notification recu",notifications);
                     console.log("notification recu",notifications.body);
                     console.log("notification recu",notifications.body.title);
 
-
-        // Update notifications attribute with the recent messsage sent from the server
-              // Parse the notifications body as JSON
               let parsedNotification;
               try {
                 parsedNotification = JSON.parse(notifications.body);
@@ -154,25 +147,26 @@ export class HeaderComponent implements OnInit {
                 console.error("Failed to parse notification body", e);
                 return;
               }
-      
-              // Validate that parsedNotification is an object
               if (parsedNotification && typeof parsedNotification === 'object') {
-                // Update notifications attribute with the recent message sent from the server
                 this.notifications.push({
                   title: parsedNotification.title || 'No Title',
                   body: parsedNotification.body || 'No Body',
-                  image: parsedNotification.image || "/assets/images/breadcrumb/emailSv.png"
+                  image: parsedNotification.image || "/assets/images/svgs/icon-dd-chat.svg"
                 });
+                this.unreadCount ++;
+                this.playSound();
+                
               } else {
                 console.error("Parsed notification is not an object", parsedNotification);
               }
             });
                           
                
-              });
+          });
   
 
   }
+
 
   // ngOnInit() {
   //   // Retrieve the user's name from the AuthService or any other service
@@ -376,6 +370,16 @@ export class HeaderComponent implements OnInit {
       link: '/theme-pages/treeview',
     },
   ];
+
+  onNotificationMenuOpen() {
+    this.unreadCount = 0;
+  }
+
+  playSound() {
+    this.audio.play().catch(error => console.error('Error playing notification sound:', error));
+  }
+
+
 }
 
 @Component({
