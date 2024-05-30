@@ -1,6 +1,5 @@
 // app-chat.component.ts
-import { Component, ViewChild, ElementRef, OnInit, Inject, Optional } from '@angular/core';
-import { messages } from './chat-data';
+import { Component, ViewChild, ElementRef, OnInit, Inject, Optional ,OnDestroy } from '@angular/core';
 import { ChatService } from 'src/app/services/chat.service';
 import { ChatContactDTO, ChatDTO } from 'src/models/chat.model';
 import {
@@ -8,66 +7,76 @@ import {
   MatDialogRef,
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { ManagerService } from 'src/app/services/manager.service';
-import { AppProfilComponent } from '../managers/profil/profil.component';
+
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss'],
 })
-export class AppChatComponent implements OnInit {
-
+export class AppChatComponent implements OnInit, OnDestroy {
   sidePanelOpened = true;
   msg = '';
   local_data: any;
   userRole: string = '';
-  
 
   // MESSAGE
   selectedMessage: any;
   selectedDiscussion: ChatDTO[];
   selectedContact: ChatContactDTO;
-
-  public messages: Array<any> = messages;
+  public messages: Array<any> = [];
+  
+  private routerSubscription: Subscription;
 
   constructor(
     public chatService: ChatService,
     private router: Router,
-    private managerService: ManagerService,
-  ) {
-    
-  }
+    private managerService: ManagerService
+  ) {}
 
   ngOnInit(): void {
-    try {   
-      console.log('ngOnInit',);
+    this.loadData();
+
+    this.routerSubscription = this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd && event.url === '/apps/chat') {
+        this.loadData();
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.routerSubscription) {
+      this.routerSubscription.unsubscribe();
+    }
+  }
+
+  private loadData(): void {
+    try {
+      console.log('loadData');
       this.chatService.fetchContactList().subscribe((c: ChatContactDTO[]) => {
         this.chatService.contactList = c;
         this.getManagerProfil();
         
-        // If there are discussions available, select the first one
         if (this.chatService.contactList.length > 0) {
           const firstDiscussionId = this.chatService.contactList[0];
           this.onSelect(firstDiscussionId);
         }
-        
-        
       });
     } finally {
-      console.log('ngOnInit OK');
+      console.log('loadData OK');
     }
   }
 
   getManagerProfil(): void {
     this.managerService.getProfil().subscribe(
-      (profil) => {
+      profil => {
         this.local_data = profil;
-
         this.userRole = this.local_data.role;
       },
-      (error) => {
+      error => {
         console.error('Error fetching profil', error);
       }
     );
@@ -93,16 +102,12 @@ export class AppChatComponent implements OnInit {
   }
 
   openDialog(action: string, obj: any): void {
-    if(this.userRole ==='ADMIN'){
+    if (this.userRole === 'ADMIN') {
       this.router.navigate(['apps/adminnewmessage'], { state: { data: obj } });
-    }else if(this.userRole ==='MANAGER'){
+    } else if (this.userRole === 'MANAGER') {
       this.router.navigate(['apps/newmessage'], { state: { data: obj } });
     }
-    
   }
-
-    
-  
 
   addRowData(data: any): void {
     this.sendMessage(data.receiver, data.msg);
@@ -121,9 +126,9 @@ export class AppChatComponent implements OnInit {
         () => {
           console.log('Message sent successfully');
           this.refreshDiscussion(receiversId[0]);
-          this.ngOnInit();
+          this.loadData();
         },
-        (error) => {
+        error => {
           console.error('Error occurred while sending message:', error);
         }
       );
@@ -138,20 +143,19 @@ export class AppChatComponent implements OnInit {
     });
   }
 
-  deleteDiscussion() {
+  deleteDiscussion(): void {
     this.chatService.deleteDiscussion(this.selectedContact.userId).subscribe(
-    () => {
-      console.log('Discussion deleted successfully');
-      this.ngOnInit();
-
-    },
-    (error) => {
-      console.log('Discussion deleted failed');
-    
-    });
-    }
-
+      () => {
+        console.log('Discussion deleted successfully');
+        this.loadData();
+      },
+      error => {
+        console.log('Discussion deletion failed');
+      }
+    );
+  }
 }
+
 
 @Component({
   selector: 'app-dialog-content',
