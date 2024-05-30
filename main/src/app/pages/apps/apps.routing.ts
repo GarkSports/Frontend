@@ -40,6 +40,8 @@ import { ListEvenementComponent } from './evenement/listEvenement/listEvenement.
 import { authGuard } from 'src/app/guards/auth.guard';
 import { isAdminGuard } from 'src/app/guards/is-admin.guard';
 import { isManagerGuard } from 'src/app/guards/is-manager.guard';
+import { NewMessagePageComponent } from './chat/new-message-page/new-message-page.component';
+import { AdminNewMessagePageComponent } from './chat/admin-new-message-page/admin-new-message-page.component';
 import { EntrainementComponent } from './evenement/entrainement/entrainement.component';
 import { AppEvaluationComponent } from 'src/app/pages/apps/evaluation/evaluation.component';
 import { AppStaffformContentComponent } from './managers/staff/staffform.component';
@@ -60,6 +62,30 @@ export const AppsRoutes: Routes = [
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
             { title: 'Chat' },
+          ],
+        },
+      },
+      {
+        path: 'newmessage',
+        canActivate: [isManagerGuard],
+        component: NewMessagePageComponent,
+        data: {
+          title: 'New Message',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'New Message' },
+          ],
+        },
+      },
+      {
+        path: 'adminnewmessage',
+        canActivate: [isAdminGuard],
+        component: AdminNewMessagePageComponent,
+        data: {
+          title: 'New Message',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'New Message' },
           ],
         },
       },

@@ -19,6 +19,9 @@ import * as TablerIcons from 'angular-tabler-icons/icons';
 //Chat
 import { AppChatComponent } from './chat/chat.component';
 import { AppChatDialogContentComponent } from './chat/chat.component';
+import {NewMessagePageComponent} from './chat/new-message-page/new-message-page.component';
+import {AdminNewMessagePageComponent} from './chat/admin-new-message-page/admin-new-message-page.component';
+
 //Contact
 import { AppContactDialogContentComponent } from './contact/contact.component';
 import { AppContactComponent } from './contact/contact.component';
@@ -225,6 +228,8 @@ import { AppManagerFormComponent } from './admin/managerform.component';
     UpdateProfileDialogComponent,
     AppChatComponent,
     AppChatDialogContentComponent,
+    NewMessagePageComponent,
+    AdminNewMessagePageComponent,
     AppPermissionComponent,
     AppNotesComponent,
     AppTodoComponent,
