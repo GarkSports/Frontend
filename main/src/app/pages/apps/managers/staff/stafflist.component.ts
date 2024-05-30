@@ -251,14 +251,12 @@ export class AppStafflistComponent implements OnInit, OnDestroy {
   openFormPage(action: string, obj: any): void {
     const queryParams = new URLSearchParams({
       action,
-      id:obj.id
+      id: obj.id
     }).toString();
     const url = `/apps/staffForm?${queryParams}`;
-    window.open(url, '_blank');
-    if(window.closed){
-      this.getManagers();
-    }
+    window.location.href = url;
   }
+  
 
   ngOnDestroy(): void {
     this.broadcastChannel.close();

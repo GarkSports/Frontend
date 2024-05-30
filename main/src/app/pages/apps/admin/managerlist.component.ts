@@ -251,11 +251,9 @@ getAcademiesNames(): void {
       id: obj.id
     }).toString();
     const url = `/apps/managerForm?${queryParams}`;
-    window.open(url, '_blank');
-    if (window.closed) {
-      this.getManagers();
-    }
+    window.location.href = url;
   }
+  
   
 
 
