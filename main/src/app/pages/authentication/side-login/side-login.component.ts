@@ -82,7 +82,7 @@ export class AppSideLoginComponent {
             this.authService.checkIfManager().subscribe((isManager) => {
               if (isManager) {
                 // Navigate to manager page
-                this.router.navigate(['/apps/profil']);
+                this.router.navigate(['/apps/academieprofile']);
               } else {
                 // Check if the user is an admin
                 this.authService.checkIfAdmin().subscribe((isAdmin) => {

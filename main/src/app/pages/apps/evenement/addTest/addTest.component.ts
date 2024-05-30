@@ -40,6 +40,9 @@ export class AddTestComponent {
         private router: Router
     ) {}
 
+  setEquipe2(event:any){
+      this.selectedEquipe2 = this.equipeList.filter(equipe => equipe.id == event.target.value)[0];
+  }
     ngOnInit(): void {
         this.initializeForm();
         this.getEquipes();
@@ -54,7 +57,7 @@ export class AddTestComponent {
             horraire: ['', Validators.required],
             repetition: [false, Validators.required],
             typeRepetition: [TypeRepetition.SEMAINE, Validators.required],
-            nbRepetition: [''],
+            nbRepetition: ['0'],
             equipe: [''],
             membres: ['']
         });
