@@ -19,9 +19,6 @@ import * as TablerIcons from 'angular-tabler-icons/icons';
 //Chat
 import { AppChatComponent } from './chat/chat.component';
 import { AppChatDialogContentComponent } from './chat/chat.component';
-import {NewMessagePageComponent} from './chat/new-message-page/new-message-page.component';
-import {AdminNewMessagePageComponent} from './chat/admin-new-message-page/admin-new-message-page.component';
-
 //Contact
 import { AppContactDialogContentComponent } from './contact/contact.component';
 import { AppContactComponent } from './contact/contact.component';
@@ -102,8 +99,7 @@ import { ConfirmDialogComponent } from './paiement/paiement.component';
 import { ArchivedAcademieComponent } from './archived-academie/academie.component';
 import { ArchivedAcademieConfirmationDialogComponent } from './archived-academie/academie.component';
 import { ArchivedAcademieConfirmationRestoreDialogComponent } from './archived-academie/academie.component';
-import { DisciplineManagerComponent } from './discipline-manager/discipline.component';
-import { AppDisciplineManagerDialogContentComponent } from './discipline-manager/discipline.component';
+import { AppDisciplineManagerDialogContentComponent, DisciplineManagerComponent } from './discipline-manager/discipline.component';
 import { AppAddDisciplineManagerComponent } from './discipline-manager/add/add.component';
 import { DeleteEventConfirmationDialogComponent } from './evenement/listEvenement/listEvenement.component';
 import { UpdateEquipePopupComponent } from './equipe/equipe.component';
@@ -111,7 +107,7 @@ import { UpdateEquipePopupComponent } from './equipe/equipe.component';
 
 
 import { AppBlogDialogContentComponent, AppBloglistComponent } from './blogs/bloglist/blog.component';
-import { AppManagerDialogContentComponent, AppManagerlistComponent,  } from './admin/managerlist.component';
+import { AppManagerDialogContentComponent, AppManagerlistComponent } from './admin/managerlist.component';
 import { AppStaffDialogContentComponent, AppStafflistComponent } from './managers/staff/stafflist.component';
 import { AppRolesDialogContentComponent, AppRoleslistComponent } from './managers/roles/roleslist.component';
 import { FullCalendarModule } from '@fullcalendar/angular';
@@ -121,42 +117,20 @@ import { NavbarComponent } from './evenement/navbar/navbar.component';
 import { AppProfilComponent } from './managers/profil/profil.component';
 import { UpdateEvenementPopupComponent } from './evenement/listEvenement/listEvenement.component';
 import { EventPopupComponent } from './evenement/calendrier/calendrier.component';
+import { DetailEventDialogComponent } from './evenement/listEvenement/listEvenement.component'; 
 import { EntrainementComponent } from './evenement/entrainement/entrainement.component';
 import { AddHeureDialogComponent } from './evenement/entrainement/entrainement.component';
 import { UpdateHeureDialogComponent } from './evenement/entrainement/entrainement.component';
-import { DetailEventDialogComponent } from './evenement/listEvenement/listEvenement.component';
-import {AppEmployeeSalaryComponent} from "../../components/dashboard1/employee-salary/employee-salary.component";
-import {AppSalesOverviewComponent} from "../../components/dashboard2/sales-overview/sales-overview.component";
-import {AppSellingProductComponent} from "../../components/dashboard1/selling-product/selling-product.component";
-import {AppTopCardsComponent} from "../../components/dashboard1/top-cards/top-cards.component";
-import {AppTopProjectsComponent} from "../../components/dashboard1/top-projects/top-projects.component";
-import {AppMonthlyEarningsTwoComponent} from "../../components/dashboard2/monthly-earnings/monthly-earnings.component";
-import {AppPaymentGatewaysComponent} from "../../components/dashboard2/payment-gateways/payment-gateways.component";
-import {AppPaymentsComponent} from "../../components/dashboard2/payments/payments.component";
-import {
-  AppProductPerformanceComponent
-} from "../../components/dashboard2/product-performance/product-performance.component";
-import {AppProductsComponent} from "../../components/dashboard2/products/products.component";
-import {
-  AppRecentTransactionsComponent
-} from "../../components/dashboard2/recent-transactions/recent-transactions.component";
-import {AppRevenueUpdatesTwoComponent} from "../../components/dashboard2/revenue-updates/revenue-updates.component";
-import {AppSalesProfitComponent} from "../../components/dashboard2/sales-profit/sales-profit.component";
-import {AppTotalEarningsComponent} from "../../components/dashboard2/total-earnings/total-earnings.component";
-import {AppWeeklyStatsComponent} from "../../components/dashboard1/weekly-stats/weekly-stats.component";
-import {AppWelcomeCardComponent} from "../../components/dashboard2/welcome-card/welcome-card.component";
-import {AppYearlySalesComponent} from "../../components/dashboard2/yearly-sales/yearly-sales.component";
+import { UpdateProfilePageComponent } from './academie-profile/update-profile-page.component';
+import { UpdatePaymentPageComponent } from './paiement/update-payment-page.component';
 
 
-import { AppEvaluationComponent } from './evaluation/evaluation.component';
-import { AppStaffformContentComponent, NotificationDialogComponent } from './managers/staff/staffform.component';
-import { AppManagerFormComponent } from './admin/managerform.component';
+
 
 
 @NgModule({
   imports: [
     FullCalendarModule,
-
     CommonModule,
     RouterModule.forChild(AppsRoutes),
     MaterialModule,
@@ -175,26 +149,13 @@ import { AppManagerFormComponent } from './admin/managerform.component';
     }),
     MatNativeDateModule,
     NgScrollbarModule,
-    AppEmployeeSalaryComponent,
-    AppSalesOverviewComponent,
-    AppSellingProductComponent,
-    AppTopCardsComponent,
-    AppTopProjectsComponent,
-    AppMonthlyEarningsTwoComponent,
-    AppPaymentGatewaysComponent,
-    AppPaymentsComponent,
-    AppProductPerformanceComponent,
-    AppProductsComponent,
-    AppRecentTransactionsComponent,
-    AppRevenueUpdatesTwoComponent,
-    AppSalesProfitComponent,
-    AppTotalEarningsComponent,
-    AppWeeklyStatsComponent,
-    AppWelcomeCardComponent,
-    AppYearlySalesComponent,
   ],
   exports: [TablerIconsModule],
   declarations: [
+    AppDisciplineManagerDialogContentComponent,
+    AppDisciplineDialogContentComponent,
+    UpdatePaymentPageComponent,
+    UpdateProfilePageComponent,
     UpdateHeureDialogComponent,
     AddHeureDialogComponent,
     EntrainementComponent,
@@ -208,7 +169,6 @@ import { AppManagerFormComponent } from './admin/managerform.component';
     AddEvenementPopupComponent,
     ListEvenementComponent,
     DisciplineManagerComponent,
-    AppDisciplineManagerDialogContentComponent,
     AppAddDisciplineManagerComponent,
     ArchivedAcademieComponent,
     ArchivedAcademieConfirmationDialogComponent,
@@ -228,8 +188,6 @@ import { AppManagerFormComponent } from './admin/managerform.component';
     UpdateProfileDialogComponent,
     AppChatComponent,
     AppChatDialogContentComponent,
-    NewMessagePageComponent,
-    AdminNewMessagePageComponent,
     AppPermissionComponent,
     AppNotesComponent,
     AppTodoComponent,
@@ -254,7 +212,6 @@ import { AppManagerFormComponent } from './admin/managerform.component';
     AppEmployeeDialogContentComponent,
     AppAddEmployeeComponent,
     DisciplineComponent,
-    AppDisciplineDialogContentComponent,
     AppAddDisciplineComponent,
     AcademieComponent,
     AppAcademieDialogContentComponent,
@@ -275,15 +232,11 @@ import { AppManagerFormComponent } from './admin/managerform.component';
     AppBlogDialogContentComponent,
     AppManagerlistComponent,
     AppManagerDialogContentComponent,
-    AppStaffformContentComponent,
+    AppStaffDialogContentComponent,
     AppStafflistComponent,
     AppRolesDialogContentComponent,
     AppRoleslistComponent,
-    AppProfilComponent,
-    AppEvaluationComponent,
-    NotificationDialogComponent,
-    AppStaffDialogContentComponent,
-    AppManagerFormComponent
+    AppProfilComponent
   ],
   providers: [DatePipe],
 })
