@@ -137,13 +137,13 @@ export class AcademieComponent implements AfterViewInit {
   getEtatColor(etat: string): { backgroundColor: string } {
     switch (etat) {
       case 'INACTIF':
-        return { backgroundColor: '#FEF5E5' };
+        return { backgroundColor: '#FF0054' };
       case 'ACTIF':
-        return { backgroundColor: '#E6FFFA' };
+        return { backgroundColor: '#b8e06a' };
       case 'SUSPENDU':
-        return { backgroundColor: '#FDEDE8' };
+        return { backgroundColor: '#FF0054' };
       case 'FERME':
-        return { backgroundColor: '#ECF2FF' };
+        return { backgroundColor: '#FF0054' };
       default:
         return { backgroundColor: 'inherit' }; // Or a default color
     }

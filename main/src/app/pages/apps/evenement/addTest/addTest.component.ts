@@ -14,6 +14,7 @@ import { Adherent } from 'src/models/adherent.model';
 import { Evenement } from 'src/models/evenement.model';
 import { TestRequest } from 'src/models/dto/TestRequest.model';
 import { Router } from '@angular/router';
+import { TypeRepetition } from 'src/models/enums/typeRepetition.model';
 
 @Component({
     selector: 'add-test',
@@ -30,6 +31,8 @@ export class AddTestComponent {
     selectedEquipe: number; // Define selectedEquipe property here
     selectedEquipe2: Equipe;
     selectedMembers: number[] = []; // Define selectedMembers property here
+    typeRepetitions: string[] = Object.values(TypeRepetition).filter(value => typeof value === 'string').map(value => String(value));
+    selectedTypeRepetition: string;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -37,6 +40,9 @@ export class AddTestComponent {
         private router: Router
     ) {}
 
+  setEquipe2(event:any){
+      this.selectedEquipe2 = this.equipeList.filter(equipe => equipe.id == event.target.value)[0];
+  }
     ngOnInit(): void {
         this.initializeForm();
         this.getEquipes();
@@ -46,8 +52,12 @@ export class AddTestComponent {
     initializeForm(): void {
         this.evenementForm = this.formBuilder.group({
             nom: ['', Validators.required],
+            lieu: ['', Validators.required],
             date: ['', Validators.required],
             horraire: ['', Validators.required],
+            repetition: [false, Validators.required],
+            typeRepetition: [TypeRepetition.SEMAINE, Validators.required],
+            nbRepetition: ['0'],
             equipe: [''],
             membres: ['']
         });
@@ -73,8 +83,12 @@ export class AddTestComponent {
         if (this.evenementForm.valid) {
             const formData = this.evenementForm.value;
             this.evenement.nomEvent = formData.nom;
+            this.evenement.lieu = formData.lieu;
             this.evenement.date = formData.date;
             this.evenement.heure = formData.horraire;
+            this.evenement.repetition = formData.repetition;
+            this.evenement.typeRepetition = formData.typeRepetition;
+            this.evenement.nbRepetition = formData.nbRepetition;
 
             let request: TestRequest;
             if (this.selectedOption === 'equipe') {

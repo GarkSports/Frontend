@@ -50,6 +50,23 @@
                                 <mat-error *ngIf="evenementForm.get('description')?.invalid && evenementForm.get('description')?.touched">Description is required</mat-error>
                             </mat-form-field>
                         </div>
+                        <div class="col-md-12">
+                            <mat-checkbox formControlName="repetition">Se répéte</mat-checkbox>
+                        </div>
+                        <div class="col-md-12" style="margin-top: 20px;" *ngIf="evenementForm.get('repetition')?.value">
+                            <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Chaque</mat-label>
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-select [(ngModel)]="selectedTypeRepetition" formControlName="typeRepetition" name="typeRepetition">
+                                    <mat-option *ngFor="let typeRepetition of typeRepetitions" [value]="typeRepetition">{{ typeRepetition }}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-12" style="margin-top: 20px;" *ngIf="evenementForm.get('repetition')?.value">
+                            <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Nombre de fois</mat-label>
+                            <mat-form-field appearance="outline" class="w-100">
+                                <input matInput required type="number" formControlName="nbRepetition" />
+                            </mat-form-field>
+                        </div>
                     </div>
                     <div class="text-right">
                         <button mat-flat-button color="primary" matStepperNext>Next</button>

@@ -1,0 +1,35 @@
+<h1 mat-dialog-title>Update Heure</h1>
+<div mat-dialog-content class="dialog-content">
+  <mat-horizontal-stepper linear #stepper>
+    <!-- Step 1: Select heure -->
+    <mat-step>
+      <ng-template matStepLabel>Heure</ng-template>
+      <mat-form-field style="width: 100%;">
+        <mat-label>Heure</mat-label>
+        <input matInput [(ngModel)]="heure" type="time">
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </mat-step>
+    
+    <!-- Step 2: Select adherents -->
+    <mat-step>
+      <ng-template matStepLabel>Adherents</ng-template>
+      <div *ngIf="data.adherents && data.adherents.length">
+        <mat-checkbox *ngFor="let adherent of data.adherents" 
+                      (change)="onAdherentCheckboxChange(adherent.id, $event.checked)"
+                      [checked]="selectedAdherents.includes(adherent.id)">
+          {{ adherent.firstname }} {{ adherent.lastname }}
+        </mat-checkbox>
+      </div>
+      <div *ngIf="!data.adherents || !data.adherents.length">
+        No adherents available.
+      </div>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button (click)="onSave()">Save</button>
+      </div>
+    </mat-step>
+  </mat-horizontal-stepper>
+</div>

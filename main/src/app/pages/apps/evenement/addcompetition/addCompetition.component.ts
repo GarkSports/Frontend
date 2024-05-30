@@ -12,6 +12,7 @@ import { MaterialModule } from 'src/app/material.module';
 import { EvenementService } from 'src/app/services/evenement.service';
 import { Adherent } from 'src/models/adherent.model';
 import { CompetitionRequest } from 'src/models/dto/CompetitonRequest.model';
+import { TypeRepetition } from 'src/models/enums/typeRepetition.model';
 import { Equipe } from 'src/models/equipe.model';
 import { Evenement } from 'src/models/evenement.model';
 
@@ -30,6 +31,8 @@ export class AddCompetitionComponent {
     selectedEquipe: number; // Define selectedEquipe property here
     selectedEquipe2: Equipe;
     selectedMembers: number[] = []; // Define selectedMembers property here
+    typeRepetitions: string[] = Object.values(TypeRepetition).filter(value => typeof value === 'string').map(value => String(value));
+    selectedTypeRepetition: string;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -43,6 +46,9 @@ export class AddCompetitionComponent {
         this.getMembers();
     }
 
+  setEquipe2(event:any){
+    this.selectedEquipe2 = this.equipeList.filter(equipe => equipe.id == event.target.value)[0];
+  }
     initializeForm(): void {
         this.evenementForm = this.formBuilder.group({
             nom: ['', Validators.required],
@@ -50,10 +56,29 @@ export class AddCompetitionComponent {
             date: ['', Validators.required],
             horraire: ['', Validators.required],
             description: ['', Validators.required],
+            repetition: [false, Validators.required],
+            typeRepetition: [TypeRepetition.SEMAINE, Validators.required],
+            nbRepetition: ['0'],
             equipe: [''],
             membres: ['']
         });
+
+        // Subscribe to repetition control value changes to toggle typeRepetition and nbRepetition validation
+        this.evenementForm.get('repetition')!.valueChanges.subscribe((repetition) => {
+            const typeRepetitionControl = this.evenementForm.get('typeRepetition')!;
+            const nbRepetitionControl = this.evenementForm.get('nbRepetition')!; // Add this line
+            if (repetition) {
+                typeRepetitionControl.setValidators(Validators.required);
+                nbRepetitionControl.setValidators(Validators.required); // Add this line
+            } else {
+                typeRepetitionControl.clearValidators();
+                nbRepetitionControl.clearValidators(); // Add this line
+            }
+            typeRepetitionControl.updateValueAndValidity();
+            nbRepetitionControl.updateValueAndValidity(); // Add this line
+        });
     }
+
 
     getEquipes(): void {
         this.eventService.getEquipes().subscribe(equipes => {
@@ -71,6 +96,11 @@ export class AddCompetitionComponent {
         this.selectedOption = option;
     }
 
+    getTypeRepetitionFromString(value: string): TypeRepetition {
+        return TypeRepetition[value as keyof typeof TypeRepetition];
+    }
+
+
     onSubmit(): void {
         if (this.evenementForm.valid) {
             const formData = this.evenementForm.value;
@@ -79,6 +109,10 @@ export class AddCompetitionComponent {
             this.evenement.date = formData.date;
             this.evenement.heure = formData.horraire;
             this.evenement.description = formData.description;
+            this.evenement.repetition = formData.repetition;
+            this.evenement.typeRepetition = this.getTypeRepetitionFromString(formData.typeRepetition);
+            this.evenement.nbRepetition = formData.nbRepetition;
+
 
             let request: CompetitionRequest;
             if (this.selectedOption === 'equipe') {

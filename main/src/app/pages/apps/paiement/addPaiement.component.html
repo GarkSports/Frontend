@@ -1,5 +1,6 @@
-<h2 class="f-w-500 m-b-24" mat-dialog-title>Ajouter Paiement</h2>
-<mat-dialog-content style="max-width: 600px">
+<h2 class="f-w-500 m-b-24">Ajouter Paiement</h2>
+
+<div style="max-width: 600px">
   <!-- Form fields for updating payment attributes -->
   <div class="form-row" style="margin-top: 10px;">
     <div class="input-container">
@@ -7,8 +8,7 @@
         <mat-label>Membre</mat-label>
         <mat-select [(ngModel)]="paiement.adherent" name="adherent" placeholder="Membre"
           (selectionChange)="onMemberSelectionChange()" required>
-          <mat-option *ngFor="let member of members" [value]="member">{{ member.firstname }} {{ member.lastname
-            }}</mat-option>
+          <mat-option *ngFor="let member of members" [value]="member">{{ member.firstname }} {{ member.lastname }}</mat-option>
         </mat-select>
         <mat-error *ngIf="paiement.adherent === null || paiement.adherent === undefined">
           Le adherent doit être saisie.
@@ -21,8 +21,7 @@
     <div class="input-container">
       <mat-form-field appearance="outline" style="width: 100%;">
         <mat-label>Type Abonnement</mat-label>
-        <mat-select [(ngModel)]="paiement.typeAbonnement" placeholder="Type Abonnement" (selectionChange)="getDateFin()"
-          required>
+        <mat-select [(ngModel)]="paiement.typeAbonnement" placeholder="Type Abonnement" (selectionChange)="getDateFin()" required>
           <mat-option *ngFor="let type of typeAbonnements" [value]="type">{{ getTypeAbonnementName(type) }}</mat-option>
         </mat-select>
         <mat-error *ngIf="paiement.typeAbonnement === null || paiement.typeAbonnement === undefined">
@@ -61,8 +60,7 @@
     <div class="input-container">
       <mat-form-field appearance="outline" style="width: 100%;">
         <mat-label>Date Paiement</mat-label>
-        <input matInput [matDatepicker]="picker3" placeholder="Date Paiement" [(ngModel)]="paiement.datePaiement"
-          required />
+        <input matInput [matDatepicker]="picker3" placeholder="Date Paiement" [(ngModel)]="paiement.datePaiement" required />
         <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
         <mat-datepicker #picker3></mat-datepicker>
         <mat-error *ngIf="paiement.datePaiement === null || paiement.datePaiement === undefined">
@@ -76,8 +74,7 @@
     <div class="input-container">
       <mat-form-field appearance="outline" style="width: 100%;">
         <mat-label>Montant</mat-label>
-        <input matInput placeholder="Montant" type="number" [(ngModel)]="paiement.montant" name="montant" min="0"
-          required />
+        <input matInput placeholder="Montant" type="number" [(ngModel)]="paiement.montant" name="montant" min="0" required />
         <mat-error *ngIf="paiement.montant !== undefined && paiement.montant < 0">
           Le montant doit être positif.
         </mat-error>
@@ -106,38 +103,36 @@
       </mat-form-field>
     </div>
   </div>
-</mat-dialog-content>
+</div>
+
 <mat-dialog-actions>
   <!-- Buttons for Save and Cancel -->
   <button mat-raised-button class="cancel-button" (click)="onCancelClick()">Cancel</button>
-  <button mat-raised-button color="primary" class="save-button" (click)="onSaveClick()"
-    [disabled]="!isFormValid()">Save</button>
-</mat-dialog-actions>
+  <button mat-raised-button color="primary" class="save-button" (click)="onSaveClick()" [disabled]="!isFormValid()">Save</button>
+  </mat-dialog-actions>
 
-<style>
-  .form-row {
-    display: flex;
-    margin-bottom: 16px;
-  }
-
-  .input-container {
-    flex: 1;
-    margin-right: 10px;
-  }
-
-  ::ng-deep .mat-dialog-actions button {
-    min-width: 100px;
-  }
-
-  .cancel-button {
-    background-color: #FA9175;
-    /* Custom color */
-    color: white;
-    /* Text color */
-  }
-
-
-  .save-button {
-    min-width: 100px;
-  }
-</style>
+  <style>
+    .form-row {
+      display: flex;
+      margin-bottom: 16px;
+    }
+  
+    .input-container {
+      flex: 1;
+      margin-right: 10px;
+    }
+  
+    ::ng-deep .mat-dialog-actions button {
+      min-width: 100px;
+    }
+  
+    .cancel-button {
+      background-color: #FA9175;
+      color: white;
+    }
+  
+    .save-button {
+      min-width: 100px;
+    }
+  </style>
+  

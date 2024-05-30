@@ -1,0 +1,108 @@
+<div class="evenement-dialog">
+    <h6 mat-dialog-title class="dialog-title">Evenement</h6>
+    <mat-dialog-content class="dialog-content">
+        <table class="evenement-table">
+            <thead>
+                <tr>
+                    <th>Nom Evenement</th>
+                    <th>Lieu</th>
+                    <th>Type</th>
+                    <th>Heure</th>
+                    <th>Equipe</th>
+                    <th>Statut</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="evenement-item">
+                    <td>{{ evenement.nomEvent }}</td>
+                    <td>{{ evenement.lieu }}</td>
+                    <td>{{ formatEnumValue(evenement.type) }}</td>
+                    <td>{{ evenement.date }} {{ evenement.heure.slice(0, 5) }}</td>
+                    <td>{{ evenement.convocationEquipe?.nom }}</td>
+                    <td>{{ evenement.statut }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </mat-dialog-content>
+    <h6 mat-dialog-title class="dialog-title">Members</h6>
+    <mat-dialog-content class="dialog-content">
+        <table class="evenement-table">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Prenom</th>
+                    <th>Email</th>
+                    <th>Telephone</th>
+                    <th>Adresse</th>
+                    <th>Equipe</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="evenement-item" *ngFor="let member of evenement.convocationMembres">
+                    <td>{{ member.firstname }}</td>
+                    <td>{{ member.lastname }}</td>
+                    <td>{{ member.email }}</td>
+                    <td>{{ member.telephone }}</td>
+                    <td>{{ member.adresse }}</td>
+                    <td>{{ member.nomEquipe }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </mat-dialog-content>
+    <mat-dialog-actions class="dialog-actions">
+        <button mat-button mat-dialog-close color="primary" class="close-button">Fermer</button>
+    </mat-dialog-actions>
+</div>
+
+<style>
+    .evenement-dialog {
+        padding: 20px;
+        border-radius: 5px;
+        background-color: rgba(248, 249, 250, 0.9);
+    }
+
+    .mat-dialog-container {
+        background: rgba(0, 0, 0, 0.5) !important;
+        /* Adjust the alpha value for transparency */
+    }
+
+    .dialog-title {
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 7px;
+    }
+
+
+    .evenement-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .evenement-table th,
+    .evenement-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    .evenement-table th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+    }
+
+    .evenement-item td:first-child {
+        font-weight: bold;
+    }
+
+    .close-button {
+        background-color: #B7EE3E;
+        color: #fff;
+        font-weight: bold;
+        border-radius: 5px;
+        padding: 8px 16px;
+    }
+
+    .close-button:hover {
+        background-color: #B7EE3E;
+    }
+</style>

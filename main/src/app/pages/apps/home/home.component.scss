@@ -1,0 +1,178 @@
+
+.slideshow {
+  margin: 0 auto;
+  overflow: hidden;
+  max-width: 500px;
+}
+
+.slideshowSlider {
+  white-space: nowrap;
+  transition: ease 1000ms;
+}
+
+.slide {
+  display: inline-block;
+
+  height: 400px;
+  width: 100%;
+  border-radius: 40px;
+}
+
+/* Buttons */
+
+.slideshowDots {
+  text-align: center;
+}
+
+.slideshowDot {
+  display: inline-block;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+
+  cursor: pointer;
+  margin: 15px 7px 0px;
+
+  background-color: #c4c4c4;
+}
+
+.slideshowDot.active {
+  background-color: #6a0dad;
+}
+.hero-bg{
+
+  background-image: url("/assets/images/home/bg_3.jpg");
+}
+/*.hero-bg2{*/
+/*    background-image: url("../images/bg_1.jpg");*/
+/*}*/
+.image-fade {
+  background-image: url("/assets/images/home/football.jpg");
+  animation-name: example ;
+  animation-duration: 25s;
+  animation-iteration-count: infinite;
+  /*animation-timing-function: ease;*/
+}
+@keyframes example {
+  0%   { background-image: url("/assets/images/home/football.jpg");}
+  20%  { background-image: url("/assets/images/home/tennis2.jpg");}
+  40%  { background-image: url("/assets/images/home/bascketball.jpg");}
+  60%  { background-image: url("/assets/images/home/rugby.jpg");}
+  80%  { background-image: url("/assets/images/home/golf.jpg");}
+  100%  { background-image: url("/assets/images/home/football.jpg"); }
+
+}
+/*@keyframes example {*/
+/*    from { background-image: url("../images/bg_3.jpg");}*/
+/*    to { background-image: url("../images/bg_1.jpg");*/
+/*    }*/
+/*}*/
+
+/*@keyframes example {*/
+/*    0%   { background-image: url("../images/bg_2.jpg");}*/
+/*    !*20%  { background-image: url("../images/bg_2.jpg");}*!*/
+/*    !*50%  {  background-image:linear-gradient(#000000, #000000);}*!*/
+/*    !*50%  { background-image: url("../images/bg_4.jpg");}*!*/
+/*    0.5%  {  background-image:linear-gradient(#000000, #000000);}*/
+/*    50%  { background-image: url("../images/bg_2.jpg");}*/
+/*    100%  { background-image: url("../images/bg_2.jpg");}*/
+/*}*/
+
+/*@keyframes imageAnimation {*/
+/*    0% { opacity: 1; animation-timing-function: ease-in; }*/
+/*    8% { opacity: 1; animation-timing-function: ease-out; }*/
+/*    17% { opacity: 1 }*/
+/*    25% { opacity: 0.5 }*/
+/*    100% { opacity: 0.5 }*/
+/*}*/
+
+
+/*@keyframes titleAnimation {*/
+/*    0% { opacity: 0 }*/
+/*    8% { opacity: 1 }*/
+/*    17% { opacity: 1 }*/
+/*    19% { opacity: 0 }*/
+/*    100% { opacity: 0 }*/
+/*}*/
+
+@keyframes slide {
+  0%, 15%, 100% {
+    transform: translateX(0);
+    animation-timing-function: ease;
+  }
+  20% {
+    transform: translateX(-100%);
+    animation-timing-function: step-end;
+  }
+  95% {
+    transform: translateX(100%);
+    animation-timing-function: ease;
+  }
+}
+.no-cssanimations .cb-slideshow li span {
+  opacity: 1;
+}
+
+.hero-bg4{
+
+  background-image: url("/images/home/bg_2.jpg");
+}
+
+.grayscale {
+  filter: grayscale(0%);
+  transition: all 0.9s ease 0s;
+  transform: scale(1);
+}
+
+.grayscale:hover {
+  filter: grayscale(0%);
+  transform: scale(1.2);
+}
+.gradiantBackground{
+  height: 400px;
+  background-image: linear-gradient(to left, rgba(255, 255, 255, 0.74), rgba(183, 183, 183, 0.66));
+  /*background-color: black;*/
+}
+.sport-icon{
+  margin-top: 50px;
+  border-radius: 10px;
+  text-align: center;
+  width: 100px;
+  padding-bottom: 50px;
+  padding-top: 0px;
+  height: 90px;
+  font-size: 55px;
+  box-shadow: rgba(0, 0, 0, 0.18) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+
+  color: #484848;
+  transform: scale(1);
+  transition: all 0.9s ease 0s;
+}
+.sport-icon:hover{
+  color: #b8b442;
+  transform: scale(1.2);
+}
+.gradiantBack{
+
+  background-image: linear-gradient(to top, rgba(0, 0, 0, 0.25), rgb(255, 255, 255));
+}
+.qui{
+  border: transparent;
+  /*margin-top: 50px;*/
+  border-radius: 10px;
+  text-align: center;
+  width: 150px;
+  padding: 10px 5px 10px 5px ;
+  /*height: 110px;*/
+  font-size: 16px;
+  font-weight: bolder;
+  box-shadow: rgba(0, 0, 0, 0.18) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+}
+.qui-active{
+  background-color: #b8b442;
+  color: white;
+  box-shadow: rgba(0, 0, 0, 0.18) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+}
+.home-title{
+  font-size: 32px !important;
+}

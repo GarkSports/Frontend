@@ -1,0 +1,62 @@
+.cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+  
+  .cards-container.vertical-layout {
+    flex-direction: column;
+  }
+  
+  .col-sm-6, .col-lg-4 {
+    max-width: 30%;
+    flex: 0 0 30%;
+  }
+  
+  .cardWithShadow {
+    margin-bottom: 16px;
+  }
+  
+  .evaluation-form-container {
+    display: none; /* Hide the form by default */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000; /* Ensure the form is above other content */
+    max-width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  
+  .evaluation-form-container.show-form {
+    display: block;
+  }
+  
+  .overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+  }
+  
+  .overlay.show-overlay {
+    display: block;
+  }
+  
+  .form-group {
+    margin-bottom: 16px;
+  }
+  
+  .form-actions {
+    display: flex;
+    justify-content: space-between;
+  }

@@ -2,23 +2,46 @@
 
 <div class="row mt-3">
     <div class="col-lg-9">
-        <mat-card class="cardWithShadow gray-background">
-            <mat-card-content class="p-24">
+      <div class=" bg-third   rounded-3xl">
+        <div class="p-24 bg-third  rounded-3xl">
                 <div class="row justify-content-between gray-background">
                     <div class="col-lg-6">
-                        <h2>Liste des Evenements</h2>
+                      <h2 class="text-black  font-medium text-lg">Liste des utilisateurs</h2>
                     </div>
                     <div class="col-lg-6 d-flex align-items-center justify-content-end">
-                        <mat-form-field appearance="outline" class="w-50 hide-hint mr-2" style="margin-right: 10px;">
-                            <input matInput placeholder="Search Evenement"
-                                (keyup)="applyFilter($any($event.target).value)" />
-                            <mat-icon matSuffix>
-                                <i-tabler name="search" class="icon-20"></i-tabler>
-                            </mat-icon>
-                        </mat-form-field>
-                        <button mat-flat-button (click)="openAddEvenementDialog()" color="primary">
-                            <mat-icon>add</mat-icon> Ajouter
-                        </button>
+                      <div class="relative  ">
+                        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                          <i-tabler name="search" class="icon-20"></i-tabler>
+                        </div>
+                        <input (keyup)="applyFilter($any($event.target).value)" type="text" id="simple-search" class="mr-8  bg-gray-50 border-[0.3px]  rounded-3xl border-gray-300  text-gray-900 text-sm    focus:ring-blue-500 focus:border-blue-500 block w-52 h-9 ps-10 p-2.5  " placeholder="Rechercher.."   />
+                      </div>
+
+                      <!--          <mat-form-field appearance="outline" class="w-50 hide-hint mr-2" style="margin-right: 10px;">-->
+                      <!--            <input matInput  />-->
+                      <!--            <mat-icon matSuffix>-->
+
+                      <!--            </mat-icon>-->
+                      <!--          </mat-form-field>-->
+                      <button (click)="openAddEvenementDialog()" class="bg-main font-bold rounded-3xl h-9 pt-1      shadow-md text-white">
+                        <div class="row ">
+                          <div class="col-1 ml-2">
+                            <i-tabler name="plus" class="icon-20"></i-tabler>
+                          </div>
+                          <div class="col-1">
+                            Ajouter
+                          </div>
+                        </div>
+                      </button>
+<!--                        <mat-form-field appearance="outline" class="w-50 hide-hint mr-2" style="margin-right: 10px;">-->
+<!--                            <input matInput placeholder="Search Evenement"-->
+<!--                                (keyup)="applyFilter($any($event.target).value)" />-->
+<!--                            <mat-icon matSuffix>-->
+<!--                                <i-tabler name="search" class="icon-20"></i-tabler>-->
+<!--                            </mat-icon>-->
+<!--                        </mat-form-field>-->
+<!--                        <button mat-flat-button (click)="openAddEvenementDialog()" color="primary">-->
+<!--                            <mat-icon>add</mat-icon> Ajouter-->
+<!--                        </button>-->
                     </div>
                 </div>
                 <div class="table-responsive">
@@ -28,7 +51,7 @@
                         <!-- Column: nom -->
                         <ng-container matColumnDef="nom">
                             <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Nom</th>
-                            <td mat-cell *matCellDef="let element" class="f-w-600 mat-subtitle-1 f-s-16 m-t-0">
+                            <td mat-cell *matCellDef="let element" class="text-sm">
                                 {{ element.nomEvent }}
                             </td>
                         </ng-container>
@@ -37,15 +60,15 @@
                         <!-- Column: type -->
                         <ng-container matColumnDef="type">
                             <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Type</th>
-                            <td mat-cell *matCellDef="let element" class="f-w-600 mat-subtitle-1 f-s-16 m-t-0">
-                                {{ element.type }}
+                            <td mat-cell *matCellDef="let element" class="text-sm">
+                                {{ formatEnumValue(element.type) | titlecase }}
                             </td>
                         </ng-container>
 
                         <!-- Column: equipe -->
                         <ng-container matColumnDef="equipe">
                             <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Equipe</th>
-                            <td mat-cell *matCellDef="let element" class="f-w-600 mat-subtitle-1 f-s-16 m-t-0">
+                            <td mat-cell *matCellDef="let element" class="text-sm">
                                 {{ element.convocationEquipe?.nom }}
                             </td>
                         </ng-container>
@@ -53,8 +76,8 @@
                         <!-- Column: lieu -->
                         <ng-container matColumnDef="date">
                             <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Date</th>
-                            <td mat-cell *matCellDef="let element" class="f-w-600 mat-subtitle-1 f-s-16 m-t-0">
-                                {{ element.date }}
+                            <td mat-cell *matCellDef="let element" class="text-sm">
+                                {{ element.date }} à {{ element.heure.slice(0, 5) }}
                             </td>
                         </ng-container>
 
@@ -64,22 +87,30 @@
                                 Statut
                             </th>
                             <td mat-cell *matCellDef="let element" class="f-s-14">
-                                <mat-form-field appearance="outline" class="smaller-select">
-                                    <mat-label>Statut</mat-label>
-                                    <mat-select [(ngModel)]="element.statut" class="custom-select"
-                                        (selectionChange)="onStatusChange(element)"
-                                        [style.background-color]="getBackgroundColor(element.statut)"
-                                        [style.color]="getTextColor(element.statut)">
-                                        <mat-option *ngFor="let status of statutOptions" [value]="status">{{ status
-                                            }}</mat-option>
-                                    </mat-select>
-                                </mat-form-field>
+
+                                <select
+                                  name="HeadlineAct"
+                                  id="HeadlineAct"
+
+                                  [style.background-color]="getBackgroundColor(element.statut)"
+                                  [style.color]="getTextColor(element.statut)"
+                                  (change)="onStatusChange(element)" [(ngModel)]="element.statut"
+                                  class="  w-22 text-center rounded-3xl p-8 border-gray-300 text-white "
+                                >
+                                  <option  *ngFor="let status of statutOptions" [value]="status">{{status}}</option>
+                                </select>
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="action">
-                            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Action</th>
+                            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600"> </th>
                             <td mat-cell *matCellDef="let element">
+                                <button mat-icon-button style="color: gray;" (click)="onDetailsEvenement(element)">
+                                    <mat-icon>group</mat-icon>
+                                </button>
+                                <button mat-icon-button style="color: gray;" (click)="onUpdateEvenement(element)">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
                                 <button mat-icon-button color="warn" (click)="onDeleteEvenement(element.id)">
                                     <mat-icon>delete_outline</mat-icon>
                                 </button>
@@ -90,17 +121,17 @@
                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                     </table>
+
                     <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
                         class="gray-background"></mat-paginator>
                 </div>
-            </mat-card-content>
-        </mat-card>
+            </div>
+        </div>
     </div>
     <div class="col-lg-3">
-        <mat-card [ngClass]="{'smallerContent': !showCheckboxes1}" class="cardWithShadow gray-background">
-            <mat-card-content class="p-24">
+      <div  class="bg-third rounded-3xl px-4   ">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h3>Filtre par evenement</h3>
+                  <h3 class="text-black font-semibold"> Filtre par évenement</h3>
                     <button mat-icon-button (click)="toggleCheckboxesVisibility1()">
                         <mat-icon>{{ showCheckboxes1 ? 'expand_less' : 'expand_more' }}</mat-icon>
                     </button>
@@ -109,16 +140,14 @@
                     <div *ngFor="let eventType of typeEventsFilter">
                         <mat-checkbox (change)="applyFilterByType(eventType)"
                             [checked]="selectedEventTypes.includes(eventType)">
-                            {{ eventType }}
+                            {{ formatEnumValue(eventType) |titlecase }}
                         </mat-checkbox>
                     </div>
                 </div>
-            </mat-card-content>
-        </mat-card>
-        <mat-card [ngClass]="{'smallerContent': !showCheckboxes2}" class="cardWithShadow gray-background">
-            <mat-card-content class="p-24">
+      </div>
+      <div  class="bg-third rounded-3xl px-4 mt-4 ">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h3>Filtre par equipe</h3>
+                  <h3 class="text-black font-semibold"> Filtre par equipe</h3>
                     <button mat-icon-button (click)="toggleCheckboxesVisibility2()">
                         <mat-icon>{{ showCheckboxes2 ? 'expand_less' : 'expand_more' }}</mat-icon>
                     </button>
@@ -131,8 +160,7 @@
                         </mat-checkbox>
                     </div>
                 </div>
-            </mat-card-content>
-        </mat-card>
+                </div>
     </div>
 </div>
 

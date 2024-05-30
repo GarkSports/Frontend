@@ -25,6 +25,7 @@ import { Manager } from 'src/models/manager.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { User } from 'src/models/user.model';
 import { WebSocketService } from 'src/app/services/web-socket-service.service';
+import {DefaultImagePipe} from "../../../../pipe/default-image.pipe";
 
 
 export interface Notification {
@@ -58,7 +59,7 @@ interface quicklinks {
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterModule, CommonModule, NgScrollbarModule, TablerIconsModule, MaterialModule],
+  imports: [RouterModule, CommonModule, NgScrollbarModule, TablerIconsModule, MaterialModule, DefaultImagePipe],
   templateUrl: './header.component.html',
   encapsulation: ViewEncapsulation.None,
 })
@@ -74,12 +75,13 @@ export class HeaderComponent implements OnInit {
   managerSource = new MatTableDataSource<User>([]);
   local_data: any;
 
-  public selectedLanguage: any = {
-    language: 'English',
-    code: 'en',
-    type: 'US',
-    icon: '/assets/images/flag/icon-flag-en.svg',
-  };
+  public selectedLanguage: any =
+{
+  language: 'Français',
+  code: 'fr',
+  icon: '/assets/images/flag/icon-flag-fr.svg',
+}
+;
 
   public languages: any[] = [
     {

@@ -1,17 +1,31 @@
-<h2 mat-dialog-title>Type Evenement</h2>
-<div mat-dialog-content class="dialog-content">
-  <mat-radio-group [(ngModel)]="selectedOption" class="radio-group">
-    <mat-radio-button value="Competition">Competition</mat-radio-button>
-    <mat-radio-button value="match amical">Match amical</mat-radio-button>
-    <mat-radio-button value="personnalise">Personnalise</mat-radio-button>
-    <mat-radio-button value="test">Test</mat-radio-button>
-  </mat-radio-group>
+<div mat-dialog-title>
+  <i-tabler (click)="onCancelClick()" class="hover:cursor-pointer" name="arrow-left"></i-tabler>
 </div>
-<div mat-dialog-actions class="dialog-actions">
-  <button mat-button class="cancel-button" color="warn" (click)="onCancelClick()">Cancel</button>
-  <button mat-button class="ok-button" color="primary" [mat-dialog-close]="selectedOption" (click)="navigateToSelectedOption()">OK</button>
+<div mat-dialog-content class="py-12"  >
+<div class="row">
+  <div class="col flex justify-center">
+    <h1 class="text-xl text-black text-center">Type d'événement
+    <p  class="mt-2 text-sm text-gray-500 text-center">Sélectionnez l'un de ces type d'événement pour <br>
+      poursuivre le formulaire.</p></h1>
+  </div>
 </div>
+  <div class="row mt-8">
+    <div class="col flex justify-center">
+      <div class="dialog-content">
+        <mat-radio-group [(ngModel)]="selectedOption" class="radio-group">
+          <mat-radio-button value="Competition">Competition</mat-radio-button>
+          <mat-radio-button value="match amical">Match amical</mat-radio-button>
+          <mat-radio-button value="personnalise">Personnalise</mat-radio-button>
+          <mat-radio-button value="test">Test</mat-radio-button>
+        </mat-radio-group>
+      </div>
+    </div>
+  </div>
+  <div  class=" flex justify-center mt-8">
+    <button   class="bg-main font-bold rounded-3xl h-9 px-5 py-2    text-white" [mat-dialog-close]="selectedOption" (click)="navigateToSelectedOption()">Confirmer</button>
+  </div>
 
+</div>
 <style>
 .dialog-content {
   margin-bottom: 20px;
@@ -32,7 +46,7 @@
 }
 
 .ok-button {
-  background-color: #007bff;
+  background-color: #B0E53C;
   color: white;
 }
 </style>

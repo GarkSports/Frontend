@@ -6,6 +6,8 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { EquipeService } from 'src/app/services/equipe.service';
 import { EvenementService } from 'src/app/services/evenement.service';
+import { Adherent } from 'src/models/adherent.model';
+import { UpdateEvenementRequest } from 'src/models/dto/UpdateEvenementRequest.model';
 import { EvenementType } from 'src/models/enums/evenementType';
 import { StatutEvenement } from 'src/models/enums/statutEvenenement.model';
 import { Equipe } from 'src/models/equipe.model';
@@ -30,7 +32,6 @@ export class ListEvenementComponent implements AfterViewInit {
 
   showCheckboxes1: boolean = true;
   showCheckboxes2: boolean = true;
-
 
   displayedColumns: string[] = [
     'nom',
@@ -90,39 +91,32 @@ export class ListEvenementComponent implements AfterViewInit {
 
   applyFilterByEquipe(filterValue: string): void {
     if (this.selectedEquipes.includes(filterValue)) {
-        // If the filter value is already selected, remove it from the selectedEquipes array
-        this.selectedEquipes = this.selectedEquipes.filter(equipe => equipe !== filterValue);
+      // If the filter value is already selected, remove it from the selectedEquipes array
+      this.selectedEquipes = this.selectedEquipes.filter(equipe => equipe !== filterValue);
     } else {
-        // Otherwise, add the filter value to the selectedEquipes array
-        this.selectedEquipes.push(filterValue);
+      // Otherwise, add the filter value to the selectedEquipes array
+      this.selectedEquipes.push(filterValue);
     }
 
     // Set the filter predicate based on the selected teams
     this.dataSource.filterPredicate = (event: Evenement) => {
-        // Check if event.equipe is not undefined
-        if (event.convocationEquipe !== undefined && event.convocationEquipe?.nom !== undefined) {
-            // If no teams are selected, show all events
-            if (this.selectedEquipes.length === 0) {
-                return true;
-            } else {
-                // Check if the event equipe matches any of the selected teams
-                return this.selectedEquipes.includes(event.convocationEquipe.nom);
-            }
+      // Check if event.equipe is not undefined
+      if (event.convocationEquipe !== undefined && event.convocationEquipe?.nom !== undefined) {
+        // If no teams are selected, show all events
+        if (this.selectedEquipes.length === 0) {
+          return true;
+        } else {
+          // Check if the event equipe matches any of the selected teams
+          return this.selectedEquipes.includes(event.convocationEquipe.nom);
         }
-        // Return false if event.equipe is undefined
-        return false;
+      }
+      // Return false if event.equipe is undefined
+      return false;
     };
 
     // Apply the filter value as an empty string to trigger the filterPredicate
     this.dataSource.filter = 'applyFilter';
-}
-
-
-
-
-
-
-
+  }
 
   applyFilter(filterValue: string): void {
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -162,10 +156,10 @@ export class ListEvenementComponent implements AfterViewInit {
     );
   }
 
-
   openAddEvenementDialog(): void {
     const dialogRef = this.dialog.open(AddEvenementPopupComponent, {
-      width: '250px',
+      width: '720.6px',
+      height: '500px',
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -235,6 +229,34 @@ export class ListEvenementComponent implements AfterViewInit {
       }
     });
   }
+
+  onUpdateEvenement(evenement: Evenement): void {
+    const dialogRef = this.dialog.open(UpdateEvenementPopupComponent, {
+      data: evenement
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // User confirmed update, refresh the list
+        this.getEvenements();
+      }
+    });
+  }
+
+  onDetailsEvenement(evenement: Evenement): void {
+    const dialogRef = this.dialog.open(DetailEventDialogComponent, {
+      data: evenement
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+      }
+    });
+  }
+
+  formatEnumValue(value: string): string {
+    return value.replace(/_/g, ' ');
+  }
 }
 
 @Component({
@@ -285,6 +307,90 @@ export class DeleteEventConfirmationDialogComponent {
 
   onDeleteClick(): void {
     this.dialogRef.close(true); // Close the dialog with 'true' value
+  }
+}
+
+@Component({
+  selector: 'app-update-evenement-popup',
+  templateUrl: './updateEvenement.component.html',
+})
+export class UpdateEvenementPopupComponent {
+  memberList: Adherent[] = [];
+  memberIds: number[] = [];
+  constructor(public dialogRef: MatDialogRef<UpdateEvenementPopupComponent>,
+    @Inject(MAT_DIALOG_DATA) public evenement: Evenement, private evenementService: EvenementService) { }
+
+
+
+  ngOnInit(): void {
+    this.getMembersByEvenement();
+    this.extractMemberIds();
+  }
+
+  getMembersByEvenement(): void {
+    if (this.evenement.id !== undefined) {
+      this.evenementService.getMembersByEvent(this.evenement.id).subscribe(
+        (members: Adherent[]) => {
+          this.memberList = members;
+        },
+        (error: any) => {
+          console.error('Error fetching members:', error);
+        }
+      );
+    } else {
+      console.error('Evenement ID is undefined');
+    }
+  }
+
+  extractMemberIds(): void {
+    if (this.evenement.convocationMembres && Array.isArray(this.evenement.convocationMembres)) {
+      this.memberIds = this.evenement.convocationMembres.map(member => member.id);
+    } else {
+      console.error('convocationMembres is undefined or not an array');
+    }
+  }
+
+  updateEvenement(): void {
+    const request: UpdateEvenementRequest = {
+      evenement: this.evenement,
+      idMembres: this.memberIds
+    };
+
+    if (this.evenement.id !== undefined) {
+      this.evenementService.updateEvenement(this.evenement.id, request).subscribe(
+        (updatedEvenement: Evenement) => {
+          console.log('Evenement updated successfully:', updatedEvenement);
+          this.dialogRef.close(updatedEvenement);
+        },
+        (error: any) => {
+          console.error('Error updating evenement:', error);
+        }
+      );
+    } else {
+      console.error('Evenement ID is undefined');
+    }
+  }
+
+  isValidForm(): boolean {
+    return !!this.evenement.nomEvent && !!this.evenement.lieu && !!this.evenement.date && !!this.evenement.heure;
+  }
+
+  onCancelClick(): void {
+    this.dialogRef.close();
+  }
+}
+
+@Component({
+  templateUrl: './detailEvent.component.html',
+})
+export class DetailEventDialogComponent {
+  constructor(
+    public dialogRef: MatDialogRef<DetailEventDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public evenement: Evenement
+  ) { }
+
+  onCancelClick(): void {
+    this.dialogRef.close(false); // Close the dialog with 'false' value
   }
 }
 
