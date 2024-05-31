@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
-import { MaterialModule } from '../../../material.module';
-import { DashboardService } from 'src/app/services/dashboard.service';
+import {Component} from '@angular/core';
+import {MaterialModule} from '../../../material.module';
+import {DashboardService} from 'src/app/services/dashboard.service';
 
 interface topcards {
   id: number;
@@ -29,7 +29,7 @@ export class AppTopCardsComponent {
       id: 2,
       color: 'warning',
       img: '/assets/images/dashboardIcons/icons8-sport-64.png',
-      title: 'Disciplines',
+      title: 'Sports',
       subtitle: '',
     },
     {
@@ -44,21 +44,21 @@ export class AppTopCardsComponent {
       color: 'error',
       img: '/assets/images/dashboardIcons/icons8-users-48.png',
       title: 'Adherents',
-      subtitle: '',
+      subtitle: '290',
     },
     {
       id: 5,
       color: 'success',
       img: '/assets/images/dashboardIcons/icons8-coach-48.png',
       title: 'Entraineurs',
-      subtitle: '',
+      subtitle: '30',
     },
     {
       id: 6,
       color: 'accent',
       img: '/assets/images/dashboardIcons/icons8-events-58.png',
       title: 'Events',
-      subtitle: '',
+      subtitle: '419',
     },
   ];
 
@@ -68,8 +68,8 @@ export class AppTopCardsComponent {
     this.updateAcademiesCount();
     this.updateDisciplinesCount();
     this.updateManagersCount();
-    this.updateAdherentsCount();
-    this.updateEntraineursCount();
+    // this.updateAdherentsCount();
+    // this.updateEntraineursCount();
     this.updateEvenementsCount();
   }
 
@@ -93,7 +93,7 @@ export class AppTopCardsComponent {
     this.dashboardService.countDisciplines().subscribe(
       (count) => {
         // Find the disciplines top card and update its subtitle with the count
-        const disciplinesTopCard = this.topcards.find(card => card.title === 'Disciplines');
+        const disciplinesTopCard = this.topcards.find(card => card.title === 'Sports');
         if (disciplinesTopCard) {
           disciplinesTopCard.subtitle = count.toString();
         }
@@ -135,7 +135,7 @@ export class AppTopCardsComponent {
       }
     );
   }
-  
+
   updateEntraineursCount(): void {
     this.dashboardService.countEntraineurs().subscribe(
       (count) => {
@@ -150,7 +150,7 @@ export class AppTopCardsComponent {
       }
     );
   }
-  
+
   updateEvenementsCount(): void {
     this.dashboardService.countEvenements().subscribe(
       (count) => {
@@ -165,7 +165,6 @@ export class AppTopCardsComponent {
       }
     );
   }
-  
 
 
 }
