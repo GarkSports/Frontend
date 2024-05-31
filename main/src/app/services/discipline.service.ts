@@ -41,4 +41,8 @@ export class DisciplineService {
   getDisciplinesManager(): Observable<Discipline[]> {
     return this.http.get<Discipline[]>(`${this.apiUrl}/getAllDisciplines`,{withCredentials: true});
   }
+
+  getDisciplineById(id: number): Observable<Discipline> {
+    return this.http.get<Discipline>(`${this.apiUrl}/getDisciplineById/${id}`);
+  }
 }

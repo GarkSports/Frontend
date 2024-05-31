@@ -1,11 +1,15 @@
 @for(blogPost of blogDetail; track blogPost.id) {
 <mat-card class="cardWithShadow">
-  <img
-    mat-card-image
-    src="{{ blogPost?.imageUrl }}"
-    alt="Photo of a Shiba Inu"
-    height="440"
-  />
+  <div class="image-container" [ngStyle]="{'background-image': 'url(' + blogPost?.imageUrl + ')'}">
+    <img
+      mat-card-image
+      class="no-post-image"
+      src="{{ blogPost?.imageUrl }}"
+      alt="Photo of a Shiba Inu"
+      height="440"
+    />
+  </div>
+  
   <div class="card-overlay h-100 d-flex align-items-end justify-content-end">
     <mat-chip class="f-s-12 f-w-600 m-y-16 m-r-16 bg-white"
       >Read</mat-chip

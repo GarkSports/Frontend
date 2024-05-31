@@ -41,9 +41,8 @@ import { authGuard } from 'src/app/guards/auth.guard';
 import { isAdminGuard } from 'src/app/guards/is-admin.guard';
 import { isManagerGuard } from 'src/app/guards/is-manager.guard';
 import { EntrainementComponent } from './evenement/entrainement/entrainement.component';
-import { AppEvaluationComponent } from 'src/app/pages/apps/evaluation/evaluation.component';
-import { AppStaffformContentComponent } from './managers/staff/staffform.component';
-import { AppManagerFormComponent } from './admin/managerform.component';
+import { UpdateProfilePageComponent } from './academie-profile/update-profile-page.component';
+import { UpdatePaymentPageComponent } from './paiement/update-payment-page.component';
 // import { AppStafflist2Component } from './managers/staff/stafflist2.component';
 
 
@@ -52,6 +51,28 @@ export const AppsRoutes: Routes = [
     path: '',
     canActivate: [authGuard],
     children: [
+      {
+        path: 'update-payment/:id',
+        component: UpdatePaymentPageComponent ,
+        data: {
+          title: 'Update paiement',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Update paiement' },
+          ],
+        },
+      },
+      {
+        path: 'update-profile/:id',
+        component: UpdateProfilePageComponent ,
+        data: {
+          title: 'Update profile',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Update profile' },
+          ],
+        },
+      },
       {
         path: 'chat',
         component: AppChatComponent,
@@ -203,30 +224,6 @@ export const AppsRoutes: Routes = [
         },
       },
       {
-        path: 'staffForm',
-        canActivate: [isManagerGuard],
-        component: AppStaffformContentComponent,
-        data: {
-          title: 'Staff',
-          urls: [
-            { title: 'Staff', url: '/dashboards/dashboard1' },
-            { title: 'Staff' },
-          ],
-        },
-      },
-      {
-        path: 'managerForm',
-        canActivate: [isAdminGuard],
-        component: AppManagerFormComponent,
-        data: {
-          title: 'Manager',
-          urls: [
-            { title: 'Manager', url: '/dashboards/dashboard1' },
-            { title: 'Manager' },
-          ],
-        },
-      },
-      {
         path: 'roles',
         canActivate: [isManagerGuard],
         component: AppRoleslistComponent,
@@ -235,18 +232,6 @@ export const AppsRoutes: Routes = [
           urls: [
             { title: 'Roles', url: '/dashboards/dashboard1' },
             { title: 'Roles' },
-          ],
-        },
-      },
-      {
-        path: 'evaluation',
-        canActivate: [isManagerGuard],
-        component: AppEvaluationComponent,
-        data: {
-          title: 'Evaluation',
-          urls: [
-            { title: 'Evaluation', url: '/dashboards/dashboard1' },
-            { title: 'Evaluation' },
           ],
         },
       },
@@ -262,17 +247,17 @@ export const AppsRoutes: Routes = [
           ],
         },
       },
-      // {
-      //   path: 'contacts',
-      //   component: AppContactComponent,
-      //   data: {
-      //     title: 'Contacts',
-      //     urls: [
-      //       { title: 'Dashboard', url: '/dashboards/dashboard1' },
-      //       { title: 'Contacts' },
-      //     ],
-      //   },
-      // },
+      {
+        path: 'contacts',
+        component: AppContactComponent,
+        data: {
+          title: 'Contacts',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Contacts' },
+          ],
+        },
+      },
       {
         path: 'courses',
         component: AppCoursesComponent,

@@ -1,6 +1,6 @@
 export class ChatDTO {
     senderId: number;
-    receiverId: number;
+    receiverId: number[];
     message: string;
     timestamp: Date;
   
