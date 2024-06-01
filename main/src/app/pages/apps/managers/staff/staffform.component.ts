@@ -44,6 +44,8 @@ export class AppStaffformContentComponent implements OnInit, OnDestroy {
   firstnameValue: string;
   roles: string[];
   roleNames: string[];
+  showParentInfo: boolean = false;
+  ifAdherent: boolean = true;
 
   dataSource = new MatTableDataSource<string>([]);
   managerSource = new MatTableDataSource<Manager>([]);
@@ -78,12 +80,31 @@ export class AppStaffformContentComponent implements OnInit, OnDestroy {
     this.route.queryParams.subscribe((params) => {
       this.action = params['action'];
       const id = params['id'];
-        this.getFormManagerById(id);
+      this.getFormManagerById(id);
       this.getOnlyRoleNames();
       this.initManagerForm();
 
+     
     });
   }
+
+  checkAge(event: any) {
+    const dateOfBirth = new Date(event.target.value);
+    const today = new Date();
+    const age = today.getFullYear() - dateOfBirth.getFullYear();
+    const monthDiff = today.getMonth() - dateOfBirth.getMonth();
+  
+    
+    if (age < 18) {
+      this.showParentInfo=true;
+      console.log('User is under 18 years old');
+    } else {
+      this.showParentInfo=false;
+      console.log('User is 18 years old or older');
+    }
+  }
+
+  
 
 
   ngOnDestroy(): void {
@@ -125,6 +146,9 @@ export class AppStaffformContentComponent implements OnInit, OnDestroy {
         console.log("name", manager.firstname);
         console.log("this.local_data", this.local_data);
         this.initManagerForm(manager); // Initialize the form with the fetched manager data
+        if(this.local_data.role==='ADHERENT'){
+          this.ifAdherent=false;
+        }
       },
       (error) => {
         console.error('Error fetching manager', error);
@@ -137,6 +161,7 @@ export class AppStaffformContentComponent implements OnInit, OnDestroy {
       firstname: [manager?.firstname || '', Validators.required],
       lastname: [manager?.lastname || '', Validators.required],
       email: [manager?.email || '', [Validators.required, Validators.email]],
+      dateNaissance: [manager?.dateNaissance || '', Validators.required],
       adresse: [manager?.adresse || '', Validators.required],
       role: [manager?.role, Validators.required],
       roleName: [
