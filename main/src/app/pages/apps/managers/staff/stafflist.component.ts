@@ -253,7 +253,7 @@ export class AppStafflistComponent implements OnInit, OnDestroy {
       action,
       id: obj.id
     }).toString();
-    const url = `/apps/staffForm?${queryParams}`;
+    const url = `/apps/staffform?${queryParams}`;
     window.location.href = url;
   }
   
