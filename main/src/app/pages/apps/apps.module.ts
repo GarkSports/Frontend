@@ -123,6 +123,8 @@ import { AddHeureDialogComponent } from './evenement/entrainement/entrainement.c
 import { UpdateHeureDialogComponent } from './evenement/entrainement/entrainement.component';
 import { UpdateProfilePageComponent } from './academie-profile/update-profile-page.component';
 import { UpdatePaymentPageComponent } from './paiement/update-payment-page.component';
+import { AppStaffformContentComponent } from './managers/staff/staffform.component';
+import { AppManagerFormComponent } from './admin/managerform.component';
 
 
 
@@ -232,8 +234,10 @@ import { UpdatePaymentPageComponent } from './paiement/update-payment-page.compo
     AppBlogDialogContentComponent,
     AppManagerlistComponent,
     AppManagerDialogContentComponent,
+    AppManagerFormComponent,
     AppStaffDialogContentComponent,
     AppStafflistComponent,
+    AppStaffformContentComponent,
     AppRolesDialogContentComponent,
     AppRoleslistComponent,
     AppProfilComponent
