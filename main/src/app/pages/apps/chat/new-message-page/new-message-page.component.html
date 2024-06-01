@@ -1,0 +1,70 @@
+<div mat-dialog-actions  class="row align-items-center " >
+  <div class="p-24">
+    <button mat-stroked-button color="warn" (click)="closeDialog()">
+        Retour
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+  </div>
+  <div >
+    <h2 mat-dialog-title>
+      Nouveau Message
+    </h2>
+  </div>  
+</div>
+
+  <mat-card class="mat-card-top gray-background cardWithShadow p-24 p-t-24">
+    
+      
+          <div class="row align-items-center">  
+            <div class="col-sm-2 col-lg-4 align-items-center">  
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>filtrer par Role</mat-label>
+                <mat-select [(ngModel)]="selectedRole" name="role" (selectionChange)="onRoleChange()">
+                  <mat-option *ngFor="let role of uniqueRoles" [value]="role">{{ role }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+      
+            <div  class="col-sm-2 col-lg-4 align-items-center">
+              <mat-form-field  appearance="outline" class="w-100">
+                <mat-label>filtrer par Equipe</mat-label>
+                <mat-select [(ngModel)]="selectedNomEquipe" name="nomEquipe" [disabled]="selectedRole !== 'ADHERENT'" (selectionChange)="onNomEquipeChange()">
+                  <mat-option *ngFor="let nomEquipe of uniqueNomEquipes"  [value]="nomEquipe">{{ nomEquipe }}</mat-option>
+                </mat-select>
+                
+              </mat-form-field>
+            </div>
+            <div  class="col-sm-2 col-lg-4 align-items-center">
+            <button mat-button [disabled]="selectedRole !== 'ADHERENT'" (click)="selectAllTeamMembers()">Sélectionner toute l'équipe</button>
+            </div>
+            
+          </div>
+          <h3> Selectionner Au Moins Un Contact</h3>
+            <!-- <ul>
+              <li *ngFor="let friend of getSelectedFriends()">{{ friend.firstname }} {{ friend.lastname }}</li>
+            </ul>  -->
+  
+            <div class="scrollable-friends-list">
+              <div *ngFor="let friend of filteredFriendsList">
+                <mat-checkbox [checked]="isSelected(friend)" (change)="toggleSelection(friend)">
+                  {{ friend.firstname }} {{ friend.lastname }} - {{ friend.role }} - {{ friend.nomEquipe }}
+                </mat-checkbox>
+              </div>
+            </div>
+            
+    
+  </mat-card >
+  
+  <div mat-dialog-actions class="p-24 p-t-0">
+    <div class="col-sm-12 col-lg-12 gray-background p-24 p-t-24">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Message</mat-label>
+        <input matInput placeholder="Ajouter message" [(ngModel)]="local_data.msg" name="msg" required />
+        <button mat-icon-button matSuffix color="primary" [disabled]="!local_data.msg || !local_data.receiver" (click)="doAction()">
+          <mat-icon>send</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+  
+  </div>
+  

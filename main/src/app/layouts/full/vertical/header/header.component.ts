@@ -24,6 +24,7 @@ import { ManagerService } from 'src/app/services/manager.service';
 import { Manager } from 'src/models/manager.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { User } from 'src/models/user.model';
+import { WebSocketService } from 'src/app/services/web-socket-service.service';
 import {DefaultImagePipe} from "../../../../pipe/default-image.pipe";
 
 
@@ -74,12 +75,13 @@ export class HeaderComponent implements OnInit {
   managerSource = new MatTableDataSource<User>([]);
   local_data: any;
 
-  public selectedLanguage: any = {
-    language: 'English',
-    code: 'en',
-    type: 'US',
-    icon: '/assets/images/flag/icon-flag-en.svg',
-  };
+  public selectedLanguage: any =
+{
+  language: 'Français',
+  code: 'fr',
+  icon: '/assets/images/flag/icon-flag-fr.svg',
+}
+;
 
   public languages: any[] = [
     {
@@ -106,6 +108,8 @@ export class HeaderComponent implements OnInit {
   ];
 
   notifications: Notification[] = [];
+  unreadCount = 0;
+  private audio: HTMLAudioElement;
 
 
   constructor(
@@ -115,23 +119,56 @@ export class HeaderComponent implements OnInit {
     private translate: TranslateService,
     private authService: AuthService,
     //private messagingService: MessagingService,
-    private managerService: ManagerService
+    private webSocketService: WebSocketService,
+    private managerService: ManagerService,
   ) {
     translate.setDefaultLang('en');
     this.local_data = { ...data };
+    this.audio = new Audio("/assets/images/notif.mp3");
   }
 
   ngOnInit() {
     this.getProfil();
-    // this.messagingService.notifications$.subscribe(notifications => {
-    //   this.notifications = notifications.map(notification => ({
-    //     title: notification.title || 'No Title',
-    //     body: notification.body || 'No Body',
-    //     image: notification.image || "/assets/images/breadcrumb/emailSv.png"
 
-    //   }));
-    // });
+
+      let stompClient = this.webSocketService.connect();
+      stompClient.connect({ withCredentials: true }, (frame: any) => {
+        const userEmail = this.local_data.username;
+        console.log(userEmail);
+
+
+                  stompClient.subscribe('/queue/reply/' + userEmail , (notifications: { body: any[string];  }) => {
+                    console.log("notification recu",notifications);
+                    console.log("notification recu",notifications.body);
+                    console.log("notification recu",notifications.body.title);
+
+              let parsedNotification;
+              try {
+                parsedNotification = JSON.parse(notifications.body);
+              } catch (e) {
+                console.error("Failed to parse notification body", e);
+                return;
+              }
+              if (parsedNotification && typeof parsedNotification === 'object') {
+                this.notifications.push({
+                  title: parsedNotification.title || 'No Title',
+                  body: parsedNotification.body || 'No Body',
+                  image: parsedNotification.image || "/assets/images/svgs/icon-dd-chat.svg"
+                });
+                this.unreadCount ++;
+                this.playSound();
+                
+              } else {
+                console.error("Parsed notification is not an object", parsedNotification);
+              }
+            });
+                          
+               
+          });
+  
+
   }
+
 
   // ngOnInit() {
   //   // Retrieve the user's name from the AuthService or any other service
@@ -335,6 +372,16 @@ export class HeaderComponent implements OnInit {
       link: '/theme-pages/treeview',
     },
   ];
+
+  onNotificationMenuOpen() {
+    this.unreadCount = 0;
+  }
+
+  playSound() {
+    this.audio.play().catch(error => console.error('Error playing notification sound:', error));
+  }
+
+
 }
 
 @Component({

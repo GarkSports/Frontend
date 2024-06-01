@@ -25,8 +25,12 @@ export class ChatService {
       return this.http.get<ChatDTO[]>(`${this.apiUrl}/chat/history?userId2=${userId2}`, { withCredentials: true });
     }
 
-    public sendMessage(receiverId: number, message: string): Observable<ChatDTO> {
-      return this.http.post<ChatDTO>(`${this.apiUrl}/chat/send`, { receiverId, message }, { withCredentials: true });
+    public sendMessage(receiversId: number[], message: string): Observable<ChatDTO> {
+      return this.http.post<ChatDTO>(`${this.apiUrl}/chat/send`, { receiversId, message }, { withCredentials: true });
+    }
+
+    public deleteDiscussion(userId: number){
+      return this.http.delete(`${this.apiUrl}/chat/user/${userId}`, { withCredentials: true });
     }
 
 
