@@ -10,7 +10,7 @@
           <div class="image-preview" *ngIf="local_data.photo">
             <img [src]="local_data.photo" alt="Photo Preview" style="width: 100px; height: 100px; margin-left: 220px; margin-bottom: 20px;" class="rounded-full object-cover "/>
           </div> 
-          <form [formGroup]="managerForm">
+          <form [formGroup]="this.local_data.role==='ADHERENT'? adherentForm: managerForm">
             <div class="row"> 
                 <div class="col-sm-6"> 
                     <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Nom</mat-label> 
@@ -28,6 +28,22 @@
                       placeholder="firstname" />
                         </mat-form-field> 
                     </div> 
+                </div>
+                <br>
+                <div class="row">
+                  <div class="col-sm-12 d-flex align-items-center">
+                    <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Date de naissance</mat-label>
+                  </div>
+                  <div class="col-sm-12">
+                    <mat-form-field appearance="outline" class="w-100">
+                      <input formControlName="dateNaissance" matColumnDef="dateNaissance" type="date" matInput (change)="checkAge($event)">                      
+                      <mat-icon matPrefix class="op-5">
+                        <mat-icon matPrefix class="op-10">
+                          <img name="birthday-cake" class="icon-20 d-flex birthday-icon" src="assets/images/svgs/birthday-cake.svg">
+                        </mat-icon>
+                      </mat-icon>
+                    </mat-form-field>
+                  </div>
                 </div>
                 <br>
             <div class="row">
@@ -79,16 +95,16 @@
                 </div>
               </div>
               <br>
-              <div class="row">
+              <div *ngIf="ifAdherent" class="row">
                 <div class="col-sm-12 d-flex align-items-center">
                   <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Type de Role</mat-label>
                 </div>
               <div class="col-lg-12">
                 <mat-form-field appearance="outline" class="w-100">
                   <mat-select formControlName="role" matNativeControl required id="role" name="role" placeholder="Role" (selectionChange)="onRoleChange($event)">
-                    <mat-option  value="STAFF">Staff</mat-option >
-                    <mat-option  value="ENTRAINEUR">Entraineur</mat-option >
-                    <mat-option  value="ADHERENT">Adherent</mat-option >
+                    <mat-option value="STAFF">Staff</mat-option >
+                    <mat-option value="ENTRAINEUR">Entraineur</mat-option >
+                    <mat-option value="ADHERENT">Adherent</mat-option >
                     <mat-option  value="PARENT">Parent</mat-option >
                   </mat-select>
                 </mat-form-field>
@@ -125,6 +141,107 @@
                   
                 </div>
               </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div class="col-lg-6" class="col-lg-6" *ngIf="showParentInfo">
+      <mat-card class="cardWithShadow theme-card">
+        <mat-card-header>
+          <mat-card-title class="m-b-0">Informations Parent</mat-card-title>
+          
+        </mat-card-header>
+       
+        <mat-card-content class="b-t-1">
+          <div class="image-preview" *ngIf="local_data.photo">
+            <img [src]="local_data.photo" alt="Photo Preview" style="width: 100px; height: 100px; margin-left: 220px; margin-bottom: 20px;" class="rounded-full object-cover "/>
+          </div> 
+          <form [formGroup]="adherentForm">
+            <div formGroupName="informationsParent">
+            <div class="row"> 
+                <div class="col-sm-6"> 
+                    <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Nom</mat-label> 
+                    <mat-form-field appearance="outline" class="w-50"> 
+                      <input formControlName="nomParent" matColumnDef="nomParent" id="nomParent"  matInput/> 
+                      <mat-icon matPrefix class="op-5">
+                        <i-tabler name="user" class="icon-20 d-flex"></i-tabler>
+                      </mat-icon>                     
+                    </mat-form-field> 
+                </div> 
+                    <div class="col-sm-6"> 
+                        <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Prénom</mat-label> 
+                        <mat-form-field appearance="outline" class="w-50"> 
+                            <input formControlName="prenomParent" type="text" matInput required id="prenomParent" name="prenomParent"
+                      placeholder="prenomParent" />
+                        </mat-form-field> 
+                    </div> 
+                </div>
+                <br>
+            <div class="row">
+                <div class="col-sm-12 d-flex align-items-center">
+                  <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Adresse</mat-label>
+                </div>
+                <div class="col-sm-12">
+                  <mat-form-field appearance="outline" class="w-100">
+                    <input formControlName="adresseParent"    
+                    matColumnDef="adresseParent" matInput />
+                    <mat-icon matPrefix class="op-5">
+                      <i-tabler
+                        name="building-arch"
+                        class="icon-20 d-flex"
+                      ></i-tabler>
+                    </mat-icon>
+                  </mat-form-field>
+                </div>
+              </div>
+              <br>
+            <div class="row">
+              <div class="col-sm-12 d-flex align-items-center">
+                <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16"
+                  >Email</mat-label>
+              </div>
+              <div class="col-sm-12">
+                <mat-form-field appearance="outline" class="w-100">
+                  <input formControlName="emailParent" matColumnDef="emailParent" matInput type="email" />
+                  <mat-icon matPrefix class="op-5">
+                    <i-tabler name="mail" class="icon-20 d-flex"></i-tabler>
+                  </mat-icon>
+                </mat-form-field>
+              </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-sm-12 d-flex align-items-center">
+                  <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16"
+                    >Téléphone</mat-label
+                  >
+                </div>
+                <div class="col-sm-12">
+                  <mat-form-field appearance="outline" class="w-100">
+                    <input formControlName="telephoneParent" matColumnDef="telephoneParent" matInput/>
+                    <mat-icon matPrefix class="op-5">
+                      <i-tabler name="phone" class="icon-20 d-flex"></i-tabler>
+                    </mat-icon>
+                  </mat-form-field>
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <div class="col-sm-12 d-flex align-items-center">
+                  <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16"
+                    >Nationalité</mat-label
+                  >
+                </div>
+                <div class="col-sm-12">
+                  <mat-form-field appearance="outline" class="w-100">
+                    <input formControlName="nationaliteParent" matColumnDef="nationaliteParent" matInput/>
+                    <mat-icon matPrefix class="op-5">
+                      <i-tabler name="world" class="icon-20 d-flex"></i-tabler>
+                    </mat-icon>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
           </form>
         </mat-card-content>
       </mat-card>

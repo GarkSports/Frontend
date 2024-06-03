@@ -43,6 +43,8 @@ import { isManagerGuard } from 'src/app/guards/is-manager.guard';
 import { EntrainementComponent } from './evenement/entrainement/entrainement.component';
 import { UpdateProfilePageComponent } from './academie-profile/update-profile-page.component';
 import { UpdatePaymentPageComponent } from './paiement/update-payment-page.component';
+import { AppStaffformContentComponent } from './managers/staff/staffform.component';
+import { AppManagerFormComponent } from './admin/managerform.component';
 // import { AppStafflist2Component } from './managers/staff/stafflist2.component';
 
 
@@ -212,6 +214,18 @@ export const AppsRoutes: Routes = [
         },
       },
       {
+        path: 'managerForm',
+        canActivate: [isAdminGuard],
+        component: AppManagerFormComponent,
+        data: {
+          title: 'ManagerForm',
+          urls: [
+            { title: 'ManagerForm', url: '/dashboards/dashboard1' },
+            { title: 'ManagerForm' },
+          ],
+        },
+      },
+      {
         path: 'staff',
         canActivate: [isManagerGuard],
         component: AppStafflistComponent,
@@ -220,6 +234,18 @@ export const AppsRoutes: Routes = [
           urls: [
             { title: 'Staff', url: '/dashboards/dashboard1' },
             { title: 'Staff' },
+          ],
+        },
+      },
+      {
+        path: 'staffform',
+        canActivate: [isManagerGuard],
+        component: AppStaffformContentComponent,
+        data: {
+          title: 'StaffForm',
+          urls: [
+            { title: 'StaffForm', url: '/dashboards/dashboard1' },
+            { title: 'StaffForm' },
           ],
         },
       },
