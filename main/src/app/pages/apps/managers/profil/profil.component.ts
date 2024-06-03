@@ -165,10 +165,23 @@ export class AppProfilComponent implements OnInit {
       (response) => {
         console.log('Password changed successfully', response);
         this.serverSideError = '';
+        this.showNotification(
+          'Succès',
+          'Mot de passe changé avec succès !',
+          'succès'
+        );
+        setTimeout(() => {
+          if (window.opener) {
+            window.close();
+          } else {
+            window.history.back();
+          }
+        }, 5000);
       },
       (error) => {
         console.error('Error changing password', error);
         this.serverSideError = error.error.message; // Assuming the error message is in the 'message' field of the error response
+        this.showNotification('Erreur', 'Erreur lors du changement du mot de passe', 'erreur');
       }
     );
   }
@@ -179,14 +192,34 @@ export class AppProfilComponent implements OnInit {
     this.managerService.updateManager(updatedManager).subscribe(
       (response) => {
         console.log('Manager updated successfully', response);
-        console.log("updatedManager",updatedManager);
+        this.showNotification(
+          'Succès',
+          'Profil mis à jour avec succès !',
+          'succès'
+        );
+        setTimeout(() => {
+          if (window.opener) {
+            window.close();
+          } else {
+            window.history.back();
+          }
+        }, 5000);
       },
       (error) => {
         console.error('Error updating manager', error);
+        this.showNotification('Erreur', 'Erreur lors de la mise à jour du manager', 'erreur');
       }
     );
   }
 }
+
+showNotification(title: string, message: string, type: 'succès' | 'erreur') {
+  this.dialog.open(NotificationDialogComponent, {
+    data: { title, message, type },
+    panelClass: type, // You can use this to apply custom styles based on the type
+  });
+}
+
 
   displayValidationErrors(): void {
     const currentPassword = this.changePwdForm.get('currentPassword');
@@ -208,5 +241,44 @@ export class AppProfilComponent implements OnInit {
     } else {
       this.validationError = '';
     }
+  }
 }
+
+
+@Component({
+  selector: 'app-notification-dialog',
+  template: `
+    <h1 mat-dialog-title class="p-24 p-t-5">{{ data.title }}</h1>
+    <div mat-dialog-content class="p-x-24 p-b-24">{{ data.message }}</div>
+    <div mat-dialog-actions>
+      <button mat-stroked-button class="p-24 p-t-0" (click)="cancelAction()">OK</button>
+    </div>
+  `,
+  styles: [
+    `
+      h1 {
+        color: #4caf50; /* Default to success color */
+      }
+      .error h1 {
+        color: #f44336; /* Error color */
+      }
+    `,
+  ],
+})
+
+
+export class NotificationDialogComponent {
+  constructor(
+    @Inject(MAT_DIALOG_DATA)
+    public data: { title: string; message: string; type: 'success' | 'error' }
+  ) {}
+
+  cancelAction(): void {
+    if (window.opener) {
+      window.close();
+    } else {
+      // Optionally, you can navigate back to the previous page if the window wasn't opened as a popup
+      window.history.back();
+    }
+  }
 }
