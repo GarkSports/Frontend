@@ -102,7 +102,7 @@
             Date Abonnement
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14" [ngClass]="{'text-danger': element.retardPaiement > 0}">
-            {{ element.dateFin | date }}
+            {{ element.dateDebut | date }} - {{ element.dateFin | date }}
             <span *ngIf="element.retardPaiement > 0" class="ml-1">{{ element.retardPaiement }} jours de retard</span>
           </td>
         </ng-container>
