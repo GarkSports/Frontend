@@ -7,10 +7,10 @@
         </mat-card-header>
        
         <mat-card-content class="b-t-1">
-          <div class="image-preview" *ngIf="local_data.photo">
+          <!-- <div class="image-preview" *ngIf="local_data.photo">
             <img [src]="local_data.photo" alt="Photo Preview" style="width: 100px; height: 100px; margin-left: 220px; margin-bottom: 20px;" class="rounded-full object-cover "/>
-          </div> 
-          <form [formGroup]="this.local_data.role==='ADHERENT'? adherentForm: managerForm">
+          </div>  -->
+          <form [formGroup]="isAdherent? adherentForm: managerForm">
             <div class="row"> 
                 <div class="col-sm-6"> 
                     <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Nom</mat-label> 
@@ -138,9 +138,10 @@
                       Cancel
                     </button>
                   </div>
-                  
                 </div>
               </div>
+              
+              
           </form>
         </mat-card-content>
       </mat-card>
