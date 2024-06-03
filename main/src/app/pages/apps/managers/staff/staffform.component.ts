@@ -55,7 +55,7 @@ export class AppStaffformContentComponent implements OnInit {
 
   constructor(
     @Optional()
-    @Inject(MAT_DIALOG_DATA)
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private firestorage: AngularFireStorage,
     private formBuilder: FormBuilder,
     private managerService: ManagerService,
@@ -215,7 +215,7 @@ export class AppStaffformContentComponent implements OnInit {
       email: [adherent?.email || '', [Validators.required, Validators.email]],
       dateNaissance: [adherent?.dateNaissance || '', Validators.required],
       adresse: [adherent?.adresse || '', Validators.required],
-      photo: [adherent?.photo],
+      photo: [adherent?.photo || null],
       telephone: [adherent?.telephone, Validators.required],
       informationsParent: this.formBuilder.group({
         nomParent: [adherent?.informationsParent?.nomParent || '', Validators.required],
@@ -305,6 +305,8 @@ export class AppStaffformContentComponent implements OnInit {
       const updatedAdherent = this.adherentForm.value;
       console.log(updatedAdherent);
       updatedAdherent.id = this.local_data.id;
+      updatedAdherent.photo = this.local_data.photo;
+
       updatedManager.id = this.local_data.id; // Set the id of the manager to be updated
       updatedManager.photo = this.local_data.photo;
       const role = this.local_data.role;
@@ -374,26 +376,37 @@ export class AppStaffformContentComponent implements OnInit {
   }
 
   async uploadFile(event: any) {
-    if (!event.target.files[0] || event.target.files[0].length === 0) {
+    if (!event.target.files[0]) {
       return;
     }
-    const mimeType = event.target.files[0].type;
-    if (mimeType.match(/image\/*/) == null) {
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.readAsDataURL(event.target.files[0]);
-    reader.onload = (_event) => {
-      this.local_data.photo = reader.result as string;
-    };
 
     const file = event.target.files[0];
-    if (file) {
-      const path = `academie/${file.name}`;
+    const mimeType = file.type;
+
+    if (!mimeType.startsWith('image/')) {
+      // Handle error if the file is not an image
+      return;
+    }
+
+    // Display image
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.local_data.imagePath = reader.result as string;
+    };
+    reader.readAsDataURL(file);
+
+    // Upload image
+    const path = `academie/${file.name}`;
+    try {
       const uploadTask = await this.firestorage.upload(path, file);
       const url = await uploadTask.ref.getDownloadURL();
+      console.log('Image URL:', url);
       this.local_data.photo = url;
+      this.photo = url;
+      // Set the photo URL to the form control
+      this.adherentForm.patchValue({ photo: url });
+    } catch (error) {
+      console.error('Error uploading file:', error);
     }
   }
 }
