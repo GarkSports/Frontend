@@ -1,56 +1,55 @@
-<mat-card class="cardWithShadow no-shadow">
-    <mat-card-content class="p-24">
-      <div class="row justify-content-between" style="margin-bottom: 20px;">
-        <div class="col-lg-3">
-          <mat-form-field appearance="outline" class="w-100 hide-hint gray-background">
-            <mat-label>Trier par Academie</mat-label>
-            <mat-select [(ngModel)]="selectedSortingOption" (selectionChange)="applySorting()">
-              <mat-option *ngFor="let sortingOption of sortingOptions" [value]="sortingOption.value">{{
-                sortingOption.viewValue }}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="col-lg-4">
-          <mat-form-field appearance="outline" class="w-100 hide-hint gray-background">
-            <mat-label>Filtrer par type</mat-label>
-            <mat-select [(ngModel)]="selectedType" (selectionChange)="applyFilterByType()">
-              <mat-option *ngFor="let type of typeOptions" [value]="type">{{ type }}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="col-lg-4">
-          <mat-form-field appearance="outline" class="w-100 hide-hint gray-background">
-            <mat-label>Filtrer par etat</mat-label>
-            <mat-select [(ngModel)]="selectedEtat" (selectionChange)="applyFilterByEtat()">
-              <mat-option *ngFor="let etat of etatOptions2" [value]="etat">{{ etat }}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="col-lg-1 d-flex align-items-center justify-content-end">
-          <button mat-icon-button color="primary" (click)="resetFilters()" style="color: gray;">
-            <mat-icon>refresh</mat-icon>
-          </button>
-        </div>
-      </div>
-    </mat-card-content>
-  </mat-card>
+<div class="row flex justify-center"  style="margin-bottom: 20px;">
+  <div class="col-lg-3">
+    <mat-form-field appearance="outline" class="w-100 hide-hint gray-background">
+      <mat-label>Trier par Academie</mat-label>
+      <mat-select [(ngModel)]="selectedSortingOption" (selectionChange)="applySorting()">
+        <mat-option *ngFor="let sortingOption of sortingOptions" [value]="sortingOption.value">{{
+            sortingOption.viewValue
+          }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="col-lg-3">
+    <mat-form-field appearance="outline" class="w-100 hide-hint gray-background">
+      <mat-label>Filtrer par type</mat-label>
+      <mat-select [(ngModel)]="selectedType" (selectionChange)="applyFilterByType()">
+        <mat-option *ngFor="let type of typeOptions" [value]="type">{{ type }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="col-lg-3">
+    <mat-form-field appearance="outline" class="w-100 hide-hint gray-background">
+      <mat-label>Filtrer par etat</mat-label>
+      <mat-select [(ngModel)]="selectedEtat" (selectionChange)="applyFilterByEtat()">
+        <mat-option *ngFor="let etat of etatOptions2" [value]="etat">{{ etat }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="col-lg-1 d-flex align-items-center justify-content-end">
+    <button mat-icon-button color="primary" (click)="resetFilters()" style="color: gray;">
+      <i-tabler name="refresh"  ></i-tabler>
+    </button>
+  </div>
+</div>
 
-<mat-card class="cardWithShadow gray-background">
-    <mat-card-content class="p-24">
+<div class=" bg-third   rounded-3xl">
+  <div class="p-24 bg-third  rounded-3xl">
         <div class="row justify-content-between">
             <div class="col-lg-6">
-                <h2>Liste des academies archivé</h2>
+              <h2 class="text-black  font-medium text-lg">Liste des academies archivé</h2>
             </div>
-            <div class="col-lg-6 d-flex align-items-center justify-content-end">
-                <mat-form-field appearance="outline" class="w-50 hide-hint mr-2" style="margin-right: 10px;">
-                    <input matInput placeholder="Search Academie" (keyup)="applyFilter($any($event.target).value)" />
-                    <mat-icon matSuffix>
-                        <i-tabler name="search" class="icon-20"></i-tabler>
-                    </mat-icon>
-                </mat-form-field>
+
+          <div class="col-lg-6 d-flex align-items-center justify-content-end">
+            <div class="relative  ">
+              <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                <i-tabler name="search" class="icon-20"></i-tabler>
+              </div>
+              <input (keyup)="applyFilter($any($event.target).value)" type="text" id="simple-search" class="mr-8  bg-gray-50 border-[0.3px]  rounded-3xl border-gray-300  text-gray-900 text-sm    focus:ring-blue-500 focus:border-blue-500 block w-52 h-9 ps-10 p-2.5  " placeholder="Rechercher.."   />
             </div>
+          </div>
         </div>
-    </mat-card-content>
+    </div>
     <mat-card-content class="p-24">
         <div class="table-responsive">
             <table mat-table [dataSource]="dataSource" class="w-100 gray-background">
@@ -114,7 +113,7 @@
             <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons class="gray-background"></mat-paginator>
         </div>
     </mat-card-content>
-</mat-card>
+</div>
 
 
 <style>

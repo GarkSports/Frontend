@@ -60,9 +60,7 @@
         <mat-icon>more_vert</mat-icon>
       </button>
       <mat-menu #moredd="matMenu" x-position="before" class="cardWithShadow">
-        <button mat-menu-item>Contact info</button>
-        <button mat-menu-item>Mute</button>
-        <button mat-menu-item>Delete chat</button>
+        <button mat-menu-item (click)="deleteDiscussion()">Supprimer La Discussion</button>
       </mat-menu>
     </mat-toolbar>
 

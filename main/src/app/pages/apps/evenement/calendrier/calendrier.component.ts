@@ -8,6 +8,7 @@ import { EvenementService } from 'src/app/services/evenement.service';
 import { EvenementType } from 'src/models/enums/evenementType';
 import { Equipe } from 'src/models/equipe.model';
 import { Evenement } from 'src/models/evenement.model';
+import frLocale from '@fullcalendar/core/locales/fr';
 
 @Component({
   selector: 'app-add-test',
@@ -19,6 +20,8 @@ export class CalendrierComponent implements OnInit {
     plugins: [dayGridPlugin, interactionPlugin],
     dateClick: this.handleDateClick.bind(this),
     eventClick: this.handleEventClick.bind(this),
+    locales :[frLocale],
+    locale: 'fr',
     events: [],
   };
 
@@ -53,7 +56,7 @@ export class CalendrierComponent implements OnInit {
       }
     });
   }
-  
+
 
 
   handleDateClick(arg: DateClickArg) {
@@ -91,12 +94,15 @@ export class CalendrierComponent implements OnInit {
       (this.selectedTeams.length === 0 || this.selectedTeams.includes(event.convocationEquipe?.nom)) &&
       (!this.selectedDate || this.isSameDate(event.date, this.selectedDate))
     ).map(event => ({
-      ...event,
-      title: `${event.nomEvent} - ${this.formatEnumValue(event.type)}`,
+      // ...event,
+      title: `${event.nomEvent} - ${event.heure.slice(0, 5) }`,
+      type: event.type,
       start: event.date,
-      backgroundColor: event.statut == 'Annulé' ? '#FF1354' : '#B7EE3E', // Set background color based on event type
-      borderColor: event.statut == 'Annulé' ? '#FF1354' : '#B7EE3E',
+      end: event.date,
+      backgroundColor: event.statut == 'Annulé' ? '#f8b0c3' : '#E8F8C6', // Set background color based on event type
+      borderColor: event.statut == 'Annulé' ? '#f8b0c3' : '#E8F8C6',
       textColor: '#000000',
+      description: 'Lecture'
     }));
   }
 

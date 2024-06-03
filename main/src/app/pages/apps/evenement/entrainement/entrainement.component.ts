@@ -1,12 +1,12 @@
-import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTable } from '@angular/material/table';
-import { DatePipe } from '@angular/common';
-import { Equipe } from 'src/models/equipe.model';
-import { EntrainementService } from 'src/app/services/entrainement.service';
-import { ConvocationEntrainement } from 'src/models/convocationEntrainement.model';
-import { Adherent } from 'src/models/adherent.model';
+import {AfterViewInit, Component, Inject, OnInit, ViewChild} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatTable} from '@angular/material/table';
+import {DatePipe} from '@angular/common';
+import {Equipe} from 'src/models/equipe.model';
+import {EntrainementService} from 'src/app/services/entrainement.service';
+import {ConvocationEntrainement} from 'src/models/convocationEntrainement.model';
+import {Adherent} from 'src/models/adherent.model';
 
 interface TeamSchedule {
   id: number;
@@ -15,6 +15,7 @@ interface TeamSchedule {
   year: number;
   schedule: { [key: string]: { heure: string, id: number } };
   adherents: Adherent[];
+  equipe: string;
 }
 
 @Component({
@@ -60,13 +61,17 @@ export class EntrainementComponent implements AfterViewInit {
     }
 
     this.table.dataSource = this.teamSchedules;
+
   }
 
   loadEntrainements(): void {
     this.entrainementService.getEntrainements().subscribe(equipes => {
       this.teamSchedules = equipes.map(equipe => this.mapToTeamSchedule(equipe));
       this.table.dataSource = this.teamSchedules;
+
+      console.log(this.teamSchedules)
     });
+
   }
 
   mapToTeamSchedule(equipe: Equipe): TeamSchedule {
@@ -94,7 +99,8 @@ export class EntrainementComponent implements AfterViewInit {
         month: firstDate.getMonth(),
         year: firstDate.getFullYear(),
         schedule: schedule,
-        adherents: equipe.adherents || []
+        adherents: equipe.adherents || [],
+        equipe: equipe.nom
       };
     } else {
       const currentDate = new Date();
@@ -104,7 +110,8 @@ export class EntrainementComponent implements AfterViewInit {
         month: currentDate.getMonth(),
         year: currentDate.getFullYear(),
         schedule: schedule,
-        adherents: equipe.adherents || []
+        adherents: equipe.adherents || [],
+        equipe: equipe.nom
       };
     }
   }
@@ -127,10 +134,10 @@ export class EntrainementComponent implements AfterViewInit {
     this.loadEntrainements(); // Reload data for the new week
   }
 
-  openAddHeureDialog(team: string, date: string, adherents: Adherent[], idEquipe: number): void {
+  openAddHeureDialog(team: string, date: string, adherents: Adherent[], idEquipe: number, nomEquipe: string): void {
     const dialogRef = this.dialog.open(AddHeureDialogComponent, {
-      width: '500px',
-      data: { team, date, adherents  }
+      width: '600px',
+      data: {team, date, adherents, nomEquipe}
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -147,10 +154,10 @@ export class EntrainementComponent implements AfterViewInit {
 
   openUpdateHeureDialog(convocation: ConvocationEntrainement, adherents: Adherent[], idConvocation: number): void {
     const dialogRef = this.dialog.open(UpdateHeureDialogComponent, {
-      width: '500px',
+      width: '600px',
       data: {convocation,adherents,idConvocation} // Pass the current ConvocationEntrainement object
     });
-  
+
     dialogRef.afterClosed().subscribe(updatedConvocation => {
       if (updatedConvocation) {
         this.loadEntrainements();
@@ -170,6 +177,7 @@ export interface DialogData {
   team: string;
   date: string;
   adherents: Adherent[];
+  equipe: string;
 }
 
 @Component({
@@ -195,6 +203,23 @@ export class AddHeureDialogComponent {
     this.dialogRef.close();
   }
 
+
+  step1 = true;
+  step2 = false;
+
+  onCancelClick(): void {
+
+    this.step1 = true;
+    this.step2 = false;
+    this.dialogRef.close();
+  }
+
+  nextStep() {
+    this.step1 = false;
+    this.step2 = true;
+
+  }
+
   onSave(): void {
     // Update the heure and date fields of convocationEntrainement
     this.convocationEntrainement.heure = this.heure;
@@ -205,6 +230,9 @@ export class AddHeureDialogComponent {
       convocationEntrainement: this.convocationEntrainement,
       idAdherents: this.selectedAdherents
     });
+
+    this.step1 = true;
+    this.step2 = false;
   }
 
   onAdherentCheckboxChange(adherentId: number, checked: boolean): void {
@@ -233,7 +261,11 @@ export class UpdateHeureDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<UpdateHeureDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { convocation: ConvocationEntrainement, adherents: Adherent[], idConvocation: number }, 
+    @Inject(MAT_DIALOG_DATA) public data: {
+      convocation: ConvocationEntrainement,
+      adherents: Adherent[],
+      idConvocation: number
+    },
     private entrainementService: EntrainementService
   ) {}
 
@@ -251,7 +283,7 @@ export class UpdateHeureDialogComponent implements OnInit {
       ...this.data.convocation,
       heure: this.heure,
     };
-  
+
     this.entrainementService.updateConvocationEntrainement(updatedConvocationEntrainement, this.selectedAdherents, this.data.idConvocation)
       .subscribe(updatedEquipe => {
         console.log('Updated Equipe:', updatedEquipe);

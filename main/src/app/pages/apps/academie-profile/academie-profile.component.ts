@@ -73,8 +73,7 @@ export class AcademieProfileComponent {
   }
 
 
-
-
+  protected readonly localStorage = localStorage;
 }
 
 

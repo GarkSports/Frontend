@@ -7,6 +7,7 @@ import { RoleName } from 'src/models/roleName.models';
 import {environment} from "../../environments/environment";
 import { ChangePasswordChange } from 'src/models/changePassword.model';
 import { User } from 'src/models/user.model';
+import { Adherent } from 'src/models/adherent.model';
 
 @Injectable({
   providedIn: 'root'
@@ -106,9 +107,9 @@ export class ManagerService {
     return this.http.put<any>(`${this.apiUrl}/update-coach?id=${managerData.id}`, managerData, {withCredentials: true, headers });
   }
 
-  updateAdherent(managerData: Manager): Observable<any> {
+  updateAdherent(adherentData: Adherent): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.put<any>(`${this.apiUrl}/update-adherent?id=${managerData.id}`, managerData, {withCredentials: true, headers });
+    return this.http.put<any>(`${this.apiUrl}/update-adherent?id=${adherentData.id}`, adherentData, {withCredentials: true, headers });
   }
 
   updateParent(managerData: Manager): Observable<any> {
@@ -149,6 +150,10 @@ export class ManagerService {
 
   getManagerById(ManagerId: number): Observable<Academie> {
     return this.http.get<Academie>(`${this.apiUrl}/getAcademieById/${ManagerId}`,  { withCredentials: true });
+  }
+
+  getFormManagerById(id: string): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/getFormManagerById/${id}`,  { withCredentials: true });
   }
 
   changeEtat(ManagerId: number): Observable<any> {

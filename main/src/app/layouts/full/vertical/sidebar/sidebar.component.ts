@@ -1,14 +1,7 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  ViewChild,
-} from '@angular/core';
-import { BrandingComponent } from './branding.component';
-import { TablerIconsModule } from 'angular-tabler-icons';
-import { MaterialModule } from 'src/app/material.module';
+import {Component, EventEmitter, Input, OnInit, Output,} from '@angular/core';
+import {BrandingComponent} from './branding.component';
+import {TablerIconsModule} from 'angular-tabler-icons';
+import {MaterialModule} from 'src/app/material.module';
 
 @Component({
   selector: 'app-sidebar',
@@ -17,10 +10,21 @@ import { MaterialModule } from 'src/app/material.module';
   templateUrl: './sidebar.component.html',
 })
 export class SidebarComponent implements OnInit {
-  constructor() { }
+  mobileNav = false;
+
   @Input() showToggle = true;
+
+  constructor() {
+  }
   @Output() toggleMobileNav = new EventEmitter<void>();
   @Output() toggleCollapsed = new EventEmitter<void>();
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+  }
+
+  toggleMobile() {
+    alert('toggleMobile')
+    this.mobileNav = !this.mobileNav;
+    this.toggleMobileNav.emit();
+  }
 }
