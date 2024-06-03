@@ -1,104 +1,64 @@
 <app-navbar></app-navbar>
-<div class="week-navigation col-lg-2">
-  <button mat-icon-button (click)="previousWeek()">&#8249;</button>
-  <span class="week-range">{{ currentWeekRange }}</span>
-  <button mat-icon-button (click)="nextWeek()">&#8250;</button>
+<div class="row mb-8">
+  <div class="col-4">
+    <button (click)="previousWeek()" class=" bg-transparent ">
+      <i-tabler class="pt-1.5" name="chevron-left"></i-tabler>
+    </button>
+    <span class="  bg-second text-black py-2 text-center rounded-3xl px-4 font-semibold ">{{ currentWeekRange }}</span>
+    <button (click)="nextWeek()" class=" bg-transparent ">
+      <i-tabler class="pt-1.5" name="chevron-right"></i-tabler>
+    </button>
+  </div>
+
 </div>
 
 
-<table mat-table [dataSource]="teamSchedules" class="mat-elevation-z8">
-  <!-- Team Column -->
-  <ng-container matColumnDef="team">
-    <th mat-header-cell *matHeaderCellDef>Équipe</th>
-    <td mat-cell *matCellDef="let element" class="team-cell">{{ element.team }}</td>
-  </ng-container>
-
-  <!-- Dynamic Day Columns -->
-  <ng-container *ngFor="let day of weekDays" [matColumnDef]="day">
-    <th mat-header-cell *matHeaderCellDef>
-      {{ day }}
-      <br>
-      <small>{{ weekDates[day] }}</small>
-    </th>
-    <td mat-cell *matCellDef="let element">
-      <ng-container *ngIf="element.schedule[day]; else addBtn">
-        <div class="schedule-info">
-          <button mat-button class="tight-spacing"
-            (click)="openUpdateHeureDialog(element.schedule[day], element.adherents, element.schedule[day].id)">
-            <strong style="margin-right: 3px; margin-left: 20px;">{{ element.schedule[day].heure | slice:0:5 }}</strong>
-          </button>
-          <button mat-button color="warn" class="tight-spacing" (click)="deleteConvocation(element.schedule[day].id)">
-            <mat-icon>delete_outline</mat-icon>
-          </button>
-        </div>
+<div class="  bg-third  rounded-3xl mt-8  p-12 ">
+  <div class="table-responsive">
+    <table [dataSource]="teamSchedules" class="bg-transparent     " mat-table>
+      <!-- Team Column -->
+      <ng-container matColumnDef="team">
+        <th *matHeaderCellDef class="bg-third">Équipe</th>
+        <td *matCellDef="let element" class="bg-third ">{{ element.team }}</td>
       </ng-container>
 
-      <ng-template #addBtn>
-        <button mat-button
-          (click)="openAddHeureDialog(element.team, weekDates[day], element.adherents, element.id)"><mat-icon>add_circle</mat-icon>
-          Ajouter</button>
-      </ng-template>
-    </td>
-  </ng-container>
+      <!-- Dynamic Day Columns -->
+      <ng-container *ngFor="let day of weekDays" [matColumnDef]="day">
+        <th *matHeaderCellDef class="bg-third">
+          {{ day }}
+          <br>
+          <small>{{ weekDates[day] }}</small>
+        </th>
+        <td *matCellDef="let element" class="bg-third text-center">
+          <ng-container *ngIf="element.schedule[day]; else addBtn">
+            <div class="flex justify-center">
+              <button (click)="openUpdateHeureDialog(element.schedule[day], element.adherents, element.schedule[day].id)"
+                      mat-button>
+                <strong
+                  style="margin-right: 3px; margin-left: 20px;">{{ element.schedule[day].heure | slice:0:5 }}</strong>
+              </button>
+              <button (click)="deleteConvocation(element.schedule[day].id)"
+                      class="text-red-600 hover:bg-red-100 rounded-md text-sm">
+                <mat-icon>delete_outline</mat-icon>
+              </button>
+            </div>
+          </ng-container>
 
-  <!-- Header and Row Declarations -->
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-</table>
+          <ng-template #addBtn>
+            <div class="flex justify-center">
+              <button (click)="openAddHeureDialog(element.team, weekDates[day], element.adherents, element.id,element.nom)"
+                      mat-button>
+                <mat-icon>add_circle</mat-icon>
+                Ajouter
+              </button>
+            </div>
+          </ng-template>
+        </td>
+      </ng-container>
 
-<style>
-  .tight-spacing {
-    margin: 0;
-    /* Remove margin */
-    padding: 0 2px;
-    /* Minimal padding to ensure buttons don't touch */
-    min-width: 0;
-    /* Ensure buttons don't have a minimum width */
-  }
-
-  .mat-button {
-    min-width: 0;
-    /* Override any default minimum width */
-    padding: 0 2px;
-    /* Minimal padding */
-  }
-
-  .week-navigation {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #f0f0f0;
-    /* Light grey background */
-    padding: 2px 2px;
-    border-radius: 20px;
-    margin-bottom: 10px;
-  }
-
-  .week-navigation button {
-    min-width: auto;
-    /* Override default min-width */
-    padding: 0 4px;
-    /* Adjust padding for smaller buttons */
-  }
-
-  .week-range {
-    margin: 0 10px;
-    /* Space between text and buttons */
-    font-weight: bold;
-  }
-
-  .team-cell {
-    font-size: 14px;
-    /* Adjust the font size to your preference */
-  }
-
-  .schedule-info {
-    display: flex;
-    align-items: center;
-  }
-
-  .schedule-info h5 {
-    margin-right: 10px;
-    /* Adjust as needed for spacing between the h5 and buttons */
-  }
-</style>
+      <!-- Header and Row Declarations -->
+      <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+      <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
+    </table>
+  </div>
+</div>
