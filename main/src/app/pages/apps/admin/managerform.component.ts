@@ -45,11 +45,18 @@ export class AppManagerFormComponent implements OnInit {
 
   getFormManagerById(id: string): void {
     this.managerService.getFormManagerById(id).subscribe(
-      (manager) => {
+      (user) => {
+        if (user.role === 'Manager') {
+        const manager = user as Manager;
         this.local_data = manager; // Store the fetched manager data
-        console.log("name", manager.firstname);
+        console.log("name", user.firstname);
         console.log("this.local_data", this.local_data);
         this.initManagerForm(manager); // Initialize the form with the fetched manager data
+      }
+      else {
+        console.error('User is not a manager');
+        // Handle error or show a message indicating that the user is not a manager
+      }
       },
       (error) => {
         console.error('Error fetching manager', error);
