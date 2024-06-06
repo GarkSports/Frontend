@@ -137,7 +137,7 @@ import {AppSalesProfitComponent} from "../../components/dashboard2/sales-profit/
 import {AppMonthlyEarningsTwoComponent} from "../../components/dashboard2/monthly-earnings/monthly-earnings.component";
 import {NewMessagePageComponent} from './chat/new-message-page/new-message-page.component';
 import {AdminNewMessagePageComponent} from './chat/admin-new-message-page/admin-new-message-page.component';
-
+import {DefaultImagePipe} from "../../pipe/default-image.pipe";
 
 
 @NgModule({
@@ -167,6 +167,7 @@ import {AdminNewMessagePageComponent} from './chat/admin-new-message-page/admin-
     AppTotalEarningsComponent,
     AppSalesProfitComponent,
     AppMonthlyEarningsTwoComponent,
+    DefaultImagePipe,
   ],
   exports: [TablerIconsModule],
   declarations: [

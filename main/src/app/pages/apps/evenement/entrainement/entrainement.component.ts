@@ -258,7 +258,7 @@ export class AddHeureDialogComponent {
 export class UpdateHeureDialogComponent implements OnInit {
   heure: string;
   selectedAdherents: number[];
-
+  step1 = true;
   constructor(
     public dialogRef: MatDialogRef<UpdateHeureDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: {
@@ -269,6 +269,12 @@ export class UpdateHeureDialogComponent implements OnInit {
     private entrainementService: EntrainementService
   ) {}
 
+
+  onCancelClick(): void {
+
+    this.step1 = true;
+    this.dialogRef.close();
+  }
   ngOnInit(): void {
     console.log('Current Convocation:', this.data.idConvocation);
     this.heure = this.data.convocation.heure;
@@ -277,6 +283,10 @@ export class UpdateHeureDialogComponent implements OnInit {
     });
   }
 
+  nextStep() {
+    this.step1 = false;
+
+  }
   onSave(): void {
     // Save the updated values
     const updatedConvocationEntrainement: ConvocationEntrainement = {

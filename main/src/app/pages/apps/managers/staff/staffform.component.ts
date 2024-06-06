@@ -1,35 +1,14 @@
-import {
-  Component,
-  OnInit,
-  Inject,
-  Optional,
-  ViewChild,
-  OnDestroy,
-  CUSTOM_ELEMENTS_SCHEMA
-} from '@angular/core';
-import { MatTableDataSource, MatTable } from '@angular/material/table';
-import {
-  MatDialog,
-  MatDialogRef,
-  MAT_DIALOG_DATA,
-} from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { Manager } from 'src/models/manager.model';
-import { ManagerService } from 'src/app/services/manager.service';
-import { DatePipe } from '@angular/common';
-import { Academie } from 'src/models/academie.model';
-import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Role, RoleArray } from 'src/models/enums/role.model';
-import { RoleName, RoleNameArray } from 'src/models/roleName.models';
-import { AngularFireStorage } from '@angular/fire/compat/storage';
-import { MatSort } from '@angular/material/sort';
-import { Observable, forkJoin } from 'rxjs';
-import { PaiementService } from 'src/app/services/paiement.service';
-import { Equipe } from 'src/models/equipe.model';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MatSelectChange } from '@angular/material/select';
-import { Adherent } from 'src/models/adherent.model';
-import isThisHour from 'date-fns/isThisHour';
+import {Component, Inject, OnInit, Optional} from '@angular/core';
+import {MatTableDataSource} from '@angular/material/table';
+import {MAT_DIALOG_DATA, MatDialog,} from '@angular/material/dialog';
+import {Manager} from 'src/models/manager.model';
+import {ManagerService} from 'src/app/services/manager.service';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Role} from 'src/models/enums/role.model';
+import {AngularFireStorage} from '@angular/fire/compat/storage';
+import {Observable} from 'rxjs';
+import {ActivatedRoute} from '@angular/router';
+import {Adherent} from 'src/models/adherent.model';
 
 @Component({
   // tslint:disable-next-line - Disables all
@@ -49,7 +28,7 @@ export class AppStaffformContentComponent implements OnInit {
   showParentInfo: boolean = false;
   ifAdherent: boolean = true;
   isAdherent: boolean = false;
-  
+
 
   dataSource = new MatTableDataSource<string>([]);
 
@@ -62,13 +41,14 @@ export class AppStaffformContentComponent implements OnInit {
     private route: ActivatedRoute,
     private dialog: MatDialog
   ) {
-  
+
   }
 
   showRoleInput: boolean = false;
   photo: string;
-  onRoleChange(event: MatSelectChange) {
-    const selectedValue = event.value;
+
+  onRoleChange(event: any) {
+    const selectedValue = event.target.value;
     this.showRoleInput =
       selectedValue === 'STAFF' || selectedValue === 'ENTRAINEUR';
     console.log('role', selectedValue);
@@ -92,7 +72,7 @@ export class AppStaffformContentComponent implements OnInit {
     const today = new Date();
     const age = today.getFullYear() - dateOfBirth.getFullYear();
     const monthDiff = today.getMonth() - dateOfBirth.getMonth();
-  
+
     if (age < 18 || (age === 18 && monthDiff < 0)) {
       this.showParentInfo = true;
       console.log('User is under 18 years old');
@@ -107,7 +87,7 @@ export class AppStaffformContentComponent implements OnInit {
     const age = today.getFullYear() - dateNaissance.getFullYear();
     const monthDiff = today.getMonth() - dateNaissance.getMonth();
     console.log(age);
-    
+
     if (age < 18 || (age === 18 && monthDiff < 0)) {
       this.showParentInfo = true;
       console.log('User is under 18 years old');
@@ -147,21 +127,21 @@ export class AppStaffformContentComponent implements OnInit {
   getFormManagerById(id: string): void {
     this.managerService.getFormManagerById(id).subscribe(
       (user) => {
-        this.local_data = user; 
+        this.local_data = user;
 
         if(this.local_data.role === 'ADHERENT'){
           const adherent = user as Adherent;
-          this.local_data = adherent; 
-          this.initAdherentForm(adherent); 
-          const dateNaissance = new Date(adherent.dateNaissance);          
+          this.local_data = adherent;
+          this.initAdherentForm(adherent);
+          const dateNaissance = new Date(adherent.dateNaissance);
           console.log(dateNaissance);
-          
+
           const today = new Date();
     const age = today.getFullYear() - dateNaissance.getFullYear();
     const monthDiff = today.getMonth() - dateNaissance.getMonth();
     console.log(age);
-    
-    if (age < 18 || (age === 18 && monthDiff < 0)) {
+
+          if (age < 18 || (age === 18 && monthDiff < 0)) {
       this.showParentInfo = true;
       console.log('User is under 18 years old');
     } else {
@@ -173,16 +153,16 @@ export class AppStaffformContentComponent implements OnInit {
         }
       else {
         const manager = user as Manager;
-        this.local_data = manager; 
-        this.initManagerForm(manager); 
+          this.local_data = manager;
+          this.initManagerForm(manager);
         console.log("manager",manager);
         console.error('User is not a manager nor adherent');
         console.log("role is",manager.role);
         console.log("type of",typeof(manager));
         console.log("role adh",Role.MANAGER);
         console.log(manager.role===Role.MANAGER?'oui':'non');
-        
-      }
+
+        }
       },
       (error) => {
         console.error('Error fetching manager', error);
@@ -400,9 +380,9 @@ export class AppStaffformContentComponent implements OnInit {
     try {
       const uploadTask = await this.firestorage.upload(path, file);
       const url = await uploadTask.ref.getDownloadURL();
-      console.log('Image URL:', url);
-      this.local_data.photo = url;
+
       this.photo = url;
+      // this.managerForm.setValue({ photo: url });
       // Set the photo URL to the form control
       this.adherentForm.patchValue({ photo: url });
     } catch (error) {
