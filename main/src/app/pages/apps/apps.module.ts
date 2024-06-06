@@ -152,6 +152,8 @@ import { AppEvaluationComponent } from './evaluation/evaluation.component';
 import { AppStaffformContentComponent, NotificationDialogComponent } from './managers/staff/staffform.component';
 import { AppManagerFormComponent } from './admin/managerform.component';
 
+import {AppComptabiliteComponent} from './comptabilite/comptabilite.component'
+
 
 @NgModule({
   imports: [
@@ -283,7 +285,8 @@ import { AppManagerFormComponent } from './admin/managerform.component';
     AppEvaluationComponent,
     NotificationDialogComponent,
     AppStaffDialogContentComponent,
-    AppManagerFormComponent
+    AppManagerFormComponent,
+    AppComptabiliteComponent
   ],
   providers: [DatePipe],
 })

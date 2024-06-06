@@ -46,6 +46,7 @@ import { EntrainementComponent } from './evenement/entrainement/entrainement.com
 import { AppEvaluationComponent } from 'src/app/pages/apps/evaluation/evaluation.component';
 import { AppStaffformContentComponent } from './managers/staff/staffform.component';
 import { AppManagerFormComponent } from './admin/managerform.component';
+import { AppComptabiliteComponent } from './comptabilite/comptabilite.component';
 // import { AppStafflist2Component } from './managers/staff/stafflist2.component';
 
 
@@ -54,6 +55,18 @@ export const AppsRoutes: Routes = [
     path: '',
     canActivate: [authGuard],
     children: [
+      {
+        path: 'comptabilite',
+        canActivate: [isManagerGuard],
+        component: AppComptabiliteComponent,
+        data: {
+          title: 'comptabilite',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Comptabilite' },
+          ],
+        },
+      },
       {
         path: 'chat',
         component: AppChatComponent,
