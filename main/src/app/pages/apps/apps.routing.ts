@@ -45,6 +45,8 @@ import { UpdateProfilePageComponent } from './academie-profile/update-profile-pa
 import { UpdatePaymentPageComponent } from './paiement/update-payment-page.component';
 import { AppStaffformContentComponent } from './managers/staff/staffform.component';
 import { AppManagerFormComponent } from './admin/managerform.component';
+import { NewMessagePageComponent } from './chat/new-message-page/new-message-page.component';
+import { AdminNewMessagePageComponent } from './chat/admin-new-message-page/admin-new-message-page.component';
 // import { AppStafflist2Component } from './managers/staff/stafflist2.component';
 
 
@@ -83,6 +85,30 @@ export const AppsRoutes: Routes = [
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
             { title: 'Chat' },
+          ],
+        },
+      },
+      {
+        path: 'newmessage',
+        canActivate: [isManagerGuard],
+        component: NewMessagePageComponent,
+        data: {
+          title: 'New Message',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'New Message' },
+          ],
+        },
+      },
+      {
+        path: 'adminnewmessage',
+        canActivate: [isAdminGuard],
+        component: AdminNewMessagePageComponent,
+        data: {
+          title: 'New Message',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'New Message' },
           ],
         },
       },

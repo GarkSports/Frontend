@@ -135,6 +135,9 @@ import {AppSalesOverviewComponent} from "../../components/dashboard2/sales-overv
 import {AppTotalEarningsComponent} from "../../components/dashboard2/total-earnings/total-earnings.component";
 import {AppSalesProfitComponent} from "../../components/dashboard2/sales-profit/sales-profit.component";
 import {AppMonthlyEarningsTwoComponent} from "../../components/dashboard2/monthly-earnings/monthly-earnings.component";
+import {NewMessagePageComponent} from './chat/new-message-page/new-message-page.component';
+import {AdminNewMessagePageComponent} from './chat/admin-new-message-page/admin-new-message-page.component';
+
 
 
 @NgModule({
@@ -167,6 +170,8 @@ import {AppMonthlyEarningsTwoComponent} from "../../components/dashboard2/monthl
   ],
   exports: [TablerIconsModule],
   declarations: [
+    NewMessagePageComponent,
+    AdminNewMessagePageComponent,
     AppDisciplineManagerDialogContentComponent,
     AppDisciplineDialogContentComponent,
     UpdatePaymentPageComponent,
