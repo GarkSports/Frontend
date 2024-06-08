@@ -38,26 +38,36 @@ import { Benefices, Depenses } from 'src/models/comptabilite.model';
 
       /////////////////////
       saveDepense(depenses: Depenses): Observable<Depenses> {
-        return this.http.post<Depenses>(`${this.apiUrl}/depenses/add`, depenses, {  withCredentials: true  });
+        return this.http.post<Depenses>(`${this.apiUrl}/depences/add`, depenses, {  withCredentials: true  });
       }
     
       // Get all benefices
       getAllDepenses(): Observable<Depenses[]> {
-        return this.http.get<Depenses[]>(`${this.apiUrl}/depenses/all`, {  withCredentials: true  });
+        return this.http.get<Depenses[]>(`${this.apiUrl}/depences/all`, {  withCredentials: true  });
       }
     
       // Get a benefice by ID
       getDepenseById(id: number): Observable<Depenses> {
-        return this.http.get<Depenses>(`${this.apiUrl}/depenses/${id}`, {  withCredentials: true });
+        return this.http.get<Depenses>(`${this.apiUrl}/depences/${id}`, {  withCredentials: true });
       }
     
       // Update a benefice by ID
       updateDepense(id: number, depenses: Depenses): Observable<Depenses> {
-        return this.http.put<Depenses>(`${this.apiUrl}/depenses/update/${id}`, depenses, {  withCredentials: true });
+        return this.http.put<Depenses>(`${this.apiUrl}/depences/update/${id}`, depenses, {  withCredentials: true });
       }
     
       // Delete a benefice by ID
       deleteDepense(id: number): Observable<void> {
-        return this.http.delete<void>(`${this.apiUrl}/depenses/delete/${id}`, {  withCredentials: true  });
+        return this.http.delete<void>(`${this.apiUrl}/depences/delete/${id}`, {  withCredentials: true  });
       }
+
+      getmonthlystat(): Observable<any> {
+        return this.http.get(`${this.apiUrl}/benefices/monthly-comparisons`, {  withCredentials: true });
+      }
+
+      getmonthlysum(): Observable<any> {
+        return this.http.get(`${this.apiUrl}/benefices/monthly-sums`, {  withCredentials: true });
+      }
+
+
   }

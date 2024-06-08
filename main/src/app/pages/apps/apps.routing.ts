@@ -47,6 +47,8 @@ import { AppEvaluationComponent } from 'src/app/pages/apps/evaluation/evaluation
 import { AppStaffformContentComponent } from './managers/staff/staffform.component';
 import { AppManagerFormComponent } from './admin/managerform.component';
 import { AppComptabiliteComponent } from './comptabilite/comptabilite.component';
+import { AddBeneficeDepenseComponent } from './comptabilite/add-benefice-depense/add-benefice-depense.component';
+import { UpdateBeneficeDepenseComponent } from './comptabilite/update-benefice-depense/update-benefice-depense.component';
 // import { AppStafflist2Component } from './managers/staff/stafflist2.component';
 
 
@@ -55,6 +57,30 @@ export const AppsRoutes: Routes = [
     path: '',
     canActivate: [authGuard],
     children: [
+      {
+        path: 'comptabilite/update/:type/:id',
+        canActivate: [isManagerGuard],
+        component: UpdateBeneficeDepenseComponent ,
+        data: {
+          title: 'update',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Comptabilite/update' },
+          ],
+        },
+      },
+      {
+        path: 'comptabilite/add/:type',
+        canActivate: [isManagerGuard],
+        component: AddBeneficeDepenseComponent ,
+        data: {
+          title: 'add',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Comptabilite/add' },
+          ],
+        },
+      },
       {
         path: 'comptabilite',
         canActivate: [isManagerGuard],

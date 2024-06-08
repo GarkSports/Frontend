@@ -1,8 +1,8 @@
-.green-button {
-    color: #28a745;
-}
+.text-danger {
+    color: red;
+  }
 
-.custom-select {
+  .custom-select {
     /* background color for the select */
     background-color: red;
     /* border color */
@@ -15,18 +15,12 @@
     font-size: 14px;
     /* padding */
     padding: 5px 10px;
-}
+  }
 
-.smallerContent {
-    max-height: 100px;
-    /* Adjust the max-height as needed */
-    overflow: hidden;
-    /* Hide overflow content */
-    transition: max-height 0.3s ease;
-    /* Smooth transition animation */
-}
-
-.gray-background {
+  .gray-background {
     background-color: #FAFAFA;
-    /*testing color blue: FAFAFA 0000FF*/
-}
+  }
+
+  .no-shadow {
+    box-shadow: none;
+  }

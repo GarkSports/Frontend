@@ -153,12 +153,15 @@ import { AppStaffformContentComponent, NotificationDialogComponent } from './man
 import { AppManagerFormComponent } from './admin/managerform.component';
 
 import {AppComptabiliteComponent} from './comptabilite/comptabilite.component'
+import { AddBeneficeDepenseComponent } from './comptabilite/add-benefice-depense/add-benefice-depense.component';
+import { UpdateBeneficeDepenseComponent } from './comptabilite/update-benefice-depense/update-benefice-depense.component';
+
+
 
 
 @NgModule({
   imports: [
     FullCalendarModule,
-
     CommonModule,
     RouterModule.forChild(AppsRoutes),
     MaterialModule,
@@ -286,7 +289,9 @@ import {AppComptabiliteComponent} from './comptabilite/comptabilite.component'
     NotificationDialogComponent,
     AppStaffDialogContentComponent,
     AppManagerFormComponent,
-    AppComptabiliteComponent
+    AppComptabiliteComponent,
+    AddBeneficeDepenseComponent,
+    UpdateBeneficeDepenseComponent
   ],
   providers: [DatePipe],
 })
