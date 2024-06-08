@@ -3,7 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { EquipeService } from 'src/app/services/equipe.service';
+import { StaffService } from 'src/app/services/staff.service';
 import { Equipe } from 'src/models/equipe.model';
+import { Test } from 'src/models/test.model';
 
 @Component({
   selector: 'app-evaluation',
@@ -11,74 +13,50 @@ import { Equipe } from 'src/models/equipe.model';
   styleUrls: ['./evaluation.component.css']
 })
 export class AppEvaluationComponent implements OnInit {
-  dataSource = new MatTableDataSource<Equipe>([]);
-  equipeCards: Equipe[] = [];
+  dataSource = new MatTableDataSource<Test>([]);
+  testCards: Test[] = [];
+
   evaluationForm: FormGroup;
   isEvaluationFormVisible = false;
   evaluation: any = {}; // Define an object to store form data
   local_data: any;
-  currentEquipe: Equipe | null = null;
 
   constructor(
     //public data: Equipe,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: Equipe,
 
-    private equipeService: EquipeService,
-    private formBuilder: FormBuilder,
+    private staffService: StaffService,
   ) {
     this.local_data = { ...data };
-    this.initEvaluationForm();
   }
 
   
 
   ngOnInit(): void {
-    this.getEquipes();
-    this.initEvaluationForm();
-    this.dataSource = new MatTableDataSource<Equipe>([]);
+    this.getTest();
+    this.dataSource = new MatTableDataSource<Test>([]);
   }
 
 
-  getEquipes(): void {
-    this.equipeService.getEquipes().subscribe(equipes => {
-      this.equipeCards = equipes;
-      this.dataSource.data = equipes;
-      this.local_data = equipes;
+
+
+  getTest(): void {
+    this.staffService.getTests().subscribe(tests => {
+      this.testCards = tests;
+      this.dataSource.data = tests;
+      this.local_data = tests;
       console.log("equipes: ",this.local_data);
-      this.initEvaluationForm();            
+
     });
   }
 
-  initEvaluationForm(): void {
-    
-    this.evaluationForm = this.formBuilder.group({
-      genre: [this.local_data.genre, Validators.required],
-      nom: [this.local_data.nom, Validators.required],
-      codeEquipe: [this.local_data.codeEquipe, Validators.required], // Add Validators.required
-    
-    });
-  }
-  
-  showEvaluationForm(equipe: Equipe): void {
-    this.currentEquipe = equipe;
-    this.evaluationForm.patchValue({
-      genre: equipe.genre,
-      nom: equipe.nom,
-      codeEquipe: equipe.codeEquipe,
-    });
-    this.isEvaluationFormVisible = true;
-  }
-
-  saveEvaluation(): void {
-    // Add logic to save the evaluation
-    this.isEvaluationFormVisible = false;
-  }
-
-  cancelEvaluation(): void {
-    this.isEvaluationFormVisible = false;
-  }
-
-  trackByNom(index: number, equipe: Equipe): string {
-    return equipe.nom;
+  openTest(action: string, obj: any): void{
+    console.log("hello");
+    const queryParams = new URLSearchParams({
+      action,
+      id: obj.id
+    }).toString();
+    const url = `/apps/test?${queryParams}`;
+    window.location.href = url;
   }
 }

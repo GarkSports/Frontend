@@ -8,6 +8,7 @@ import {environment} from "../../environments/environment";
 import { ChangePasswordChange } from 'src/models/changePassword.model';
 import { User } from 'src/models/user.model';
 import { Adherent } from 'src/models/adherent.model';
+import { Test } from 'src/models/test.model';
 
 @Injectable({
   providedIn: 'root'
@@ -131,7 +132,8 @@ export class ManagerService {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.put<any>(`${this.apiUrl}/update-manager`, managerData, { withCredentials: true,headers });
   }
-  
+
+
   getRoleNames(): Observable<RoleName[]> {
     return this.http.get<RoleName[]>(`${this.apiUrl}/get-role-names`, { withCredentials: true });
   }
