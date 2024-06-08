@@ -5,6 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { ComptabiliteService } from 'src/app/services/comptabilite.service';
 import { Benefices, Depenses } from 'src/models/comptabilite.model';
+import { PaiementService } from 'src/app/services/paiement.service';
 import {
   ApexAxisChartSeries,
   ApexChart,
@@ -23,6 +24,12 @@ import {
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import autoTable from 'jspdf-autotable';
+import { Paiement } from 'src/models/paiement.model';
+import { Adherent } from 'src/models/adherent.model';
+import { StatutAdherent } from 'src/models/enums/statutAdherent.model';
+
+
+
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -70,6 +77,9 @@ export class AppComptabiliteComponent implements OnInit {
   monthlySums: any = { currentMonthBenefices: 0, currentMonthDepenses: 0, currentMonthNet: 0 };
   monthlyComparisons: any;
 
+  PaiementdataSource = new MatTableDataSource<Paiement>([]);
+  paiementList: Paiement[] = [];
+
 
   @ViewChild('beneficePaginator') beneficePaginator: MatPaginator;
   @ViewChild('beneficeSort') beneficeSort: MatSort;
@@ -79,19 +89,33 @@ export class AppComptabiliteComponent implements OnInit {
   @ViewChild('depensesPaginator') depensesPaginator: MatPaginator;
   @ViewChild('depenseSort') depenseSort: MatSort;
   DepensesdataSource = new MatTableDataSource<Depenses>([]);
+  paiementnonPayeList: Paiement[];
+  paiementnonPayeCount:number;
+  paiementtotalCount: number;
+  paiementquotient: number;
 
 
 
-  constructor(private ComptabiliteService: ComptabiliteService,
-    private router: Router) {
+  constructor(
+    private ComptabiliteService: ComptabiliteService,
+    private router: Router,
+    private paiementService: PaiementService,
+    ) 
+    {
       this.selectedDate = new Date(); 
-      
-
-
-         }
+    }
 
   typeOptions: any;
   etatOptions: any;
+
+  NonPayeListdisplayedColumns: string[] = [
+    'Type',
+    'Etat',
+    'Quantite',
+    'prix_unitaire',
+    'total',
+    'action'
+  ]
   
 
   BeneficesdisplayedColumns: string[] = [
@@ -126,8 +150,33 @@ export class AppComptabiliteComponent implements OnInit {
     this.getMonthlySums();
     this.getMonthlyComparisons();
     this.updateChart();
+    this.getPaiements();
 
   }
+
+  getPaiements(): void {
+    this.paiementService.getPaiements().subscribe(paiements => {
+      this.paiementList = paiements;
+      this.PaiementdataSource.data = this.paiementList;
+      this.calculateNonPayeQuotient();
+    });
+  }
+
+
+  calculateNonPayeQuotient(): void {
+   
+
+    this.paiementnonPayeList = this.paiementList.filter(paiement => paiement.adherent!.statutAdherent.toString().toLowerCase() === 'non_payé');
+    
+    this.paiementnonPayeCount = this.paiementnonPayeList.length;
+    // Filter out adherents with defined statutAdherent
+    this.paiementtotalCount = this.paiementList.filter(paiement => paiement.adherent?.statutAdherent !== undefined).length;
+  
+    // Calculate quotient
+    this.paiementquotient = this.paiementtotalCount > 0 ? (this.paiementnonPayeCount / this.paiementtotalCount) : 0;
+
+  }
+  
 
   updateChart(): void {
     this.currentyearChart = {
