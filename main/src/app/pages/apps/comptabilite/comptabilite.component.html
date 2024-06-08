@@ -1,6 +1,5 @@
-
-<div class="flex justify-center items-center ">
-  <div class="row p-24 col-lg-12 ">
+<div class="d-flex justify-content-center align-items-center">
+  <div class="row p-24 col-lg-12 justify-content-center">
 
     <div class="col-lg-3">
       <mat-form-field appearance="outline" class="w-100 hide-hint gray-background">
@@ -29,156 +28,102 @@
       </mat-form-field>
     </div>
 
-    <div class="col-lg-3">
+    <div class="col-lg-1 d-flex justify-content-center align-items-center">
       <button mat-icon-button color="primary" (click)="resetFilters()" style="color: gray;">
         <i-tabler name="refresh"></i-tabler>
       </button>
     </div>
 
   </div>
-
 </div>
-<div class="flex justify-center items-center ">
-<div *ngIf="monthlySums" class="row p-24 col-12 parent-container" style="margin-bottom: 20px;">
-  <div class="col-lg-2 p-24  bg-third rounded-3xl gray-background child-div " style="margin-right: 20px;" >
-    <div class=" f-s-16 f-w-600 gray-background" >
-      <span class="f-s-16 f-w-600 gray-background">Totals Des benefices : </span>
-    </div>
-    <div *ngIf="monthlyComparisons" class="pt-2">
-      <p>
-        
-        <button
-          *ngIf="monthlyComparisons.beneficesComparison >= 0"
-          mat-mini-fab
-          class="bg-light-success text-success shadow-none icon-20"
-        >
-          <i-tabler
-            name="arrow-up-left"
-            class="icon-14 d-flex"
-          ></i-tabler>
-        </button>
-        <button
-          *ngIf="monthlyComparisons.beneficesComparison < 0"
-          mat-mini-fab
-          class="bg-light-error text-error shadow-none icon-20"
-        >
-          <i-tabler
-            name="arrow-down-right"
-            class="icon-14 d-flex"
-          ></i-tabler>
-        </button>
-        {{ monthlyComparisons.beneficesComparison }}%
-        depuis le mois dernier
-      </p>
 
+<div class="d-flex justify-content-center align-items-center">
+  <div *ngIf="monthlySums" class="row p-24 col-12 justify-content-between" style="margin-bottom: 20px;">
+    
+    <div class="col-lg-2.5 p-24 bg-third rounded-3xl gray-background m-2">
+      <div class="f-s-16 f-w-600 gray-background">
+        <span class="f-s-16 f-w-600 gray-background">Totals Des benefices :</span>
+      </div>
+      <div *ngIf="monthlyComparisons" class="pt-2">
+        <p>
+          <button *ngIf="monthlyComparisons.beneficesComparison >= 0" mat-mini-fab class="bg-light-success text-success shadow-none icon-20">
+            <i-tabler name="arrow-up-left" class="icon-14 d-flex"></i-tabler>
+          </button>
+          <button *ngIf="monthlyComparisons.beneficesComparison < 0" mat-mini-fab class="bg-light-error text-error shadow-none icon-20">
+            <i-tabler name="arrow-down-right" class="icon-14 d-flex"></i-tabler>
+          </button>
+          {{ monthlyComparisons.beneficesComparison }}% depuis le mois dernier
+        </p>
+      </div>
+      <div class="f-s-16 f-w-600 gray-background pt-2">
+        <tr class="large-text">{{ monthlySums.currentMonthBenefices }}</tr>
+      </div>
     </div>
-    <div class=" f-s-16 f-w-600 gray-background pt-2" >
-      <tr class="large-text ">{{ monthlySums.currentMonthBenefices }}</tr>
+    
+    <div class="col-lg-2.5 p-24 bg-third rounded-3xl gray-background m-2">
+      <div class="f-s-16 f-w-600 gray-background">
+        <span class="f-s-16 f-w-600 gray-background">Totals Des Depenses :</span>
+      </div>
+      <div *ngIf="monthlyComparisons" class="pt-2">
+        <p>
+          <button *ngIf="monthlyComparisons.depensesComparison >= 0" mat-mini-fab class="bg-light-error text-error shadow-none icon-20">
+            <i-tabler name="arrow-up-left" class="icon-14 d-flex"></i-tabler>
+          </button>
+          <button *ngIf="monthlyComparisons.depensesComparison < 0" mat-mini-fab class="bg-light-success text-success shadow-none icon-20">
+            <i-tabler name="arrow-down-right" class="icon-14 d-flex"></i-tabler>
+          </button>
+          {{ monthlyComparisons.depensesComparison }}% depuis le mois dernier
+        </p>
+      </div>
+      <div class="f-s-16 f-w-600 gray-background pt-2">
+        <tr class="large-text">{{ monthlySums.currentMonthDepenses }}</tr>
+      </div>
     </div>
+    
+    <div class="col-lg-2 p-24 bg-third rounded-3xl gray-background m-2">
+      <div class="f-s-16 f-w-600 gray-background">
+        <span class="f-s-16 f-w-600 gray-background">Benefices net :</span>
+      </div>
+      <div *ngIf="monthlyComparisons" class="pt-2">
+        <p>
+          <button *ngIf="monthlyComparisons.netComparison >= 0" mat-mini-fab class="bg-light-success text-success shadow-none icon-20">
+            <i-tabler name="arrow-up-left" class="icon-14 d-flex"></i-tabler>
+          </button>
+          <button *ngIf="monthlyComparisons.netComparison < 0" mat-mini-fab class="bg-light-error text-error shadow-none icon-20">
+            <i-tabler name="arrow-down-right" class="icon-14 d-flex"></i-tabler>
+          </button>
+          {{ monthlyComparisons.netComparison }}% depuis le mois dernier
+        </p>
+      </div>
+      <div class="f-s-16 f-w-600 gray-background pt-2">
+        <tr class="large-text">{{ monthlySums.currentMonthNet }}</tr>
+      </div>
+    </div>
+    
+    <div class="col-lg-4 bg-third rounded-3xl gray-background m-2">
+      <mat-card class="gray-background m-b-0">
+        <mat-card-content>
+          <apx-chart
+            [series]="currentyearChart.series"
+            [chart]="currentyearChart.chart"
+            [colors]="currentyearChart.colors"
+            [grid]="currentyearChart.grid"
+            [plotOptions]="currentyearChart.plotOptions"
+            [dataLabels]="currentyearChart.dataLabels"
+            [legend]="currentyearChart.legend"
+            [stroke]="currentyearChart.stroke"
+            [xaxis]="currentyearChart.xaxis"
+            [yaxis]="currentyearChart.yaxis"
+            [fill]="currentyearChart.fill"
+            [tooltip]="currentyearChart.tooltip"
+          ></apx-chart>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
   </div>
-  
-  <div class="col-lg-2 p-24 bg-third rounded-3xl gray-background child-div " style="margin-right: 20px;">
-    <div class=" f-s-16 f-w-600 gray-background" >
-      <span class="f-s-16 f-w-600 gray-background">Totals Des Depenses : </span>
-      
-    </div>
-
-    <div *ngIf="monthlyComparisons" class="pt-2" >
-      <p>
-        
-        <button
-          *ngIf="monthlyComparisons.depensesComparison >= 0"
-          mat-mini-fab
-          class="bg-light-error text-error shadow-none icon-20"
-        >
-          <i-tabler
-            name="arrow-up-left"
-            class="icon-14 d-flex"
-          ></i-tabler>
-        </button>
-        <button
-          *ngIf="monthlyComparisons.depensesComparison < 0"
-          mat-mini-fab
-          class="bg-light-success text-success  shadow-none icon-20"
-        >
-          <i-tabler
-            name="arrow-down-right"
-            class="icon-14 d-flex"
-          ></i-tabler>
-        </button>
-        {{ monthlyComparisons.depensesComparison }}%
-        depuis le mois dernier
-      </p>
-    </div>
-
-    <div class="f-s-16 f-w-600 gray-background pt-2" >
-      <tr class="large-text">{{ monthlySums.currentMonthDepenses }} </tr>
-    </div>
-  </div>
-  
-  <div class="col-lg-2 p-24 bg-third rounded-3xl gray-background child-div " style="margin-right: 20px;">
-    <div class=" f-s-16 f-w-600 gray-background" >
-      <span class="f-s-16 f-w-600 gray-background">Benefices net : </span>
-    </div>
-
-    <div *ngIf="monthlyComparisons" class="pt-2" >
-      <p>
-        
-        <button
-          *ngIf="monthlyComparisons.netComparison >= 0"
-          mat-mini-fab
-          class="bg-light-success text-success shadow-none icon-20"
-        >
-          <i-tabler
-            name="arrow-up-left"
-            class="icon-14 d-flex"
-          ></i-tabler>
-        </button>
-        <button
-          *ngIf="monthlyComparisons.netComparison < 0"
-          mat-mini-fab
-          class="bg-light-error text-error shadow-none icon-20"
-        >
-          <i-tabler
-            name="arrow-down-right"
-            class="icon-14 d-flex"
-          ></i-tabler>
-        </button>
-        {{ monthlyComparisons.netComparison }}%
-        depuis le mois dernier
-      </p>
-    </div>
-
-
-    <div class=" f-s-16 f-w-600 gray-background pt-2" >
-      <tr class="large-text">{{  monthlySums.currentMonthNet }} </tr>
-    </div>
-  </div>
-  
-  <div class="col-lg-4 bg-third rounded-3xl gray-background child-div ">
-    <mat-card class="gray-background m-b-0">
-      <mat-card-content  >
-        <apx-chart
-          [series]="currentyearChart.series"
-          [chart]="currentyearChart.chart"
-          [colors]="currentyearChart.colors"
-          [grid]="currentyearChart.grid"
-          [plotOptions]="currentyearChart.plotOptions"
-          [dataLabels]="currentyearChart.dataLabels"
-          [legend]="currentyearChart.legend"
-          [stroke]="currentyearChart.stroke"
-          [xaxis]="currentyearChart.xaxis"
-          [yaxis]="currentyearChart.yaxis"
-          [fill]="currentyearChart.fill"
-          [tooltip]="currentyearChart.tooltip"
-        >
-        </apx-chart>
-      </mat-card-content>
-    </mat-card>
-  </div>
-
 </div>
-</div>
+
 
 <mat-card>
   <div class="p-24 bg-third col-lg-6 col-lg-12 rounded-3xl gray-background" style="margin-bottom: 20px;">
