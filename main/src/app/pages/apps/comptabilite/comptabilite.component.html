@@ -137,7 +137,7 @@
           <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
             <i-tabler name="search" class="icon-20"></i-tabler>
           </div>
-          <input type="text" id="simple-search" class="mr-8 bg-gray-50 border-[0.3px] rounded-3xl border-gray-300 text-gray-900 f-s-14 focus:ring-blue-500 focus:border-blue-500 block w-52 h-9 ps-10 p-2.5" placeholder="Rechercher..">
+          <input (keyup)="beneficesapplyFilter($any($event.target).value)" type="text" id="simple-search" class="mr-8 bg-gray-50 border-[0.3px] rounded-3xl border-gray-300 text-gray-900 f-s-14 focus:ring-blue-500 focus:border-blue-500 block w-52 h-9 ps-10 p-2.5" placeholder="Rechercher..">
         </div>
         <button class="bg-main font-bold rounded-3xl h-9 pt-1 shadow-md text-white">
           <div class="row">
@@ -236,7 +236,7 @@
           <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
             <i-tabler name="search" class="icon-20"></i-tabler>
           </div>
-          <input type="text" id="simple-search" class="mr-8 bg-gray-50 border-[0.3px] rounded-3xl border-gray-300 text-gray-900 f-s-14 focus:ring-blue-500 focus:border-blue-500 block w-52 h-9 ps-10 p-2.5" placeholder="Rechercher..">
+          <input (keyup)="depensessapplyFilter($any($event.target).value)" type="text" id="simple-search" class="mr-8 bg-gray-50 border-[0.3px] rounded-3xl border-gray-300 text-gray-900 f-s-14 focus:ring-blue-500 focus:border-blue-500 block w-52 h-9 ps-10 p-2.5" placeholder="Rechercher..">
         </div>
         <button class="bg-main font-bold rounded-3xl h-9 pt-1 shadow-md text-white">
           <div class="row">

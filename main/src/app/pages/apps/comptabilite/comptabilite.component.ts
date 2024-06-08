@@ -349,6 +349,14 @@ applyFilterByMonth(): void {
     );
   }
 
+  beneficesapplyFilter(filterValue: string): void {
+    this.BeneficesdataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  depensessapplyFilter(filterValue: string): void {
+    this.DepensesdataSource.filter = filterValue.trim().toLowerCase();
+  }
+
   beneficesexportToPDF(): void {
     const doc = new jsPDF();
     const columns = this.BeneficesdisplayedColumns.map(col => ({ title: col, dataKey: col }));
