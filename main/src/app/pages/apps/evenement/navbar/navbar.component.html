@@ -20,6 +20,13 @@
         Evénements
       </button>
       <button
+        (click)="setActive('entrainement')" [disabled]="isEntrainementActive" [routerLinkActiveOptions]="{exact: false}"
+        [routerLinkActive]="'bg-black   py-2 px-5 '" class="shrink-0  rounded-3xl    px-4  font-bold text-second hover:bg-third hover:text-black  "
+        routerLink="/apps/entrainement"
+      >
+        Entrainement
+      </button>
+      <button
         [disabled]="isCalendrierActive" routerLink="/apps/calendrier" [routerLinkActive]="'bg-black   py-2 px-5 '"  [routerLinkActiveOptions]="{exact: false}" (click)="setActive('calendrier')"
         class="shrink-0  rounded-3xl    px-4  font-bold text-second hover:bg-third hover:text-black  "
       >

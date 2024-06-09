@@ -60,4 +60,14 @@ export class PaiementService {
     return this.http.get<Equipe[]>(`${this.apiUrlEquipe}/getEquipes`,{withCredentials: true});
   }
 
+  getPaiementById(idPaiement: number): Observable<Paiement> {
+    const url = `${this.apiUrl}/getPaiement/${idPaiement}`;
+    return this.http.get<Paiement>(url);
+  }
+
+  deletePaiementHistory(idPaiementHistory: number): Observable<void> {
+    const url = `${this.apiUrl}/deletePaiementHistory/${idPaiementHistory}`;
+    return this.http.delete<void>(url);
+  }
+
 }

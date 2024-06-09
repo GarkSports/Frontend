@@ -450,7 +450,7 @@ export class AddPaiementPopupComponent implements OnInit {
 })
 export class PaiementHistoryPopupComponent {
   constructor(public dialogRef: MatDialogRef<PaiementDetailsPopupComponent>,
-    @Inject(MAT_DIALOG_DATA) public paiementHistory: PaiementHistory[]) { }
+    @Inject(MAT_DIALOG_DATA) public paiementHistory: PaiementHistory[], private paiementService: PaiementService) { }
 
   close(): void {
     this.dialogRef.close();
@@ -460,10 +460,40 @@ export class PaiementHistoryPopupComponent {
     'dateDebut',
     'dateFin',
     'datePaiement',
-    'retardPaiement',
     'montant',
     'reste',
+    'action',
   ];
+
+  reloadPaiementHistory(): void {
+    // Assuming you have the adherent ID accessible somehow, e.g., passed via MAT_DIALOG_DATA
+    const adherentId = this.paiementHistory[0]?.adherent?.id;
+    if (adherentId) {
+      this.paiementService.getPaiementHistory(adherentId).subscribe({
+        next: (histories) => {
+          this.paiementHistory = histories;
+        },
+        error: (error) => {
+          console.error('Error loading paiement histories:', error);
+        }
+      });
+    }
+  }
+
+  deletePaiementHistory(idPaiementHistory: number): void {
+    this.paiementService.deletePaiementHistory(idPaiementHistory).subscribe({
+      next: () => {
+        // Handle successful deletion, e.g., show a confirmation message or refresh data
+        this.reloadPaiementHistory();  // Reload the list after deletion
+      },
+      error: (error) => {
+        // Handle error
+        console.error('Error deleting paiement history:', error);
+      }
+    });
+  }
+
+  
 }
 
 @Component({

@@ -1,11 +1,12 @@
 import { Academie } from "./academie.model";
 import { Discipline } from "./discipline.model";
 import { StatutAdherent } from "./enums/statutAdherent.model";
+import { InformationsParent } from "./informationsParent";
 import { Paiement } from "./paiement.model";
 import { User } from "./user.model";
 
 export class Adherent extends User {
-    informationParent: string;
+    informationsParent: InformationsParent;
     discipline?: Discipline;
     academie?: Academie;
     paiement?: Paiement;
