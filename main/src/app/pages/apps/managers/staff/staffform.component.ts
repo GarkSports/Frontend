@@ -1,33 +1,14 @@
-import {
-  Component,
-  OnInit,
-  Inject,
-  Optional,
-  ViewChild,
-  OnDestroy,
-  CUSTOM_ELEMENTS_SCHEMA
-} from '@angular/core';
-import { MatTableDataSource, MatTable } from '@angular/material/table';
-import {
-  MatDialog,
-  MatDialogRef,
-  MAT_DIALOG_DATA,
-} from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { Manager } from 'src/models/manager.model';
-import { ManagerService } from 'src/app/services/manager.service';
-import { DatePipe } from '@angular/common';
-import { Academie } from 'src/models/academie.model';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Role, RoleArray } from 'src/models/enums/role.model';
-import { RoleName, RoleNameArray } from 'src/models/roleName.models';
-import { AngularFireStorage } from '@angular/fire/compat/storage';
-import { MatSort } from '@angular/material/sort';
-import { Observable, forkJoin } from 'rxjs';
-import { PaiementService } from 'src/app/services/paiement.service';
-import { Equipe } from 'src/models/equipe.model';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MatSelectChange } from '@angular/material/select';
+import {Component, Inject, OnInit, Optional} from '@angular/core';
+import {MatTableDataSource} from '@angular/material/table';
+import {MAT_DIALOG_DATA, MatDialog,} from '@angular/material/dialog';
+import {Manager} from 'src/models/manager.model';
+import {ManagerService} from 'src/app/services/manager.service';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Role} from 'src/models/enums/role.model';
+import {AngularFireStorage} from '@angular/fire/compat/storage';
+import {Observable} from 'rxjs';
+import {ActivatedRoute} from '@angular/router';
+import {Adherent} from 'src/models/adherent.model';
 
 @Component({
   // tslint:disable-next-line - Disables all
@@ -35,38 +16,39 @@ import { MatSelectChange } from '@angular/material/select';
   templateUrl: './staffform.component.html',
 })
 // tslint:disable-next-line - Disables all
-export class AppStaffformContentComponent implements OnInit, OnDestroy {
-  private broadcastChannel: BroadcastChannel;
+export class AppStaffformContentComponent implements OnInit {
 
   action: string;
   local_data: any;
   managerForm: FormGroup;
+  adherentForm: FormGroup;
   firstnameValue: string;
   roles: string[];
   roleNames: string[];
+  showParentInfo: boolean = false;
+  ifAdherent: boolean = true;
+  isAdherent: boolean = false;
+
 
   dataSource = new MatTableDataSource<string>([]);
-  managerSource = new MatTableDataSource<Manager>([]);
 
   constructor(
     @Optional()
-    @Inject(MAT_DIALOG_DATA)
-    public data: { managerForm: FormGroup; data: Manager },
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private firestorage: AngularFireStorage,
     private formBuilder: FormBuilder,
     private managerService: ManagerService,
     private route: ActivatedRoute,
     private dialog: MatDialog
   ) {
-    this.local_data = { ...data };
-    this.action = this.local_data.action;
-    this.broadcastChannel = new BroadcastChannel('staffFormChannel');
+
   }
 
   showRoleInput: boolean = false;
   photo: string;
-  onRoleChange(event: MatSelectChange) {
-    const selectedValue = event.value;
+
+  onRoleChange(event: any) {
+    const selectedValue = event.target.value;
     this.showRoleInput =
       selectedValue === 'STAFF' || selectedValue === 'ENTRAINEUR';
     console.log('role', selectedValue);
@@ -78,17 +60,41 @@ export class AppStaffformContentComponent implements OnInit, OnDestroy {
     this.route.queryParams.subscribe((params) => {
       this.action = params['action'];
       const id = params['id'];
-        this.getFormManagerById(id);
+      this.getFormManagerById(id);
+      this.initAdherentForm();
       this.getOnlyRoleNames();
       this.initManagerForm();
-
     });
   }
 
+  checkAge(event: any) {
+    const dateOfBirth = new Date(event.target.value);
+    const today = new Date();
+    const age = today.getFullYear() - dateOfBirth.getFullYear();
+    const monthDiff = today.getMonth() - dateOfBirth.getMonth();
 
-  ngOnDestroy(): void {
-    this.broadcastChannel.postMessage('staffFormClosed');
-    this.broadcastChannel.close();
+    if (age < 18 || (age === 18 && monthDiff < 0)) {
+      this.showParentInfo = true;
+      console.log('User is under 18 years old');
+    } else {
+      this.showParentInfo = false;
+      console.log('User is 18 years old or older');
+    }
+  }
+
+  checkAgeOnInit(dateNaissance: Date) {
+    const today = new Date();
+    const age = today.getFullYear() - dateNaissance.getFullYear();
+    const monthDiff = today.getMonth() - dateNaissance.getMonth();
+    console.log(age);
+
+    if (age < 18 || (age === 18 && monthDiff < 0)) {
+      this.showParentInfo = true;
+      console.log('User is under 18 years old');
+    } else {
+      this.showParentInfo = false;
+      console.log('User is 18 years old or older');
+    }
   }
 
   getOnlyRoleNames(): void {
@@ -120,11 +126,43 @@ export class AppStaffformContentComponent implements OnInit, OnDestroy {
 
   getFormManagerById(id: string): void {
     this.managerService.getFormManagerById(id).subscribe(
-      (manager) => {
-        this.local_data = manager; // Store the fetched manager data
-        console.log("name", manager.firstname);
-        console.log("this.local_data", this.local_data);
-        this.initManagerForm(manager); // Initialize the form with the fetched manager data
+      (user) => {
+        this.local_data = user;
+
+        if(this.local_data.role === 'ADHERENT'){
+          const adherent = user as Adherent;
+          this.local_data = adherent;
+          this.initAdherentForm(adherent);
+          const dateNaissance = new Date(adherent.dateNaissance);
+          console.log(dateNaissance);
+
+          const today = new Date();
+    const age = today.getFullYear() - dateNaissance.getFullYear();
+    const monthDiff = today.getMonth() - dateNaissance.getMonth();
+    console.log(age);
+
+          if (age < 18 || (age === 18 && monthDiff < 0)) {
+      this.showParentInfo = true;
+      console.log('User is under 18 years old');
+    } else {
+      this.showParentInfo = false;
+      console.log('User is 18 years old or older');
+    }
+          this.ifAdherent = false;
+          this.isAdherent = true;
+        }
+      else {
+        const manager = user as Manager;
+          this.local_data = manager;
+          this.initManagerForm(manager);
+        console.log("manager",manager);
+        console.error('User is not a manager nor adherent');
+        console.log("role is",manager.role);
+        console.log("type of",typeof(manager));
+        console.log("role adh",Role.MANAGER);
+        console.log(manager.role===Role.MANAGER?'oui':'non');
+
+        }
       },
       (error) => {
         console.error('Error fetching manager', error);
@@ -137,6 +175,7 @@ export class AppStaffformContentComponent implements OnInit, OnDestroy {
       firstname: [manager?.firstname || '', Validators.required],
       lastname: [manager?.lastname || '', Validators.required],
       email: [manager?.email || '', [Validators.required, Validators.email]],
+      dateNaissance: [manager?.dateNaissance || '', Validators.required],
       adresse: [manager?.adresse || '', Validators.required],
       role: [manager?.role, Validators.required],
       roleName: [
@@ -149,19 +188,30 @@ export class AppStaffformContentComponent implements OnInit, OnDestroy {
     });
   }
 
-  getManagers(): void {
-    this.managerService.getManagers().subscribe(
-      (managers) => {
-        console.log('Managers fetched successfully', managers);
-        this.managerSource.data = managers;
-      },
-      (error) => {
-        console.error('Error fetching academies', error);
-      }
-    );
+  initAdherentForm(adherent?: Adherent): void {
+    this.adherentForm = this.formBuilder.group({
+      firstname: [adherent?.firstname || '', Validators.required],
+      lastname: [adherent?.lastname || '', Validators.required],
+      email: [adherent?.email || '', [Validators.required, Validators.email]],
+      dateNaissance: [adherent?.dateNaissance || '', Validators.required],
+      adresse: [adherent?.adresse || '', Validators.required],
+      photo: [adherent?.photo || null],
+      telephone: [adherent?.telephone, Validators.required],
+      informationsParent: this.formBuilder.group({
+        nomParent: [adherent?.informationsParent?.nomParent || '', Validators.required],
+        prenomParent: [adherent?.informationsParent?.prenomParent || '', Validators.required],
+        telephoneParent: [adherent?.informationsParent?.telephoneParent || '', Validators.required],
+        adresseParent: [adherent?.informationsParent?.adresseParent || '', Validators.required],
+        emailParent: [adherent?.informationsParent?.emailParent || '', [Validators.required, Validators.email]],
+        nationaliteParent: [adherent?.informationsParent?.nationaliteParent || '', Validators.required]
+      })
+    });
   }
 
+
   doAction(): void {
+    const form = this.isAdherent ? this.adherentForm : this.managerForm;
+
     if (this.action === 'Add') {
       const role = this.managerForm.get('role')?.value;
       console.log('role', role);
@@ -232,9 +282,14 @@ export class AppStaffformContentComponent implements OnInit, OnDestroy {
       );
     } else if (this.action === 'Update') {
       const updatedManager = this.managerForm.value;
+      const updatedAdherent = this.adherentForm.value;
+      console.log(updatedAdherent);
+      updatedAdherent.id = this.local_data.id;
+      updatedAdherent.photo = this.local_data.photo;
+
       updatedManager.id = this.local_data.id; // Set the id of the manager to be updated
       updatedManager.photo = this.local_data.photo;
-      const role = updatedManager.role;
+      const role = this.local_data.role;
       let updateObservable;
       switch (role) {
         case 'STAFF':
@@ -247,7 +302,7 @@ export class AppStaffformContentComponent implements OnInit, OnDestroy {
             this.managerService.updateEntraineur(updatedManager);
           break;
         case 'ADHERENT':
-          const adherentWithPhoto = { ...updatedManager, photo: this.photo };
+          const adherentWithPhoto = { ...updatedAdherent, photo: this.photo };
 
           updateObservable =
             this.managerService.updateAdherent(adherentWithPhoto);
@@ -296,32 +351,42 @@ export class AppStaffformContentComponent implements OnInit, OnDestroy {
     if (window.opener) {
       window.close();
     } else {
-      // Optionally, you can navigate back to the previous page if the window wasn't opened as a popup
       window.history.back();
     }
   }
 
   async uploadFile(event: any) {
-    if (!event.target.files[0] || event.target.files[0].length === 0) {
+    if (!event.target.files[0]) {
       return;
     }
-    const mimeType = event.target.files[0].type;
-    if (mimeType.match(/image\/*/) == null) {
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.readAsDataURL(event.target.files[0]);
-    reader.onload = (_event) => {
-      this.local_data.photo = reader.result as string;
-    };
 
     const file = event.target.files[0];
-    if (file) {
-      const path = `academie/${file.name}`;
+    const mimeType = file.type;
+
+    if (!mimeType.startsWith('image/')) {
+      // Handle error if the file is not an image
+      return;
+    }
+
+    // Display image
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.local_data.imagePath = reader.result as string;
+    };
+    reader.readAsDataURL(file);
+
+    // Upload image
+    const path = `academie/${file.name}`;
+    try {
       const uploadTask = await this.firestorage.upload(path, file);
       const url = await uploadTask.ref.getDownloadURL();
-      this.local_data.photo = url;
+
+      this.photo = url;
+      // this.managerForm.setValue({ photo: url });
+      // Set the photo URL to the form control
+      this.adherentForm.patchValue({ photo: url });
+    } catch (error) {
+      console.error('Error uploading file:', error);
     }
   }
 }
@@ -329,10 +394,10 @@ export class AppStaffformContentComponent implements OnInit, OnDestroy {
 @Component({
   selector: 'app-notification-dialog',
   template: `
-    <h1 mat-dialog-title>{{ data.title }}</h1>
-    <div mat-dialog-content>{{ data.message }}</div>
+    <h1 mat-dialog-title class="p-24 p-t-5">{{ data.title }}</h1>
+    <div mat-dialog-content class="p-x-24 p-b-24">{{ data.message }}</div>
     <div mat-dialog-actions>
-      <button mat-button mat-dialog-close (click)="cancelAction()">OK</button>
+      <button mat-stroked-button class="p-24 p-t-0" (click)="cancelAction()">OK</button>
     </div>
   `,
   styles: [
@@ -346,6 +411,8 @@ export class AppStaffformContentComponent implements OnInit, OnDestroy {
     `,
   ],
 })
+
+
 export class NotificationDialogComponent {
   constructor(
     @Inject(MAT_DIALOG_DATA)

@@ -108,12 +108,7 @@
 
         <textarea
           class="mt-1.5 h-18 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
-          required rows="4" formControlName="description"></textarea>
-
-        <p class="text-red-600"
-           *ngIf="evenementForm.get('description')?.invalid && evenementForm.get('description')?.touched">
-          Champ Description est obligatoire!
-        </p>
+          formControlName="description" rows="4"></textarea>
       </div>
       <div class="mt-4">
         <mat-checkbox formControlName="repetition">Se répéte</mat-checkbox>

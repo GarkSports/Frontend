@@ -1,0 +1,121 @@
+<h2 class="f-w-500 m-b-24" mat-dialog-title>Update Payment</h2>
+<mat-dialog-content style="max-width: 600px">
+  <!-- Form fields for updating payment attributes -->
+  <div class="form-row" style="margin-top: 10px;">
+    <div class="input-container">
+      <mat-form-field appearance="outline" style="width: 100%;">
+        <mat-label>Type Abonnement</mat-label>
+        <mat-select [(ngModel)]="paiement.typeAbonnement" placeholder="Type Abonnement" required>
+          <mat-option *ngFor="let type of typeAbonnements" [value]="type">{{ type }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="input-container">
+      <mat-form-field appearance="outline">
+        <mat-label>Date Début</mat-label>
+        <input matInput [matDatepicker]="picker" placeholder="Date Début" [(ngModel)]="paiement.dateDebut" required />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="paiement.dateDebut === null || paiement.dateDebut === undefined">
+          La date debut doit être saisie.
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="input-container">
+      <mat-form-field appearance="outline">
+        <mat-label>Date Fin</mat-label>
+        <input matInput [matDatepicker]="picker2" placeholder="Date Fin" [(ngModel)]="paiement.dateFin" required />
+        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+        <mat-datepicker #picker2></mat-datepicker>
+        <mat-error *ngIf="paiement.dateFin === null || paiement.dateFin === undefined">
+          La date fin doit être saisie.
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="input-container">
+      <mat-form-field appearance="outline" style="width: 100%;">
+        <mat-label>Date Paiement</mat-label>
+        <input matInput [matDatepicker]="picker3" placeholder="Date Paiement" [(ngModel)]="paiement.datePaiement"
+          required />
+        <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+        <mat-datepicker #picker3></mat-datepicker>
+        <mat-error *ngIf="paiement.datePaiement === null || paiement.datePaiement === undefined">
+          La date paiement doit être saisie.
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="input-container">
+      <mat-form-field appearance="outline" style="width: 100%;">
+        <mat-label>Montant</mat-label>
+        <input matInput type="number" placeholder="Montant" [(ngModel)]="paiement.montant" min="0" required />
+        <mat-error *ngIf="paiement.montant !== undefined && paiement.montant < 0">
+          Le montant doit être positif.
+        </mat-error>
+        <mat-error *ngIf="paiement.montant === null || paiement.montant === undefined">
+          Le montant doit être saisi.
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="input-container">
+      <mat-form-field appearance="outline" style="width: 100%;">
+        <mat-label>Reste</mat-label>
+        <input matInput type="number" placeholder="Reste" [(ngModel)]="paiement.reste" />
+        <mat-error *ngIf="paiement.reste < 0">
+          Le reste doit être positif.
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="input-container">
+      <mat-form-field appearance="outline" style="width: 100%;">
+        <mat-label>Remarque</mat-label>
+        <textarea matInput placeholder="Remarque" [(ngModel)]="paiement.remarque"></textarea>
+      </mat-form-field>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <!-- Buttons for Save and Cancel -->
+  <button mat-raised-button class="cancel-button" (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" [mat-dialog-close]="paiement" class="save-button" (click)="onUpdate(paiement)"
+    >Update</button>
+</mat-dialog-actions>
+
+<style>
+  .form-row {
+    display: flex;
+    margin-bottom: 16px;
+  }
+
+  .input-container {
+    flex: 1;
+    margin-right: 10px;
+  }
+
+  ::ng-deep .mat-dialog-actions button {
+    min-width: 100px;
+  }
+
+  .cancel-button {
+    background-color: #FA9175;
+    /* Custom color */
+    color: white;
+    /* Text color */
+  }
+
+  .save-button {
+    min-width: 100px;
+  }
+</style>

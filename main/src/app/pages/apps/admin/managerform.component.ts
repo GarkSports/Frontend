@@ -45,11 +45,18 @@ export class AppManagerFormComponent implements OnInit {
 
   getFormManagerById(id: string): void {
     this.managerService.getFormManagerById(id).subscribe(
-      (manager) => {
+      (user) => {
+        if (user.role === 'Manager') {
+        const manager = user as Manager;
         this.local_data = manager; // Store the fetched manager data
-        console.log("name", manager.firstname);
+        console.log("name", user.firstname);
         console.log("this.local_data", this.local_data);
         this.initManagerForm(manager); // Initialize the form with the fetched manager data
+      }
+      else {
+        console.error('User is not a manager');
+        // Handle error or show a message indicating that the user is not a manager
+      }
       },
       (error) => {
         console.error('Error fetching manager', error);
@@ -158,10 +165,10 @@ export class AppManagerFormComponent implements OnInit {
 @Component({
   selector: 'app-notification-dialog',
   template: `
-    <h1 mat-dialog-title>{{ data.title }}</h1>
-    <div mat-dialog-content>{{ data.message }}</div>
+    <h1 mat-dialog-title class="p-24 p-t-5">{{ data.title }}</h1>
+    <div mat-dialog-content class="p-x-24 p-b-24">{{ data.message }}</div>
     <div mat-dialog-actions>
-      <button mat-button mat-dialog-close (click)="cancelAction()">OK</button>
+      <button mat-stroked-button class="p-24 p-t-0" (click)="cancelAction()">OK</button>
     </div>
   `,
   styles: [
@@ -175,6 +182,7 @@ export class AppManagerFormComponent implements OnInit {
     `,
   ],
 })
+
 export class NotificationDialogComponent {
   constructor(
     @Inject(MAT_DIALOG_DATA)

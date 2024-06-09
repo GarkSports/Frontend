@@ -1,20 +1,13 @@
-import { Component } from '@angular/core';
-import {
-    FormBuilder,
-    FormGroup,
-    FormsModule,
-    ReactiveFormsModule,
-    Validators,
-    FormControl,
-} from '@angular/forms';
-import { MaterialModule } from 'src/app/material.module';
-import { CommonModule } from '@angular/common';
-import { EvenementService } from 'src/app/services/evenement.service';
-import { Equipe } from 'src/models/equipe.model';
-import { Evenement } from 'src/models/evenement.model'; // Import Evenement model
-import { MatchAmicalRequest } from 'src/models/dto/MatchAmicalRequest.model';
-import { Router } from '@angular/router';
-import { TypeRepetition } from 'src/models/enums/typeRepetition.model';
+import {Component} from '@angular/core';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators,} from '@angular/forms';
+import {MaterialModule} from 'src/app/material.module';
+import {CommonModule} from '@angular/common';
+import {EvenementService} from 'src/app/services/evenement.service';
+import {Equipe} from 'src/models/equipe.model';
+import {Evenement} from 'src/models/evenement.model'; // Import Evenement model
+import {MatchAmicalRequest} from 'src/models/dto/MatchAmicalRequest.model';
+import {Router} from '@angular/router';
+import {TypeRepetition} from 'src/models/enums/typeRepetition.model';
 
 @Component({
     selector: 'add-matchamical',
@@ -28,7 +21,7 @@ export class AddMatchAmicalComponent {
     matchAmicalForm: FormGroup;
     typeRepetitions: string[] = Object.values(TypeRepetition).filter(value => typeof value === 'string').map(value => String(value));
     selectedTypeRepetition: string;
-
+  step1: boolean = true;
     constructor(
         private formBuilder: FormBuilder,
         private eventService: EvenementService,
@@ -60,6 +53,9 @@ export class AddMatchAmicalComponent {
         });
     }
 
+  nextStep(): void {
+    this.step1 = false;
+  }
     ngOnInit(): void {
         this.getEquipes();
     }
