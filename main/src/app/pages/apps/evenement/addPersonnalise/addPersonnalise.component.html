@@ -15,7 +15,7 @@
                 <p class="text-center hidden sm:block text-black"> Details </p>
               </li>
 
-              <li class="  gap-2  p-2">
+              <li class="  gap-2  p-2    ">
                 <button (click)="step1=false"
                         [ngClass]="{
                   'bg-main': !step1,
@@ -26,11 +26,11 @@
                   'text-second': step1,
                 }"
 
-                        class="size-12  pt-0.5  rounded-full  text-second    text-center text-lg  font-bold"
+                        class="size-12 ml-5  pt-0.5  rounded-full  text-second    text-center text-lg  font-bold"
                 > 2
                 </button>
 
-                <p class="text-center hidden sm:block text-black">Cnvocation</p>
+                <p class="text-center hidden sm:block text-black">Convocation</p>
               </li>
 
             </ol>
@@ -38,7 +38,7 @@
         </div>
       </div>
       <form [formGroup]="evenementForm" class="m-t-24">
-        <div class=" ">
+          @if(step1){
           <!-- Nom -->
           <div class="mt-4">
             <label class="block text-sm font-medium text-gray-900"> Nom </label>
@@ -90,88 +90,91 @@
               class="mt-1.5 h-18 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
               formControlName="description" rows="4"></textarea>
           </div>
-          <div class="mt-4">
-            <mat-checkbox formControlName="repetition">Se répéte</mat-checkbox>
-          </div>
+            <div class="mt-4 flex justify-center">
+              <button
+                class="px-8 py-2 rounded-3xl font-semibold bg-main hover:bg-mainHover disabled:bg-second text-black"
+                (click)="nextStep()">Suivant
+              </button>
+            </div>
+          }
 
-          <div *ngIf="evenementForm.get('repetition')?.value" class="mt-4" style="margin-top: 20px;">
 
-            <label class="block text-sm font-medium text-gray-900"> Chaque </label>
-            <select
-              [(ngModel)]="selectedTypeRepetition"
-              class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
-              formControlName="typeRepetition" name="typeRepetition"
-              required
-            >
-              <option *ngFor="let typeRepetition of typeRepetitions" [value]="typeRepetition">{{
-                  typeRepetition |titlecase
-                }}
-              </option>
-            </select>
-          </div>
-          <div *ngIf="evenementForm.get('repetition')?.value" class="mt-4" style="margin-top: 20px;">
+          @if(!step1){
 
-            <label class="block text-sm font-medium text-gray-900" for="HeadlineAct"> Nombre de fois </label>
-            <input
-              class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
-              formControlName="nbRepetition" required type="number"/>
-
-          </div>
-        </div>
-        <div class="text-right">
-          <button color="primary" mat-flat-button>Next</button>
-        </div>
         <div>
           <!-- Radio buttons for selection -->
-          <div class="radio-buttons-container">
-            <mat-radio-group [(ngModel)]="selectedOption" name="selectedOption"
-                             style="margin-bottom: 20px;">
-              <mat-radio-button (click)="changeOption('equipe')" [checked]="selectedOption === 'equipe'"
-                                value="equipe">Equipe
+          <div class="radio-buttons-container flex justify-center">
+            <mat-radio-group [(ngModel)]="selectedOption" name="selectedOption" style="margin-bottom: 20px;">
+              <mat-radio-button value="equipe" [checked]="selectedOption === 'equipe'" color="primary"
+                                (click)="changeOption('equipe')">Equipe
               </mat-radio-button>
-              <mat-radio-button (click)="changeOption('member')" [checked]="selectedOption === 'member'"
-                                value="member">Member
+              <mat-radio-button value="member" [checked]="selectedOption === 'member'" color="primary"
+                                (click)="changeOption('member')">Member
               </mat-radio-button>
             </mat-radio-group>
           </div>
 
           <!-- Equipe selection -->
           <div *ngIf="selectedOption === 'equipe'">
-            <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Equipe</mat-label>
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-select [(ngModel)]="selectedEquipe" name="equipe" required required>
-                <mat-option *ngFor="let equipe of equipeList" [value]="equipe.id">{{ equipe.nom }}</mat-option>
-              </mat-select>
-            </mat-form-field>
+            <label for="HeadlineAct" class="block text-sm font-medium text-gray-900"> Equipe </label>
+
+            <select
+              [(ngModel)]="selectedEquipe"
+              required
+              name="HeadlineAct"
+              id="HeadlineAct"
+              class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
+            >
+              <option value=""></option>
+              <option *ngFor="let equipe of equipeList" [value]="equipe.id">{{
+                  equipe.nom
+                }}
+              </option>
+            </select>
           </div>
           <!-- Member selection -->
           <div *ngIf="selectedOption === 'member'">
-            <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Equipe</mat-label>
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-select [(ngModel)]="selectedEquipe2" name="equipe" required>
-                <mat-option *ngFor="let equipe of equipeList" [value]="equipe">{{ equipe.nom }}</mat-option>
-              </mat-select>
-            </mat-form-field>
+
+            <label  class="block text-sm font-medium text-gray-900"> Equipe </label>
+
+            <select
+              (change)="setEquipe2($event)"
+              name="equipe" required
+              class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
+            >
+              <option value=""></option>
+              <option *ngFor="let equipe of equipeList"  [value]="equipe.id">{{
+                  equipe.nom
+                }}
+              </option>
+            </select>
           </div>
 
 
-          <div *ngIf="selectedOption === 'member' && selectedEquipe2">
+          <div *ngIf="selectedOption === 'member' && selectedEquipe2" class="mt-4">
             <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Members</mat-label>
             <mat-form-field appearance="outline" class="w-100">
-              <mat-select [(ngModel)]="selectedMembers" multiple name="membres" required required>
-                <mat-option *ngFor="let member of selectedEquipe2.adherents"
-                            [value]="member.id">{{ member.firstname }} {{ member.lastname }}
+              <mat-select multiple required [(ngModel)]="selectedMembers" name="membres" required>
+                <mat-option *ngFor="let member of selectedEquipe2.adherents" [value]="member.id">{{
+                    member.firstname
+                  }} {{ member.lastname }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
           </div>
         </div>
-        <div class="d-flex align-items-center justify-content-between">
-          <button color="warn" mat-flat-button>
-            Back
-          </button>
-          <button (click)="onSubmit()" [disabled]="!evenementForm.valid" color="primary" mat-flat-button>Finish</button>
-        </div>
+
+
+            <div class="flex justify-center mt-4">
+
+              <button
+                class="px-8 py-2 rounded-3xl font-semibold bg-main hover:bg-mainHover disabled:bg-second text-black"
+                [disabled]="!evenementForm.valid"
+                (click)="onSubmit()">Confirmer
+              </button>
+            </div>
+
+          }
       </form>
     </div>
   </div>

@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Paiement } from 'src/models/paiement.model';
 import { PaiementService } from 'src/app/services/paiement.service';
 import { TypeAbonnement } from 'src/models/enums/typeAbonnement.model';
+import {PaiementHistoryPopupComponent} from "./paiement.component";
+import {PaiementHistory} from "../../../../models/paiementHistory.model";
 
 @Component({
   selector: 'app-update-payment-page',
@@ -17,7 +19,18 @@ export class UpdatePaymentPageComponent implements OnInit {
   ngOnInit(): void {
     this.getPaiement();
   }
+  historic :PaiementHistory[]= []
+  numStep=1;
+  changeStep(num: number): void {
+    this.numStep = num;
+    if( this.numStep == 2 && this.paiement.adherent !=null) {
 
+      this.paiementService.getPaiementHistory(this.paiement.adherent.id).subscribe((paiementHistory) => {
+        this.historic = paiementHistory;
+        console.log(paiementHistory)
+      });
+    }
+  }
   getPaiement(): void {
     const idString = this.route.snapshot.paramMap.get('id');
     if (idString) {
