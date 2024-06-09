@@ -23,8 +23,8 @@ export class UpdateBeneficeDepenseComponent implements OnInit {
       type: ['', Validators.required],
       etat: ['', Validators.required],
       date: ['', Validators.required],
-      prixunite: ['', [Validators.required, Validators.min(0)]],
-      quantite: ['', [Validators.required, Validators.min(0)]],
+      prixunite: ['', [Validators.required, Validators.min(1)]],
+      quantite: ['', [Validators.required, Validators.min(1)]],
     });
   }
 
