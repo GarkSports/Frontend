@@ -94,7 +94,7 @@ export class CalendrierComponent implements OnInit {
       (this.selectedTeams.length === 0 || this.selectedTeams.includes(event.convocationEquipe?.nom)) &&
       (!this.selectedDate || this.isSameDate(event.date, this.selectedDate))
     ).map(event => ({
-      // ...event,
+      ...event,
       title: `${event.nomEvent} - ${event.heure.slice(0, 5) }`,
       type: event.type,
       start: event.date,

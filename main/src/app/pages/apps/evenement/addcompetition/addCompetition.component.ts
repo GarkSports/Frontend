@@ -89,8 +89,12 @@ export class AddCompetitionComponent {
     getMembers(): void {
         this.eventService.getMembers().subscribe(members => {
             this.memberList = members;
+    
+            // Initialize selectedMembers array with all member IDs
+            this.selectedMembers = this.memberList.map(member => member.id);
         });
     }
+    
 
     changeOption(option: string): void {
         this.selectedOption = option;

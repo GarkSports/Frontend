@@ -6,6 +6,7 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import { MatSelectionListChange } from '@angular/material/list';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 import { EquipeService } from 'src/app/services/equipe.service';
 import { Adherent } from 'src/models/adherent.model';
 import { Discipline } from 'src/models/discipline.model';
@@ -144,6 +145,7 @@ export class EquipeComponent implements AfterViewInit {
     public datePipe: DatePipe,
     private equipeService: EquipeService,
     private firestorage: AngularFireStorage,
+    private router: Router
   ) { }
 
   ngAfterViewInit(): void {
@@ -156,9 +158,9 @@ export class EquipeComponent implements AfterViewInit {
 
   ngOnInit(): void {
     this.equipes.push(this.createEmptyEquipe());
-    this.getMembers();
+    //this.getMembers();
     this.getDisciplines();
-    this.getEntraineurs();
+    //this.getEntraineurs();
     this.getEquipes();
   }
 
@@ -180,8 +182,8 @@ export class EquipeComponent implements AfterViewInit {
     this.equipes.splice(index, 1);
   }
 
-  getMembers(): void {
-    this.equipeService.getMembers()
+  getMembers(equipeId: number): void {
+    this.equipeService.getMembers(equipeId)
       .subscribe(members => this.members = members);
   }
 
@@ -190,8 +192,8 @@ export class EquipeComponent implements AfterViewInit {
       .subscribe(disciplines => this.disciplines = disciplines);
   }
 
-  getEntraineurs(): void {
-    this.equipeService.getEntraineurs()
+  getEntraineurs(equipeId: number): void {
+    this.equipeService.getEntraineurs(equipeId)
       .subscribe(entraineurs => this.entraineurs = entraineurs);
   }
 
@@ -250,37 +252,37 @@ export class EquipeComponent implements AfterViewInit {
     this.equipeService.deleteEquipe(equipeId).subscribe(() => {
       // Reload equipes
       this.getEquipes();
-      this.getMembers();
-      this.getEntraineurs();
+      this.getMembers(equipeId);
+      this.getEntraineurs(equipeId);
     }, error => {
       // Handle error, if needed
       console.error('Error deleting equipe:', error);
     });
   }
 
-  showAdherentsPopup(adherents: Adherent[]): void {
+  showAdherentsPopup(adherents: Adherent[], equipeId: number): void {
     const dialogRef = this.dialog.open(AdherentPopupComponent, {
-      data: { adherents },
+      data: { adherents, equipeId },
     });
 
     dialogRef.afterClosed().subscribe(() => {
       // This will be executed after the dialog is closed
       this.getEquipes();
-      this.getMembers();
-      this.getEntraineurs();
+      this.getMembers(equipeId);
+      this.getEntraineurs(equipeId);
     });
   }
 
-  showEntraineursPopup(entraineurs: Entraineur[]): void {
+  showEntraineursPopup(entraineurs: Entraineur[], equipeId: number): void {
     const dialogRef = this.dialog.open(EntraineurPopupComponent, {
-      data: { entraineurs },
+      data: { entraineurs, equipeId },
     });
 
     dialogRef.afterClosed().subscribe(() => {
       // This will be executed after the dialog is closed
       this.getEquipes();
-      this.getMembers();
-      this.getEntraineurs();
+      //this.getMembers();
+      this.getEntraineurs(equipeId);
     });
   }
 
@@ -304,8 +306,8 @@ export class EquipeComponent implements AfterViewInit {
         // Handle success, if needed
         console.log('Members affected to equipe:', result);
         this.getEquipes();
-        this.getMembers();
-        this.getEntraineurs();
+        this.getMembers(equipeId);
+        this.getEntraineurs(equipeId);
       },
       (error) => {
         // Handle error, if needed
@@ -332,8 +334,8 @@ export class EquipeComponent implements AfterViewInit {
         // Handle success, if needed
         console.log('Entraineurs affected to equipe:', result);
         this.getEquipes();
-        this.getMembers();
-        this.getEntraineurs();
+        //this.getMembers();
+        this.getEntraineurs(equipeId);
       },
       (error) => {
         // Handle error, if needed
@@ -353,6 +355,10 @@ export class EquipeComponent implements AfterViewInit {
         this.getEquipes();
       }
     });
+  }
+
+  navigateToAddEquipe(): void {
+    this.router.navigate(['/apps/addequipe']);
   }
 }
 
@@ -420,7 +426,7 @@ export class UpdateEquipePopupComponent {
     } else {
       this.uploadingImage = false; // Reset uploadingImage flag if no file is selected (canceled)
     }
-  }
+  }  
 }
 
 @Component({
@@ -428,9 +434,9 @@ export class UpdateEquipePopupComponent {
   templateUrl: './adherentPopup.component.html',
 })
 export class AdherentPopupComponent {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { adherents: Adherent[] }, private dialogRef: MatDialogRef<AdherentPopupComponent>, private equipeService: EquipeService) { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { adherents: Adherent[], equipeId: number }, private dialogRef: MatDialogRef<AdherentPopupComponent>, private equipeService: EquipeService) { }
   removeAdherent(adherentId: number): void {
-    this.equipeService.removeAdherentFromEquipe(adherentId).subscribe(() => {
+    this.equipeService.removeAdherentFromEquipe(adherentId,this.data.equipeId).subscribe(() => {
       // Close the dialog after the adherent is removed
       this.dialogRef.close();
     }, error => {
@@ -446,9 +452,9 @@ export class AdherentPopupComponent {
   templateUrl: './entraineurPopup.component.html',
 })
 export class EntraineurPopupComponent {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { entraineurs: Entraineur[] }, private dialogRef: MatDialogRef<AdherentPopupComponent>, private equipeService: EquipeService) { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { entraineurs: Entraineur[], equipeId: number }, private dialogRef: MatDialogRef<AdherentPopupComponent>, private equipeService: EquipeService) { }
   removeEntraineur(entraineurId: number): void {
-    this.equipeService.removeEntraineurFromEquipe(entraineurId).subscribe(() => {
+    this.equipeService.removeEntraineurFromEquipe(entraineurId,this.data.equipeId).subscribe(() => {
       // Close the dialog after the adherent is removed
       this.dialogRef.close();
     }, error => {
@@ -480,7 +486,7 @@ export class AddMemberPopupComponent {
   }
 
   getMembers(): void {
-    this.equipeService.getMembers()
+    this.equipeService.getMembers(this.data.equipeId)
       .subscribe(members => {
         this.members = members;
         this.filteredMembers = members; // Initialize filtered list with all members
@@ -525,7 +531,7 @@ export class AddCoachPopupComponent {
   }
 
   getCoachs(): void {
-    this.equipeService.getEntraineurs()
+    this.equipeService.getEntraineurs(this.data.equipeId)
       .subscribe(coachs => {
         this.coachs = coachs;
         this.filteredCoachs = coachs; // Initialize filtered list with all coaches

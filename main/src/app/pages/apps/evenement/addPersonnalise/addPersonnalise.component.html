@@ -26,13 +26,11 @@
                         </div>
                         <!-- Date -->
                         <div class="col-md-6">
-                            <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Date</mat-label>
-                            <mat-form-field appearance="outline" class="w-100">
-                                <input matInput [matDatepicker]="picker" required formControlName="date" />
-                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                                <mat-datepicker #picker></mat-datepicker>
-                                <mat-error *ngIf="evenementForm.get('date')?.invalid && evenementForm.get('date')?.touched">Date is required</mat-error>
-                            </mat-form-field>
+                            <label for="HeadlineAct" class="block text-sm font-medium text-gray-900"> Date </label>
+                            <input type="date"
+                                   class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
+                                   required formControlName="date"/>
+                                   <mat-error *ngIf="evenementForm.get('date')?.invalid && evenementForm.get('date')?.touched">Date is required</mat-error>
                         </div>
                         <!-- Horraire -->
                         <div class="col-md-6">
@@ -50,7 +48,7 @@
                                 <mat-error *ngIf="evenementForm.get('description')?.invalid && evenementForm.get('description')?.touched">Description is required</mat-error>
                             </mat-form-field>
                         </div>
-                        <div class="col-md-12">
+                        <!-- <div class="col-md-12">
                             <mat-checkbox formControlName="repetition">Se répéte</mat-checkbox>
                         </div>
                         <div class="col-md-12" style="margin-top: 20px;" *ngIf="evenementForm.get('repetition')?.value">
@@ -66,7 +64,7 @@
                             <mat-form-field appearance="outline" class="w-100">
                                 <input matInput required type="number" formControlName="nbRepetition" />
                             </mat-form-field>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="text-right">
                         <button mat-flat-button color="primary" matStepperNext>Next</button>

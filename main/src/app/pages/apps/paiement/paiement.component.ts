@@ -21,7 +21,6 @@ export class PaiementComponent implements AfterViewInit {
   searchText: any;
   displayedColumns: string[] = [
     'membre',
-    'equipe',
     'telephone',
     'type_abonnement',
     'date_abonnement',

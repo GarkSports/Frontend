@@ -46,13 +46,11 @@
           </div>
           <!-- Date -->
           <div class="col-md-12">
-            <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Date</mat-label>
-            <mat-form-field appearance="outline" class="w-100">
-              <input [matDatepicker]="picker" formControlName="date" matInput required/>
-              <mat-datepicker-toggle [for]="picker" matSuffix></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
+            <label for="HeadlineAct" class="block text-sm font-medium text-gray-900"> Date </label>
+            <input type="date"
+                   class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
+                   required formControlName="date"/>
               <mat-error *ngIf="matchAmicalForm.get('date')!.hasError('required')">Date is required</mat-error>
-            </mat-form-field>
           </div>
           <!-- Description -->
           <div class="col-md-12">
@@ -63,7 +61,7 @@
               </mat-error>
             </mat-form-field>
           </div>
-          <div class="col-md-12">
+          <!-- <div class="col-md-12">
             <mat-checkbox formControlName="repetition">Se répéte</mat-checkbox>
           </div>
           <div *ngIf="matchAmicalForm.get('repetition')?.value" class="col-md-12" style="margin-top: 20px;">
@@ -81,7 +79,7 @@
             <mat-form-field appearance="outline" class="w-100">
               <input formControlName="nbRepetition" matInput required type="number"/>
             </mat-form-field>
-          </div>
+          </div> -->
           <div class="checkbox-container">
             <!-- Checkboxes for equipe selection -->
             <div *ngFor="let equipe of equipeList" class="checkbox-input-container">

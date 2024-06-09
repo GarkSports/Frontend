@@ -47,6 +47,7 @@ import { AppStaffformContentComponent } from './managers/staff/staffform.compone
 import { AppManagerFormComponent } from './admin/managerform.component';
 import { NewMessagePageComponent } from './chat/new-message-page/new-message-page.component';
 import { AdminNewMessagePageComponent } from './chat/admin-new-message-page/admin-new-message-page.component';
+import { AddEquipeComponent } from './equipe/addEquipe.component';
 // import { AppStafflist2Component } from './managers/staff/stafflist2.component';
 
 
@@ -412,6 +413,18 @@ export const AppsRoutes: Routes = [
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
             { title: 'Equipe' },
+          ],
+        },
+      },
+      {
+        path: 'addequipe',
+        canActivate: [isManagerGuard],
+        component: AddEquipeComponent,
+        data: {
+          title: 'AddEquipe',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'AddEquipe' },
           ],
         },
       },
