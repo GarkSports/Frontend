@@ -139,6 +139,12 @@ import {NewMessagePageComponent} from './chat/new-message-page/new-message-page.
 import {AdminNewMessagePageComponent} from './chat/admin-new-message-page/admin-new-message-page.component';
 import {DefaultImagePipe} from "../../pipe/default-image.pipe";
 
+import {AppComptabiliteComponent} from './comptabilite/comptabilite.component'
+import { AddBeneficeDepenseComponent } from './comptabilite/add-benefice-depense/add-benefice-depense.component';
+import { UpdateBeneficeDepenseComponent } from './comptabilite/update-benefice-depense/update-benefice-depense.component';
+
+
+
 
 @NgModule({
   imports: [
@@ -258,8 +264,15 @@ import {DefaultImagePipe} from "../../pipe/default-image.pipe";
     AppStafflistComponent,
     AppStaffformContentComponent,
     AppRolesDialogContentComponent,
-    AppRoleslistComponent,
-    AppProfilComponent
+    AppRoleslistComponent, 
+    AppProfilComponent,
+    AppEvaluationComponent,
+    NotificationDialogComponent,
+    AppStaffDialogContentComponent,
+    AppManagerFormComponent,
+    AppComptabiliteComponent,
+    AddBeneficeDepenseComponent,
+    UpdateBeneficeDepenseComponent  
   ],
   providers: [DatePipe],
 })
