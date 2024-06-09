@@ -1,0 +1,105 @@
+<div class="flex justify-center items-center">
+  <div class="gray-background rounded-3xl p-24" style="min-width: 900px;">
+  <h2 class="f-w-500 m-b-24">Ajouter {{ addtype | titlecase }}</h2>
+
+  <form [formGroup]="evenementForm">
+    <div class="mt-4">
+      <label for="HeadlineAct" class="block text-sm font-medium text-gray-900"> Type </label>
+      <input required placeholder="Type" formControlName="type"
+             class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent text-black sm:text-sm"/>
+      <p class="text-red-600" *ngIf="evenementForm.get('type')?.invalid && evenementForm.get('type')?.touched">Champ type
+        est obligatoire!
+      </p>
+    </div>
+
+    <div class="mt-4">
+      <label for="etat" class="block text-sm font-medium text-gray-900">Etat</label>
+      <select formControlName="etat" class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent text-black sm:text-sm" required>
+        <option value="" disabled selected>Choisir un état</option>
+        <option value="FIXE">FIXE</option>
+        <option value="VARIABLE">VARIABLE</option>
+      </select>
+      <p class="text-red-600" *ngIf="evenementForm.get('etat')?.invalid && evenementForm.get('etat')?.touched">
+        Champ etat est obligatoire!
+      </p>
+    </div>
+    
+
+    <div class="mt-4">
+      <label for="HeadlineAct" class="block text-sm font-medium text-gray-900"> Date </label>
+      <input type="date"
+             class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent text-black sm:text-sm"
+             required formControlName="date"/>
+      <p class="text-red-600" *ngIf="evenementForm.get('date')?.invalid && evenementForm.get('date')?.touched">
+        Champ Date est obligatoire!
+      </p>
+    </div>
+
+    <div class="mt-4">
+      <label for="HeadlineAct" class="block text-sm font-medium text-gray-900"> Prix D'unité </label>
+      <input type="number"
+             class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent text-black sm:text-sm"
+             required formControlName="prixunite"/>
+      <p class="text-red-600" *ngIf="evenementForm.get('prixunite')?.invalid && evenementForm.get('prixunite')?.touched">
+        Champ Prix D'unité est obligatoire!
+      </p>
+    </div>
+
+    <div class="mt-4">
+      <label for="HeadlineAct" class="block text-sm font-medium text-gray-900"> Quantité </label>
+      <input type="number"
+             class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent text-black sm:text-sm"
+             required formControlName="quantite"/>
+      <p class="text-red-600" *ngIf="evenementForm.get('quantite')?.invalid && evenementForm.get('quantite')?.touched">
+        Champ Quantité est obligatoire!
+      </p>
+    </div>
+
+    <div class="mt-4" *ngIf="addtype === 'depenses'">
+      <label for="beneficiaire" class="block text-sm font-medium text-gray-900"> Bénéficiaire </label>
+      <input type="text"
+             class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent text-black sm:text-sm"
+             required formControlName="beneficiaire"/>
+      <p class="text-red-600" *ngIf="evenementForm.get('beneficiaire')?.invalid && evenementForm.get('beneficiaire')?.touched">
+        Champ beneficiaire est obligatoire!
+      </p>
+    </div>
+
+    <div class="mt-4 flex justify-center">
+      <button type="submit" class="px-8 py-2 rounded-3xl font-semibold bg-main hover:bg-mainHover disabled:bg-second text-black"
+              [disabled]="!evenementForm.valid"
+              (click)="add()">Confirmer
+      </button>
+    </div>
+  </form>
+</div>
+</div>
+
+<style>
+  .text-danger {
+    color: red;
+  }
+
+  .custom-select {
+    /* background color for the select */
+    background-color: red;
+    /* border color */
+    border: 1px solid #cccccc;
+    /* border radius */
+    border-radius: 4px;
+    /* color for the text */
+    color: #333333;
+    /* font size */
+    font-size: 14px;
+    /* padding */
+    padding: 5px 10px;
+  }
+
+  .gray-background {
+    background-color: #FAFAFA;
+  }
+
+  .no-shadow {
+    box-shadow: none;
+  }
+</style>
