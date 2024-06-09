@@ -1,0 +1,373 @@
+<div class="d-flex justify-content-center align-items-center">
+  <div class="row p-24 col-lg-12 justify-content-center">
+
+    <div class="col-lg-3">
+      <mat-form-field appearance="outline" class="w-100 hide-hint gray-background">
+        <mat-label>Filtrer par mois</mat-label>
+        <input matInput [matDatepicker]="monthPicker" [(ngModel)]="selectedDate" (dateChange)="applyFilterByMonth()">
+        <mat-datepicker-toggle matSuffix [for]="monthPicker"></mat-datepicker-toggle>
+        <mat-datepicker #monthPicker startView="year" (monthSelected)="chosenMonthHandler($event, monthPicker)" panelClass="example-month-picker"></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+    <div class="col-lg-3">
+      <mat-form-field appearance="outline" class="w-100 hide-hint gray-background">
+        <mat-label>Filtrer par Type</mat-label>
+        <mat-select [(ngModel)]="selectedType" (selectionChange)="applyFilterByType()">
+          <mat-option *ngFor="let type of typeOptions" [value]="type">{{ type }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col-lg-3">
+      <mat-form-field appearance="outline" class="w-100 hide-hint gray-background">
+        <mat-label>Filtrer par Etat</mat-label>
+        <mat-select [(ngModel)]="selectedEtat" (selectionChange)="applyFilterByEtat()">
+          <mat-option *ngFor="let etat of etatOptions" [value]="etat">{{ etat }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col-lg-1 d-flex justify-content-center align-items-center">
+      <button mat-icon-button color="primary" (click)="resetFilters()" style="color: gray;">
+        <i-tabler name="refresh"></i-tabler>
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<div class="d-flex justify-content-center align-items-center">
+  <div *ngIf="monthlySums" class="row p-24 col-12 justify-content-between" style="margin-bottom: 20px;">
+    
+    <div class="col-lg-2.5 p-24 bg-third rounded-3xl gray-background m-2">
+      <div class="f-s-16 f-w-600 gray-background">
+        <span class="f-s-16 f-w-600 gray-background">Totals Des benefices :</span>
+      </div>
+      <div *ngIf="monthlyComparisons" class="pt-2">
+        <p>
+          <button *ngIf="monthlyComparisons.beneficesComparison >= 0" mat-mini-fab class="bg-light-success text-success shadow-none icon-20">
+            <i-tabler name="arrow-up-left" class="icon-14 d-flex"></i-tabler>
+          </button>
+          <button *ngIf="monthlyComparisons.beneficesComparison < 0" mat-mini-fab class="bg-light-error text-error shadow-none icon-20">
+            <i-tabler name="arrow-down-right" class="icon-14 d-flex"></i-tabler>
+          </button>
+          {{ monthlyComparisons.beneficesComparison }}% depuis le mois dernier
+        </p>
+      </div>
+      <div class="f-s-16 f-w-600 gray-background pt-2">
+        <tr class="large-text">{{ monthlySums.currentMonthBenefices }}</tr>
+      </div>
+    </div>
+    
+    <div class="col-lg-2.5 p-24 bg-third rounded-3xl gray-background m-2">
+      <div class="f-s-16 f-w-600 gray-background">
+        <span class="f-s-16 f-w-600 gray-background">Totals Des Depenses :</span>
+      </div>
+      <div *ngIf="monthlyComparisons" class="pt-2">
+        <p>
+          <button *ngIf="monthlyComparisons.depensesComparison >= 0" mat-mini-fab class="bg-light-error text-error shadow-none icon-20">
+            <i-tabler name="arrow-up-left" class="icon-14 d-flex"></i-tabler>
+          </button>
+          <button *ngIf="monthlyComparisons.depensesComparison < 0" mat-mini-fab class="bg-light-success text-success shadow-none icon-20">
+            <i-tabler name="arrow-down-right" class="icon-14 d-flex"></i-tabler>
+          </button>
+          {{ monthlyComparisons.depensesComparison }}% depuis le mois dernier
+        </p>
+      </div>
+      <div class="f-s-16 f-w-600 gray-background pt-2">
+        <tr class="large-text">{{ monthlySums.currentMonthDepenses }}</tr>
+      </div>
+    </div>
+    
+    <div class="col-lg-2 p-24 bg-third rounded-3xl gray-background m-2">
+      <div class="f-s-16 f-w-600 gray-background">
+        <span class="f-s-16 f-w-600 gray-background">Benefices net :</span>
+      </div>
+      <div *ngIf="monthlyComparisons" class="pt-2">
+        <p>
+          <button *ngIf="monthlyComparisons.netComparison >= 0" mat-mini-fab class="bg-light-success text-success shadow-none icon-20">
+            <i-tabler name="arrow-up-left" class="icon-14 d-flex"></i-tabler>
+          </button>
+          <button *ngIf="monthlyComparisons.netComparison < 0" mat-mini-fab class="bg-light-error text-error shadow-none icon-20">
+            <i-tabler name="arrow-down-right" class="icon-14 d-flex"></i-tabler>
+          </button>
+          {{ monthlyComparisons.netComparison }}% depuis le mois dernier
+        </p>
+      </div>
+      <div class="f-s-16 f-w-600 gray-background pt-2">
+        <tr class="large-text">{{ monthlySums.currentMonthNet }}</tr>
+      </div>
+    </div>
+    
+    <div class="col-lg-4 bg-third rounded-3xl gray-background m-2">
+      <mat-card class="gray-background m-b-0 no-shadow">
+        <mat-card-content>
+          <apx-chart
+            [series]="currentyearChart.series"
+            [chart]="currentyearChart.chart"
+            [colors]="currentyearChart.colors"
+            [grid]="currentyearChart.grid"
+            [plotOptions]="currentyearChart.plotOptions"
+            [dataLabels]="currentyearChart.dataLabels"
+            [legend]="currentyearChart.legend"
+            [stroke]="currentyearChart.stroke"
+            [xaxis]="currentyearChart.xaxis"
+            [yaxis]="currentyearChart.yaxis"
+            [fill]="currentyearChart.fill"
+            [tooltip]="currentyearChart.tooltip"
+          ></apx-chart>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+  </div>
+</div>
+
+
+<mat-card>
+  <div class="p-24 bg-third col-lg-6 col-lg-12 rounded-3xl gray-background" style="margin-bottom: 20px;">
+    <div class="row justify-content-between gray-background">
+      <div class="col-lg-6">
+        <h2 class="text-black font-medium text-lg">Liste des benefices</h2>
+      </div>
+      <div class="col-lg-6 d-flex align-items-center justify-content-end">
+
+        <div class="relative ">
+          <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+            <i-tabler name="search" class="icon-20"></i-tabler>
+          </div>
+          <input (keyup)="beneficesapplyFilter($any($event.target).value)" type="text" id="simple-search" class="mr-8 bg-gray-50 border-[0.3px] rounded-3xl border-gray-300 text-gray-900 f-s-14 focus:ring-blue-500 focus:border-blue-500 block w-52 h-9 ps-10 p-2.5" placeholder="Rechercher..">
+        </div>
+        <button class="bg-main font-bold rounded-3xl h-9 pt-1 shadow-md text-white">
+          <div class="row">
+            <div class="col-1 ml-2">
+              <i-tabler name="plus" class="icon-20"></i-tabler>
+            </div>
+            <div (click)="navigateToAddPage('benefices')" class="col-1">
+              Ajouter
+            </div>
+          </div>
+        </button>
+        <button class="bg-main font-bold rounded-3xl h-9 pt-1 shadow-md text-white">
+          <div class="row">
+            <div class="col-1 ml-2">
+              <i-tabler name="plus" class="icon-20"></i-tabler>
+            </div>
+            <div (click)="beneficesexportToPDF()" class="col-1">
+              Export
+            </div>
+          </div>
+        </button>
+      </div>
+    </div>
+    <div class="table-responsive gray-background ">
+
+
+      <table mat-table [dataSource]="BeneficesdataSource" class="w-100 gray-background">
+        <!-- Column definitions -->
+
+        <!-- Column: Etat -->
+        <ng-container matColumnDef="Etat">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Etat</th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.etat }}</td>
+        </ng-container>
+
+        <!-- Column: Type -->
+        <ng-container matColumnDef="Type">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Type</th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.type }}</td>
+        </ng-container>
+
+        <!-- Column: Quantite -->
+        <ng-container matColumnDef="Quantite">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Quantite</th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.quantite }}</td>
+        </ng-container>
+
+        <!-- Column: Prix Unitaire -->
+        <ng-container matColumnDef="prix_unitaire">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">prix d'unité</th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.prixunite }}</td>
+        </ng-container>
+
+        <!-- Column: Total -->
+        <ng-container matColumnDef="total">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">total</th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.total }}</td>
+        </ng-container>
+
+        <!-- Column: Date -->
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Date</th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.date }}</td>
+        </ng-container>
+
+        <!-- Column: Action -->
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600"></th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-icon-button style="color: gray;" (click)="navigateToUpdatePage('benefices',element.id)">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- Table rows -->
+        <tr mat-header-row *matHeaderRowDef="BeneficesdisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: BeneficesdisplayedColumns"></tr>
+        
+      </table>
+
+      <mat-paginator #beneficePaginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons class="gray-background"></mat-paginator>
+    </div>  
+
+
+  </div>
+
+  <div class="p-24 bg-third col-lg-6 col-lg-12 rounded-3xl" >
+    <div class="row justify-content-between gray-background">
+      <div class="col-lg-6">
+        <h2 class="text-black font-medium text-lg">Liste des dépenses</h2>
+      </div>
+      <div class="col-lg-6 d-flex align-items-center justify-content-end">
+
+        <div class="relative">
+          <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+            <i-tabler name="search" class="icon-20"></i-tabler>
+          </div>
+          <input (keyup)="depensessapplyFilter($any($event.target).value)" type="text" id="simple-search" class="mr-8 bg-gray-50 border-[0.3px] rounded-3xl border-gray-300 text-gray-900 f-s-14 focus:ring-blue-500 focus:border-blue-500 block w-52 h-9 ps-10 p-2.5" placeholder="Rechercher..">
+        </div>
+        <button class="bg-main font-bold rounded-3xl h-9 pt-1 shadow-md text-white">
+          <div class="row">
+            <div class="col-1 ml-2">
+              <i-tabler name="plus" class="icon-20"></i-tabler>
+            </div>
+            <div (click)="navigateToAddPage('depenses')" class="col-1">
+              Ajouter
+            </div>
+          </div>
+        </button>
+        <button class="bg-main font-bold rounded-3xl h-9 pt-1 shadow-md text-white">
+          <div class="row">
+            <div class="col-1 ml-2">
+              <i-tabler name="plus" class="icon-20"></i-tabler>
+            </div>
+            <div (click)="depensesexportToPDF()" class="col-1">
+              Export
+            </div>
+          </div>
+        </button>
+      </div>
+    </div>
+
+    <div class="table-responsive gray-background mt-8">
+      <table mat-table [dataSource]="DepensesdataSource" class="w-100 gray-background">
+        <!-- Column definitions -->
+
+        <!-- Column: Etat -->
+        <ng-container matColumnDef="Etat">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Etat</th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.etat }}</td>
+        </ng-container>
+
+        <!-- Column: Type -->
+        <ng-container matColumnDef="Type">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Type</th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.type }}</td>
+        </ng-container>
+
+        <!-- Column: Beneficiaire -->
+        <ng-container matColumnDef="Beneficiaire">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Beneficiaire</th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.beneficiaire }}</td>
+        </ng-container>
+
+        <!-- Column: Quantite -->
+        <ng-container matColumnDef="Quantite">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Quantite</th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.quantite }}</td>
+        </ng-container>
+
+        <!-- Column: Prix Unitaire -->
+        <ng-container matColumnDef="prix_unitaire">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">prix d'unité</th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.prixunite }}</td>
+        </ng-container>
+
+        <!-- Column: Total -->
+        <ng-container matColumnDef="total">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Total</th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.total }}</td>
+        </ng-container>
+
+        <!-- Column: Date -->
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Date</th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.date }}</td>
+        </ng-container>
+
+        <!-- Column: Action -->
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600"></th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-icon-button style="color: gray;" (click)="navigateToUpdatePage('depenses',element.id)">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- Table rows -->
+        <tr mat-header-row *matHeaderRowDef="DepensesdisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: DepensesdisplayedColumns"></tr>
+      </table>
+
+      <mat-paginator #depensesPaginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons class="gray-background"></mat-paginator>
+    </div>
+  </div>
+</mat-card>
+
+  <style>
+    .text-danger {
+      color: red;
+    }
+
+    .large-text {
+        font-size: 24px; /* Ajustez la taille selon vos besoins */
+        font-weight: bold; /* Si vous voulez un texte en gras */
+      }
+  
+    .custom-select {
+      /* background color for the select */
+      background-color: red;
+      /* border color */
+      border: 1px solid #cccccc;
+      /* border radius */
+      border-radius: 4px;
+      /* color for the text */
+      color: #333333;
+      /* font size */
+      font-size: 14px;
+      /* padding */
+      padding: 5px 10px;
+    }
+  
+    .gray-background {
+      background-color: #FAFAFA;
+    }
+  
+    .no-shadow {
+      box-shadow: none;
+    }
+    .parent-container {
+  display: flex;
+  flex-direction: row; /* or row depending on your layout */
+  height: 100%; /* or any desired height */
+}
+
+.child-div {
+  flex-grow: 1;
+  
+}
+  </style>
+  

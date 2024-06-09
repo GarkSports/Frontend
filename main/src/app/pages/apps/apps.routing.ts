@@ -44,9 +44,13 @@ import { EntrainementComponent } from './evenement/entrainement/entrainement.com
 import { UpdateProfilePageComponent } from './academie-profile/update-profile-page.component';
 import { UpdatePaymentPageComponent } from './paiement/update-payment-page.component';
 import { AppStaffformContentComponent } from './managers/staff/staffform.component';
-import { AppManagerFormComponent } from './admin/managerform.component';
+import { AppManagerFormComponent } from './admin/managerform.component'; 
+import { AppComptabiliteComponent } from './comptabilite/comptabilite.component';
+import { AddBeneficeDepenseComponent } from './comptabilite/add-benefice-depense/add-benefice-depense.component';
+import { UpdateBeneficeDepenseComponent } from './comptabilite/update-benefice-depense/update-benefice-depense.component'; 
 import { NewMessagePageComponent } from './chat/new-message-page/new-message-page.component';
 import { AdminNewMessagePageComponent } from './chat/admin-new-message-page/admin-new-message-page.component';
+import { AddEquipeComponent } from './equipe/addEquipe.component';
 // import { AppStafflist2Component } from './managers/staff/stafflist2.component';
 
 
@@ -55,6 +59,42 @@ export const AppsRoutes: Routes = [
     path: '',
     canActivate: [authGuard],
     children: [
+      { 
+        path: 'comptabilite/update/:type/:id',
+        canActivate: [isManagerGuard],
+        component: UpdateBeneficeDepenseComponent ,
+        data: {
+          title: 'update',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Comptabilite/update' },
+          ],
+        },
+      },
+      {
+        path: 'comptabilite/add/:type',
+        canActivate: [isManagerGuard],
+        component: AddBeneficeDepenseComponent ,
+        data: {
+          title: 'add',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Comptabilite/add' },
+          ],
+        },
+      },
+      {
+        path: 'comptabilite',
+        canActivate: [isManagerGuard],
+        component: AppComptabiliteComponent,
+        data: {
+          title: 'comptabilite',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Comptabilite' }, 
+          ],
+        },
+      },
       {
         path: 'update-payment/:id',
         component: UpdatePaymentPageComponent ,
@@ -73,7 +113,7 @@ export const AppsRoutes: Routes = [
           title: 'Update profile',
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Update profile' },
+            { title: 'Update profile' }, 
           ],
         },
       },
@@ -412,6 +452,18 @@ export const AppsRoutes: Routes = [
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
             { title: 'Equipe' },
+          ],
+        },
+      },
+      {
+        path: 'addequipe',
+        canActivate: [isManagerGuard],
+        component: AddEquipeComponent,
+        data: {
+          title: 'AddEquipe',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'AddEquipe' },
           ],
         },
       },

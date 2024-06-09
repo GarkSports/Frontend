@@ -1,12 +1,12 @@
-import {AfterViewInit, Component, Inject, OnInit, ViewChild} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatTable} from '@angular/material/table';
-import {DatePipe} from '@angular/common';
-import {Equipe} from 'src/models/equipe.model';
-import {EntrainementService} from 'src/app/services/entrainement.service';
-import {ConvocationEntrainement} from 'src/models/convocationEntrainement.model';
-import {Adherent} from 'src/models/adherent.model';
+import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTable } from '@angular/material/table';
+import { DatePipe } from '@angular/common';
+import { Equipe } from 'src/models/equipe.model';
+import { EntrainementService } from 'src/app/services/entrainement.service';
+import { ConvocationEntrainement } from 'src/models/convocationEntrainement.model';
+import { Adherent } from 'src/models/adherent.model';
 
 interface TeamSchedule {
   id: number;
@@ -137,7 +137,7 @@ export class EntrainementComponent implements AfterViewInit {
   openAddHeureDialog(team: string, date: string, adherents: Adherent[], idEquipe: number, nomEquipe: string): void {
     const dialogRef = this.dialog.open(AddHeureDialogComponent, {
       width: '600px',
-      data: {team, date, adherents, nomEquipe}
+      data: { team, date, adherents, nomEquipe }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -155,7 +155,7 @@ export class EntrainementComponent implements AfterViewInit {
   openUpdateHeureDialog(convocation: ConvocationEntrainement, adherents: Adherent[], idConvocation: number): void {
     const dialogRef = this.dialog.open(UpdateHeureDialogComponent, {
       width: '600px',
-      data: {convocation,adherents,idConvocation} // Pass the current ConvocationEntrainement object
+      data: { convocation, adherents, idConvocation } // Pass the current ConvocationEntrainement object
     });
 
     dialogRef.afterClosed().subscribe(updatedConvocation => {
@@ -197,6 +197,13 @@ export class AddHeureDialogComponent {
     const parts = data.date.split('-');
     const formattedDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
     this.date = new Date(formattedDate);
+  }
+
+  ngOnInit(): void {
+    // Initialize selectedAdherents array with all adherent IDs
+    this.data.adherents.forEach(adherent => {
+      this.selectedAdherents.push(adherent.id);
+    });
   }
 
   onNoClick(): void {
@@ -247,6 +254,11 @@ export class AddHeureDialogComponent {
       }
     }
   }
+
+  isAdherentSelected(adherentId: number): boolean {
+    return this.selectedAdherents.includes(adherentId);
+  }
+
 }
 
 
@@ -267,7 +279,7 @@ export class UpdateHeureDialogComponent implements OnInit {
       idConvocation: number
     },
     private entrainementService: EntrainementService
-  ) {}
+  ) { }
 
 
   onCancelClick(): void {

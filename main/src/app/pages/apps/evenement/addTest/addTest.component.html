@@ -4,13 +4,12 @@
       <div class="">
         <!-- Radio buttons for selection -->
         <div class="radio-buttons-container flex justify-center">
-          <mat-radio-group [(ngModel)]="selectedOption" name="selectedOption"
-                           style="margin-bottom: 20px;">
+          <mat-radio-group [(ngModel)]="selectedOption" name="selectedOption" style="margin-bottom: 20px;">
             <mat-radio-button value="equipe" [checked]="selectedOption === 'equipe'" color="primary"
-                              (click)="changeOption('equipe')">Equipe
+              (click)="changeOption('equipe')">Equipe
             </mat-radio-button>
             <mat-radio-button value="member" [checked]="selectedOption === 'member'" color="primary"
-                              (click)="changeOption('member')">Member
+              (click)="changeOption('member')">Member
             </mat-radio-button>
           </mat-radio-group>
         </div>
@@ -19,16 +18,11 @@
         <div *ngIf="selectedOption === 'equipe'">
           <label for="HeadlineAct" class="block text-sm font-medium text-gray-900"> Equipe </label>
 
-          <select
-            [(ngModel)]="selectedEquipe"
-            required
-            name="HeadlineAct"
-            id="HeadlineAct"
-            class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
-          >
+          <select [(ngModel)]="selectedEquipe" required name="HeadlineAct" id="HeadlineAct"
+            class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm">
             <option value=""></option>
             <option *ngFor="let equipe of equipeList" [value]="equipe.id">{{
-                equipe.nom
+              equipe.nom
               }}
             </option>
           </select>
@@ -42,7 +36,7 @@
             <mat-form-field appearance="outline" class="w-100">
               <mat-select [(ngModel)]="selectedMembers" multiple name="membres" required required>
                 <mat-option *ngFor="let member of selectedEquipe2.adherents" [value]="member.id">{{
-                    member.firstname
+                  member.firstname
                   }} {{ member.lastname }}
                 </mat-option>
               </mat-select>
@@ -58,9 +52,8 @@
         <div class="col-md-12">
           <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Nom</mat-label>
           <mat-form-field appearance="outline" class="w-100">
-            <input formControlName="nom" matInput placeholder="Nom" required/>
-            <mat-error
-              *ngIf="evenementForm.get('nom')?.invalid && evenementForm.get('nom')?.touched">Nom
+            <input formControlName="nom" matInput placeholder="Nom" required />
+            <mat-error *ngIf="evenementForm.get('nom')?.invalid && evenementForm.get('nom')?.touched">Nom
               is required
             </mat-error>
           </mat-form-field>
@@ -68,38 +61,33 @@
         <div class="col-md-12">
           <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Lieu</mat-label>
           <mat-form-field appearance="outline" class="w-100">
-            <input formControlName="lieu" matInput placeholder="Lieu" required/>
-            <mat-error
-              *ngIf="evenementForm.get('lieu')?.invalid && evenementForm.get('lieu')?.touched">Lieu
+            <input formControlName="lieu" matInput placeholder="Lieu" required />
+            <mat-error *ngIf="evenementForm.get('lieu')?.invalid && evenementForm.get('lieu')?.touched">Lieu
               is required
             </mat-error>
           </mat-form-field>
         </div>
         <!-- Date -->
         <div class="col-md-6">
-          <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Date</mat-label>
-          <mat-form-field appearance="outline" class="w-100">
-            <input [matDatepicker]="picker" formControlName="date" matInput required/>
-            <mat-datepicker-toggle [for]="picker" matSuffix></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-            <mat-error
-              *ngIf="evenementForm.get('date')?.invalid && evenementForm.get('date')?.touched">Date
-              is required
-            </mat-error>
-          </mat-form-field>
+          <label for="HeadlineAct" class="block text-sm font-medium text-gray-900"> Date </label>
+          <input type="date"
+            class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
+            required formControlName="date" />
+          <mat-error *ngIf="evenementForm.get('date')?.invalid && evenementForm.get('date')?.touched">Date
+            is required
+          </mat-error>
         </div>
         <!-- Horraire -->
         <div class="col-md-6">
           <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Horraire</mat-label>
           <mat-form-field appearance="outline" class="w-100">
-            <input formControlName="horraire" matInput required type="time"/>
-            <mat-error
-              *ngIf="evenementForm.get('horraire')?.invalid && evenementForm.get('horraire')?.touched">Horraire
+            <input formControlName="horraire" matInput required type="time" />
+            <mat-error *ngIf="evenementForm.get('horraire')?.invalid && evenementForm.get('horraire')?.touched">Horraire
               is required
             </mat-error>
           </mat-form-field>
         </div>
-        <div class="col-md-12">
+        <!-- <div class="col-md-12">
           <mat-checkbox formControlName="repetition">Se répéte</mat-checkbox>
         </div>
         <div *ngIf="evenementForm.get('repetition')?.value" class="col-md-12" style="margin-top: 20px;">
@@ -116,11 +104,10 @@
           <mat-form-field appearance="outline" class="w-100">
             <input formControlName="nbRepetition" matInput required type="number"/>
           </mat-form-field>
-        </div>
+        </div> -->
       </div>
       <div class="text-right">
-        <button (click)="onSubmit()" [disabled]="!evenementForm.valid" color="primary"
-                mat-flat-button>Finish
+        <button (click)="onSubmit()" [disabled]="!evenementForm.valid" color="primary" mat-flat-button>Finish
         </button>
       </div>
     </form>

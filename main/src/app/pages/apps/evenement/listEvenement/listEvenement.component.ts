@@ -122,6 +122,21 @@ export class ListEvenementComponent implements AfterViewInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
+  sortData(sortOrder: string): void {
+    this.dataSource.data = this.dataSource.data.sort((a, b) => {
+      const dateA = new Date(a.date + ' ' + a.heure);
+      const dateB = new Date(b.date + ' ' + b.heure);
+      if (sortOrder === 'asc') {
+        return dateA.getTime() - dateB.getTime();
+      } else if (sortOrder === 'desc') {
+        return dateB.getTime() - dateA.getTime();
+      } else {
+        return 0;
+      }
+    });
+    this.table.renderRows(); // Ensure the table is re-rendered to reflect the sorted data
+  }
+
   toggleCheckboxesVisibility1() {
     this.showCheckboxes1 = !this.showCheckboxes1;
   }

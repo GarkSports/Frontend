@@ -138,6 +138,13 @@ import {AppMonthlyEarningsTwoComponent} from "../../components/dashboard2/monthl
 import {NewMessagePageComponent} from './chat/new-message-page/new-message-page.component';
 import {AdminNewMessagePageComponent} from './chat/admin-new-message-page/admin-new-message-page.component';
 import {DefaultImagePipe} from "../../pipe/default-image.pipe";
+import { AddEquipeComponent } from './equipe/addEquipe.component';
+
+import {AppComptabiliteComponent} from './comptabilite/comptabilite.component'
+import { AddBeneficeDepenseComponent } from './comptabilite/add-benefice-depense/add-benefice-depense.component';
+import { UpdateBeneficeDepenseComponent } from './comptabilite/update-benefice-depense/update-benefice-depense.component';
+
+
 
 
 @NgModule({
@@ -171,6 +178,7 @@ import {DefaultImagePipe} from "../../pipe/default-image.pipe";
   ],
   exports: [TablerIconsModule],
   declarations: [
+    AddEquipeComponent,
     NewMessagePageComponent,
     AdminNewMessagePageComponent,
     AppDisciplineManagerDialogContentComponent,
@@ -258,8 +266,15 @@ import {DefaultImagePipe} from "../../pipe/default-image.pipe";
     AppStafflistComponent,
     AppStaffformContentComponent,
     AppRolesDialogContentComponent,
-    AppRoleslistComponent,
-    AppProfilComponent
+    AppRoleslistComponent, 
+    AppProfilComponent,
+    AppEvaluationComponent,
+    NotificationDialogComponent,
+    AppStaffDialogContentComponent,
+    AppManagerFormComponent,
+    AppComptabiliteComponent,
+    AddBeneficeDepenseComponent,
+    UpdateBeneficeDepenseComponent  
   ],
   providers: [DatePipe],
 })
