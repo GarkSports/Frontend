@@ -128,7 +128,7 @@ import {
 import {UpdateProfilePageComponent} from './academie-profile/update-profile-page.component';
 import {UpdatePaymentPageComponent} from './paiement/update-payment-page.component';
 import {AppStaffformContentComponent} from './managers/staff/staffform.component';
-import {AppManagerFormComponent} from './admin/managerform.component';
+import {AppManagerFormComponent, NotificationDialogComponent} from './admin/managerform.component';
 import {AppProductsComponent} from "../../components/dashboard2/products/products.component";
 import {AppRevenueUpdatesTwoComponent} from "../../components/dashboard2/revenue-updates/revenue-updates.component";
 import {AppSalesOverviewComponent} from "../../components/dashboard2/sales-overview/sales-overview.component";
@@ -143,6 +143,7 @@ import { AddEquipeComponent } from './equipe/addEquipe.component';
 import {AppComptabiliteComponent} from './comptabilite/comptabilite.component'
 import { AddBeneficeDepenseComponent } from './comptabilite/add-benefice-depense/add-benefice-depense.component';
 import { UpdateBeneficeDepenseComponent } from './comptabilite/update-benefice-depense/update-benefice-depense.component';
+import { AppEvaluationComponent } from './evaluation/evaluation.component';
 
 
 
