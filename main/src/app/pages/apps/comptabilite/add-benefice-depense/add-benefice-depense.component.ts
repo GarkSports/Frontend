@@ -27,8 +27,8 @@ export class AddBeneficeDepenseComponent {
       type: ['', Validators.required],
       etat: ['', Validators.required],
       date: ['', Validators.required],
-      prixunite: [0, [Validators.required, Validators.min(0)]],
-      quantite: [0, [Validators.required, Validators.min(0)]],
+      prixunite: [0, [Validators.required, Validators.min(1)]],
+      quantite: [0, [Validators.required, Validators.min(1)]],
       
     });
 
