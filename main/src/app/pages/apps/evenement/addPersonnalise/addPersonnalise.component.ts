@@ -112,4 +112,8 @@ export class AddPersonnaliseComponent {
       // Form is invalid, do something like showing error messages
     }
   }
+
+  setEquipe2(event:any){
+    this.selectedEquipe2 = this.equipeList.filter(equipe => equipe.id == event.target.value)[0];
+  }
 }

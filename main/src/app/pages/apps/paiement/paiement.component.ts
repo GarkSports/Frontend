@@ -358,6 +358,10 @@ export class AddPaiementPopupComponent implements OnInit {
     this.getMembers();
   }
 
+  numStep=1;
+  changeStep(num: number): void {
+    this.numStep = num;
+  }
   isFormValid(): boolean {
     return (
       (this.paiement.montant !== undefined && this.paiement.montant >= 0 && this.paiement.montant !== null) &&
@@ -464,7 +468,6 @@ export class PaiementHistoryPopupComponent {
     'reste',
     'action',
   ];
-
   reloadPaiementHistory(): void {
     // Assuming you have the adherent ID accessible somehow, e.g., passed via MAT_DIALOG_DATA
     const adherentId = this.paiementHistory[0]?.adherent?.id;
@@ -493,7 +496,7 @@ export class PaiementHistoryPopupComponent {
     });
   }
 
-  
+
 }
 
 @Component({

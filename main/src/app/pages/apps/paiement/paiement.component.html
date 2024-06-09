@@ -97,7 +97,7 @@
 
         <ng-container matColumnDef="type_abonnement">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Type Abonnement
+            Type
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.typeAbonnement }}</td>
         </ng-container>
@@ -117,14 +117,11 @@
             Statut
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
-            <mat-form-field appearance="outline" class="smaller-select">
-              <mat-label>Statut</mat-label>
-              <mat-select [(ngModel)]="element.adherent.statutAdherent" (selectionChange)="onStatusChange(element)"
-                class="custom-select" [style.background-color]="getBackgroundColor(element.adherent.statutAdherent)"
-                [style.color]="getTextColor(element.adherent.statutAdherent)">
-                <mat-option *ngFor="let status of statutOptions" [value]="status">{{ formatEnumValue(status) }}</mat-option>
-              </mat-select>
-            </mat-form-field>
+
+
+              <div class="rounded-3xl   text-white font-bold w-20 text-center py-1.5"  [style.background-color]="getBackgroundColor(element.adherent.statutAdherent)">
+                {{ formatEnumValue(element.adherent.statutAdherent) }}
+              </div>
           </td>
         </ng-container>
 
@@ -139,13 +136,13 @@
                 <mat-icon>edit</mat-icon>
               </button>
             </a>
-            
-            <button mat-icon-button style="color: gray;" (click)="openPaymentHistoryPopup(element.adherent.id)">
-              <mat-icon>history</mat-icon>
-            </button>
-            <button mat-icon-button style="color: gray;" (click)="openMembreDetailPopup(element.adherent.id)">
-              <mat-icon>person</mat-icon>
-            </button>
+
+<!--            <button mat-icon-button style="color: gray;" (click)="openPaymentHistoryPopup(element.adherent.id)">-->
+<!--              <mat-icon>history</mat-icon>-->
+<!--            </button>-->
+<!--            <button mat-icon-button style="color: gray;" (click)="openMembreDetailPopup(element.adherent.id)">-->
+<!--              <mat-icon>person</mat-icon>-->
+<!--            </button>-->
             <button mat-icon-button color="warn" (click)="onDeletePaiement(element.id)">
               <mat-icon>delete_outline</mat-icon>
             </button>
@@ -154,7 +151,7 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
-      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons class="gray-background"></mat-paginator>
+<!--      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons class="gray-background"></mat-paginator>-->
     </div>
   </div>
 </div>
