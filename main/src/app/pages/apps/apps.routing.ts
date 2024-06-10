@@ -44,6 +44,8 @@ import { EntrainementComponent } from './evenement/entrainement/entrainement.com
 import { UpdateProfilePageComponent } from './academie-profile/update-profile-page.component';
 import { UpdatePaymentPageComponent } from './paiement/update-payment-page.component';
 import { AppStaffformContentComponent } from './managers/staff/staffform.component';
+import { AppEvaluationComponent } from './evaluation/evaluation.component';
+import { AppTestContentComponent } from './evaluation/test.component';
 import { AppManagerFormComponent } from './admin/managerform.component'; 
 import { AppComptabiliteComponent } from './comptabilite/comptabilite.component';
 import { AddBeneficeDepenseComponent } from './comptabilite/add-benefice-depense/add-benefice-depense.component';
@@ -312,6 +314,30 @@ export const AppsRoutes: Routes = [
           urls: [
             { title: 'StaffForm', url: '/dashboards/dashboard1' },
             { title: 'StaffForm' },
+          ],
+        },
+      },
+      {
+        path: 'eval',
+        canActivate: [isManagerGuard],
+        component: AppEvaluationComponent,
+        data: {
+          title: 'eval',
+          urls: [
+            { title: 'eval', url: '/dashboards/dashboard1' },
+            { title: 'eval' },
+          ],
+        },
+      },
+      {
+        path: 'test',
+        canActivate: [isManagerGuard],
+        component: AppTestContentComponent,
+        data: {
+          title: 'test',
+          urls: [
+            { title: 'test', url: '/dashboards/dashboard1' },
+            { title: 'test' },
           ],
         },
       },

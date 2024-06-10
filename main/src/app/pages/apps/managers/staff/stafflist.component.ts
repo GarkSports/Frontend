@@ -55,6 +55,8 @@ export class AppStafflistComponent implements OnInit, OnDestroy {
   local_data: any;
   roleNames: string[] = [];
   managerForm: FormGroup;
+  showRoleInput: boolean = false;
+  displayedData: any[] = [];
 
   constructor(
     public dialog: MatDialog,
@@ -70,7 +72,6 @@ export class AppStafflistComponent implements OnInit, OnDestroy {
     this.broadcastChannel = new BroadcastChannel('staffFormChannel');
     this.broadcastChannel.addEventListener('message', this.handleBroadcastMessage.bind(this));
   }
-  displayedData: any[] = [];
 
   ngOnInit(): void {
     this.dataSource = new MatTableDataSource<Manager>([]);
@@ -259,7 +260,6 @@ export class AppStafflistComponent implements OnInit, OnDestroy {
       this.getManagers();
     }
   }
-  showRoleInput: boolean = false;
   onRoleChange(event: Event) {
     const selectedValue = (event.target as HTMLSelectElement).value;
     this.showRoleInput =
@@ -348,14 +348,6 @@ export class AppStaffDialogContentComponent {
       this.dialogRef.close({ event: 'Cancel' });
     }
   }
-
-      // //here we will just reload or display the changes instantly but the real work will be in the dialog
-      // dialogRef.afterClosed().subscribe((result)=> {
-      //   if (result && result.event) {
-
-  //     this.getManagers();
-      //   }});
-
 
   closeDialog(): void {
     this.dialogRef.close({ event: 'Cancel' });

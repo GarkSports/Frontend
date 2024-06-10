@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable, catchError, map, of, tap, throwError } from 'rxjs';
 import { Academie } from 'src/models/academie.model';
 import { Manager } from 'src/models/manager.model';
@@ -8,6 +8,7 @@ import {environment} from "../../environments/environment";
 import { ChangePasswordChange } from 'src/models/changePassword.model';
 import { User } from 'src/models/user.model';
 import { Adherent } from 'src/models/adherent.model';
+import { Test } from 'src/models/test.model';
 
 @Injectable({
   providedIn: 'root'
@@ -37,6 +38,19 @@ export class ManagerService {
     return this.http.delete<any>(`${this.apiUrl}/delete-role-name?id=${roleNameData.id}`, { withCredentials: true, headers });
   }
   
+  deleteUser(userId: number): Observable<{ success: boolean, message?: string, error?: string }> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.delete<any>(`${this.apiUrl}/delete-user?id=${userId}`, { withCredentials: true, headers })
+    .pipe(
+      map((response: HttpResponse<string>) => {
+        if (response.status === 200) {
+          return { success: true, message: response.body || '' };
+        } else {
+          return { success: false, error: response.body || '' };
+        }
+      })
+    );
+  }
 
   addStaff(managerData: Manager): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
@@ -131,7 +145,8 @@ export class ManagerService {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.put<any>(`${this.apiUrl}/update-manager`, managerData, { withCredentials: true,headers });
   }
-  
+
+
   getRoleNames(): Observable<RoleName[]> {
     return this.http.get<RoleName[]>(`${this.apiUrl}/get-role-names`, { withCredentials: true });
   }

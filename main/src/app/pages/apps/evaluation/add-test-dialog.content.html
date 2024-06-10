@@ -1,0 +1,27 @@
+<h1 mat-dialog-title>Ajouter un nouveau modèle</h1>
+<div mat-dialog-content>
+  <form [formGroup]="testForm">
+    <mat-form-field appearance="outline">
+      <input matInput placeholder="Test Name" formControlName="testName">
+    </mat-form-field>
+    
+    <div formArrayName="categories">
+      <div *ngFor="let categorie of categories.controls; let i = index" [formGroupName]="i">
+        <mat-form-field appearance="outline">
+          <input matInput placeholder="categorie Name" [formControlName]="'categorieName'">
+        </mat-form-field>
+        <button mat-icon-button (click)="removeCategorie(i)">
+          <mat-icon>remove_circle</mat-icon>
+        </button>
+      </div>
+    </div>
+    <button mat-icon-button (click)="addCategorie()">
+      <mat-icon>add_circle</mat-icon>
+    </button>
+    <input type="hidden" formControlName="testId">
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="closeDialog()">Cancel</button>
+  <button mat-button (click)="doAction()">Save</button>
+</div>

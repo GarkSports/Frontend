@@ -8,5 +8,5 @@ export class Manager extends User {
     roleName?: string;
     permissions?: string[];
     nomEquipe: string;
-
+    statut: StatutManager;
 }

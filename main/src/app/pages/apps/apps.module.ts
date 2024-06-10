@@ -135,6 +135,9 @@ import {AppSalesOverviewComponent} from "../../components/dashboard2/sales-overv
 import {AppTotalEarningsComponent} from "../../components/dashboard2/total-earnings/total-earnings.component";
 import {AppSalesProfitComponent} from "../../components/dashboard2/sales-profit/sales-profit.component";
 import {AppMonthlyEarningsTwoComponent} from "../../components/dashboard2/monthly-earnings/monthly-earnings.component";
+import { AppAddTestDialogContentComponent, AppEvaluationComponent } from './evaluation/evaluation.component';
+import { AppTestContentComponent } from './evaluation/test.component';
+import { AppTestDialogContentComponent } from './evaluation/testDialog.component';
 import {NewMessagePageComponent} from './chat/new-message-page/new-message-page.component';
 import {AdminNewMessagePageComponent} from './chat/admin-new-message-page/admin-new-message-page.component';
 import {DefaultImagePipe} from "../../pipe/default-image.pipe";
@@ -143,7 +146,6 @@ import {AddEquipeComponent} from './equipe/addEquipe.component';
 import {AppComptabiliteComponent} from './comptabilite/comptabilite.component'
 import {AddBeneficeDepenseComponent} from './comptabilite/add-benefice-depense/add-benefice-depense.component';
 import {UpdateBeneficeDepenseComponent} from './comptabilite/update-benefice-depense/update-benefice-depense.component';
-import {AppEvaluationComponent} from './evaluation/evaluation.component';
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 
 
@@ -270,6 +272,9 @@ import {FaIconComponent} from "@fortawesome/angular-fontawesome";
     AppRoleslistComponent,
     AppProfilComponent,
     AppEvaluationComponent,
+    AppTestContentComponent,
+    AppTestDialogContentComponent,
+    AppAddTestDialogContentComponent,
     NotificationDialogComponent,
     AppStaffDialogContentComponent,
     AppManagerFormComponent,

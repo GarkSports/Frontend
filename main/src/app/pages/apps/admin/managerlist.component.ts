@@ -280,7 +280,7 @@ export class AppManagerDialogContentComponent {
   isPasswordVisible: boolean = false;
 
   dataSource = new MatTableDataSource<Manager>([]);
-
+  displayedData: any[] = [];
   constructor(
     public dialogRef: MatDialogRef<AppManagerDialogContentComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: Manager,
@@ -292,7 +292,7 @@ export class AppManagerDialogContentComponent {
     this.action = this.local_data.action ;
 
   }
-  displayedData: any[] = [];
+
 
 
 
