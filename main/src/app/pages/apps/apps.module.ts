@@ -138,14 +138,13 @@ import {AppMonthlyEarningsTwoComponent} from "../../components/dashboard2/monthl
 import {NewMessagePageComponent} from './chat/new-message-page/new-message-page.component';
 import {AdminNewMessagePageComponent} from './chat/admin-new-message-page/admin-new-message-page.component';
 import {DefaultImagePipe} from "../../pipe/default-image.pipe";
-import { AddEquipeComponent } from './equipe/addEquipe.component';
+import {AddEquipeComponent} from './equipe/addEquipe.component';
 
 import {AppComptabiliteComponent} from './comptabilite/comptabilite.component'
-import { AddBeneficeDepenseComponent } from './comptabilite/add-benefice-depense/add-benefice-depense.component';
-import { UpdateBeneficeDepenseComponent } from './comptabilite/update-benefice-depense/update-benefice-depense.component';
-import { AppEvaluationComponent } from './evaluation/evaluation.component';
-
-
+import {AddBeneficeDepenseComponent} from './comptabilite/add-benefice-depense/add-benefice-depense.component';
+import {UpdateBeneficeDepenseComponent} from './comptabilite/update-benefice-depense/update-benefice-depense.component';
+import {AppEvaluationComponent} from './evaluation/evaluation.component';
+import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 
 
 @NgModule({
@@ -176,6 +175,7 @@ import { AppEvaluationComponent } from './evaluation/evaluation.component';
     AppSalesProfitComponent,
     AppMonthlyEarningsTwoComponent,
     DefaultImagePipe,
+    FaIconComponent,
   ],
   exports: [TablerIconsModule],
   declarations: [
@@ -267,7 +267,7 @@ import { AppEvaluationComponent } from './evaluation/evaluation.component';
     AppStafflistComponent,
     AppStaffformContentComponent,
     AppRolesDialogContentComponent,
-    AppRoleslistComponent, 
+    AppRoleslistComponent,
     AppProfilComponent,
     AppEvaluationComponent,
     NotificationDialogComponent,
@@ -275,7 +275,7 @@ import { AppEvaluationComponent } from './evaluation/evaluation.component';
     AppManagerFormComponent,
     AppComptabiliteComponent,
     AddBeneficeDepenseComponent,
-    UpdateBeneficeDepenseComponent  
+    UpdateBeneficeDepenseComponent
   ],
   providers: [DatePipe],
 })

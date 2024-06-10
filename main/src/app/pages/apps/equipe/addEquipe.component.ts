@@ -1,12 +1,13 @@
-import { DatePipe } from "@angular/common";
-import { Component } from "@angular/core";
-import { AngularFireStorage } from "@angular/fire/compat/storage";
-import { NgForm } from "@angular/forms";
-import { MatDialog } from "@angular/material/dialog";
-import { Router } from "@angular/router";
-import { EquipeService } from "src/app/services/equipe.service";
-import { Discipline } from "src/models/discipline.model";
-import { Equipe } from "src/models/equipe.model";
+import {DatePipe} from "@angular/common";
+import {Component} from "@angular/core";
+import {AngularFireStorage} from "@angular/fire/compat/storage";
+import {NgForm} from "@angular/forms";
+import {MatDialog} from "@angular/material/dialog";
+import {Router} from "@angular/router";
+import {EquipeService} from "src/app/services/equipe.service";
+import {Discipline} from "src/models/discipline.model";
+import {Equipe} from "src/models/equipe.model";
+import {faAd} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
     selector: 'app-add-equipe',
@@ -97,4 +98,5 @@ export class AddEquipeComponent {
         return equipe;
     }
 
+  protected readonly faAd = faAd;
 }
