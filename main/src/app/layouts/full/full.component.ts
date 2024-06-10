@@ -328,6 +328,8 @@ export class FullComponent implements OnInit {
         {
           displayName: 'Comptabilité',
           iconName: 'moneybag',
+          route: 'apps/comptabilite',
+
         },
         {
           displayName: 'Boîte de réception',

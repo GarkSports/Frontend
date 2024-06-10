@@ -3,6 +3,7 @@ import {CoreService} from 'src/app/services/core.service';
 import {TablerIconsModule} from "angular-tabler-icons";
 import {Academie} from "../../../../../models/academie.model";
 import {AcademieService} from "../../../../services/academie.service";
+import {Location} from "@angular/common";
 
 @Component({
   selector: 'app-branding',
@@ -12,7 +13,9 @@ import {AcademieService} from "../../../../services/academie.service";
       @if (options.theme === 'light') {
         <div class="row flex flex-nowrap">
           <div class="col-2 pt-2">
-            <i-tabler name="arrow-left" class="d-flex"></i-tabler>
+            <button (click)="goBack()" class="pt-2">
+              <i-tabler name="arrow-left" class="d-flex"></i-tabler>
+            </button>
           </div>
           <div class="col flex justify-center items-center hidden sm:flex">
             <div>
@@ -52,11 +55,14 @@ export class BrandingComponent {
 
   @Input() mobileNav = false;
 
-  constructor(private academieService: AcademieService, private settings: CoreService) {
+  constructor(private academieService: AcademieService, private settings: CoreService, private location: Location) {
     this.academieService.getAcademie().subscribe((data) => {
       this.academie = data;
       console.log(this.academie);
     });
   }
 
+  goBack() {
+    this.location.back();
+  }
 }

@@ -33,10 +33,11 @@
           <div *ngIf="data.adherents && data.adherents.length" class="w-full flex justify-center">
             <div class="grid grid-cols-2 w-full ">
               <div *ngFor="let adherent of data.adherents">
-                <mat-checkbox color="primary"
-                              (change)="onAdherentCheckboxChange(adherent.id, $event.checked)">
+                <mat-checkbox color="primary" [checked]="isAdherentSelected(adherent.id)" (change)="onAdherentCheckboxChange(adherent.id, $event.checked)">
                   {{ adherent.firstname }} {{ adherent.lastname }}
                 </mat-checkbox>
+                
+                
 
               </div>
             </div>

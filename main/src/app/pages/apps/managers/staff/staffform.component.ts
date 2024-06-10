@@ -72,7 +72,7 @@ export class AppStaffformContentComponent implements OnInit {
     private route: ActivatedRoute,
     private dialog: MatDialog
   ) {
-  
+
   }
 
 
@@ -126,7 +126,7 @@ export class AppStaffformContentComponent implements OnInit {
     const today = new Date();
     const age = today.getFullYear() - dateOfBirth.getFullYear();
     const monthDiff = today.getMonth() - dateOfBirth.getMonth();
-  
+
     if (age < 18 || (age === 18 && monthDiff < 0)) {
       this.showParentInfo = true;
       console.log('User is under 18 years old');
@@ -141,7 +141,7 @@ export class AppStaffformContentComponent implements OnInit {
     const age = today.getFullYear() - dateNaissance.getFullYear();
     const monthDiff = today.getMonth() - dateNaissance.getMonth();
     console.log(age);
-    
+
     if (age < 18 || (age === 18 && monthDiff < 0)) {
       this.showParentInfo = true;
       console.log('User is under 18 years old');
@@ -190,7 +190,7 @@ export class AppStaffformContentComponent implements OnInit {
           this.initAdherentForm(adherent); 
           const dateNaissance = new Date(adherent.dateNaissance);          
           console.log(dateNaissance);
-          
+
           const today = new Date();
           const age = today.getFullYear() - dateNaissance.getFullYear();
           const monthDiff = today.getMonth() - dateNaissance.getMonth();

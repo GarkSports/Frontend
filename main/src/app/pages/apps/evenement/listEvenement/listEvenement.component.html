@@ -22,6 +22,7 @@
 
                       <!--            </mat-icon>-->
                       <!--          </mat-form-field>-->
+    
                       <button (click)="openAddEvenementDialog()" class="bg-main font-bold rounded-3xl h-9 pt-1      shadow-md text-white">
                         <div class="row ">
                           <div class="col-1 ml-2">
@@ -122,8 +123,8 @@
                         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                     </table>
 
-                    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
-                        class="gray-background"></mat-paginator>
+                  <!--                    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons-->
+                  <!--                        class="gray-background"></mat-paginator>-->
                 </div>
             </div>
         </div>
@@ -161,6 +162,16 @@
                     </div>
                 </div>
                 </div>
+                <div class="bg-third rounded-3xl px-4 mt-4">
+                    <h3 class="text-black font-semibold">Trier par Date</h3>
+                    <div class="ml-3">
+                      <select (change)="sortData($any($event.target).value)" class="bg-gray-50 border-[0.3px] rounded-3xl border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-52 h-10 ps-10 p-10 mt-2">
+                        <option value="" disabled selected>Choisir...</option>
+                        <option value="asc">Date Ascendante</option>
+                        <option value="desc">Date Descendante</option>
+                      </select>
+                    </div>
+                  </div>
     </div>
 </div>
 

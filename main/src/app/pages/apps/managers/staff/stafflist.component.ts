@@ -1,24 +1,16 @@
-import { Component, OnInit, Inject, Optional, ViewChild, OnDestroy } from '@angular/core';
-import { MatTableDataSource, MatTable } from '@angular/material/table';
-import {
-  MatDialog,
-  MatDialogRef,
-  MAT_DIALOG_DATA,
-} from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { Manager } from 'src/models/manager.model';
-import { ManagerService } from 'src/app/services/manager.service';
-import { DatePipe } from '@angular/common';
-import { Academie } from 'src/models/academie.model';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Role, RoleArray } from 'src/models/enums/role.model';
-import { RoleName, RoleNameArray } from 'src/models/roleName.models';
-import { AngularFireStorage } from '@angular/fire/compat/storage';
-import { MatSort } from '@angular/material/sort';
-import { Observable, forkJoin } from 'rxjs';
-import { PaiementService } from 'src/app/services/paiement.service';
-import { Equipe } from 'src/models/equipe.model';
-import { Router } from '@angular/router';
+import {Component, Inject, OnDestroy, OnInit, Optional, ViewChild} from '@angular/core';
+import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef,} from '@angular/material/dialog';
+import {MatPaginator} from '@angular/material/paginator';
+import {Manager} from 'src/models/manager.model';
+import {ManagerService} from 'src/app/services/manager.service';
+import {DatePipe} from '@angular/common';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AngularFireStorage} from '@angular/fire/compat/storage';
+import {MatSort} from '@angular/material/sort';
+import {PaiementService} from 'src/app/services/paiement.service';
+import {Equipe} from 'src/models/equipe.model';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-staff-list',
@@ -108,13 +100,13 @@ export class AppStafflistComponent implements OnInit, OnDestroy {
       this.applyFilter('');
     }
   }
-  
+
   // getRolesOptions(): void {
   //   this.managerService.getOnlyRoleNames().subscribe((roles: RoleName[]) => {
   //     this.rolesOptions = roles.map((role: RoleName) => role);
   //   });
   // }
-  
+
 
   getEquipeNames(): void {
     this.paiementService.getEquipes().subscribe((equipes: Equipe[]) => {
@@ -152,10 +144,10 @@ export class AppStafflistComponent implements OnInit, OnDestroy {
   applyFilter(filterValue: string): void {
     // Convert filter value to lowercase for case-insensitive comparison
     const filter = filterValue.trim().toLowerCase();
-  
+
     // Split the filter value into individual words
     const filterWords = filter.split(' ');
-  
+
     // Set filter function for data source
     this.dataSource.filterPredicate = (data: Manager, filter: string) => {
       // Check if any attribute matches all the filter words
@@ -171,7 +163,7 @@ export class AppStafflistComponent implements OnInit, OnDestroy {
         this.matchesFilter(data.roleName, word)
       );
     };
-  
+
     this.dataSource.filter = filter;
   }
 
@@ -254,10 +246,10 @@ export class AppStafflistComponent implements OnInit, OnDestroy {
       action,
       id: obj.id
     }).toString();
-    const url = `/apps/staffform?${queryParams}`;
+    const url = `?${queryParams}`;
     window.location.href = url;
   }
-  
+
 
   ngOnDestroy(): void {
     this.broadcastChannel.close();

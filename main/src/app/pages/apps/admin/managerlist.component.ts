@@ -1,22 +1,16 @@
-import { Component, OnInit, Inject, Optional, ViewChild } from '@angular/core';
-import { MatTableDataSource, MatTable } from '@angular/material/table';
-import {
-  MatDialog,
-  MatDialogRef,
-  MAT_DIALOG_DATA,
-} from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { Manager } from 'src/models/manager.model';
-import { AdminService } from 'src/app/services/admin.service';
-import { DatePipe } from '@angular/common';
-import { Academie } from 'src/models/academie.model';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ManagerService } from 'src/app/services/manager.service';
-import { MatSelectChange } from '@angular/material/select';
-import { MatSort } from '@angular/material/sort';
-import { StatutManager } from 'src/models/enums/statutManager';
-import { AcademieService } from 'src/app/services/academie.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import {Component, Inject, OnInit, Optional, ViewChild} from '@angular/core';
+import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef,} from '@angular/material/dialog';
+import {MatPaginator} from '@angular/material/paginator';
+import {Manager} from 'src/models/manager.model';
+import {AdminService} from 'src/app/services/admin.service';
+import {DatePipe} from '@angular/common';
+import {Academie} from 'src/models/academie.model';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {ManagerService} from 'src/app/services/manager.service';
+import {MatSort} from '@angular/material/sort';
+import {AcademieService} from 'src/app/services/academie.service';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-manager-list',
@@ -46,7 +40,7 @@ export class AppManagerlistComponent implements OnInit {
   displayedColumns: string[] = [
     'firstname',
     'email',
-    'telephone',   
+    'telephone',
     'telephone2',
     'academie',
     'adresse',
@@ -101,13 +95,13 @@ export class AppManagerlistComponent implements OnInit {
     if (this.selectedStatut !== null) {
       // Convert the selectedStatut to lowercase for case-insensitive comparison
       const filter = this.selectedStatut.trim().toLowerCase();
-  
+
       // Set filter function for data source
       this.dataSource.filterPredicate = (data: Manager, filter: string) => {
         // Check if the statut matches the filter value exactly
         return data.blocked.toString().toLowerCase() === filter;
       };
-  
+
       // Apply the filter
       this.dataSource.filter = filter;
     } else {
@@ -146,7 +140,7 @@ getAcademiesNames(): void {
   this.academieService.getAcademies().subscribe((academies: Academie[]) => {
     this.academieOptions = academies.map((academie: Academie) => academie.nom);
     console.log("academie.nom",this.academieOptions);
-    
+
   });
 }
 
@@ -155,13 +149,13 @@ getAcademiesNames(): void {
     if (this.selectedAcademie !== null) {
       // Convert filter value to lowercase for case-insensitive comparison
       const filter = this.selectedAcademie.trim().toLowerCase();
-  
+
       // Set filter function for data source
       this.dataSource.filterPredicate = (data: Manager, filter: string) => {
         // Check if Academie matches the selected Academie
         return this.matchesFilter(data.academie?.nom, filter);
       };
-  
+
       // Apply the filter
       this.dataSource.filter = filter;
     } else {
@@ -173,10 +167,10 @@ getAcademiesNames(): void {
   applyFilter(filterValue: string): void {
     // Convert filter value to lowercase for case-insensitive comparison
     const filter = filterValue.trim().toLowerCase();
-  
+
     // Split the filter value into individual words
     const filterWords = filter.split(' ');
-  
+
     // Set filter function for data source
     this.dataSource.filterPredicate = (data: Manager, filter: string) => {
       // Check if any attribute matches all the filter words
@@ -192,7 +186,7 @@ getAcademiesNames(): void {
         this.matchesFilter(data.roleName, word)
       );
     };
-  
+
     this.dataSource.filter = filter;
   }
 
@@ -217,7 +211,7 @@ getAcademiesNames(): void {
       }
     );
   }
-  
+
   fetchData() {
     // Call your service to fetch the data
     this.adminService.getManagers().subscribe(data => {
@@ -226,7 +220,7 @@ getAcademiesNames(): void {
       this.dataSource.sort = this.sort;
     });
   }
-  
+
 
   ngAfterViewInit(): void {
     this.adminService.getManagers().subscribe(managers => {
@@ -253,8 +247,6 @@ getAcademiesNames(): void {
     const url = `/apps/managerForm?${queryParams}`;
     window.location.href = url;
   }
-  
-  
 
 
   openDialog(action: string, obj: any): void {
@@ -265,7 +257,7 @@ getAcademiesNames(): void {
 
     //here we will just reload or display the changes instantly but the real work will be in the dialog
     dialogRef.afterClosed().subscribe(() => {
-      
+
       this.getManagers();
 
     });
@@ -273,7 +265,7 @@ getAcademiesNames(): void {
 
 }
 
- 
+
 @Component({
   // tslint:disable-next-line - Disables all
   selector: 'app-dialog-content',
@@ -298,7 +290,7 @@ export class AppManagerDialogContentComponent {
   ) {
     this.local_data = { ...data };
     this.action = this.local_data.action ;
-  
+
   }
 
 
@@ -350,10 +342,10 @@ export class AppManagerDialogContentComponent {
           (response) => {
             if (response.success) {
               console.log('Manager blocked successfully', response.message);
-              this.dialogRef.close(true);             
+              this.dialogRef.close(true);
             } else {
               console.error('Error blocking manager', response.error);
-              this.dialogRef.close(true);             
+              this.dialogRef.close(true);
             }
           },
           (error) => {
@@ -372,7 +364,7 @@ export class AppManagerDialogContentComponent {
               this.dialogRef.close(true);
             } else {
               console.error('Error deleting manager', response.error);
-              this.dialogRef.close(true);             
+              this.dialogRef.close(true);
             }
           },
           (error) => {
@@ -381,9 +373,9 @@ export class AppManagerDialogContentComponent {
           }
         );
     }
-      
+
   }
-  
+
 
   closeDialog(): void {
     this.dialogRef.close({ event: 'Cancel' });

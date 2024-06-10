@@ -102,9 +102,9 @@ export class AppChatComponent implements OnInit, OnDestroy {
   }
 
   openDialog(action: string, obj: any): void {
-    if (this.userRole === 'ADMIN') {
+    if (this.userRole == 'ADMIN') {
       this.router.navigate(['apps/adminnewmessage'], { state: { data: obj } });
-    } else if (this.userRole === 'MANAGER') {
+    } else if (this.userRole == 'MANAGER') {
       this.router.navigate(['apps/newmessage'], { state: { data: obj } });
     }
   }

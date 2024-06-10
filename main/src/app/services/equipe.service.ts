@@ -16,8 +16,8 @@ export class EquipeService {
 
   constructor(private http: HttpClient) { }
 
-  getMembers(): Observable<Adherent[]> {
-    const url = `${this.apiUrl}/getAdherents`;
+  getMembers(equipeId: number): Observable<Adherent[]> {
+    const url = `${this.apiUrl}/getAdherents/${equipeId}`;
     return this.http.get<Adherent[]>(url, { withCredentials: true });
   }
 
@@ -25,8 +25,8 @@ export class EquipeService {
     return this.http.get<Discipline[]>(`${this.apiUrlDiscipline}/getAllDisciplines`, { withCredentials: true });
   }
 
-  getEntraineurs(): Observable<Entraineur[]> {
-    return this.http.get<Entraineur[]>(`${this.apiUrl}/getEntraineurs`, { withCredentials: true });
+  getEntraineurs(equipeId: number): Observable<Entraineur[]> {
+    return this.http.get<Entraineur[]>(`${this.apiUrl}/getEntraineurs/${equipeId}`, { withCredentials: true });
   }
 
   addEquipe(equipeData: Equipe, disciplineId: number): Observable<any> {
@@ -69,11 +69,13 @@ export class EquipeService {
     return this.http.post<Equipe>(url, entraineurIds);
   }
 
-  removeAdherentFromEquipe(adherentId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/removeAdherentFromEquipe/${adherentId}`);
+  removeAdherentFromEquipe(adherentId: number, equipeId: number): Observable<void> {
+    const url = `${this.apiUrl}/removeAdherentFromEquipe/${adherentId}/${equipeId}`;
+    return this.http.delete<void>(url);
   }
+  
 
-  removeEntraineurFromEquipe(entraineurId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/removeEntraineurFromEquipe/${entraineurId}`);
+  removeEntraineurFromEquipe(entraineurId: number, equipeId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/removeEntraineurFromEquipe/${entraineurId}/${equipeId}`);
   }
 }
