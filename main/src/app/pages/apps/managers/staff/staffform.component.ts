@@ -30,6 +30,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatSelectChange } from '@angular/material/select';
 import { Adherent } from 'src/models/adherent.model';
 import isThisHour from 'date-fns/isThisHour';
+import { EquipeService } from 'src/app/services/equipe.service';
+import { StatutManager } from 'src/models/enums/statutManager';
 
 @Component({
   // tslint:disable-next-line - Disables all
@@ -49,9 +51,16 @@ export class AppStaffformContentComponent implements OnInit {
   showParentInfo: boolean = false;
   ifAdherent: boolean = true;
   isAdherent: boolean = false;
-  
-
+  equipeList: Equipe[] = [];
   dataSource = new MatTableDataSource<string>([]);
+  equipeDataSource = new MatTableDataSource<Equipe>([]);
+  statutManagerValues = Object.values(StatutManager);
+  user: Manager;
+  showRoleInput: boolean = false;
+  showNiveauScolaire: boolean = false;
+  photo: string;
+  displayedData: any[] = [];
+  isLoading = false;
 
   constructor(
     @Optional()
@@ -59,31 +68,56 @@ export class AppStaffformContentComponent implements OnInit {
     private firestorage: AngularFireStorage,
     private formBuilder: FormBuilder,
     private managerService: ManagerService,
+    private equipeService: EquipeService,
     private route: ActivatedRoute,
     private dialog: MatDialog
   ) {
   
   }
 
-  showRoleInput: boolean = false;
-  photo: string;
-  onRoleChange(event: MatSelectChange) {
-    const selectedValue = event.value;
-    this.showRoleInput =
-      selectedValue === 'STAFF' || selectedValue === 'ENTRAINEUR';
-    console.log('role', selectedValue);
-  }
 
-  displayedData: any[] = [];
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
       this.action = params['action'];
       const id = params['id'];
+      this.photo='';
       this.getFormManagerById(id);
       this.initAdherentForm();
       this.getOnlyRoleNames();
       this.initManagerForm();
+      this.getEquipes();
+      
+
+    });
+  }
+
+  deleteUser(): void{
+    if (confirm(`Are you sure you want to delete the category: ?`)) {
+      this.managerService.deleteUser(this.local_data.id).subscribe(
+        response => {
+          console.log('Category deleted successfully', response);
+          // Remove the deleted category from the test
+        },
+        error => {
+          console.error('Error deleting category', error);
+        }
+      );
+    }
+  }
+
+  onRoleChange(event: MatSelectChange) {
+    const selectedValue = event.value;
+    this.showRoleInput =
+      selectedValue === 'STAFF' || selectedValue === 'ENTRAINEUR';
+    this.showNiveauScolaire = 
+    selectedValue === 'ADHERENT' || selectedValue === 'PARENT';
+  }
+
+  getEquipes(): void {
+    this.equipeService.getEquipes().subscribe(equipes => {
+      this.equipeList = equipes;
+      this.equipeDataSource.data = this.equipeList;
     });
   }
 
@@ -148,41 +182,45 @@ export class AppStaffformContentComponent implements OnInit {
     this.managerService.getFormManagerById(id).subscribe(
       (user) => {
         this.local_data = user; 
-
         if(this.local_data.role === 'ADHERENT'){
           const adherent = user as Adherent;
           this.local_data = adherent; 
+          this.local_data.id=adherent.id;
+          this.photo=adherent.photo;
           this.initAdherentForm(adherent); 
           const dateNaissance = new Date(adherent.dateNaissance);          
           console.log(dateNaissance);
           
           const today = new Date();
-    const age = today.getFullYear() - dateNaissance.getFullYear();
-    const monthDiff = today.getMonth() - dateNaissance.getMonth();
-    console.log(age);
-    
-    if (age < 18 || (age === 18 && monthDiff < 0)) {
-      this.showParentInfo = true;
-      console.log('User is under 18 years old');
-    } else {
-      this.showParentInfo = false;
-      console.log('User is 18 years old or older');
-    }
-          this.ifAdherent = false;
-          this.isAdherent = true;
-        }
-      else {
-        const manager = user as Manager;
-        this.local_data = manager; 
-        this.initManagerForm(manager); 
-        console.log("manager",manager);
-        console.error('User is not a manager nor adherent');
-        console.log("role is",manager.role);
-        console.log("type of",typeof(manager));
-        console.log("role adh",Role.MANAGER);
-        console.log(manager.role===Role.MANAGER?'oui':'non');
-        
-      }
+          const age = today.getFullYear() - dateNaissance.getFullYear();
+          const monthDiff = today.getMonth() - dateNaissance.getMonth();
+          console.log(age);
+          
+          if (age < 18 || (age === 18 && monthDiff < 0)) {
+            this.showParentInfo = true;
+            console.log('User is under 18 years old');
+          } else {
+            this.showParentInfo = false;
+            console.log('User is 18 years old or older');
+          }
+                this.ifAdherent = false;
+                this.isAdherent = true;
+              }
+            else {
+              const manager = user as Manager;
+              this.local_data = manager; 
+              this.local_data.id=manager.id;
+              this.photo=manager.photo;
+
+              this.initManagerForm(manager); 
+              console.log("manager",manager);
+              console.error('User is not a manager nor adherent');
+              console.log("role is",manager.role);
+              console.log("type of",typeof(manager));
+              console.log("role adh",Role.MANAGER);
+              console.log(manager.role===Role.MANAGER?'oui':'non');
+              
+            }
       },
       (error) => {
         console.error('Error fetching manager', error);
@@ -191,6 +229,8 @@ export class AppStaffformContentComponent implements OnInit {
   }
 
   initManagerForm(manager?: Manager): void {
+    const statut = manager?.blocked ? 'BLOCKED' : 'ACTIVE';
+
     this.managerForm = this.formBuilder.group({
       firstname: [manager?.firstname || '', Validators.required],
       lastname: [manager?.lastname || '', Validators.required],
@@ -198,6 +238,7 @@ export class AppStaffformContentComponent implements OnInit {
       dateNaissance: [manager?.dateNaissance || '', Validators.required],
       adresse: [manager?.adresse || '', Validators.required],
       role: [manager?.role, Validators.required],
+      statut: [statut, Validators.required],
       roleName: [
         manager?.role === Role.ADHERENT || manager?.role === Role.PARENT
           ? null
@@ -209,6 +250,8 @@ export class AppStaffformContentComponent implements OnInit {
   }
 
   initAdherentForm(adherent?: Adherent): void {
+    const statut = adherent?.blocked ? 'BLOCKED' : 'ACTIVE';
+
     this.adherentForm = this.formBuilder.group({
       firstname: [adherent?.firstname || '', Validators.required],
       lastname: [adherent?.lastname || '', Validators.required],
@@ -217,6 +260,10 @@ export class AppStaffformContentComponent implements OnInit {
       adresse: [adherent?.adresse || '', Validators.required],
       photo: [adherent?.photo || null],
       telephone: [adherent?.telephone, Validators.required],
+      equipes: [adherent?.nomEquipe, Validators.required],
+      nationalite: [adherent?.nationalite, Validators.required],
+      niveauScolaire: [adherent?.niveauScolaire, Validators.required],
+      statut: [statut, Validators.required],
       informationsParent: this.formBuilder.group({
         nomParent: [adherent?.informationsParent?.nomParent || '', Validators.required],
         prenomParent: [adherent?.informationsParent?.prenomParent || '', Validators.required],
@@ -227,6 +274,29 @@ export class AppStaffformContentComponent implements OnInit {
       })
     });
   }
+
+  onStatutChange(event: MatSelectChange): void {
+    const newStatut = event.value;
+  
+    // Update the local_data's blocked status based on the selected statut
+    this.local_data.blocked = (newStatut === 'BLOCKED');
+  
+    // Determine the action to take based on the new blocked status
+    const blockAction = this.local_data.blocked ? 'blockManager' : 'unBlockManager';
+  
+    // Call the appropriate service method
+    this.managerService[blockAction](this.local_data.id).subscribe(
+      (response: any) => {
+        console.log('Manager action successful', response);
+      },
+      (error: any) => {
+        console.error('Error', error);
+      }
+    );
+  }
+  
+
+  
 
 
   doAction(): void {
@@ -376,39 +446,31 @@ export class AppStaffformContentComponent implements OnInit {
   }
 
   async uploadFile(event: any) {
-    if (!event.target.files[0]) {
+    this.isLoading = true;
+    if (!event.target.files[0] || event.target.files[0].length === 0) {
       return;
     }
-
+    const mimeType = event.target.files[0].type;
+    if (mimeType.match(/image\/*/) == null) {
+      return;
+    }
     const file = event.target.files[0];
-    const mimeType = file.type;
-
-    if (!mimeType.startsWith('image/')) {
-      // Handle error if the file is not an image
-      return;
-    }
-
-    // Display image
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.local_data.imagePath = reader.result as string;
-    };
-    reader.readAsDataURL(file);
-
-    // Upload image
-    const path = `academie/${file.name}`;
-    try {
+    if (file) {
+      const path = `academie/${file.name}`;
       const uploadTask = await this.firestorage.upload(path, file);
       const url = await uploadTask.ref.getDownloadURL();
-      console.log('Image URL:', url);
-      this.local_data.photo = url;
       this.photo = url;
-      // Set the photo URL to the form control
-      this.adherentForm.patchValue({ photo: url });
-    } catch (error) {
-      console.error('Error uploading file:', error);
+      console.log("photo", this.photo);
     }
+    this.isLoading = false; 
+  } 
+  openPhotoDialog(): void {
+    const dialogRef = this.dialog.open(PhotoDialogComponent, {
+      data: { photo: this.photo },
+      panelClass: 'photo-dialog-panel' // Optional: Add a custom class for additional styling
+    });
   }
+  
 }
 
 @Component({
@@ -446,5 +508,20 @@ export class NotificationDialogComponent {
       // Optionally, you can navigate back to the previous page if the window wasn't opened as a popup
       window.history.back();
     }
+  }
+
+
+}
+
+@Component({
+  selector: 'app-form-content',
+  templateUrl: './photo-dialog-component.html',
+
+})
+export class PhotoDialogComponent {
+  photo: string;
+
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { photo: string }) {
+    this.photo = data.photo;
   }
 }

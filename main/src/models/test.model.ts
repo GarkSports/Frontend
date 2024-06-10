@@ -8,4 +8,5 @@ export class Test {
     academie: Academie;
     adherent: Adherent;
     categories: Categorie[];
+    creationDate: Date; 
 }

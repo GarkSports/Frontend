@@ -44,7 +44,9 @@ import { AppTestDialogContentComponent } from './testDialog.component';
   })
   // tslint:disable-next-line - Disables all
 export class AppTestContentComponent implements OnInit {
-
+  color = 'primary';
+  checked = false;
+  disabled = false;
   action: string;
   dataSource = new MatTableDataSource<Test>([]);
   testCards: Test[] = [];
@@ -71,8 +73,6 @@ export class AppTestContentComponent implements OnInit {
     this.local_data = { ...data };
   }
 
-  
-
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
         this.action = params['action'];
@@ -86,6 +86,9 @@ export class AppTestContentComponent implements OnInit {
         console.log("id", this.id);
         
       });
+  }
+  toggleCategoryView(index: number): void {
+    this.selectedCategoryToOpenIndex = this.selectedCategoryToOpenIndex === index ? -1 : index;
   }
   
   logIt(categorieName: string, index: number): void {
@@ -107,6 +110,21 @@ export class AppTestContentComponent implements OnInit {
         this.getTestById(testId); // Refresh the test details if needed
       }
     });
+  }
+  
+  deleteCategorie(test: Test, category: Categorie): void {
+    if (confirm(`Are you sure you want to delete the category: ${category.categorieName}?`)) {
+      this.staffService.deleteCategorie(category.id).subscribe(
+        response => {
+          console.log('Category deleted successfully', response);
+          // Remove the deleted category from the test
+          test.categories = test.categories.filter(c => c.id !== category.id);
+        },
+        error => {
+          console.error('Error deleting category', error);
+        }
+      );
+    }
   }
   
 

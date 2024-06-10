@@ -5,5 +5,5 @@ export class Categorie {
     id: number;
     categorieName: string;
     test: Test;
-    kpi: Kpi[]; 
+    kpis: Kpi[]; 
 }

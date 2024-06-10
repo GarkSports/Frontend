@@ -135,7 +135,7 @@ import {AppSalesOverviewComponent} from "../../components/dashboard2/sales-overv
 import {AppTotalEarningsComponent} from "../../components/dashboard2/total-earnings/total-earnings.component";
 import {AppSalesProfitComponent} from "../../components/dashboard2/sales-profit/sales-profit.component";
 import {AppMonthlyEarningsTwoComponent} from "../../components/dashboard2/monthly-earnings/monthly-earnings.component";
-import { AppEvaluationComponent } from './evaluation/evaluation.component';
+import { AppAddTestDialogContentComponent, AppEvaluationComponent } from './evaluation/evaluation.component';
 import { AppTestContentComponent } from './evaluation/test.component';
 import { AppTestDialogContentComponent } from './evaluation/testDialog.component';
 
@@ -259,7 +259,8 @@ import { AppTestDialogContentComponent } from './evaluation/testDialog.component
     AppProfilComponent,
     AppEvaluationComponent,
     AppTestContentComponent,
-    AppTestDialogContentComponent
+    AppTestDialogContentComponent,
+    AppAddTestDialogContentComponent
   ],
   providers: [DatePipe],
 })

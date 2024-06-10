@@ -2,7 +2,6 @@ import { Component, Inject, Optional } from "@angular/core";
 import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { StaffService } from "src/app/services/staff.service";
-
 @Component({
   selector: 'app-dialog-content',
   templateUrl: './test-dialog.content.html',
@@ -37,7 +36,10 @@ export class AppTestDialogContentComponent {
   }
 
   addKpi(): void {
-    this.kpis.push(this.fb.control(''));
+    this.kpis.push(this.fb.group({
+      kpiType: ['', Validators.required],
+      valkpi: [null]
+    }));
   }
 
   removeKpi(index: number): void {

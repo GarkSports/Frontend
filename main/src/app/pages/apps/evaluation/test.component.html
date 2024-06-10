@@ -7,7 +7,11 @@
             <div *ngFor="let category of test?.categories; let i = index">
               <mat-card class="cardWithShadow theme-card mb-4">
                 <mat-card-header (click)="logIt(category.categorieName, i)">
-                  <mat-card-title class="m-b-0">{{ category.categorieName }}</mat-card-title>
+                  <mat-slide-toggle 
+                  (change)="toggleCategoryView(i)">
+                </mat-slide-toggle>
+                 <mat-card-title class="m-b-0">{{ category.categorieName }}</mat-card-title>
+                  <i-tabler name="trash" class="icon-18 cursor-pointer" (click)="deleteCategorie(test, category)"></i-tabler>
                 </mat-card-header>
                 <mat-card-content class="b-t-1" *ngIf="selectedCategoryToOpenIndex === i">
                   <div>
@@ -47,3 +51,39 @@
     </div>
   </div>
 </div>
+
+<style>
+/* Change the color of the thumb when checked (on) */
+test .mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
+  background-color: #4CAF50 !important; /* Green color */
+}
+
+test .mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
+  background-color: #4CAF50 !important; /* Green color */
+}
+
+test .mat-slide-toggle .mat-slide-toggle-thumb {
+  background-color: #9E9E9E !important; /* Gray color */
+}
+
+test .mat-slide-toggle .mat-slide-toggle-bar {
+  background-color: #E0E0E0 !important; /* Light gray color */
+}
+
+
+      .mat-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mat-card-title {
+  flex-grow: 1;
+  margin-right: 16px;
+}
+
+.icon-18 {
+  margin-left: auto;
+}
+    
+</style>

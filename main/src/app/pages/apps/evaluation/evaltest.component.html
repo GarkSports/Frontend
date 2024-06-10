@@ -1,29 +1,55 @@
-<div
-  class="row cards-container"
-  
->
-  <div
-    class="col-sm-6 col-lg-4"
-    *ngFor="let test of testCards"
-  >
-    <mat-card class="cardWithShadow">
+<div class="row cards-container">
+  <div class="col-sm-6 col-lg-4" *ngFor="let test of testCards">
+    <mat-card class="cardWithShadow square-card">
       <mat-card-content class="text-center p-24">
-
-        <h4 mat-card-title class="card-title m-t-16 m-b-0">{{ test.testName }}</h4>
-        <div class="m-t-20">
-          
-          <button
-            mat-flat-button
-            class="m-r-8"
-            color="primary"
-            (click)="openTest('Add',test)"
-          >
-            Gèrer évaluation
-          </button>
+        <div class="card-header">
+          <h4 class="card-title">{{ test.testName }}</h4>
+          <div class="card-icons">
+            <i-tabler name="edit" class="icon-18 cursor-pointer" (click)="openTest('Add',test)"></i-tabler>
+            <i-tabler name="trash" class="icon-18 cursor-pointer" (click)="deleteTest(test)"></i-tabler>
+          </div>
         </div>
+        <h1>Catégories: {{ test.categories.length }}</h1>
+        <h1>Sous catégories: {{ getTotalKpis(test) }}</h1>
+        <p>Créer le: {{ test.creationDate | date: 'short' }}</p>
+
       </mat-card-content>
-      <mat-divider></mat-divider>
     </mat-card>
   </div>
+  <div class="row cards-container">
+
+  <mat-card class="cardWithShadow square-card">
+    <mat-card-content class="text-center p-24">
+      <div class="m-t-20">
+        <mat-icon color="primary" class="cursor-pointer" style="font-size: 30px; height: 30px; width: 30px;" (click)="addTest()">
+          add_circle
+        </mat-icon>
+        <h1>Ajouter un nouveau modèle</h1>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
 
 </div>
+
+
+<style>
+  .square-card {
+  border-radius: 0 !important; /* Remove border radius to make the cards rectangular */
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-title {
+  margin: 0;
+}
+
+.card-icons {
+  display: flex;
+}
+
+</style>

@@ -13,8 +13,8 @@ export class StaffService {
     private apiUrl = environment.apiUrl+ 'staff';
     constructor(private http: HttpClient) {}
 
-    getTests(): Observable<Test[]> {
-        return this.http.get<Test[]>(`${this.apiUrl}/academies/14/tests`, { withCredentials: true });
+    getTests(academieId: number): Observable<Test[]> {
+        return this.http.get<Test[]>(`${this.apiUrl}/academies/${academieId}/tests`, { withCredentials: true });
     }
 
     getTestById(testId: number): Observable<Test[]> {
@@ -29,6 +29,10 @@ export class StaffService {
         return this.http.delete<void>(`${this.apiUrl}/kpi/${kpiId}`, { withCredentials: true });
     }
 
+    addTest(academieId: number, newTest: any): Observable<Test> {
+        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.post<Test>(`${this.apiUrl}/add-test?academieId=${academieId}`, newTest, { withCredentials: true, headers });
+      }
 
     addKpi(categoryIndex: number, newKpiValue: string, categorieId: number): Observable<Categorie> {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
@@ -39,7 +43,13 @@ export class StaffService {
     addCategorie(testId: number, newCategorie: any): Observable<Categorie> {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         return this.http.post<Categorie>(`${this.apiUrl}/add-categorie?testId=${testId}`, newCategorie, { withCredentials: true, headers });
-      }
+    }
       
-      
+    deleteTest(testId: number): Observable<void> {
+        return this.http.delete<void>(`${this.apiUrl}/tests/${testId}`);
+    } 
+
+    deleteCategorie(categoryId: number): Observable<void> {
+        return this.http.delete<void>(`${this.apiUrl}/categories/${categoryId}`);
+    }
 }
