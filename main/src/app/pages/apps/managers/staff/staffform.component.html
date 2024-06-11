@@ -13,7 +13,7 @@
           align-items: center; " *ngIf="isLoading; else imageContent">
             <mat-spinner></mat-spinner> <!-- or any other loading indicator -->
           </div>
-          
+
           <ng-template  #imageContent>
             <div style=" display: flex;
             justify-content: center;
@@ -125,7 +125,7 @@
                 </mat-form-field>
               </div>
             </div>
-            <div *ngIf="showNiveauScolaire" class="row">
+            <div *ngIf="isAdherent" class="row">
               <br>
               <div class="col-sm-12 d-flex align-items-center">
                 <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Niveau scolaire</mat-label>
