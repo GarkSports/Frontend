@@ -3,7 +3,7 @@ export class Benefices {
     type: string;
     etat: string; 
     quantite: number;
-    prixUnite: number; 
+    prixunite: number; 
     total: number; 
     date: string;
   }
