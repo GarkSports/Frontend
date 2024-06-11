@@ -464,6 +464,7 @@ export class AppStaffformContentComponent implements OnInit {
     }
     this.isLoading = false; 
   } 
+  
   openPhotoDialog(): void {
     const dialogRef = this.dialog.open(PhotoDialogComponent, {
       data: { photo: this.photo },

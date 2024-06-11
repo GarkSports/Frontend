@@ -11,6 +11,7 @@ import {MatSort} from '@angular/material/sort';
 import {PaiementService} from 'src/app/services/paiement.service';
 import {Equipe} from 'src/models/equipe.model';
 import {Router} from '@angular/router';
+import { PhotoDialogComponent } from './staffform.component';
 
 @Component({
   selector: 'app-staff-list',
@@ -35,7 +36,6 @@ export class AppStafflistComponent implements OnInit, OnDestroy {
   ];
 
   dataSource = new MatTableDataSource<Manager>([]);
-
   statutOptions: string[] = ['true', 'false'];
   selectedEquipe: string | null = null;
   nomEquipeOptions: string[] = [];
@@ -200,7 +200,7 @@ export class AppStafflistComponent implements OnInit, OnDestroy {
       (managers) => {
         console.log('Managers fetched successfully', managers);
         this.dataSource.data = managers;
-      },
+        },
       (error) => {
         console.error('Error fetching academies', error);
       }
@@ -237,7 +237,7 @@ export class AppStafflistComponent implements OnInit, OnDestroy {
           ? Validators.required
           : null,
       ],
-      photo: [null, Validators.required],
+      photo: [this.local_data.photo, Validators.required],
     });
   }
 
@@ -280,6 +280,12 @@ export class AppStafflistComponent implements OnInit, OnDestroy {
     });
   }
 
+  openPhotoDialog(photo: string): void {
+    const dialogRef = this.dialog.open(PhotoDialogComponent, {
+      data: { photo },
+      panelClass: 'photo-dialog-panel' // Optional: Add a custom class for additional styling
+    });
+  }
 
 }
 
@@ -348,6 +354,7 @@ export class AppStaffDialogContentComponent {
       this.dialogRef.close({ event: 'Cancel' });
     }
   }
+
 
   closeDialog(): void {
     this.dialogRef.close({ event: 'Cancel' });
