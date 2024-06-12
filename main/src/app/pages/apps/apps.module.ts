@@ -155,6 +155,7 @@ import { AppManagerFormComponent } from './admin/managerform.component';
 import {AppComptabiliteComponent} from './comptabilite/comptabilite.component'
 import { AddBeneficeDepenseComponent } from './comptabilite/add-benefice-depense/add-benefice-depense.component';
 import { UpdateBeneficeDepenseComponent } from './comptabilite/update-benefice-depense/update-benefice-depense.component';
+import {AddPostPageComponent} from './blogs/bloglist/add-post-page/add-post-page.component'
 
 
 
@@ -291,7 +292,8 @@ import { UpdateBeneficeDepenseComponent } from './comptabilite/update-benefice-d
     AppManagerFormComponent,
     AppComptabiliteComponent,
     AddBeneficeDepenseComponent,
-    UpdateBeneficeDepenseComponent
+    UpdateBeneficeDepenseComponent,
+    AddPostPageComponent
   ],
   providers: [DatePipe],
 })
