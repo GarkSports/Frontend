@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable, catchError, map, of, tap, throwError } from 'rxjs';
 import { Academie } from 'src/models/academie.model';
 import { Manager } from 'src/models/manager.model';
@@ -8,6 +8,7 @@ import {environment} from "../../environments/environment";
 import { ChangePasswordChange } from 'src/models/changePassword.model';
 import { User } from 'src/models/user.model';
 import { Adherent } from 'src/models/adherent.model';
+import { Test } from 'src/models/test.model';
 
 @Injectable({
   providedIn: 'root'
@@ -32,11 +33,38 @@ export class ManagerService {
     return this.http.put<any>(`${this.apiUrl}/update-role-name?id=${roleNameData.id}`, roleNameData, {withCredentials: true, headers });
   }
   
-  deleteRolename(roleNameData: RoleName): Observable<any> {
+  deleteRolename(roleNameId: number): Observable<{ success: boolean, message?: string, error?: string }> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.delete<any>(`${this.apiUrl}/delete-role-name?id=${roleNameData.id}`, { withCredentials: true, headers });
+    return this.http.delete<any>(`${this.apiUrl}/delete-role-name?id=${roleNameId}`, { withCredentials: true, headers })
+    .pipe(
+      map((response: HttpResponse<string>) => {
+        if (response.status === 200) {
+          try {
+            const responseData = JSON.parse(response.body || '');
+            return { success: true, message: responseData.message };
+          } catch (e) {
+            return { success: true, message: response.body || 'Role name deleted successfully' };
+          }
+        } else {
+          return { success: false, error: response.body || '' };
+        }
+      })
+    );
   }
   
+  deleteUser(userId: number): Observable<{ success: boolean, message?: string, error?: string }> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.delete<any>(`${this.apiUrl}/delete-user?id=${userId}`, { withCredentials: true, headers })
+    .pipe(
+      map((response: HttpResponse<string>) => {
+        if (response.status === 200) {
+          return { success: true, message: response.body || '' };
+        } else {
+          return { success: false, error: response.body || '' };
+        }
+      })
+    );
+  }
 
   addStaff(managerData: Manager): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
@@ -82,7 +110,7 @@ export class ManagerService {
     return this.http.post<any>(`${this.apiUrl}/add-coach`, requestBody, { withCredentials: true, headers });
   }
 
-  addAdherent(managerData: Manager): Observable<any> {
+  addAdherent(managerData: Adherent): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     const requestBody = {
       email: managerData.email,
@@ -90,7 +118,8 @@ export class ManagerService {
       lastname: managerData.lastname,
       role:managerData.role,
       adresse: managerData.adresse,
-      photo:managerData.photo
+      niveauScolaire: managerData.niveauScolaire,
+      photo:managerData.photo,
     };
   
     console.log("this is service", requestBody);
@@ -131,7 +160,8 @@ export class ManagerService {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.put<any>(`${this.apiUrl}/update-manager`, managerData, { withCredentials: true,headers });
   }
-  
+
+
   getRoleNames(): Observable<RoleName[]> {
     return this.http.get<RoleName[]>(`${this.apiUrl}/get-role-names`, { withCredentials: true });
   }

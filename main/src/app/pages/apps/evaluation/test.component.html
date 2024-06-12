@@ -1,0 +1,89 @@
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <mat-card class="cardWithShadow theme-card">
+        <mat-card-content class="b-t-1">
+          <form [formGroup]="testForm">
+            <div *ngFor="let category of test?.categories; let i = index">
+              <mat-card class="cardWithShadow theme-card mb-4">
+                <mat-card-header (click)="logIt(category.categorieName, i)">
+                  <mat-slide-toggle 
+                  (change)="toggleCategoryView(i)">
+                </mat-slide-toggle>
+                 <mat-card-title class="m-b-0">{{ category.categorieName }}</mat-card-title>
+                  <i-tabler name="trash" class="icon-18 cursor-pointer" (click)="deleteCategorie(test, category)"></i-tabler>
+                </mat-card-header>
+                <mat-card-content class="b-t-1" *ngIf="selectedCategoryToOpenIndex === i">
+                  <div>
+                    <div *ngFor="let kpi of category.kpis">
+                      <div class="d-flex align-items-center mb-2">
+                        {{ kpi.kpiType }}
+                        <i-tabler name="trash" class="icon-18 cursor-pointer ml-2" (click)="deleteKpi(kpi)"></i-tabler>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="d-flex align-items-center mb-3">
+                    <div *ngIf="selectedCategoryIndex === i" class="mr-2">
+                      <mat-form-field appearance="outline">
+                        <input formControlName="newKpiValue" matInput placeholder="Nouveau KPI">
+                        <button mat-button matSuffix (click)="addKpi(category.id)" tabindex="-1">
+                          <mat-icon>add</mat-icon>
+                        </button>
+                      </mat-form-field>
+                    </div>
+                    <div class="d-flex align-items-center">
+                      <i-tabler name="plus" class="icon-18 cursor-pointer mr-2" (click)="selectCategory(i)"></i-tabler>
+                      <h1 class="m-0">Ajouter une sous-catégorie</h1>
+                    </div>
+                  </div>
+                </mat-card-content>
+                
+              </mat-card>
+  
+            </div>
+            <div class="d-flex align-items-center">
+              <i-tabler name="plus" class="icon-18 cursor-pointer mr-2" (click)="addCategorie('AddCat', test, test.id)" ></i-tabler>
+              <h1 class="m-0">Ajouter une catégorie</h1>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
+
+<style>
+/* Change the color of the thumb when checked (on) */
+test .mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
+  background-color: #4CAF50 !important; /* Green color */
+}
+
+test .mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
+  background-color: #4CAF50 !important; /* Green color */
+}
+
+test .mat-slide-toggle .mat-slide-toggle-thumb {
+  background-color: #9E9E9E !important; /* Gray color */
+}
+
+test .mat-slide-toggle .mat-slide-toggle-bar {
+  background-color: #E0E0E0 !important; /* Light gray color */
+}
+
+
+      .mat-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mat-card-title {
+  flex-grow: 1;
+  margin-right: 16px;
+}
+
+.icon-18 {
+  margin-left: auto;
+}
+    
+</style>

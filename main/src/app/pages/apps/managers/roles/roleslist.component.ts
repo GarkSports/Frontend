@@ -24,18 +24,15 @@ export class AppRoleslistComponent implements OnInit {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> =
     Object.create(null);
   searchText: any;
-  
+  roleNames: RoleName[];
 
-  displayedColumns: string[] = [
-    'roleName',
-    'permissions',
-    'action',
-  ];
+  displayedColumns: string[] = ['roleName', 'permissions', 'action'];
+ // displayedColumns: string[] = ['action', 'permissions', 'roleName'];
   dataSource = new MatTableDataSource<RoleName>([]);
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator =
   Object.create(null);
-  roleNames: string[];
+  //roleNames: string[];
 
 
   constructor(public dialog: MatDialog,
@@ -45,7 +42,41 @@ export class AppRoleslistComponent implements OnInit {
   ngOnInit(): void {
     this.dataSource = new MatTableDataSource<RoleName>([]);
     this.table.renderRows();
+    this.fetchRoleNames();
+  }
 
+  matchesFilter(value: any, filter: string): boolean {
+    // Convert value to string if it's not already
+    const stringValue = value ? value.toString().toLowerCase() : '';
+    // Check if the string value contains the filter value
+    return stringValue.includes(filter);
+  }
+  
+  applyFilter(filterValue: string): void {
+    // Convert filter value to lowercase for case-insensitive comparison
+    const filter = filterValue.trim().toLowerCase();
+
+    // Split the filter value into individual words
+    const filterWords = filter.split(' ');
+
+    // Set filter function for data source
+    this.dataSource.filterPredicate = (data: RoleName, filter: string) => {
+      // Check if any attribute matches all the filter words
+      return filterWords.every(word =>
+        this.matchesFilter(data.name, word) 
+      );
+    };
+
+    this.dataSource.filter = filter;
+  }
+
+
+  fetchRoleNames(): void {
+    this.managerService.getRoleNames().subscribe(roleNames => {
+      this.roleNames = roleNames;
+      console.log(roleNames);
+      
+    });
   }
 
  
@@ -56,9 +87,6 @@ export class AppRoleslistComponent implements OnInit {
     });
   }
   
-  applyFilter(filterValue: string): void {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
 
   btnCategoryClick(val: string): number {
     this.dataSource.filter = val.trim().toLowerCase();
@@ -71,26 +99,9 @@ export class AppRoleslistComponent implements OnInit {
       data: obj
     });
 
-    //here we will just reload or display the changes instantly but the real work will be in the dialog
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result.event === 'Add') {
-        this.addRowData(result.data.managerData); // add the user in the page just display it 
-      } else if (result.event === 'Update') {
-        this.updateRowData(result.data);
-      // } else if (result.event === 'Delete') {
-      //   this.deleteRowData(result.data);
-      } 
-      
+    dialogRef.afterClosed().subscribe((result: any) => {
+      this.fetchRoleNames();
     });
-  }
-  // tslint:disable-next-line - Disables all
-  addRowData(managerData: Manager): void {
-    this.table.renderRows();
-
-  }
-  // tslint:disable-next-line - Disables all
-  updateRowData(managerData: Manager): void {
-    this.table.renderRows();
   }
 }
 
@@ -111,7 +122,7 @@ export class AppRolesDialogContentComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<AppRolesDialogContentComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: Roles,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: RoleName,
     private formBuilder: FormBuilder,
     private managerService: ManagerService
   ) {
@@ -130,7 +141,7 @@ export class AppRolesDialogContentComponent implements OnInit {
 
   initManagerForm(): void {
     this.managerForm = this.formBuilder.group({
-      roleName: [this.local_data.roleName, Validators.required],
+      name: [this.local_data.name, Validators.required],
       permissions: [this.local_data.permissions, Validators.required],
     });
   }
@@ -155,7 +166,7 @@ export class AppRolesDialogContentComponent implements OnInit {
 
   doAction(): void {
     if (this.action === 'Add' && this.managerForm) {
-      const name = this.managerForm.get('roleName')?.value; // Add '?' for null check
+      const name = this.managerForm.get('name')?.value; // Add '?' for null check
       const permissions = this.managerForm.get('permissions')?.value; // Add '?' for null check
   
   
@@ -174,43 +185,48 @@ export class AppRolesDialogContentComponent implements OnInit {
     } else if (this.action === 'Update' && this.managerForm) {
       // Handle Update action
         const updatedRolename = this.managerForm.value;
-        // const updatedRoleName = this.managerForm.get('roleName')?.value; // Add '?' for null check
-        // const permissions = this.managerForm.get('permissions')?.value; // Add '?' for null check
 
         updatedRolename.id = this.local_data.id; // Set the id of the manager to be updated
         this.managerService.updateRolename(updatedRolename).subscribe(
           (response) => {
             console.log('rolename updated successfully', response);
+            this.fetchRoleNames();
             this.dialogRef.close({ event: this.action, data: updatedRolename });
+            
           },
           (error) => {
             console.error('Error updating rolename', error);
           }
+          
         );
       
     } else if (this.action === 'Delete') {
       // Handle Delete action
-      this.managerService.deleteRolename(this.local_data).subscribe(
-        (response) => {
-          console.log('Manager deleted successfully', response);
-          console.log( this.local_data.id );
-          
-          this.dialogRef.close({ event: this.action, data: this.local_data.id });
+      this.managerService.deleteRolename(this.local_data.id).subscribe(
+        response => {
+          if (response.success) {
+            console.log(response.message);
+            this.dialogRef.close({ event: true });
+            this.fetchRoleNames();
+          } else {
+            console.error(response.error);
+            this.dialogRef.close({ event: true });
+            this.fetchRoleNames();
+          }
+          this.fetchRoleNames();
         },
-        (error) => {
-          console.error('Error deleting manager', error);
-          console.log( this.local_data.id );
-
-          // i should display another dialogRef showing that the request wasn't successfull
-          this.dialogRef.close({ event: this.action});
+        error => {
+          console.error('Error deleting rolename', error);
+          this.dialogRef.close({ event: true });
+          this.fetchRoleNames();
         }
+        
       );
-     } 
+    }
      else {
       this.dialogRef.close({ event: 'Cancel' });
     }
   }
-  
 
   closeDialog(): void {
     this.dialogRef.close({ event: 'Cancel' });

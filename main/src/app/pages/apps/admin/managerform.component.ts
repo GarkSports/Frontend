@@ -39,24 +39,20 @@ export class AppManagerFormComponent implements OnInit {
       const id = params['id'];
         this.getFormManagerById(id);
         this.initManagerForm();
-      
     });
   }
 
   getFormManagerById(id: string): void {
     this.managerService.getFormManagerById(id).subscribe(
       (user) => {
-        if (user.role === 'Manager') {
+  
         const manager = user as Manager;
         this.local_data = manager; // Store the fetched manager data
         console.log("name", user.firstname);
         console.log("this.local_data", this.local_data);
         this.initManagerForm(manager); // Initialize the form with the fetched manager data
-      }
-      else {
-        console.error('User is not a manager');
-        // Handle error or show a message indicating that the user is not a manager
-      }
+      
+      
       },
       (error) => {
         console.error('Error fetching manager', error);
@@ -103,8 +99,8 @@ export class AppManagerFormComponent implements OnInit {
         (response) => {
           console.log('Manager added:', response);
           this.showNotification(
-            'Success',
-            'Manager updated successfully!',
+            'Succès',
+            'Manager ajouté avec Succès!',
             'success'
           );
           setTimeout(() => {
@@ -117,7 +113,7 @@ export class AppManagerFormComponent implements OnInit {
         },
         (error) => {
           console.error('Error adding manager:', error);
-          this.showNotification('Error', 'Error adding manager', 'error');
+          this.showNotification('Erreur', `Erreur lors du l'ajout du manager`, 'error');
         }
       );
     } else if (this.action === 'Update' && this.local_data) {
@@ -126,8 +122,8 @@ export class AppManagerFormComponent implements OnInit {
         (response) => {
           console.log('Manager updated:', response);
           this.showNotification(
-            'Success',
-            'Manager updated successfully!',
+            'Succèss',
+            'Manager mis à jour avec succès!',
             'success'
           );
           setTimeout(() => {
@@ -140,7 +136,7 @@ export class AppManagerFormComponent implements OnInit {
         },
         (error) => {
           console.error('Error updating manager:', error);
-          this.showNotification('Error', 'Error updating manager', 'error');
+          this.showNotification('Erreur', 'Erreur lors du mis à jour du manager', 'error');
         }
       );
     }
@@ -167,8 +163,8 @@ export class AppManagerFormComponent implements OnInit {
   template: `
     <h1 mat-dialog-title class="p-24 p-t-5">{{ data.title }}</h1>
     <div mat-dialog-content class="p-x-24 p-b-24">{{ data.message }}</div>
-    <div mat-dialog-actions>
-      <button mat-stroked-button class="p-24 p-t-0" (click)="cancelAction()">OK</button>
+    <div mat-dialog-actions class="p-24 p-t-0">
+      <button mat-stroked-button (click)="cancelAction()">OK</button>
     </div>
   `,
   styles: [

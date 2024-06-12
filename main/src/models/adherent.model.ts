@@ -15,4 +15,5 @@ export class Adherent extends User {
     statutAdherent: StatutAdherent;
     creationDate: Date;
     paiementDate: Date;
+    niveauScolaire: string;
 }
