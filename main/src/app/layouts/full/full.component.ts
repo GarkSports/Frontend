@@ -318,7 +318,7 @@ export class FullComponent implements OnInit {
             {
               displayName: 'Evaluation',
               iconName: 'point',
-              route: 'apps/evaluation',
+              route: 'apps/eval',
             },
         {
           displayName: 'Paiement',
