@@ -107,7 +107,9 @@ import {
   AddEvenementPopupComponent,
   DeleteEventConfirmationDialogComponent,
   DetailEventDialogComponent,
+  DetailEventMatchAmicalDialogComponent,
   ListEvenementComponent,
+  UpdateEvenementMatchAmicalPopupComponent,
   UpdateEvenementPopupComponent
 } from './evenement/listEvenement/listEvenement.component';
 
@@ -179,6 +181,8 @@ import { AppEvaluationComponent } from './evaluation/evaluation.component';
   ],
   exports: [TablerIconsModule],
   declarations: [
+    DetailEventMatchAmicalDialogComponent,
+    UpdateEvenementMatchAmicalPopupComponent,
     AddEquipeComponent,
     NewMessagePageComponent,
     AdminNewMessagePageComponent,
