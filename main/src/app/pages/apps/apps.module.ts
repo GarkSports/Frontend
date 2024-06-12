@@ -107,7 +107,9 @@ import {
   AddEvenementPopupComponent,
   DeleteEventConfirmationDialogComponent,
   DetailEventDialogComponent,
+  DetailEventMatchAmicalDialogComponent,
   ListEvenementComponent,
+  UpdateEvenementMatchAmicalPopupComponent,
   UpdateEvenementPopupComponent
 } from './evenement/listEvenement/listEvenement.component';
 
@@ -183,6 +185,8 @@ import { NgxImageViewerModule } from '@simfyz/ngx-image-viewer';
   ],
   exports: [TablerIconsModule],
   declarations: [
+    DetailEventMatchAmicalDialogComponent,
+    UpdateEvenementMatchAmicalPopupComponent,
     AddEquipeComponent,
     NewMessagePageComponent,
     AdminNewMessagePageComponent,

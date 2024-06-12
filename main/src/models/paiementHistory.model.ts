@@ -1,4 +1,5 @@
 import { Adherent } from "./adherent.model";
+import { StatutAdherent } from "./enums/statutAdherent.model";
 
 export class PaiementHistory {
     id: number;
@@ -8,5 +9,6 @@ export class PaiementHistory {
     montant: number;
     reste: number;
     retardPaiement: number;
+    statutAdherent: StatutAdherent;
     adherent?: Adherent;
 }
