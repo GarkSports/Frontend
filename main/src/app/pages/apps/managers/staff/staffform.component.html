@@ -3,31 +3,55 @@
       <mat-card class="cardWithShadow theme-card">
         <mat-card-header>
           <mat-card-title class="m-b-0">Informations Générales</mat-card-title>
-          
+          <i-tabler name="trash" class="icon-22 cursor-pointer" (click)="deleteUser()"></i-tabler>
+
         </mat-card-header>
        
-        <mat-card-content class="b-t-1">
-          <div class="image-preview" *ngIf="local_data.photo">
-            <img [src]="local_data.photo" alt="Photo Preview" style="width: 100px; height: 100px; margin-left: 220px; margin-bottom: 20px;" class="rounded-full object-cover "/>
-          </div> 
-          <form [formGroup]="managerForm">
-            <div class="row"> 
-                <div class="col-sm-6"> 
+        <mat-card-content  class="b-t-1">
+          <div style=" display: flex;
+          justify-content: center;
+          align-items: center; " *ngIf="isLoading; else imageContent">
+            <mat-spinner></mat-spinner> <!-- or any other loading indicator -->
+          </div>
+
+          <ng-template  #imageContent>
+            <div style=" display: flex;
+            justify-content: center;
+            align-items: center; ">
+            <img [src]="photo ? photo : 'https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png'" alt="User Photo" 
+            style=" width: 200px; height: 200px;" class="rounded-full object-cover" (click)="openPhotoDialog()" />
+          </div>
+          </ng-template>
+          <br>
+          <br>
+          <form [formGroup]="isAdherent? adherentForm: managerForm" class="form-section">
+            <div class="row" > 
+                <div class="col-sm-6" > 
                     <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Nom</mat-label> 
                     <mat-form-field appearance="outline" class="w-50"> 
                       <input formControlName="lastname" matColumnDef="lastname" id="lastname"  matInput/> 
-                      <mat-icon matPrefix class="op-5">
-                        <i-tabler name="user" class="icon-20 d-flex"></i-tabler>
-                      </mat-icon>                     
+                  
                     </mat-form-field> 
                 </div> 
-                    <div class="col-sm-6"> 
+       
+                    <div class="col-sm-4"> 
                         <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Prénom</mat-label> 
                         <mat-form-field appearance="outline" class="w-50"> 
-                            <input formControlName="firstname" type="text" matInput required id="firstname" name="firstname"
-                      placeholder="firstname" />
+                            <input formControlName="firstname" type="text" matInput required id="firstname" name="firstname"/>
                         </mat-form-field> 
                     </div> 
+                </div>
+                <br>
+                <div class="row">
+                  <div class="col-sm-12 d-flex align-items-center">
+                    <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Date de naissance</mat-label>
+                  </div>
+                  <div class="col-sm-12">
+                    <mat-form-field appearance="outline" class="w-100">
+                      <input formControlName="dateNaissance" matColumnDef="dateNaissance" type="date" matInput (change)="checkAge($event)">                      
+
+                    </mat-form-field>
+                  </div>
                 </div>
                 <br>
             <div class="row">
@@ -37,12 +61,7 @@
                 <div class="col-sm-12">
                   <mat-form-field appearance="outline" class="w-100">
                     <input formControlName="adresse" matColumnDef="adresse" matInput />
-                    <mat-icon matPrefix class="op-5">
-                      <i-tabler
-                        name="building-arch"
-                        class="icon-20 d-flex"
-                      ></i-tabler>
-                    </mat-icon>
+
                   </mat-form-field>
                 </div>
               </div>
@@ -56,9 +75,7 @@
               <div class="col-sm-12">
                 <mat-form-field appearance="outline" class="w-100">
                   <input formControlName="email" matColumnDef="email" matInput type="email" />
-                  <mat-icon matPrefix class="op-5">
-                    <i-tabler name="mail" class="icon-20 d-flex"></i-tabler>
-                  </mat-icon>
+ 
                 </mat-form-field>
               </div>
             </div>
@@ -72,42 +89,111 @@
                 <div class="col-sm-12">
                   <mat-form-field appearance="outline" class="w-100">
                     <input formControlName="telephone" matColumnDef="telephone" matInput/>
-                    <mat-icon matPrefix class="op-5">
-                      <i-tabler name="phone" class="icon-20 d-flex"></i-tabler>
-                    </mat-icon>
+
                   </mat-form-field>
                 </div>
               </div>
-              <br>
-              <div class="row">
+              
+              <div *ngIf="ifAdherent && action === 'Add'" class="row">
+                <br>
                 <div class="col-sm-12 d-flex align-items-center">
                   <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Type de Role</mat-label>
                 </div>
               <div class="col-lg-12">
                 <mat-form-field appearance="outline" class="w-100">
-                  <mat-select formControlName="role" matNativeControl required id="role" name="role" placeholder="Role" (selectionChange)="onRoleChange($event)">
-                    <mat-option  value="STAFF">Staff</mat-option >
-                    <mat-option  value="ENTRAINEUR">Entraineur</mat-option >
-                    <mat-option  value="ADHERENT">Adherent</mat-option >
-                    <mat-option  value="PARENT">Parent</mat-option >
+                  <mat-select formControlName="role" matNativeControl required id="role" name="role"  
+                  (selectionChange)="onRoleChange($event)">
+                    <mat-option value="STAFF">Staff</mat-option >
+                    <mat-option value="ENTRAINEUR">Entraineur</mat-option >
+                    <mat-option value="ADHERENT">Adherent</mat-option >
+                    <mat-option value="PARENT">Parent</mat-option >
                   </mat-select>
                 </mat-form-field>
               </div>
             </div>
+            
+            <div *ngIf="showRoleInput" class="row">
+              <br>
+              <div class="col-sm-12 d-flex align-items-center">
+                <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Role</mat-label>
+              </div>
+                <div class="col-sm-12">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-select  formControlName="roleName" matNativeControl required id="roleNames" name="roleNames">
+                      <mat-option *ngFor="let roleName of roleNames" [value]="roleName">{{ roleName }}</mat-option >
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+            <div *ngIf="showNiveauScolaire" class="row">
+              <br>
+              <div class="col-sm-12 d-flex align-items-center">
+                <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Niveau scolaire</mat-label>
+              </div>
+              <div class="col-sm-12">
+                <mat-form-field appearance="outline" class="w-100">
+                  <input formControlName="niveauScolaire" matInput/>
+                </mat-form-field>
+              </div>
+              
+            </div>
+
             <br>
-              <div  *ngIf="showRoleInput" class="row">
+            <div class="row">
+              <div class="col-sm-12 d-flex align-items-center">
+                <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16"
+                  >Nationalité</mat-label>
+              </div>
+              <div class="col-sm-12">
+                <mat-form-field appearance="outline" class="w-100">
+                  <input formControlName="nationalite" matColumnDef="nationalite" type="country" matInput/>
+  
+                </mat-form-field>
+              </div>
+            </div>
+
+            <br>
+
+            
+
+            <div class="row">
+              <div class="col-sm-12 d-flex align-items-center">
+                <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Equipes</mat-label>
+              </div>
+              <div class="col-sm-12">
+                <mat-form-field appearance="outline" class="w-100">
+                <mat-select formControlName="equipes" multiple required id="equipes" name="equipes" >
+                  <mat-option *ngFor="let equipe of equipeList" [value]="equipe">
+                    {{ equipe.nom }}
+                  </mat-option>
+                  </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+
+            <br>
+
+
+              <br>
+              <div *ngIf="action==='Update'" class="row">
                 <div class="col-sm-12 d-flex align-items-center">
-                  <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Role</mat-label>
+                  <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Statut</mat-label>
                 </div>
-                  <div class="col-sm-12">
+                <div class="col-sm-12">
                   <mat-form-field appearance="outline" class="w-100">
-                    <mat-select  formControlName="roleName" matNativeControl required id="roleNames" name="roleNames" placeholder="Role">
-                        <mat-option *ngFor="let roleName of roleNames" [value]="roleName">{{ roleName }}</mat-option >
+                    <mat-select formControlName="statut" matNativeControl required id="statut" name="statut" 
+                                (selectionChange)="onStatutChange($event)">
+                      <mat-option value="ACTIVE">Activé</mat-option>
+                      <mat-option value="BLOCKED">Bloqué</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </div>
               </div>
+                              
               <br>
+              <br>
+              <br>
+
               <div class="row">
                 <div class="col-lg-12 d-flex justify-content-center">
                   <div class="button-container">
@@ -122,10 +208,130 @@
                       Cancel
                     </button>
                   </div>
-                  
                 </div>
               </div>
+              
+              
           </form>
         </mat-card-content>
       </mat-card>
     </div>
+    <div class="col-lg-6" class="col-lg-6" *ngIf="showParentInfo">
+      <mat-card class="cardWithShadow theme-card">
+        <mat-card-header>
+          <mat-card-title class="m-b-0">Informations Parent</mat-card-title>
+        </mat-card-header>
+
+       
+        <mat-card-content class="b-t-1">
+
+          <form [formGroup]="adherentForm">
+            <div formGroupName="informationsParent">
+            <div class="row"> 
+                <div class="col-sm-6"> 
+                    <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Nom</mat-label> 
+                    <mat-form-field appearance="outline" class="w-50"> 
+                      <input formControlName="nomParent" matColumnDef="nomParent" id="nomParent"  matInput/> 
+                  
+                    </mat-form-field> 
+                </div> 
+                    <div class="col-sm-6"> 
+                        <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Prénom</mat-label> 
+                        <mat-form-field appearance="outline" class="w-50"> 
+                            <input formControlName="prenomParent" type="text" matInput required id="prenomParent" name="prenomParent"/>
+                        </mat-form-field> 
+                    </div> 
+                </div>
+                <br>
+            <div class="row">
+                <div class="col-sm-12 d-flex align-items-center">
+                  <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Adresse</mat-label>
+                </div>
+                <div class="col-sm-12">
+                  <mat-form-field appearance="outline" class="w-100">
+                    <input formControlName="adresseParent"    
+                    matColumnDef="adresseParent" matInput />
+   
+                  </mat-form-field>
+                </div>
+              </div>
+              <br>
+            <div class="row">
+              <div class="col-sm-12 d-flex align-items-center">
+                <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16"
+                  >Email</mat-label>
+              </div>
+              <div class="col-sm-12">
+                <mat-form-field appearance="outline" class="w-100">
+                  <input formControlName="emailParent" matColumnDef="emailParent" matInput type="email" />
+
+                </mat-form-field>
+              </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-sm-12 d-flex align-items-center">
+                  <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16"
+                    >Téléphone</mat-label
+                  >
+                </div>
+                <div class="col-sm-12">
+                  <mat-form-field appearance="outline" class="w-100">
+                    <input formControlName="telephoneParent" matColumnDef="telephoneParent" matInput/>
+
+                  </mat-form-field>
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <div class="col-sm-12 d-flex align-items-center">
+                  <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16"
+                    >Nationalité</mat-label
+                  >
+                </div>
+                <div class="col-sm-12">
+                  <mat-form-field appearance="outline" class="w-100">
+                    <input formControlName="nationaliteParent" matColumnDef="nationaliteParent" matInput/>
+
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <style>
+      .mat-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mat-card-title {
+  flex-grow: 1;
+  margin-right: 16px;
+}
+
+.icon-22 {
+  margin-left: auto;
+}
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* Adjust the value as needed */
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px; /* Adjust the value as needed */
+}
+
+.col-sm-12 {
+  flex: 0 0 100%;
+  max-width: 100%;
+}
+
+    </style>

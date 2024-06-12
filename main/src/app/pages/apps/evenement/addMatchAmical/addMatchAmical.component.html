@@ -1,188 +1,107 @@
-<!--<div class="bg-third min-h-screen px-64 py-4 rounded-3xl flex justify-center">-->
-<!--  <div class=" w-full">-->
-<!--    <div class="">-->
-<!--      <div class="mb-8">-->
-<!--        <div>-->
-<!--          <h2 class="sr-only">Steps</h2>-->
+<div class="bg-third   px-64 py-4 rounded-3xl flex justify-center">
+  <div class=" w-full">
+    <div class="">
+      <div class="mb-8">
+        <div>
+          <div class=" ">
+            <ol class="  flex gap-28 justify-center text-sm font-medium text-gray-500">
+              <li class="  gap-2   p-2">
+                <button (click)="step1=true"
+                  class="size-12  pt-0.5 rounded-full bg-main text-black text-center text-lg  font-bold"> 1
+                </button>
 
-<!--          <div-->
-<!--            class="relative after:absolute after:inset-x-0 after:top-1/2 after:block after:h-0.5 after:-translate-y-1/2 after:rounded-lg after:bg-gray-100"-->
-<!--          >-->
-<!--            <ol class="relative z-10 flex justify-between text-sm font-medium text-gray-500">-->
-<!--              <li class="flex items-center gap-2 bg-white p-2">-->
-<!--                <span class="size-6 rounded-full bg-gray-100 text-center text-[10px]/6 font-bold"> 1 </span>-->
+                <p class="text-center hidden sm:block text-black"> Details </p>
+              </li>
 
-<!--                <span class="hidden sm:block"> Details </span>-->
-<!--              </li>-->
+              <li class="  gap-2  p-2">
+                <button (click)="step1=false" [ngClass]="{
+                  'bg-main': !step1,
+                  'bg-transparent': step1,
+                  'text-black': !step1,
+                  'border-second': step1,
+                  'border-2': step1,
+                  'text-second': step1,
+                }" class="size-12  pt-0.5  rounded-full  text-second    text-center text-lg  font-bold"> 2
+                </button>
 
-<!--              <li class="flex items-center gap-2 bg-white p-2">-->
-<!--        <span-->
-<!--          class="size-6 rounded-full bg-blue-600 text-center text-[10px]/6 font-bold text-white"-->
-<!--        >-->
-<!--          2-->
-<!--        </span>-->
+                <p class="text-center hidden sm:block text-black"> Dates </p>
+              </li>
 
-<!--                <span class="hidden sm:block"> Address </span>-->
-<!--              </li>-->
+            </ol>
+          </div>
+        </div>
+      </div>
 
-<!--              <li class="flex items-center gap-2 bg-white p-2">-->
-<!--                <span class="size-6 rounded-full bg-gray-100 text-center text-[10px]/6 font-bold"> 3 </span>-->
+      <form [formGroup]="matchAmicalForm">
+        @if (step1) {
+        <div class="mt-4">
+          <label class="block text-sm font-medium text-gray-900"> Nom adversaire</label>
+          <input required placeholder="Nom" formControlName="nomEvent"
+            class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm" />
+          <p class="text-red-600"
+            *ngIf="matchAmicalForm.get('nomEvent')!.hasError('required') && matchAmicalForm.get('nomEvent')?.touched">
+            Champ nom est obligatoire! </p>
+        </div>
+        <div class="mt-4">
+          <label class="block text-sm font-medium text-gray-900"> Lieu </label>
+          <input required placeholder="Lieu" formControlName="lieu"
+            class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm" />
+          <p class="text-red-600"
+            *ngIf="matchAmicalForm.get('lieu')!.hasError('required') && matchAmicalForm.get('lieu')?.touched">Champ
+            lieu est obligatoire! </p>
+        </div>
+        <div class="mt-4">
+          <label class="block text-sm font-medium text-gray-900"> Date </label>
+          <input required placeholder="Lieu" formControlName="date" type="date"
+            class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm" />
+          <p class="text-red-600"
+            *ngIf="matchAmicalForm.get('date')!.hasError('required') && matchAmicalForm.get('date')?.touched">Champ
+            date est obligatoire! </p>
+        </div>
+        <div class="mt-4">
+          <label class="block text-sm font-medium text-gray-900"> Description </label>
 
-<!--                <span class="hidden sm:block"> Payment </span>-->
-<!--              </li>-->
-<!--            </ol>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      <mat-stepper #stepper>-->
-<!--        <mat-step>-->
-<!--          <ng-template matStepLabel>Détails</ng-template>-->
-<!--          <form [formGroup]="matchAmicalForm" class="m-t-24">-->
-<!--            &lt;!&ndash; Nom &ndash;&gt;-->
-<!--            <div class="col-md-12">-->
-<!--              <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Nom</mat-label>-->
-<!--              <mat-form-field appearance="outline" class="w-100">-->
-<!--                <input matInput formControlName="nomEvent" required/>-->
-<!--                <mat-error *ngIf="matchAmicalForm.get('nomEvent')!.hasError('required')">Nom is required</mat-error>-->
-<!--              </mat-form-field>-->
-<!--            </div>-->
-<!--            &lt;!&ndash; Lieu &ndash;&gt;-->
-<!--            <div class="col-md-12">-->
-<!--              <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Lieu</mat-label>-->
-<!--              <mat-form-field appearance="outline" class="w-100">-->
-<!--                <input matInput formControlName="lieu" required/>-->
-<!--                <mat-error *ngIf="matchAmicalForm.get('lieu')!.hasError('required')">Lieu is required</mat-error>-->
-<!--              </mat-form-field>-->
-<!--            </div>-->
-<!--            &lt;!&ndash; Date &ndash;&gt;-->
-<!--            <div class="col-md-12">-->
-<!--              <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Date</mat-label>-->
-<!--              <mat-form-field appearance="outline" class="w-100">-->
-<!--                <input matInput [matDatepicker]="picker" formControlName="date" required/>-->
-<!--                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>-->
-<!--                <mat-datepicker #picker></mat-datepicker>-->
-<!--                <mat-error *ngIf="matchAmicalForm.get('date')!.hasError('required')">Date is required</mat-error>-->
-<!--              </mat-form-field>-->
-<!--            </div>-->
-<!--            &lt;!&ndash; Description &ndash;&gt;-->
-<!--            <div class="col-md-12">-->
-<!--              <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Description</mat-label>-->
-<!--              <mat-form-field appearance="outline" class="w-100">-->
-<!--                <textarea matInput formControlName="description" required rows="4"></textarea>-->
-<!--                <mat-error *ngIf="matchAmicalForm.get('description')!.hasError('required')">Description is required-->
-<!--                </mat-error>-->
-<!--              </mat-form-field>-->
-<!--            </div>-->
-<!--            <div class="col-md-12">-->
-<!--              <mat-checkbox formControlName="repetition">Se répéte</mat-checkbox>-->
-<!--            </div>-->
-<!--            <div class="col-md-12" style="margin-top: 20px;" *ngIf="matchAmicalForm.get('repetition')?.value">-->
-<!--              <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Chaque</mat-label>-->
-<!--              <mat-form-field appearance="outline" class="w-100">-->
-<!--                <mat-select [(ngModel)]="selectedTypeRepetition" formControlName="typeRepetition" name="typeRepetition">-->
-<!--                  <mat-option *ngFor="let typeRepetition of typeRepetitions"-->
-<!--                              [value]="typeRepetition">{{ typeRepetition }}-->
-<!--                  </mat-option>-->
-<!--                </mat-select>-->
-<!--              </mat-form-field>-->
-<!--            </div>-->
-<!--            <div class="col-md-12" style="margin-top: 20px;" *ngIf="matchAmicalForm.get('repetition')?.value">-->
-<!--              <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Nombre de fois</mat-label>-->
-<!--              <mat-form-field appearance="outline" class="w-100">-->
-<!--                <input matInput required type="number" formControlName="nbRepetition"/>-->
-<!--              </mat-form-field>-->
-<!--            </div>-->
-<!--            <div class="text-right">-->
-<!--              <button mat-flat-button color="primary" matStepperNext>Next</button>-->
-<!--            </div>-->
-<!--          </form>-->
-<!--        </mat-step>-->
+          <textarea
+            class="mt-1.5 h-18 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
+            rows="4" formControlName="description"></textarea>
+        </div>
+        <div class="mt-4 flex justify-center">
+          <button class="px-8 py-2 rounded-3xl font-semibold bg-main hover:bg-mainHover disabled:bg-second text-black"
+            (click)="nextStep()">Suivant
+          </button>
+        </div>
+        }
+        @if (!step1) {
+          <!-- Checkboxes for equipe selection -->
+          <div *ngFor="let equipe of equipeList" class="row mt-4">
+            <div class="ml-40 col pt-1.5">
+              <mat-checkbox (click)="onEquipeSelect(equipe.id)" color="primary" [checked]="selectedEquipeIds.includes(equipe.id)"
+                [value]="equipe.id.toString()" class="checkbox-button">
+                {{ equipe.nom }}
+              </mat-checkbox>
+            </div>
+            <div *ngIf="selectedEquipeIds.includes(equipe.id)" class="col-6">
+              <!-- Input field for horaire -->
+              <input required placeholder="Horaire" formControlName="horaire{{equipe.id}}" type="time"
+                class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent text-black sm:text-sm" />
+              <!-- Error message if horaire is required and touched -->
+              <!-- <p class="text-red-600"
+                *ngIf="matchAmicalForm.get('horaire' + equipe.id)?.errors?.required && matchAmicalForm.get('horaire' + equipe.id)?.touched">
+                Champ horaire est obligatoire!
+              </p> -->
+            </div>
+          </div>
 
-<!--        <mat-step>-->
-<!--          <ng-template matStepLabel>Convocation</ng-template>-->
-<!--          <form [formGroup]="matchAmicalForm" class="m-t-24">-->
-<!--            <div class="checkbox-container">-->
-<!--              &lt;!&ndash; Checkboxes for equipe selection &ndash;&gt;-->
-<!--              <div *ngFor="let equipe of equipeList" class="checkbox-input-container">-->
-<!--                <div class="d-flex align-items-center">-->
-<!--                  <mat-checkbox [value]="equipe.id.toString()" class="checkbox-button"-->
-<!--                                (click)="onEquipeSelect(equipe.id)"-->
-<!--                                [checked]="selectedEquipeId === equipe.id">-->
-<!--                    {{ equipe.nom }}-->
-<!--                  </mat-checkbox>-->
-<!--                  <div class="horaire-input" *ngIf="selectedEquipeId === equipe.id">-->
-<!--                    <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Horaire for {{ equipe.nom }}</mat-label>-->
-<!--                    <mat-form-field appearance="outline" class="w-100">-->
-<!--                      <input matInput formControlName="horaire" type="time" required/>-->
-<!--                      <mat-error *ngIf="matchAmicalForm.get('horaire')!.hasError('required')">Horaire is required-->
-<!--                      </mat-error>-->
-<!--                    </mat-form-field>-->
-
-<!--                  </div>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--            <div class="d-flex align-items-center justify-content-between" style="margin-top: 70px;">-->
-<!--              <button mat-flat-button color="warn" matStepperPrevious>-->
-<!--                Back-->
-<!--              </button>-->
-<!--              <button mat-flat-button color="primary" type="button" (click)="onSubmit()"-->
-<!--                      [disabled]="!matchAmicalForm.valid">Finish-->
-<!--              </button>-->
-<!--            </div>-->
-<!--          </form>-->
-
-<!--        </mat-step>-->
-<!--      </mat-stepper>-->
-<!--    </div>-->
-<!--  </div>-->
-
-
-<!--  <style>-->
-<!--    .checkbox-container {-->
-<!--      display: flex;-->
-<!--      flex-direction: column;-->
-<!--      align-items: center;-->
-<!--    }-->
-
-<!--    .checkbox-input-container {-->
-<!--      margin-top: 15px;-->
-<!--      margin-bottom: 15px;-->
-<!--    }-->
-
-<!--    .checkbox-input-container .d-flex {-->
-<!--      justify-content: center;-->
-<!--      align-items: center;-->
-<!--    }-->
-
-<!--    .horaire-input {-->
-<!--      margin-left: 10px; /* Adjust the spacing between checkbox and input */-->
-<!--    }-->
-
-<!--    .radio-container {-->
-<!--      display: flex;-->
-<!--      flex-direction: column;-->
-<!--      align-items: center;-->
-<!--    }-->
-
-<!--    .radio-input-container {-->
-<!--      margin-top: 15px;-->
-<!--      margin-bottom: 15px;-->
-<!--    }-->
-
-<!--    .radio-button {-->
-<!--      display: flex;-->
-<!--      align-items: center;-->
-<!--    }-->
-
-<!--    .time-input {-->
-<!--      margin-left: 10px;-->
-<!--      /* Adjust the spacing between radio button and input */-->
-<!--      border: 1px solid #ccc;-->
-<!--      /* Add border for better visibility */-->
-<!--      padding: 4px;-->
-<!--      /* Add padding for better appearance */-->
-<!--      border-radius: 4px;-->
-<!--      /* Add border radius for rounded corners */-->
-<!--    }-->
-<!--  </style>-->
+          <!-- Submit button -->
+          <div class="flex justify-center mt-4">
+            <button class="px-8 py-2 rounded-3xl font-semibold bg-main hover:bg-mainHover disabled:bg-second text-black"
+               (click)="onSubmit()">
+              Confirmer
+            </button>
+          </div>
+        }
+        
+      </form>
+    </div>
+  </div>
+</div>

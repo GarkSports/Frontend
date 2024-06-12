@@ -1,7 +1,9 @@
-
-import { Component } from '@angular/core';
-import { CoreService } from 'src/app/services/core.service';
+import {Component, Input} from '@angular/core';
+import {CoreService} from 'src/app/services/core.service';
 import {TablerIconsModule} from "angular-tabler-icons";
+import {Academie} from "../../../../../models/academie.model";
+import {AcademieService} from "../../../../services/academie.service";
+import {Location} from "@angular/common";
 
 @Component({
   selector: 'app-branding',
@@ -9,32 +11,35 @@ import {TablerIconsModule} from "angular-tabler-icons";
   template: `
     <div class="branding mb-4">
       @if (options.theme === 'light') {
-        <div class="row">
+        <div class="row flex flex-nowrap">
           <div class="col-2 pt-2">
-            <i-tabler name="arrow-left" class="d-flex"></i-tabler>
+            <button (click)="goBack()" class="pt-2">
+              <i-tabler name="arrow-left" class="d-flex"></i-tabler>
+            </button>
           </div>
-          <div class="col  flex justify-center ">
-            <a href="/">
+          <div class="col flex justify-center items-center hidden sm:flex">
+            <div>
               <img
-                src="./assets/images/logos/logo-gark.png"
-                class="h-10 "
+                src="{{academie !== null && academie.logo != null ? academie?.logo : 'assets/images/brand/GARKSPORTS.png'}}"
+                class="h-14"
                 alt="logo"
               />
-            </a>
+            </div>
           </div>
         </div>
+
       }
       @if (options.theme === 'dark') {
 
         <div class="flex justify-center">
-          <a href="/">
+          <div>
             <img
-              src="./assets/images/logos/logo-gark.png"
-              class="align-middle m-2"
+              src="{{academie !==null && academie.logo!=null ? academie?.logo : 'assets/images/brand/GARKSPORTS.png'}}"
+              width="300"
               alt="logo"
-              width="150px"
             />
-          </a>
+
+          </div>
 
         </div>
       }
@@ -45,7 +50,19 @@ import {TablerIconsModule} from "angular-tabler-icons";
   ]
 })
 export class BrandingComponent {
+  academie: Academie | null = null;
   options = this.settings.getOptions();
 
-  constructor(private settings: CoreService) {}
+  @Input() mobileNav = false;
+
+  constructor(private academieService: AcademieService, private settings: CoreService, private location: Location) {
+    this.academieService.getAcademie().subscribe((data) => {
+      this.academie = data;
+      console.log(this.academie);
+    });
+  }
+
+  goBack() {
+    this.location.back();
+  }
 }

@@ -1,39 +1,34 @@
-<h2 mat-dialog-title>{{action}}</h2>
+<h2 mat-dialog-title>{{ action }}</h2>
 
-<!-- it was <ng-container *ngIf="action !== 'Delete' && action !== 'Block'">  -->
 <ng-container *ngIf="action !== 'Delete'">
-  <mat-dialog-content *ngIf="action === 'Add' || action ==='Update'" style="max-width: 500px" class="mat-typography m-t-24">
+  <mat-dialog-content *ngIf="action === 'Add' || action === 'Update'" style="max-width: 500px; height: 200px" class="mat-typography m-t-34">
     <form [formGroup]="managerForm">
       <div class="row">
-      
-        <div class="col-sm-6 col-lg-12">
+        <div class="col-sm-6 col-lg-12 mb-3">
           <mat-form-field appearance="outline" class="w-100">
-            <input formControlName="roleName" type="text" matInput required id="roleName" name="roleName"
-              placeholder="Role" />
+            <mat-label>Role</mat-label>
+            <input formControlName="name" type="text" matInput required id="name" name="name" placeholder="Enter role name" />
           </mat-form-field>
         </div>
         
-        <div class="col-sm-6 col-lg-12">
+        <div class="col-sm-6 col-lg-12 mb-3">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Permissions</mat-label>
-            <mat-select formControlName="permissions" multiple required id="permissions" name="permissions" placeholder="Permissions">
+            <mat-select formControlName="permissions" multiple required id="permissions" name="permissions" placeholder="Select permissions">
               <mat-option *ngFor="let permission of permissions" [value]="permission">{{ permission }}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
-        
       </div>
     </form>
   </mat-dialog-content>
 </ng-container>
 
-<div mat-dialog-actions class="p-24 p-t-0">
+<div mat-dialog-actions class="p-24 p-t-0 d-flex justify-content-between">
   <button mat-flat-button (click)="doAction()" color="primary">
-   
-      {{action}}
-    
+    <mat-icon>check</mat-icon> {{ action }}
   </button>
   <button mat-stroked-button color="warn" (click)="closeDialog()">
-    Cancel
+    <mat-icon>cancel</mat-icon> Cancel
   </button>
 </div>

@@ -1,138 +1,84 @@
-<h2 class="f-w-500 m-b-24">Ajouter Paiement</h2>
+<div class="bg-third rounded-3xl py-4 ">
+  <div  class="flex justify-center  ">
+    <!-- Form fields for updating payment attributes -->
+    <div class=" w-[60%]">
+        <div class="grid grid-cols-2 gap-16 mt-6">
+          <div class=" col-span-2">
+            <label class="block text-sm font-medium text-gray-400"> Membre </label>
+            <select  [(ngModel)]="paiement.adherent"  class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
+                     name="adherent"   (change)="onMemberSelectionChange()" required
+                     type="text">
+              <option *ngFor="let member of members" [value]="member">{{ member.firstname }} {{ member.lastname }}</option>
+            </select>
+            <!--        <p class="text-sm text-red-600" *ngIf="paiement.adherent === null || paiement.adherent === undefined">   L'adherent doit être saisie.</p>-->
+          </div>
 
-<div style="max-width: 600px">
-  <!-- Form fields for updating payment attributes -->
-  <div class="form-row" style="margin-top: 10px;">
-    <div class="input-container">
-      <mat-form-field appearance="outline" style="width: 100%;">
-        <mat-label>Membre</mat-label>
-        <mat-select [(ngModel)]="paiement.adherent" name="adherent" placeholder="Membre"
-          (selectionChange)="onMemberSelectionChange()" required>
-          <mat-option *ngFor="let member of members" [value]="member">{{ member.firstname }} {{ member.lastname }}</mat-option>
-        </mat-select>
-        <mat-error *ngIf="paiement.adherent === null || paiement.adherent === undefined">
-          Le adherent doit être saisie.
-        </mat-error>
-      </mat-form-field>
-    </div>
+          <div class=" col-span-2">
+            <label class="block text-sm font-medium text-gray-400"> Type Abonnement </label>
+            <select class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
+                    [(ngModel)]="paiement.typeAbonnement" (change)="getDateFin()" required
+            >
+              <option *ngFor="let type of typeAbonnements" [value]="type">{{ getTypeAbonnementName(type) }}</option>
+            </select>
+            <!--        <p class="text-sm text-red-600"  *ngIf="paiement.typeAbonnement === null || paiement.typeAbonnement === undefined">
+                Le type abonnement doit être saisie.</p>-->
+          </div>
+
+          <div class=" ">
+            <label class="block text-sm font-medium text-gray-400"> Date Début </label>
+            <input class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
+                   placeholder="Date Début" [(ngModel)]="paiement.dateDebut" required type="date"/>
+            <!--        <p class="text-sm text-red-600" *ngIf="paiement.dateDebut === null || paiement.dateDebut === undefined">
+                La date debut doit être saisie.</p>-->
+          </div>
+
+          <div class=" ">
+            <label class="block text-sm font-medium text-gray-400"> Date Fin </label>
+            <input class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
+                   [(ngModel)]="paiement.dateFin" required  type="date"/>
+            <!--        <p class="text-sm text-red-600" *ngIf="paiement.dateFin === null || paiement.dateFin === undefined">
+                La date fin doit être saisie.</p>-->
+          </div>
+          <div class=" col-span-2">
+            <label class="block text-sm font-medium text-gray-400"> Date Paiement </label>
+            <input class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
+                   placeholder="Date Paiement" [(ngModel)]="paiement.datePaiement" required  type="date"/>
+            <!--        <p class="text-sm text-red-600"   *ngIf="paiement.datePaiement === null || paiement.datePaiement === undefined">
+                La date paiement doit être saisie.</p>-->
+          </div>
+
+
+          <div class=" ">
+            <label class="block text-sm font-medium text-gray-400"> Montant </label>
+            <input class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
+                   placeholder="Montant" type="number" [(ngModel)]="paiement.montant" name="montant" min="0" required />
+            <!--        <p class="text-sm text-red-600"  *ngIf="paiement.montant !== undefined && paiement.montant < 0">
+                Le montant doit être positif..</p>-->
+          </div>
+
+          <div class=" ">
+            <label class="block text-sm font-medium text-gray-400"> Reste </label>
+            <input class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
+                   placeholder="Reste" type="number" [(ngModel)]="paiement.reste" name="reste" min="0" />
+            <!--        <p class="text-sm text-red-600" *ngIf="paiement.reste < 0">
+                Le reste doit être positif.</p>-->
+          </div>
+          <div class=" col-span-2">
+            <label class="block text-sm font-medium text-gray-400"> Remarque </label>
+            <textarea [(ngModel)]="paiement.remarque" placeholder="Remarque"
+                      class="mt-1.5 h-18 px-4  w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
+                      rows="4"></textarea>
+            <!--        <p class="text-sm text-red-600"  *ngIf="paiement.typeAbonnement === null || paiement.typeAbonnement === undefined">
+                Le type abonnement doit être saisie.</p>-->
+          </div>
+          <div class="col-span-2 flex justify-center">
+            <button
+              (click)="onSaveClick()" [disabled]="!isFormValid()"
+              class="px-8 py-2 rounded-3xl font-semibold bg-main hover:bg-mainHover disabled:bg-second text-black">Enregistrer
+            </button>
+          </div>
+
+        </div>
   </div>
-
-  <div class="form-row">
-    <div class="input-container">
-      <mat-form-field appearance="outline" style="width: 100%;">
-        <mat-label>Type Abonnement</mat-label>
-        <mat-select [(ngModel)]="paiement.typeAbonnement" placeholder="Type Abonnement" (selectionChange)="getDateFin()" required>
-          <mat-option *ngFor="let type of typeAbonnements" [value]="type">{{ getTypeAbonnementName(type) }}</mat-option>
-        </mat-select>
-        <mat-error *ngIf="paiement.typeAbonnement === null || paiement.typeAbonnement === undefined">
-          Le type abonnement doit être saisie.
-        </mat-error>
-      </mat-form-field>
-    </div>
-  </div>
-
-  <div class="form-row">
-    <div class="input-container">
-      <mat-form-field appearance="outline">
-        <mat-label>Date Début</mat-label>
-        <input matInput [matDatepicker]="picker" placeholder="Date Début" [(ngModel)]="paiement.dateDebut" required />
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-        <mat-error *ngIf="paiement.dateDebut === null || paiement.dateDebut === undefined">
-          La date debut doit être saisie.
-        </mat-error>
-      </mat-form-field>
-    </div>
-    <div class="input-container">
-      <mat-form-field appearance="outline">
-        <mat-label>Date Fin</mat-label>
-        <input matInput [matDatepicker]="picker2" placeholder="Date Fin" [(ngModel)]="paiement.dateFin" required />
-        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-        <mat-datepicker #picker2></mat-datepicker>
-        <mat-error *ngIf="paiement.dateFin === null || paiement.dateFin === undefined">
-          La date fin doit être saisie.
-        </mat-error>
-      </mat-form-field>
-    </div>
-  </div>
-
-  <div class="form-row">
-    <div class="input-container">
-      <mat-form-field appearance="outline" style="width: 100%;">
-        <mat-label>Date Paiement</mat-label>
-        <input matInput [matDatepicker]="picker3" placeholder="Date Paiement" [(ngModel)]="paiement.datePaiement" required />
-        <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
-        <mat-datepicker #picker3></mat-datepicker>
-        <mat-error *ngIf="paiement.datePaiement === null || paiement.datePaiement === undefined">
-          La date paiement doit être saisie.
-        </mat-error>
-      </mat-form-field>
-    </div>
-  </div>
-
-  <div class="form-row">
-    <div class="input-container">
-      <mat-form-field appearance="outline" style="width: 100%;">
-        <mat-label>Montant</mat-label>
-        <input matInput placeholder="Montant" type="number" [(ngModel)]="paiement.montant" name="montant" min="0" required />
-        <mat-error *ngIf="paiement.montant !== undefined && paiement.montant < 0">
-          Le montant doit être positif.
-        </mat-error>
-        <mat-error *ngIf="paiement.montant === null || paiement.montant === undefined">
-          Le montant doit être saisi.
-        </mat-error>
-      </mat-form-field>
-    </div>
-
-    <div class="input-container">
-      <mat-form-field appearance="outline" style="width: 100%;">
-        <mat-label>Reste</mat-label>
-        <input matInput placeholder="Reste" type="number" [(ngModel)]="paiement.reste" name="reste" min="0" />
-        <mat-error *ngIf="paiement.reste < 0">
-          Le reste doit être positif.
-        </mat-error>
-      </mat-form-field>
-    </div>
-  </div>
-
-  <div class="form-row">
-    <div class="input-container">
-      <mat-form-field appearance="outline" style="width: 100%;">
-        <mat-label>Remarque</mat-label>
-        <textarea matInput placeholder="Remarque" [(ngModel)]="paiement.remarque"></textarea>
-      </mat-form-field>
-    </div>
   </div>
 </div>
-
-<mat-dialog-actions>
-  <!-- Buttons for Save and Cancel -->
-  <button mat-raised-button class="cancel-button" (click)="onCancelClick()">Cancel</button>
-  <button mat-raised-button color="primary" class="save-button" (click)="onSaveClick()" [disabled]="!isFormValid()">Save</button>
-  </mat-dialog-actions>
-
-  <style>
-    .form-row {
-      display: flex;
-      margin-bottom: 16px;
-    }
-  
-    .input-container {
-      flex: 1;
-      margin-right: 10px;
-    }
-  
-    ::ng-deep .mat-dialog-actions button {
-      min-width: 100px;
-    }
-  
-    .cancel-button {
-      background-color: #FA9175;
-      color: white;
-    }
-  
-    .save-button {
-      min-width: 100px;
-    }
-  </style>
-  

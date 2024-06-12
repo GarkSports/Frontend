@@ -18,7 +18,7 @@ import { Manager } from 'src/models/manager.model';
 import { ManagerService } from 'src/app/services/manager.service';
 import { DatePipe } from '@angular/common';
 import { Academie } from 'src/models/academie.model';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Role, RoleArray } from 'src/models/enums/role.model';
 import { RoleName, RoleNameArray } from 'src/models/roleName.models';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
@@ -28,6 +28,10 @@ import { PaiementService } from 'src/app/services/paiement.service';
 import { Equipe } from 'src/models/equipe.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSelectChange } from '@angular/material/select';
+import { Adherent } from 'src/models/adherent.model';
+import isThisHour from 'date-fns/isThisHour';
+import { EquipeService } from 'src/app/services/equipe.service';
+import { StatutManager } from 'src/models/enums/statutManager';
 
 @Component({
   // tslint:disable-next-line - Disables all
@@ -35,60 +39,114 @@ import { MatSelectChange } from '@angular/material/select';
   templateUrl: './staffform.component.html',
 })
 // tslint:disable-next-line - Disables all
-export class AppStaffformContentComponent implements OnInit, OnDestroy {
-  private broadcastChannel: BroadcastChannel;
+export class AppStaffformContentComponent implements OnInit {
 
   action: string;
   local_data: any;
   managerForm: FormGroup;
+  adherentForm: FormGroup;
   firstnameValue: string;
   roles: string[];
   roleNames: string[];
-
+  showParentInfo: boolean = false;
+  ifAdherent: boolean = true;
+  isAdherent: boolean = false;
+  equipeList: Equipe[] = [];
   dataSource = new MatTableDataSource<string>([]);
-  managerSource = new MatTableDataSource<Manager>([]);
+  equipeDataSource = new MatTableDataSource<Equipe>([]);
+  statutManagerValues = Object.values(StatutManager);
+  user: Manager;
+  showRoleInput: boolean = false;
+  showNiveauScolaire: boolean = false;
+  photo: string;
+  displayedData: any[] = [];
+  isLoading = false;
 
   constructor(
     @Optional()
-    @Inject(MAT_DIALOG_DATA)
-    public data: { managerForm: FormGroup; data: Manager },
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private firestorage: AngularFireStorage,
     private formBuilder: FormBuilder,
     private managerService: ManagerService,
+    private equipeService: EquipeService,
     private route: ActivatedRoute,
     private dialog: MatDialog
   ) {
-    this.local_data = { ...data };
-    this.action = this.local_data.action;
-    this.broadcastChannel = new BroadcastChannel('staffFormChannel');
+
   }
 
-  showRoleInput: boolean = false;
-  photo: string;
-  onRoleChange(event: MatSelectChange) {
-    const selectedValue = event.value;
-    this.showRoleInput =
-      selectedValue === 'STAFF' || selectedValue === 'ENTRAINEUR';
-    console.log('role', selectedValue);
-  }
 
-  displayedData: any[] = [];
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
       this.action = params['action'];
       const id = params['id'];
-        this.getFormManagerById(id);
+      this.photo='';
+      this.getFormManagerById(id);
       this.getOnlyRoleNames();
-      this.initManagerForm();
+      this.getEquipes();
+      
 
     });
   }
 
+  deleteUser(): void{
+    if (confirm(`Are you sure you want to delete the category: ?`)) {
+      this.managerService.deleteUser(this.local_data.id).subscribe(
+        response => {
+          console.log('Category deleted successfully', response);
+          // Remove the deleted category from the test
+        },
+        error => {
+          console.error('Error deleting category', error);
+        }
+      );
+    }
+  }
 
-  ngOnDestroy(): void {
-    this.broadcastChannel.postMessage('staffFormClosed');
-    this.broadcastChannel.close();
+  onRoleChange(event: MatSelectChange) {
+    const selectedValue = event.value;
+    this.showRoleInput =
+      selectedValue === 'STAFF' || selectedValue === 'ENTRAINEUR';
+      if(selectedValue === 'ADHERENT')
+        this.showNiveauScolaire = true;
+  }
+
+  getEquipes(): void {
+    this.equipeService.getEquipes().subscribe(equipes => {
+      this.equipeList = equipes;
+      this.equipeDataSource.data = this.equipeList;
+    });
+  }
+
+  checkAge(event: any) {
+    const dateOfBirth = new Date(event.target.value);
+    const today = new Date();
+    const age = today.getFullYear() - dateOfBirth.getFullYear();
+    const monthDiff = today.getMonth() - dateOfBirth.getMonth();
+
+    if (age < 18 || (age === 18 && monthDiff < 0)) {
+      this.showParentInfo = true;
+      console.log('User is under 18 years old');
+    } else {
+      this.showParentInfo = false;
+      console.log('User is 18 years old or older');
+    }
+  }
+
+  checkAgeOnInit(dateNaissance: Date) {
+    const today = new Date();
+    const age = today.getFullYear() - dateNaissance.getFullYear();
+    const monthDiff = today.getMonth() - dateNaissance.getMonth();
+    console.log(age);
+
+    if (age < 18 || (age === 18 && monthDiff < 0)) {
+      this.showParentInfo = true;
+      console.log('User is under 18 years old');
+    } else {
+      this.showParentInfo = false;
+      console.log('User is 18 years old or older');
+    }
   }
 
   getOnlyRoleNames(): void {
@@ -120,11 +178,47 @@ export class AppStaffformContentComponent implements OnInit, OnDestroy {
 
   getFormManagerById(id: string): void {
     this.managerService.getFormManagerById(id).subscribe(
-      (manager) => {
-        this.local_data = manager; // Store the fetched manager data
-        console.log("name", manager.firstname);
-        console.log("this.local_data", this.local_data);
-        this.initManagerForm(manager); // Initialize the form with the fetched manager data
+      (user) => {
+        this.local_data = user; 
+        if(this.local_data.role === 'ADHERENT'){
+          const adherent = user as Adherent;
+          this.local_data = adherent; 
+          this.local_data.id=adherent.id;
+          this.photo=adherent.photo;
+          this.initAdherentForm(adherent); 
+          const dateNaissance = new Date(adherent.dateNaissance);          
+          console.log(dateNaissance);
+
+          const today = new Date();
+          const age = today.getFullYear() - dateNaissance.getFullYear();
+          const monthDiff = today.getMonth() - dateNaissance.getMonth();
+          console.log(age);
+          
+          if (age < 18 || (age === 18 && monthDiff < 0)) {
+            this.showParentInfo = true;
+            console.log('User is under 18 years old');
+          } else {
+            this.showParentInfo = false;
+            console.log('User is 18 years old or older');
+          }
+                this.ifAdherent = false;
+                this.isAdherent = true;
+              }
+            else {
+              const manager = user as Manager;
+              this.local_data = manager; 
+              this.local_data.id=manager.id;
+              this.photo=manager.photo;
+
+              this.initManagerForm(manager); 
+              console.log("manager",manager);
+              console.error('User is not a manager nor adherent');
+              console.log("role is",manager.role);
+              console.log("type of",typeof(manager));
+              console.log("role adh",Role.MANAGER);
+              console.log(manager.role===Role.MANAGER?'oui':'non');
+              
+            }
       },
       (error) => {
         console.error('Error fetching manager', error);
@@ -133,12 +227,16 @@ export class AppStaffformContentComponent implements OnInit, OnDestroy {
   }
 
   initManagerForm(manager?: Manager): void {
+    const statut = manager?.blocked ? 'BLOCKED' : 'ACTIVE';
+
     this.managerForm = this.formBuilder.group({
       firstname: [manager?.firstname || '', Validators.required],
       lastname: [manager?.lastname || '', Validators.required],
       email: [manager?.email || '', [Validators.required, Validators.email]],
+      dateNaissance: [manager?.dateNaissance || '', Validators.required],
       adresse: [manager?.adresse || '', Validators.required],
       role: [manager?.role, Validators.required],
+      statut: [statut, Validators.required],
       roleName: [
         manager?.role === Role.ADHERENT || manager?.role === Role.PARENT
           ? null
@@ -149,19 +247,59 @@ export class AppStaffformContentComponent implements OnInit, OnDestroy {
     });
   }
 
-  getManagers(): void {
-    this.managerService.getManagers().subscribe(
-      (managers) => {
-        console.log('Managers fetched successfully', managers);
-        this.managerSource.data = managers;
+  initAdherentForm(adherent?: Adherent): void {
+    const statut = adherent?.blocked ? 'BLOCKED' : 'ACTIVE';
+
+    this.adherentForm = this.formBuilder.group({
+      firstname: [adherent?.firstname || '', Validators.required],
+      lastname: [adherent?.lastname || '', Validators.required],
+      email: [adherent?.email || '', [Validators.required, Validators.email]],
+      dateNaissance: [adherent?.dateNaissance || '', Validators.required],
+      adresse: [adherent?.adresse || '', Validators.required],
+      photo: [adherent?.photo || null],
+      telephone: [adherent?.telephone || '', Validators.required],
+      equipes: [adherent?.nomEquipe || '', Validators.required],
+      nationalite: [adherent?.nationalite || '', Validators.required],
+      niveauScolaire: [adherent?.niveauScolaire || '', Validators.required],
+      statut: [statut, Validators.required],
+      informationsParent: this.formBuilder.group({
+        nomParent: [adherent?.informationsParent?.nomParent || '', Validators.required],
+        prenomParent: [adherent?.informationsParent?.prenomParent || '', Validators.required],
+        telephoneParent: [adherent?.informationsParent?.telephoneParent || '', Validators.required],
+        adresseParent: [adherent?.informationsParent?.adresseParent || '', Validators.required],
+        emailParent: [adherent?.informationsParent?.emailParent || '', [Validators.required, Validators.email]],
+        nationaliteParent: [adherent?.informationsParent?.nationaliteParent || '', Validators.required]
+      })
+    });
+  }
+
+  onStatutChange(event: MatSelectChange): void {
+    const newStatut = event.value;
+  
+    // Update the local_data's blocked status based on the selected statut
+    this.local_data.blocked = (newStatut === 'BLOCKED');
+  
+    // Determine the action to take based on the new blocked status
+    const blockAction = this.local_data.blocked ? 'blockManager' : 'unBlockManager';
+  
+    // Call the appropriate service method
+    this.managerService[blockAction](this.local_data.id).subscribe(
+      (response: any) => {
+        console.log('Manager action successful', response);
       },
-      (error) => {
-        console.error('Error fetching academies', error);
+      (error: any) => {
+        console.error('Error', error);
       }
     );
   }
+  
+
+  
+
 
   doAction(): void {
+    const form = this.isAdherent ? this.adherentForm : this.managerForm;
+
     if (this.action === 'Add') {
       const role = this.managerForm.get('role')?.value;
       console.log('role', role);
@@ -213,8 +351,8 @@ export class AppStaffformContentComponent implements OnInit, OnDestroy {
         (response) => {
           console.log('Manager added:', response);
           this.showNotification(
-            'Success',
-            'Manager updated successfully!',
+            'Succèss',
+            'Utilisateur ajouté avec Succès!',
             'success'
           );
           setTimeout(() => {
@@ -227,14 +365,19 @@ export class AppStaffformContentComponent implements OnInit, OnDestroy {
         },
         (error) => {
           console.error('Error adding manager:', error);
-          this.showNotification('Error', 'Error adding manager', 'error');
+          this.showNotification('Erreur', `Erreur lors du l'ajout d'utilisateur`, 'error');
         }
       );
     } else if (this.action === 'Update') {
       const updatedManager = this.managerForm.value;
+      const updatedAdherent = this.adherentForm.value;
+      console.log(updatedAdherent);
+      updatedAdherent.id = this.local_data.id;
+      updatedAdherent.photo = this.local_data.photo;
+
       updatedManager.id = this.local_data.id; // Set the id of the manager to be updated
       updatedManager.photo = this.local_data.photo;
-      const role = updatedManager.role;
+      const role = this.local_data.role;
       let updateObservable;
       switch (role) {
         case 'STAFF':
@@ -247,7 +390,7 @@ export class AppStaffformContentComponent implements OnInit, OnDestroy {
             this.managerService.updateEntraineur(updatedManager);
           break;
         case 'ADHERENT':
-          const adherentWithPhoto = { ...updatedManager, photo: this.photo };
+          const adherentWithPhoto = { ...updatedAdherent, photo: this.photo };
 
           updateObservable =
             this.managerService.updateAdherent(adherentWithPhoto);
@@ -265,8 +408,8 @@ export class AppStaffformContentComponent implements OnInit, OnDestroy {
         (response) => {
           console.log('Manager updated:', response);
           this.showNotification(
-            'Success',
-            'Manager updated successfully!',
+            'Succèss',
+            'Utilisateur mis à jour avec succès!',
             'success'
           );
           setTimeout(() => {
@@ -279,7 +422,7 @@ export class AppStaffformContentComponent implements OnInit, OnDestroy {
         },
         (error) => {
           console.error('Error updating manager:', error);
-          this.showNotification('Error', 'Error updating manager', 'error');
+          this.showNotification('Erreur', `Erreur lors du mis à jour d'utilisateur`, 'error');
         }
       );
     }
@@ -296,12 +439,12 @@ export class AppStaffformContentComponent implements OnInit, OnDestroy {
     if (window.opener) {
       window.close();
     } else {
-      // Optionally, you can navigate back to the previous page if the window wasn't opened as a popup
       window.history.back();
     }
   }
 
   async uploadFile(event: any) {
+    this.isLoading = true;
     if (!event.target.files[0] || event.target.files[0].length === 0) {
       return;
     }
@@ -309,30 +452,33 @@ export class AppStaffformContentComponent implements OnInit, OnDestroy {
     if (mimeType.match(/image\/*/) == null) {
       return;
     }
-
-    const reader = new FileReader();
-    reader.readAsDataURL(event.target.files[0]);
-    reader.onload = (_event) => {
-      this.local_data.photo = reader.result as string;
-    };
-
     const file = event.target.files[0];
     if (file) {
       const path = `academie/${file.name}`;
       const uploadTask = await this.firestorage.upload(path, file);
       const url = await uploadTask.ref.getDownloadURL();
-      this.local_data.photo = url;
+      this.photo = url;
+      console.log("photo", this.photo);
     }
+    this.isLoading = false; 
+  } 
+  
+  openPhotoDialog(): void {
+    const dialogRef = this.dialog.open(PhotoDialogComponent, {
+      data: { photo: this.photo },
+      panelClass: 'photo-dialog-panel' // Optional: Add a custom class for additional styling
+    });
   }
+  
 }
 
 @Component({
   selector: 'app-notification-dialog',
   template: `
-    <h1 mat-dialog-title>{{ data.title }}</h1>
-    <div mat-dialog-content>{{ data.message }}</div>
-    <div mat-dialog-actions>
-      <button mat-button mat-dialog-close (click)="cancelAction()">OK</button>
+    <h1 mat-dialog-title class="p-24 p-t-5">{{ data.title }}</h1>
+    <div mat-dialog-content class="p-x-24 p-b-24">{{ data.message }}</div>
+    <div mat-dialog-actions class="p-24 p-t-0">
+      <button mat-stroked-button (click)="cancelAction()">OK</button>
     </div>
   `,
   styles: [
@@ -346,6 +492,8 @@ export class AppStaffformContentComponent implements OnInit, OnDestroy {
     `,
   ],
 })
+
+
 export class NotificationDialogComponent {
   constructor(
     @Inject(MAT_DIALOG_DATA)
@@ -359,5 +507,20 @@ export class NotificationDialogComponent {
       // Optionally, you can navigate back to the previous page if the window wasn't opened as a popup
       window.history.back();
     }
+  }
+
+
+}
+
+@Component({
+  selector: 'app-form-content',
+  templateUrl: './photo-dialog-component.html',
+
+})
+export class PhotoDialogComponent {
+  photo: string;
+
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { photo: string }) {
+    this.photo = data.photo;
   }
 }

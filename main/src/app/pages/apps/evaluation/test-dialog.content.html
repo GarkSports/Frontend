@@ -1,0 +1,27 @@
+<h1 mat-dialog-title>{{ action === 'AddCat' ? 'Add Category' : 'Edit Category' }}</h1>
+<div mat-dialog-content>
+  <form [formGroup]="testForm">
+    <mat-form-field appearance="outline">
+      <input matInput placeholder="Category Name" formControlName="categorieName">
+    </mat-form-field>
+    
+    <div formArrayName="kpis">
+      <div *ngFor="let kpi of kpis.controls; let i = index" [formGroupName]="i">
+        <mat-form-field appearance="outline">
+          <input matInput placeholder="KPI Type" [formControlName]="'kpiType'">
+        </mat-form-field>
+        <button mat-icon-button (click)="removeKpi(i)">
+          <mat-icon>remove_circle</mat-icon>
+        </button>
+      </div>
+    </div>
+    <button mat-icon-button (click)="addKpi()">
+      <mat-icon>add_circle</mat-icon>
+    </button>
+    <input type="hidden" formControlName="testId">
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="closeDialog()">Cancel</button>
+  <button mat-button (click)="doAction()">Save</button>
+</div>

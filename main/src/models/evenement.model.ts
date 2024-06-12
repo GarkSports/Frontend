@@ -23,5 +23,7 @@ export class Evenement {
     convocationEquipe?: Equipe;
     convocationMembres?: Adherent[];
 
+    convocationEquipesMatchAmical?: Equipe[];
+
     academie?: Academie;
 }

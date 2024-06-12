@@ -20,10 +20,11 @@ export class PaiementComponent implements AfterViewInit {
     Object.create(null);
   searchText: any;
   displayedColumns: string[] = [
+    'photo',
     'membre',
-    'equipe',
     'telephone',
     'type_abonnement',
+    'date_paiement',
     'date_abonnement',
     'statut',
     'actions'
@@ -358,6 +359,10 @@ export class AddPaiementPopupComponent implements OnInit {
     this.getMembers();
   }
 
+  numStep=1;
+  changeStep(num: number): void {
+    this.numStep = num;
+  }
   isFormValid(): boolean {
     return (
       (this.paiement.montant !== undefined && this.paiement.montant >= 0 && this.paiement.montant !== null) &&
@@ -415,12 +420,13 @@ export class AddPaiementPopupComponent implements OnInit {
   }
 
   onSaveClick(): void {
+    const datePaiement: Date | undefined = this.paiement.montant === 0 ? undefined : this.paiement.datePaiement;
     if (this.paiement.adherent) {
       const paiementData = {
         typeAbonnement: this.paiement.typeAbonnement,
         dateDebut: this.paiement.dateDebut,
         dateFin: this.paiement.dateFin,
-        datePaiement: this.paiement.datePaiement,
+        datePaiement: datePaiement,
         montant: this.paiement.montant,
         reste: this.paiement.reste,
         remarque: this.paiement.remarque,
@@ -450,7 +456,7 @@ export class AddPaiementPopupComponent implements OnInit {
 })
 export class PaiementHistoryPopupComponent {
   constructor(public dialogRef: MatDialogRef<PaiementDetailsPopupComponent>,
-    @Inject(MAT_DIALOG_DATA) public paiementHistory: PaiementHistory[]) { }
+    @Inject(MAT_DIALOG_DATA) public paiementHistory: PaiementHistory[], private paiementService: PaiementService) { }
 
   close(): void {
     this.dialogRef.close();
@@ -460,10 +466,39 @@ export class PaiementHistoryPopupComponent {
     'dateDebut',
     'dateFin',
     'datePaiement',
-    'retardPaiement',
     'montant',
     'reste',
+    'action',
   ];
+  reloadPaiementHistory(): void {
+    // Assuming you have the adherent ID accessible somehow, e.g., passed via MAT_DIALOG_DATA
+    const adherentId = this.paiementHistory[0]?.adherent?.id;
+    if (adherentId) {
+      this.paiementService.getPaiementHistory(adherentId).subscribe({
+        next: (histories) => {
+          this.paiementHistory = histories;
+        },
+        error: (error) => {
+          console.error('Error loading paiement histories:', error);
+        }
+      });
+    }
+  }
+
+  deletePaiementHistory(idPaiementHistory: number): void {
+    this.paiementService.deletePaiementHistory(idPaiementHistory).subscribe({
+      next: () => {
+        // Handle successful deletion, e.g., show a confirmation message or refresh data
+        this.reloadPaiementHistory();  // Reload the list after deletion
+      },
+      error: (error) => {
+        // Handle error
+        console.error('Error deleting paiement history:', error);
+      }
+    });
+  }
+
+
 }
 
 @Component({

@@ -1,0 +1,337 @@
+<div class="bg-third rounded-3xl py-4 ">
+
+  <div>
+    <div class="hidden sm:block">
+      <div class=" ">
+        <nav aria-label="Tabs" class="-mb-px flex justify-center gap-28">
+
+
+          <button
+            (click)="changeStep(1)"
+            aria-current="page"
+            class="shrink-0   px-1 rounded-sm  text-lg font-medium "
+            [ngClass]="{
+              'border-main':numStep === 1,
+              'border-b-4':numStep === 1,
+              'text-black':numStep === 1,
+              'text-gray-500': numStep !== 1,
+              'hover:border-gray-300': numStep !== 1,
+              'hover:text-gray-700': numStep !== 1,
+              'border-transparent': numStep !== 1,
+            }"
+          >
+            Abonnement
+          </button>
+
+          <button
+
+            (click)="changeStep(2)" class="shrink-0   px-1 rounded-sm  text-lg font-medium "
+            [ngClass]="{
+              'border-main':numStep === 2,
+              'border-b-4':numStep === 2,
+              'text-black':numStep === 2,
+              'text-gray-500': numStep !== 2,
+              'hover:border-gray-300': numStep !== 2,
+              'hover:text-gray-700': numStep !== 2,
+              'border-transparent': numStep !== 2,
+            }"
+
+          >
+            Historique
+          </button>
+
+          <button
+
+            (click)="changeStep(3)"
+            class="shrink-0   px-1 rounded-sm  text-lg font-medium "
+            [ngClass]="{
+              'border-main':numStep === 3,
+              'border-b-4':numStep === 3,
+              'text-black':numStep === 3,
+              'text-gray-500': numStep !== 3,
+              'hover:border-gray-300': numStep !== 3,
+              'hover:text-gray-700': numStep !== 3,
+              'border-transparent': numStep !== 3,
+            }"
+          >
+
+            Détails du Membre
+          </button>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <div  class="flex justify-center mt-8">
+    <!-- Form fields for updating payment attributes -->
+    <div class=" w-[60%]">
+      @if(numStep === 1){
+        <div class="grid grid-cols-2 gap-16 mt-6">
+<!--          <div class=" col-span-2">-->
+<!--            <label class="block text-sm font-medium text-gray-400"> Membre </label>-->
+<!--            <select  [(ngModel)]="paiement.adherent"  class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"-->
+<!--                     name="adherent"   (change)="onMemberSelectionChange()" required-->
+<!--                     type="text">-->
+<!--              <option *ngFor="let member of members" [value]="member">{{ member.firstname }} {{ member.lastname }}</option>-->
+<!--            </select>-->
+<!--            &lt;!&ndash;        <p class="text-sm text-red-600" *ngIf="paiement.adherent === null || paiement.adherent === undefined">   L'adherent doit être saisie.</p>&ndash;&gt;-->
+<!--          </div>-->
+
+          <div class=" col-span-2">
+            <label class="block text-sm font-medium text-gray-400"> Type Abonnement </label>
+            <select class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
+                    [(ngModel)]="paiement.typeAbonnement"   required
+            >
+              <option *ngFor="let type of typeAbonnements" [value]="type">{{ type }}</option>
+            </select>
+            <!--        <p class="text-sm text-red-600"  *ngIf="paiement.typeAbonnement === null || paiement.typeAbonnement === undefined">
+                Le type abonnement doit être saisie.</p>-->
+          </div>
+
+          <div class=" ">
+            <label class="block text-sm font-medium text-gray-400"> Date Début </label>
+            <input class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
+                   placeholder="Date Début" [(ngModel)]="paiement.dateDebut" required type="date"/>
+            <!--        <p class="text-sm text-red-600" *ngIf="paiement.dateDebut === null || paiement.dateDebut === undefined">
+                La date debut doit être saisie.</p>-->
+          </div>
+
+          <div class=" ">
+            <label class="block text-sm font-medium text-gray-400"> Date Fin </label>
+            <input class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
+                   [(ngModel)]="paiement.dateFin" required  type="date"/>
+            <!--        <p class="text-sm text-red-600" *ngIf="paiement.dateFin === null || paiement.dateFin === undefined">
+                La date fin doit être saisie.</p>-->
+          </div>
+          <div class=" col-span-2">
+            <label class="block text-sm font-medium text-gray-400"> Date Paiement </label>
+            <input class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
+                   placeholder="Date Paiement" [(ngModel)]="paiement.datePaiement" required  type="date"/>
+            <!--        <p class="text-sm text-red-600"   *ngIf="paiement.datePaiement === null || paiement.datePaiement === undefined">
+                La date paiement doit être saisie.</p>-->
+          </div>
+
+
+          <div class=" ">
+            <label class="block text-sm font-medium text-gray-400"> Montant </label>
+            <input class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
+                   placeholder="Montant" type="number" [(ngModel)]="paiement.montant" name="montant" min="0" required />
+            <!--        <p class="text-sm text-red-600"  *ngIf="paiement.montant !== undefined && paiement.montant < 0">
+                Le montant doit être positif..</p>-->
+          </div>
+
+          <div class=" ">
+            <label class="block text-sm font-medium text-gray-400"> Reste </label>
+            <input class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
+                   placeholder="Reste" type="number" [(ngModel)]="paiement.reste" name="reste" min="0" />
+            <!--        <p class="text-sm text-red-600" *ngIf="paiement.reste < 0">
+                Le reste doit être positif.</p>-->
+          </div>
+          <div class=" col-span-2">
+            <label class="block text-sm font-medium text-gray-400"> Remarque </label>
+            <textarea [(ngModel)]="paiement.remarque" placeholder="Remarque"
+                      class="mt-1.5 h-18 px-4  w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
+                      rows="4"></textarea>
+            <!--        <p class="text-sm text-red-600"  *ngIf="paiement.typeAbonnement === null || paiement.typeAbonnement === undefined">
+                Le type abonnement doit être saisie.</p>-->
+          </div>
+          <div class="col-span-2 flex justify-center">
+            <button
+             (click)="onUpdate(paiement)"
+              class="px-8 py-2 rounded-3xl font-semibold bg-main hover:bg-mainHover disabled:bg-second text-black">Enregistrer
+            </button>
+          </div>
+
+        </div>
+      }
+      @if(numStep == 2 ){
+        <table class="-ml-28 w-full       text-sm">
+          <thead class="ltr:text-left rtl:text-right">
+          <tr class="bg-second ">
+            <th class="whitespace-nowrap px-8 py-3 font-medium text-black rounded-tl-xl rounded-bl-xl">   Dates</th>
+            <th class="whitespace-nowrap px-8 py-3 font-medium text-black ">   Date de Paiement</th>
+            <th class="whitespace-nowrap px-8 py-3 font-medium text-black">Retard de Paiement</th>
+            <th class="whitespace-nowrap px-8 py-3 font-medium text-black">     Montant payé</th>
+            <th class="whitespace-nowrap px-8 py-3 font-medium text-black">     Statut</th>
+            <th class="whitespace-nowrap px-8 py-3 font-medium text-black rounded-tr-xl rounded-br-xl">  Reste à payer</th>
+          </tr>
+          </thead>
+
+          <tbody class=" ">
+
+              <tr *ngFor="let history of historic">
+                <td class="whitespace-nowrap px-8 py-4   text-black">{{ history.dateDebut }}  /  {{ history.dateFin }}</td>
+                <td class="whitespace-nowrap px-8 py-4 text-black">{{ history.datePaiement }}</td>
+                <td class="whitespace-nowrap px-8 py-4 text-black">{{ history.retardPaiement }}</td>
+                <td class="whitespace-nowrap px-8 py-4 text-black">{{ history.montant }}</td>
+                <td class="whitespace-nowrap px-8 py-4 text-black">{{ history.statutAdherent }}</td>
+                <td class="whitespace-nowrap px-8 py-4 text-black">{{ history.reste }}</td>
+              </tr>
+
+          </tbody>
+        </table>
+      }
+      @if(numStep === 3 && paiement.adherent){
+        <div class="grid grid-cols-2 gap-16 mt-6">
+
+          <div class=" col-span-2">
+            <label class="block text-sm font-medium text-gray-400"> Nom </label>
+            <input class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
+                   placeholder="Date Paiement" disabled [value]="paiement.adherent.lastname + ' ' + paiement.adherent.firstname" required  type="text"/>
+            <!--        <p class="text-sm text-red-600"   *ngIf="paiement.datePaiement === null || paiement.datePaiement === undefined">
+                La date paiement doit être saisie.</p>-->
+          </div>
+
+          <div class=" col-span-2">
+            <label class="block text-sm font-medium text-gray-400"> E-mail</label>
+            <input class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
+                   placeholder="Date Paiement" disabled [(ngModel)]="paiement.adherent.email" required  type="text"/>
+            <!--        <p class="text-sm text-red-600"   *ngIf="paiement.datePaiement === null || paiement.datePaiement === undefined">
+                La date paiement doit être saisie.</p>-->
+          </div>
+
+          <div class=" col-span-2">
+            <label class="block text-sm font-medium text-gray-400"> Téléphone</label>
+            <input class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
+                   placeholder="Date Paiement" disabled [(ngModel)]="paiement.adherent.telephone" required  type="text"/>
+            <!--        <p class="text-sm text-red-600"   *ngIf="paiement.datePaiement === null || paiement.datePaiement === undefined">
+                La date paiement doit être saisie.</p>-->
+          </div>
+
+          <div class=" col-span-2">
+            <label class="block text-sm font-medium text-gray-400"> Statut</label>
+            <input class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
+                   placeholder="Date Paiement" disabled [(ngModel)]="paiement.adherent.statutAdherent"  required  type="text"/>
+            <!--        <p class="text-sm text-red-600"   *ngIf="paiement.datePaiement === null || paiement.datePaiement === undefined">
+                La date paiement doit être saisie.</p>-->
+          </div>
+
+
+        </div>
+      }
+    </div>
+  </div>
+</div>
+
+
+
+<!--<h2 class="f-w-500 m-b-24" mat-dialog-title>Update Payment</h2>-->
+<!--<mat-dialog-content style="max-width: 600px">-->
+<!--  &lt;!&ndash; Form fields for updating payment attributes &ndash;&gt;-->
+<!--  <div class="form-row" style="margin-top: 10px;">-->
+<!--    <div class="input-container">-->
+<!--      <mat-form-field appearance="outline" style="width: 100%;">-->
+<!--        <mat-label>Type Abonnement</mat-label>-->
+<!--        <mat-select [(ngModel)]="paiement.typeAbonnement" placeholder="Type Abonnement" required>-->
+<!--          <mat-option *ngFor="let type of typeAbonnements" [value]="type">{{ type }}</mat-option>-->
+<!--        </mat-select>-->
+<!--      </mat-form-field>-->
+<!--    </div>-->
+<!--  </div>-->
+
+<!--  <div class="form-row">-->
+<!--    <div class="input-container">-->
+<!--      <mat-form-field appearance="outline">-->
+<!--        <mat-label>Date Début</mat-label>-->
+<!--        <input matInput [matDatepicker]="picker" placeholder="Date Début" [(ngModel)]="paiement.dateDebut" required />-->
+<!--        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>-->
+<!--        <mat-datepicker #picker></mat-datepicker>-->
+<!--        <mat-error *ngIf="paiement.dateDebut === null || paiement.dateDebut === undefined">-->
+<!--          La date debut doit être saisie.-->
+<!--        </mat-error>-->
+<!--      </mat-form-field>-->
+<!--    </div>-->
+<!--    <div class="input-container">-->
+<!--      <mat-form-field appearance="outline">-->
+<!--        <mat-label>Date Fin</mat-label>-->
+<!--        <input matInput [matDatepicker]="picker2" placeholder="Date Fin" [(ngModel)]="paiement.dateFin" required />-->
+<!--        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>-->
+<!--        <mat-datepicker #picker2></mat-datepicker>-->
+<!--        <mat-error *ngIf="paiement.dateFin === null || paiement.dateFin === undefined">-->
+<!--          La date fin doit être saisie.-->
+<!--        </mat-error>-->
+<!--      </mat-form-field>-->
+<!--    </div>-->
+<!--  </div>-->
+
+<!--  <div class="form-row">-->
+<!--    <div class="input-container">-->
+<!--      <mat-form-field appearance="outline" style="width: 100%;">-->
+<!--        <mat-label>Date Paiement</mat-label>-->
+<!--        <input matInput [matDatepicker]="picker3" placeholder="Date Paiement" [(ngModel)]="paiement.datePaiement"-->
+<!--          required />-->
+<!--        <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>-->
+<!--        <mat-datepicker #picker3></mat-datepicker>-->
+<!--        <mat-error *ngIf="paiement.datePaiement === null || paiement.datePaiement === undefined">-->
+<!--          La date paiement doit être saisie.-->
+<!--        </mat-error>-->
+<!--      </mat-form-field>-->
+<!--    </div>-->
+<!--  </div>-->
+
+<!--  <div class="form-row">-->
+<!--    <div class="input-container">-->
+<!--      <mat-form-field appearance="outline" style="width: 100%;">-->
+<!--        <mat-label>Montant</mat-label>-->
+<!--        <input matInput type="number" placeholder="Montant" [(ngModel)]="paiement.montant" min="0" required />-->
+<!--        <mat-error *ngIf="paiement.montant !== undefined && paiement.montant < 0">-->
+<!--          Le montant doit être positif.-->
+<!--        </mat-error>-->
+<!--        <mat-error *ngIf="paiement.montant === null || paiement.montant === undefined">-->
+<!--          Le montant doit être saisi.-->
+<!--        </mat-error>-->
+<!--      </mat-form-field>-->
+<!--    </div>-->
+
+<!--    <div class="input-container">-->
+<!--      <mat-form-field appearance="outline" style="width: 100%;">-->
+<!--        <mat-label>Reste</mat-label>-->
+<!--        <input matInput type="number" placeholder="Reste" [(ngModel)]="paiement.reste" />-->
+<!--        <mat-error *ngIf="paiement.reste < 0">-->
+<!--          Le reste doit être positif.-->
+<!--        </mat-error>-->
+<!--      </mat-form-field>-->
+<!--    </div>-->
+<!--  </div>-->
+
+<!--  <div class="form-row">-->
+<!--    <div class="input-container">-->
+<!--      <mat-form-field appearance="outline" style="width: 100%;">-->
+<!--        <mat-label>Remarque</mat-label>-->
+<!--        <textarea matInput placeholder="Remarque" [(ngModel)]="paiement.remarque"></textarea>-->
+<!--      </mat-form-field>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</mat-dialog-content>-->
+<!--<mat-dialog-actions>-->
+<!--  &lt;!&ndash; Buttons for Save and Cancel &ndash;&gt;-->
+<!--  <button mat-raised-button class="cancel-button" (click)="onCancel()">Cancel</button>-->
+<!--  <button mat-raised-button color="primary" [mat-dialog-close]="paiement" class="save-button-->
+<!--    >Update</button>-->
+<!--</mat-dialog-actions>-->
+
+<!--<style>-->
+<!--  .form-row {-->
+<!--    display: flex;-->
+<!--    margin-bottom: 16px;-->
+<!--  }-->
+
+<!--  .input-container {-->
+<!--    flex: 1;-->
+<!--    margin-right: 10px;-->
+<!--  }-->
+
+<!--  ::ng-deep .mat-dialog-actions button {-->
+<!--    min-width: 100px;-->
+<!--  }-->
+
+<!--  .cancel-button {-->
+<!--    background-color: #FA9175;-->
+<!--    /* Custom color */-->
+<!--    color: white;-->
+<!--    /* Text color */-->
+<!--  }-->
+
+<!--  .save-button {-->
+<!--    min-width: 100px;-->
+<!--  }-->
+<!--</style>-->
