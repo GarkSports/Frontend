@@ -26,11 +26,8 @@ export class AppRoleslistComponent implements OnInit {
   searchText: any;
   roleNames: RoleName[];
 
-  displayedColumns: string[] = [
-    'roleName',
-    'permissions',
-    'action',
-  ];
+  displayedColumns: string[] = ['roleName', 'permissions', 'action'];
+ // displayedColumns: string[] = ['action', 'permissions', 'roleName'];
   dataSource = new MatTableDataSource<RoleName>([]);
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator =
@@ -47,6 +44,33 @@ export class AppRoleslistComponent implements OnInit {
     this.table.renderRows();
     this.fetchRoleNames();
   }
+
+  matchesFilter(value: any, filter: string): boolean {
+    // Convert value to string if it's not already
+    const stringValue = value ? value.toString().toLowerCase() : '';
+    // Check if the string value contains the filter value
+    return stringValue.includes(filter);
+  }
+  
+  applyFilter(filterValue: string): void {
+    // Convert filter value to lowercase for case-insensitive comparison
+    const filter = filterValue.trim().toLowerCase();
+
+    // Split the filter value into individual words
+    const filterWords = filter.split(' ');
+
+    // Set filter function for data source
+    this.dataSource.filterPredicate = (data: RoleName, filter: string) => {
+      // Check if any attribute matches all the filter words
+      return filterWords.every(word =>
+        this.matchesFilter(data.name, word) 
+      );
+    };
+
+    this.dataSource.filter = filter;
+  }
+
+
   fetchRoleNames(): void {
     this.managerService.getRoleNames().subscribe(roleNames => {
       this.roleNames = roleNames;
@@ -63,9 +87,6 @@ export class AppRoleslistComponent implements OnInit {
     });
   }
   
-  applyFilter(filterValue: string): void {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
 
   btnCategoryClick(val: string): number {
     this.dataSource.filter = val.trim().toLowerCase();
