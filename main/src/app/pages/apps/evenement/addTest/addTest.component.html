@@ -1,4 +1,4 @@
-<div class="bg-third min-h-screen px-64 py-4 rounded-3xl flex justify-center">
+<div class="bg-third   px-64 py-4 rounded-3xl flex justify-center">
   <div class=" w-full">
     <form id="firstForm" class="m-t-24">
       <div class="">
@@ -45,30 +45,30 @@
         </div>
       </div>
     </form>
-    <form [formGroup]="evenementForm" class="m-t-24">
+    <form [formGroup]="evenementForm" class=" mt-2">
       <ng-template matStepLabel>Détails</ng-template>
-      <div class="row">
+      <div class="grid grid-cols-2 gap-8">
         <!-- Nom -->
-        <div class="col-md-12">
-          <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Nom</mat-label>
-          <mat-form-field appearance="outline" class="w-100">
-            <input formControlName="nom" matInput placeholder="Nom" required />
-            <mat-error *ngIf="evenementForm.get('nom')?.invalid && evenementForm.get('nom')?.touched">Nom
-              is required
-            </mat-error>
-          </mat-form-field>
+        <div class="col-span-2">
+          <label for="HeadlineAct" class="block text-sm font-medium text-gray-900"> Nom </label>
+          <input type="text"
+                 class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
+                 placeholder="Nom" required formControlName="nom" />
+          <mat-error *ngIf="evenementForm.get('nom')?.invalid && evenementForm.get('nom')?.touched">Nom
+            is required
+          </mat-error>
         </div>
-        <div class="col-md-12">
-          <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Lieu</mat-label>
-          <mat-form-field appearance="outline" class="w-100">
-            <input formControlName="lieu" matInput placeholder="Lieu" required />
+        <div class="col-span-2">
+
+          <label for="HeadlineAct" class="block text-sm font-medium text-gray-900"> Lieu </label>
+          <input type="text"
+                 class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
+                 required formControlName="lieu" />
             <mat-error *ngIf="evenementForm.get('lieu')?.invalid && evenementForm.get('lieu')?.touched">Lieu
-              is required
+              est obligatoire
             </mat-error>
-          </mat-form-field>
         </div>
-        <!-- Date -->
-        <div class="col-md-6">
+        <div class="">
           <label for="HeadlineAct" class="block text-sm font-medium text-gray-900"> Date </label>
           <input type="date"
             class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
@@ -78,14 +78,14 @@
           </mat-error>
         </div>
         <!-- Horraire -->
-        <div class="col-md-6">
-          <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Horraire</mat-label>
-          <mat-form-field appearance="outline" class="w-100">
-            <input formControlName="horraire" matInput required type="time" />
-            <mat-error *ngIf="evenementForm.get('horraire')?.invalid && evenementForm.get('horraire')?.touched">Horraire
-              is required
-            </mat-error>
-          </mat-form-field>
+        <div class="">
+          <label for="HeadlineAct" class="block text-sm font-medium text-gray-900"> Horraire </label>
+          <input type="time"
+                 class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
+                 required formControlName="horraire" />
+          <mat-error *ngIf="evenementForm.get('horraire')?.invalid && evenementForm.get('horraire')?.touched">Horraire
+            is required
+          </mat-error>
         </div>
         <!-- <div class="col-md-12">
           <mat-checkbox formControlName="repetition">Se répéte</mat-checkbox>
@@ -106,8 +106,10 @@
           </mat-form-field>
         </div> -->
       </div>
-      <div class="text-right">
-        <button (click)="onSubmit()" [disabled]="!evenementForm.valid" color="primary" mat-flat-button>Finish
+      <div class="mt-4 flex justify-center">
+        <button class="px-8 py-2 rounded-3xl font-semibold bg-main hover:bg-mainHover disabled:bg-second text-black"
+                (click)="onSubmit()"
+                [disabled]="!evenementForm.valid">Confirmer
         </button>
       </div>
     </form>

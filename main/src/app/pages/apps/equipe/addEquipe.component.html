@@ -1,7 +1,8 @@
 <div class="bg-third rounded-3xl  py-8 px-8">
-  <div *ngFor="let equipe of equipes; let i = index" class="border-second rounded-3xl border-2">
+  <div *ngFor="let equipe of equipes; let i = index" class="border-second rounded-3xl border-2 ">
     <form #equipeForm="ngForm" (ngSubmit)="onSubmit()">
-      <div class="grid-cols-7 grid gap-10 mb-8">
+
+      <div class="grid-cols-7 grid gap-10 mb-8 ml-48">
         <div>
           <label class="block text-sm font-medium text-gray-900"> Nom </label>
           <input #nom="ngModel" [(ngModel)]="equipe.nom" class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm" name="nom" placeholder="Nom"
@@ -61,7 +62,7 @@
         </div>
         <div>
           <button (click)="removeEquipeForm(i)" *ngIf="equipes.length > 1"
-                  class="pt-8 text-red-600">
+                  class="pt-8 -ml-8 text-red-600">
             <mat-icon>delete_outline</mat-icon>
           </button>
         </div>

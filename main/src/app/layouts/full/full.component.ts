@@ -289,7 +289,7 @@ export class FullComponent implements OnInit {
           iconName: 'message-2',
           route: 'apps/chat',
         },
-        
+
 
       ];
     } else if (userRole === 'MANAGER') {
@@ -305,6 +305,11 @@ export class FullComponent implements OnInit {
           route: 'apps/listevenement',
         },
         {
+          displayName: 'Evaluation',
+          iconName: 'clipboard-text',
+          route: 'apps/evaluation',
+        },
+        {
           displayName: 'Utilisateurs',
           iconName: 'users',
           route: 'apps/staff',
@@ -314,12 +319,7 @@ export class FullComponent implements OnInit {
           iconName: 'users-group',
           route: 'apps/equipe',
         },
-        
-            {
-              displayName: 'Evaluation',
-              iconName: 'point',
-              route: 'apps/evaluation',
-            },
+
         {
           displayName: 'Paiement',
           iconName: 'credit-card',
@@ -336,14 +336,14 @@ export class FullComponent implements OnInit {
           iconName: 'messages',
           route: 'apps/chat',
         },
-        {
-          displayName: 'Statistiques',
-          iconName: 'chart-dots',
-        },
-        {
-          displayName: 'Collecte',
-          iconName: 'coins',
-        },
+        // {
+        //   displayName: 'Statistiques',
+        //   iconName: 'chart-dots',
+        // },
+        // {
+        //   displayName: 'Collecte',
+        //   iconName: 'coins',
+        // },
         {
           displayName: 'Disciplines',
           iconName: 'medal',
@@ -362,7 +362,7 @@ export class FullComponent implements OnInit {
         },
         {
           displayName: 'Blog',
-          iconName: 'chart-donut-3',
+          iconName: 'article',
           route: 'apps/blog',
           children: [
             {

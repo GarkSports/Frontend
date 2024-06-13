@@ -1,7 +1,7 @@
 <div mat-dialog-title>
   <i-tabler (click)="onCancelClick()" class="hover:cursor-pointer" name="arrow-left"></i-tabler>
 </div>
-<div mat-dialog-content class="py-12"  >
+<div mat-dialog-content class="pt-12 pb-4"  >
 <div class="row">
   <div class="col flex justify-center">
     <h1 class="text-xl text-black text-center">Type d'événement
@@ -21,7 +21,7 @@
       </div>
     </div>
   </div>
-  <div  class=" flex justify-center mt-8">
+  <div  class=" flex justify-center mt-4">
     <button   class="bg-main font-bold rounded-3xl h-9 px-5 py-2    text-white" [mat-dialog-close]="selectedOption" (click)="navigateToSelectedOption()">Confirmer</button>
   </div>
 

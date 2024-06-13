@@ -48,6 +48,8 @@ export class DisciplineManagerComponent implements AfterViewInit {
     obj.action = action;
     const dialogRef = this.dialog.open(AppDisciplineManagerDialogContentComponent, {
       data: obj,
+      width:'500px',
+      height:'400px'
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result.event === 'Add') {
