@@ -105,7 +105,7 @@
 }
 
 <div mat-dialog-actions class="p-24 p-t-0">
-  <button mat-flat-button (click)="doAction()" color="primary" [disabled]="!local_data.title || !local_data.subtitle || !local_data.body || !local_data.category || uploadingImage || local_data.publicAudience == null">
+  <button mat-flat-button (click)="doAction()" color="primary" [disabled]="(action !=='Supprimer') && (!local_data.title || !local_data.subtitle || !local_data.body || !local_data.category || uploadingImage || local_data.publicAudience == null)">
     
     <span *ngIf="uploadingImage">Chargement Image...</span>
     <span *ngIf="!uploadingImage">{{action}}</span>

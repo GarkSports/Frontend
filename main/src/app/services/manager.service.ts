@@ -33,9 +33,23 @@ export class ManagerService {
     return this.http.put<any>(`${this.apiUrl}/update-role-name?id=${roleNameData.id}`, roleNameData, {withCredentials: true, headers });
   }
   
-  deleteRolename(roleNameData: RoleName): Observable<any> {
+  deleteRolename(roleNameId: number): Observable<{ success: boolean, message?: string, error?: string }> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.delete<any>(`${this.apiUrl}/delete-role-name?id=${roleNameData.id}`, { withCredentials: true, headers });
+    return this.http.delete<any>(`${this.apiUrl}/delete-role-name?id=${roleNameId}`, { withCredentials: true, headers })
+    .pipe(
+      map((response: HttpResponse<string>) => {
+        if (response.status === 200) {
+          try {
+            const responseData = JSON.parse(response.body || '');
+            return { success: true, message: responseData.message };
+          } catch (e) {
+            return { success: true, message: response.body || 'Role name deleted successfully' };
+          }
+        } else {
+          return { success: false, error: response.body || '' };
+        }
+      })
+    );
   }
   
   deleteUser(userId: number): Observable<{ success: boolean, message?: string, error?: string }> {
@@ -96,7 +110,7 @@ export class ManagerService {
     return this.http.post<any>(`${this.apiUrl}/add-coach`, requestBody, { withCredentials: true, headers });
   }
 
-  addAdherent(managerData: Manager): Observable<any> {
+  addAdherent(managerData: Adherent): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     const requestBody = {
       email: managerData.email,
@@ -104,7 +118,8 @@ export class ManagerService {
       lastname: managerData.lastname,
       role:managerData.role,
       adresse: managerData.adresse,
-      photo:managerData.photo
+      niveauScolaire: managerData.niveauScolaire,
+      photo:managerData.photo,
     };
   
     console.log("this is service", requestBody);

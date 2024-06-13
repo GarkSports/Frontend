@@ -20,9 +20,11 @@ export class PaiementComponent implements AfterViewInit {
     Object.create(null);
   searchText: any;
   displayedColumns: string[] = [
+    'photo',
     'membre',
     'telephone',
     'type_abonnement',
+    'date_paiement',
     'date_abonnement',
     'statut',
     'actions'
@@ -418,12 +420,13 @@ export class AddPaiementPopupComponent implements OnInit {
   }
 
   onSaveClick(): void {
+    const datePaiement: Date | undefined = this.paiement.montant === 0 ? undefined : this.paiement.datePaiement;
     if (this.paiement.adherent) {
       const paiementData = {
         typeAbonnement: this.paiement.typeAbonnement,
         dateDebut: this.paiement.dateDebut,
         dateFin: this.paiement.dateFin,
-        datePaiement: this.paiement.datePaiement,
+        datePaiement: datePaiement,
         montant: this.paiement.montant,
         reste: this.paiement.reste,
         remarque: this.paiement.remarque,

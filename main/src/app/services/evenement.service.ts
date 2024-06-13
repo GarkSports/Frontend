@@ -11,6 +11,7 @@ import { MatchAmicalRequest } from 'src/models/dto/MatchAmicalRequest.model';
 import { StatutEvenement } from 'src/models/enums/statutEvenenement.model';
 import { CompetitionRequest } from 'src/models/dto/CompetitonRequest.model';
 import { UpdateEvenementRequest } from 'src/models/dto/UpdateEvenementRequest.model';
+import { UpdateEvenementRequestBody } from 'src/models/dto/updateMatchAmicalRequest.model';
 
 @Injectable({
   providedIn: 'root'
@@ -43,7 +44,7 @@ export class EvenementService {
 
   addMatchAmical(request: MatchAmicalRequest): Observable<Evenement> {
     return this.http.post<Evenement>(`${this.apiEvenement}/addMatchAmical`, request, { withCredentials: true });
-  }
+  }  
 
   getEvenements(): Observable<Evenement[]> {
     return this.http.get<Evenement[]>(`${this.apiEvenement}/getAllEvenements`,{ withCredentials: true });
@@ -80,4 +81,17 @@ export class EvenementService {
     const url = `${this.apiEvenement}/updateEvenement/${evenementId}`;
     return this.http.put<Evenement>(url, requestBody, { withCredentials: true });
   }
+
+  updateEvenementMatchAmical(evenementId: number, evenementData: UpdateEvenementRequestBody): Observable<Evenement> {
+    const url = `${this.apiEvenement}/updateEvenementMatchAmical/${evenementId}`;
+    return this.http.put<Evenement>(url, evenementData, { withCredentials: true });
+  }
+
+  getEquipesByEvenementMatchAmical(idEvenement: number): Observable<Equipe[]> {
+    const url = `${this.apiEvenement}/getEquipesByEvenementMatchAmical/${idEvenement}`;
+    return this.http.get<Equipe[]>(url);
+  }
+  
+  
+  
 }

@@ -1,157 +1,173 @@
-<div class="bg-third rounded-3xl  py-8 px-8">
-  <div *ngFor="let equipe of equipes; let i = index" class="border-second rounded-3xl border-2 ">
-    <form #equipeForm="ngForm" (ngSubmit)="onSubmit()">
-
-      <div class="grid-cols-7 grid gap-10 mb-8 ml-48">
-        <div>
-          <label class="block text-sm font-medium text-gray-900"> Nom </label>
-          <input #nom="ngModel" [(ngModel)]="equipe.nom" class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm" name="nom" placeholder="Nom"
-                 required/>
-          <!--          <p class="text-red-600" *ngIf="evenementForm.get('lieu')?.invalid && evenementForm.get('lieu')?.touched">-->
-          <!--            Champ lieu est obligatoire!-->
-          <!--          </p>-->
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-900"> Genre </label>
-
-          <select
-            #genre="ngModel" [(ngModel)]="equipe.genre" class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
-            name="genre"
-            required
-          >
-            <option *ngFor="let genre of genres" [value]="genre">
-              {{ genre }}
-            </option>
-          </select>
-        </div>
-        <div>
-
-          <label class="block text-sm font-medium text-gray-900"> Groupe d'age </label>
-          <input #groupeAge="ngModel" [(ngModel)]="equipe.groupeAge"
-                 class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm" name="groupeAge" placeholder="Groupe d'âge"
-
-                 required/>
-
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-900"> Couleur </label>
-          <input #couleur="ngModel" [(ngModel)]="equipe.couleur" class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
-                 name="couleur" placeholder="Couleur" required
-                 type="color"/>
-
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-900"> Discipline </label>
-
-          <select
-            #discipline="ngModel" [(ngModel)]="equipe.discipline"
-            class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm" name="discipline"
-            required
-          >
-            <option *ngFor="let discipline of disciplines" [value]="discipline">
-              {{ discipline.nom }}
-            </option>
-          </select>
-        </div>
-        <div class="pt-8 pl-6">
-          <label for="logo-{{i}}">
-            <mat-icon>image</mat-icon>
-            <input #fileInput (change)="uploadFile($event, equipe)" class="hidden" id="logo-{{i}}" name="logo"
-                   type="file"/>
-          </label>
-        </div>
-        <div>
-          <button (click)="removeEquipeForm(i)" *ngIf="equipes.length > 1"
-                  class="pt-8 -ml-8 text-red-600">
-            <mat-icon>delete_outline</mat-icon>
-          </button>
-        </div>
+<mat-card class="cardWithShadow gray-background">
+  <mat-card-content class="p-24">
+      <h2>Ajouter des équipes</h2>
+      <div *ngFor="let equipe of equipes; let i = index">
+          <form #equipeForm="ngForm" (ngSubmit)="onSubmit()">
+              <table>
+                  <tr>
+                      <th>Nom</th>
+                      <th>Genre</th>
+                      <th>Groupe d'âge</th>
+                      <th>Couleur</th>
+                      <th>Select discipline</th>
+                      <th>Logo</th>
+                      <th></th> <!-- Empty header for the delete button -->
+                  </tr>
+                  <tr>
+                      <td>
+                          <mat-form-field appearance="outline" class="w-100 hide-hint" style="width: 100%;">
+                              <input matInput placeholder="Nom" name="nom" [(ngModel)]="equipe.nom" required
+                                  #nom="ngModel">
+                          </mat-form-field>
+                      </td>
+                      <td>
+                          <mat-form-field appearance="outline" class="w-100 hide-hint" style="width: 150px;">
+                              <mat-label>Select genre</mat-label>
+                              <mat-select placeholder="Genre" [(ngModel)]="equipe.genre" name="genre" required
+                                  #genre="ngModel">
+                                  <mat-option *ngFor="let genre of genres" [value]="genre">
+                                      {{ genre }}
+                                  </mat-option>
+                              </mat-select>
+                          </mat-form-field>
+                      </td>
+                      <td>
+                          <mat-form-field appearance="outline" class="w-100 hide-hint" style="width: 100%;">
+                              <input matInput placeholder="Groupe d'âge" name="groupeAge"
+                                  [(ngModel)]="equipe.groupeAge" required #groupeAge="ngModel">
+                          </mat-form-field>
+                      </td>
+                      <td>
+                          <mat-form-field appearance="outline" class="w-100 hide-hint" style="width: 130px;">
+                              <input matInput type="color" placeholder="Couleur" name="couleur"
+                                  [(ngModel)]="equipe.couleur" required #couleur="ngModel">
+                          </mat-form-field>
+                      </td>
+                      <td>
+                          <mat-form-field appearance="outline" class="w-100 hide-hint" style="width: 175px;">
+                              <mat-label>Select discipline</mat-label>
+                              <mat-select placeholder="Discipline" [(ngModel)]="equipe.discipline" name="discipline"
+                                  required #discipline="ngModel">
+                                  <mat-option *ngFor="let discipline of disciplines" [value]="discipline">
+                                      {{ discipline.nom }}
+                                  </mat-option>
+                              </mat-select>
+                          </mat-form-field>
+                      </td>
+                      <td>
+                          <div class="custom-file-upload">
+                              <label for="logo-{{i}}" class="file-upload-label">
+                                  <mat-icon>image</mat-icon><span>Upload Logo</span>
+                                  <input type="file" id="logo-{{i}}" name="logo" (change)="uploadFile($event, equipe)"
+                                      #fileInput />
+                              </label>
+                          </div>
+                      </td>
+                      <td>
+                          <button mat-icon-button color="warn" (click)="removeEquipeForm(i)"
+                              *ngIf="equipes.length > 1">
+                              <mat-icon>delete_outline</mat-icon>
+                          </button>
+                      </td>
+                  </tr>
+                  <tr>
+                      <td>
+                          <div
+                              *ngIf="equipeForm.controls['nom'].invalid && (equipeForm.controls['nom'].dirty || equipeForm.controls['nom'].touched)">
+                              <span class="error-message">Le nom est requis</span>
+                          </div>
+                      </td>
+                      <td>
+                          <div
+                              *ngIf="equipeForm.controls['genre'].invalid && (equipeForm.controls['genre'].dirty || equipeForm.controls['genre'].touched)">
+                              <span class="error-message">Veuillez sélectionner un genre</span>
+                          </div>
+                      </td>
+                      <td>
+                          <div
+                              *ngIf="equipeForm.controls['groupeAge'].invalid && (equipeForm.controls['groupeAge'].dirty || equipeForm.controls['groupeAge'].touched)">
+                              <span class="error-message">Veuillez saisir un groupe d'âge</span>
+                          </div>
+                      </td>
+                      <td>
+                          <div
+                              *ngIf="equipeForm.controls['couleur'].invalid && (equipeForm.controls['couleur'].dirty || equipeForm.controls['couleur'].touched)">
+                              <span class="error-message">Veuillez choisir une couleur</span>
+                          </div>
+                      </td>
+                      <td>
+                          <div
+                              *ngIf="equipeForm.controls['discipline'].invalid && (equipeForm.controls['discipline'].dirty || equipeForm.controls['discipline'].touched)">
+                              <span class="error-message">Veuillez sélectionner une discipline</span>
+                          </div>
+                      </td>
+                  </tr>
+              </table>
+          </form>
+          <!-- Track the forms for validation -->
+          <ng-container *ngIf="forms.push(equipeForm)"></ng-container>
       </div>
-      <!--                <table>-->
-      <!--                    <tr>-->
-      <!--                        <th>Nom</th>-->
-      <!--                        <th>Genre</th>-->
-      <!--                        <th>Groupe d'âge</th>-->
-      <!--                        <th>Couleur</th>-->
-      <!--                        <th>Select discipline</th>-->
-      <!--                        <th>Logo</th>-->
-      <!--                        <th></th> &lt;!&ndash; Empty header for the delete button &ndash;&gt;-->
-      <!--                    </tr>-->
-      <!--                    <tr>-->
-      <!--                        <td>-->
+      <button mat-raised-button color="accent" (click)="addEquipeForm()"
+          style="margin-right: 10px; margin-top: 10px; margin-left: 3px; background-color: #7B7B7B;">
+          <mat-icon>add</mat-icon> Ajouter un autre formulaire
+      </button>
+      <button mat-raised-button color="primary" (click)="onSubmit()"
+          [disabled]="!areAllFormsValid() || uploadingImage" style="margin-top: 10px;">
+          <span *ngIf="uploadingImage">Uploading Logo...</span>
+          <span *ngIf="!uploadingImage">Ajouter</span>
+      </button>
+  </mat-card-content>
+</mat-card>
 
-      <!--                        </td>-->
-      <!--                        <td>-->
-      <!--                        </td>-->
-      <!--                        <td>-->
-      <!--                        </td>-->
-      <!--                        <td>-->
-      <!--                        </td>-->
-      <!--                        <td>-->
-      <!--                        </td>-->
-      <!--                        <td>-->
-      <!--                            <div class="custom-file-upload">-->
 
-      <!--                            </div>-->
-      <!--                        </td>-->
-      <!--                        <td>-->
+<style>
+  .error-message {
+      color: #ff0000;
+      /* Red color for error messages */
+      font-size: 12px;
+      /* Adjust font size */
+      font-style: italic;
+      /* Italics */
+      margin-top: 4px;
+      /* Adjust spacing from the field */
+  }
 
-      <!--                        </td>-->
-      <!--                    </tr>-->
-      <!--                    <tr>-->
-      <!--                        <td>-->
-      <!--                            <div-->
-      <!--                                *ngIf="equipeForm.controls['nom'].invalid && (equipeForm.controls['nom'].dirty || equipeForm.controls['nom'].touched)">-->
-      <!--                                <span class="error-message">Le nom est requis</span>-->
-      <!--                            </div>-->
-      <!--                        </td>-->
-      <!--                        <td>-->
-      <!--                            <div-->
-      <!--                                *ngIf="equipeForm.controls['genre'].invalid && (equipeForm.controls['genre'].dirty || equipeForm.controls['genre'].touched)">-->
-      <!--                                <span class="error-message">Veuillez sélectionner un genre</span>-->
-      <!--                            </div>-->
-      <!--                        </td>-->
-      <!--                        <td>-->
-      <!--                            <div-->
-      <!--                                *ngIf="equipeForm.controls['groupeAge'].invalid && (equipeForm.controls['groupeAge'].dirty || equipeForm.controls['groupeAge'].touched)">-->
-      <!--                                <span class="error-message">Veuillez saisir un groupe d'âge</span>-->
-      <!--                            </div>-->
-      <!--                        </td>-->
-      <!--                        <td>-->
-      <!--                            <div-->
-      <!--                                *ngIf="equipeForm.controls['couleur'].invalid && (equipeForm.controls['couleur'].dirty || equipeForm.controls['couleur'].touched)">-->
-      <!--                                <span class="error-message">Veuillez choisir une couleur</span>-->
-      <!--                            </div>-->
-      <!--                        </td>-->
-      <!--                        <td>-->
-      <!--                            <div-->
-      <!--                                *ngIf="equipeForm.controls['discipline'].invalid && (equipeForm.controls['discipline'].dirty || equipeForm.controls['discipline'].touched)">-->
-      <!--                                <span class="error-message">Veuillez sélectionner une discipline</span>-->
-      <!--                            </div>-->
-      <!--                        </td>-->
-      <!--                    </tr>-->
-      <!--                </table>-->
-    </form>
-    <!-- Track the forms for validation -->
-    <ng-container *ngIf="forms.push(equipeForm)"></ng-container>
-  </div>
-  <div class="w-full flex justify-center mt-8">
-    <button (click)="addEquipeForm()" class="flex gap-4 font-semibold">
-      <svg class="size-5" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-        <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
-        <path
-          d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM232 344V280H168c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V168c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H280v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z"/>
-      </svg>
-      Ajouter une autre équipe
-    </button>
+  .gray-background {
+      background-color: #FAFAFA;
+      /*testing color blue: 0000FF*/
+  }
 
-  </div>
-  <div class="w-full flex justify-center mt-4">
-    <button (click)="onSubmit()"
-            [disabled]="!areAllFormsValid() || uploadingImage"
-            class="px-8 py-2 rounded-3xl font-semibold bg-main hover:bg-mainHover disabled:bg-second text-black">
-      <span *ngIf="uploadingImage">Uploading Logo...</span>
-      <span *ngIf="!uploadingImage">Ajouter</span>
-    </button>
-  </div>
-</div>
+  .custom-file-upload {
+      display: inline-block;
+      position: relative;
+  }
+
+  .file-upload-label {
+      display: inline-block;
+      padding: 8px 12px;
+      background-color: #B7EE3E;
+      color: #fff;
+      border-radius: 4px;
+      cursor: pointer;
+  }
+
+  .file-upload-label span {
+      vertical-align: middle;
+  }
+
+  /* Hide the actual file input */
+  input[type="file"] {
+      display: none;
+  }
+
+  .custom-file-upload .file-upload-label {
+      display: flex;
+      align-items: center;
+      /* Align items vertically */
+  }
+
+  .custom-file-upload .file-upload-label mat-icon {
+      margin-right: 8px;
+      /* Adjust the spacing between the icon and the text */
+  }
+</style>

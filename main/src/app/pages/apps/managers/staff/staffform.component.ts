@@ -83,9 +83,7 @@ export class AppStaffformContentComponent implements OnInit {
       const id = params['id'];
       this.photo='';
       this.getFormManagerById(id);
-      this.initAdherentForm();
       this.getOnlyRoleNames();
-      this.initManagerForm();
       this.getEquipes();
       
 
@@ -110,8 +108,8 @@ export class AppStaffformContentComponent implements OnInit {
     const selectedValue = event.value;
     this.showRoleInput =
       selectedValue === 'STAFF' || selectedValue === 'ENTRAINEUR';
-    this.showNiveauScolaire = 
-    selectedValue === 'ADHERENT' || selectedValue === 'PARENT';
+      if(selectedValue === 'ADHERENT')
+        this.showNiveauScolaire = true;
   }
 
   getEquipes(): void {
@@ -259,10 +257,10 @@ export class AppStaffformContentComponent implements OnInit {
       dateNaissance: [adherent?.dateNaissance || '', Validators.required],
       adresse: [adherent?.adresse || '', Validators.required],
       photo: [adherent?.photo || null],
-      telephone: [adherent?.telephone, Validators.required],
-      equipes: [adherent?.nomEquipe, Validators.required],
-      nationalite: [adherent?.nationalite, Validators.required],
-      niveauScolaire: [adherent?.niveauScolaire, Validators.required],
+      telephone: [adherent?.telephone || '', Validators.required],
+      equipes: [adherent?.nomEquipe || '', Validators.required],
+      nationalite: [adherent?.nationalite || '', Validators.required],
+      niveauScolaire: [adherent?.niveauScolaire || '', Validators.required],
       statut: [statut, Validators.required],
       informationsParent: this.formBuilder.group({
         nomParent: [adherent?.informationsParent?.nomParent || '', Validators.required],
@@ -353,8 +351,8 @@ export class AppStaffformContentComponent implements OnInit {
         (response) => {
           console.log('Manager added:', response);
           this.showNotification(
-            'Success',
-            'Manager updated successfully!',
+            'Succèss',
+            'Utilisateur ajouté avec Succès!',
             'success'
           );
           setTimeout(() => {
@@ -367,7 +365,7 @@ export class AppStaffformContentComponent implements OnInit {
         },
         (error) => {
           console.error('Error adding manager:', error);
-          this.showNotification('Error', 'Error adding manager', 'error');
+          this.showNotification('Erreur', `Erreur lors du l'ajout d'utilisateur`, 'error');
         }
       );
     } else if (this.action === 'Update') {
@@ -410,8 +408,8 @@ export class AppStaffformContentComponent implements OnInit {
         (response) => {
           console.log('Manager updated:', response);
           this.showNotification(
-            'Success',
-            'Manager updated successfully!',
+            'Succèss',
+            'Utilisateur mis à jour avec succès!',
             'success'
           );
           setTimeout(() => {
@@ -424,7 +422,7 @@ export class AppStaffformContentComponent implements OnInit {
         },
         (error) => {
           console.error('Error updating manager:', error);
-          this.showNotification('Error', 'Error updating manager', 'error');
+          this.showNotification('Erreur', `Erreur lors du mis à jour d'utilisateur`, 'error');
         }
       );
     }
@@ -464,6 +462,7 @@ export class AppStaffformContentComponent implements OnInit {
     }
     this.isLoading = false; 
   } 
+  
   openPhotoDialog(): void {
     const dialogRef = this.dialog.open(PhotoDialogComponent, {
       data: { photo: this.photo },
@@ -478,8 +477,8 @@ export class AppStaffformContentComponent implements OnInit {
   template: `
     <h1 mat-dialog-title class="p-24 p-t-5">{{ data.title }}</h1>
     <div mat-dialog-content class="p-x-24 p-b-24">{{ data.message }}</div>
-    <div mat-dialog-actions>
-      <button mat-stroked-button class="p-24 p-t-0" (click)="cancelAction()">OK</button>
+    <div mat-dialog-actions class="p-24 p-t-0">
+      <button mat-stroked-button (click)="cancelAction()">OK</button>
     </div>
   `,
   styles: [

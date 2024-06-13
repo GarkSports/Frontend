@@ -3,31 +3,25 @@
     <div class="">
       <div class="mb-8">
         <div>
-          <div
-            class=" "
-          >
+          <div class=" ">
             <ol class="  flex gap-28 justify-center text-sm font-medium text-gray-500">
               <li class="  gap-2   p-2">
                 <button (click)="step1=true"
-                        class="size-12  pt-0.5 rounded-full bg-main text-black text-center text-lg  font-bold"> 1
+                  class="size-12  pt-0.5 rounded-full bg-main text-black text-center text-lg  font-bold"> 1
                 </button>
 
                 <p class="text-center hidden sm:block text-black"> Details </p>
               </li>
 
               <li class="  gap-2  p-2">
-                <button (click)="step1=false"
-                        [ngClass]="{
+                <button (click)="step1=false" [ngClass]="{
                   'bg-main': !step1,
                   'bg-transparent': step1,
                   'text-black': !step1,
                   'border-second': step1,
                   'border-2': step1,
                   'text-second': step1,
-                }"
-
-                        class="size-12  pt-0.5  rounded-full  text-second    text-center text-lg  font-bold"
-                > 2
+                }" class="size-12  pt-0.5  rounded-full  text-second    text-center text-lg  font-bold"> 2
                 </button>
 
                 <p class="text-center hidden sm:block text-black"> Dates </p>
@@ -40,107 +34,74 @@
 
       <form [formGroup]="matchAmicalForm">
         @if (step1) {
-          <div class="mt-4">
-            <label class="block text-sm font-medium text-gray-900"> Nom </label>
-            <input required placeholder="Nom" formControlName="nomEvent"
-                   class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"/>
-            <p class="text-red-600"
-               *ngIf="matchAmicalForm.get('nomEvent')!.hasError('required') && matchAmicalForm.get('nomEvent')?.touched">
-              Champ nom est obligatoire! </p>
-          </div>
-          <div class="mt-4">
-            <label class="block text-sm font-medium text-gray-900"> Lieu </label>
-            <input required placeholder="Lieu" formControlName="lieu"
-                   class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"/>
-            <p class="text-red-600"
-               *ngIf="matchAmicalForm.get('lieu')!.hasError('required') && matchAmicalForm.get('lieu')?.touched">Champ
-              lieu est obligatoire! </p>
-          </div>
-          <div class="mt-4">
-            <label class="block text-sm font-medium text-gray-900"> Date </label>
-            <input required placeholder="Lieu" formControlName="date"
-                   type="date"
-                   class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"/>
-            <p class="text-red-600"
-               *ngIf="matchAmicalForm.get('date')!.hasError('required') && matchAmicalForm.get('date')?.touched">Champ
-              date est obligatoire! </p>
-          </div>
-          <div class="mt-4">
-            <label class="block text-sm font-medium text-gray-900"> Description </label>
+        <div class="mt-4">
+          <label class="block text-sm font-medium text-gray-900"> Nom adversaire</label>
+          <input required placeholder="Nom" formControlName="nomEvent"
+            class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm" />
+          <p class="text-red-600"
+            *ngIf="matchAmicalForm.get('nomEvent')!.hasError('required') && matchAmicalForm.get('nomEvent')?.touched">
+            Champ nom est obligatoire! </p>
+        </div>
+        <div class="mt-4">
+          <label class="block text-sm font-medium text-gray-900"> Lieu </label>
+          <input required placeholder="Lieu" formControlName="lieu"
+            class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm" />
+          <p class="text-red-600"
+            *ngIf="matchAmicalForm.get('lieu')!.hasError('required') && matchAmicalForm.get('lieu')?.touched">Champ
+            lieu est obligatoire! </p>
+        </div>
+        <div class="mt-4">
+          <label class="block text-sm font-medium text-gray-900"> Date </label>
+          <input required placeholder="Lieu" formControlName="date" type="date"
+            class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm" />
+          <p class="text-red-600"
+            *ngIf="matchAmicalForm.get('date')!.hasError('required') && matchAmicalForm.get('date')?.touched">Champ
+            date est obligatoire! </p>
+        </div>
+        <div class="mt-4">
+          <label class="block text-sm font-medium text-gray-900"> Description </label>
 
-            <textarea
-              class="mt-1.5 h-18 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
-              rows="4" formControlName="description"></textarea>
-          </div>
-          <div class="mt-4">
-            <mat-checkbox formControlName="repetition">Se répéte</mat-checkbox>
-          </div>
-          <div class="mt-4" style="margin-top: 20px;" *ngIf="matchAmicalForm.get('repetition')?.value">
-
-            <label class="block text-sm font-medium text-gray-900"> Chaque </label>
-            <select
-              [(ngModel)]="selectedTypeRepetition"
-              required
-              formControlName="typeRepetition" name="typeRepetition"
-              class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
-            >
-              <option *ngFor="let typeRepetition of typeRepetitions" [value]="typeRepetition">{{
-                  typeRepetition |titlecase
-                }}
-              </option>
-            </select>
-          </div>
-          <div class="mt-4" style="margin-top: 20px;" *ngIf="matchAmicalForm.get('repetition')?.value">
-
-            <label class="block text-sm font-medium text-gray-900"> Nombre de fois </label>
-            <input
-              class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
-              required type="number" formControlName="nbRepetition"/>
-
-          </div>
-          <div class="mt-4 flex justify-center">
-            <button
-              class="px-8 py-2 rounded-3xl font-semibold bg-main hover:bg-mainHover disabled:bg-second text-black"
-              (click)="nextStep()">Suivant
-            </button>
-          </div>
+          <textarea
+            class="mt-1.5 h-18 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
+            rows="4" formControlName="description"></textarea>
+        </div>
+        <div class="mt-4 flex justify-center">
+          <button class="px-8 py-2 rounded-3xl font-semibold bg-main hover:bg-mainHover disabled:bg-second text-black"
+            (click)="nextStep()">Suivant
+          </button>
+        </div>
         }
         @if (!step1) {
           <!-- Checkboxes for equipe selection -->
-          <div *ngFor="let equipe of equipeList" class="row  mt-4   ">
-            <div class="ml-40 col     pt-1.5">
-              <mat-checkbox (click)="onEquipeSelect(equipe.id)" color="primary"
-                            [checked]="selectedEquipeId === equipe.id"
-                            [value]="equipe.id.toString()"
-                            class="checkbox-button">
+          <div *ngFor="let equipe of equipeList" class="row mt-4">
+            <div class="ml-40 col pt-1.5">
+              <mat-checkbox (click)="onEquipeSelect(equipe.id)" color="primary" [checked]="selectedEquipeIds.includes(equipe.id)"
+                [value]="equipe.id.toString()" class="checkbox-button">
                 {{ equipe.nom }}
-
               </mat-checkbox>
-
             </div>
-            <div *ngIf="selectedEquipeId === equipe.id" class="col-6     ">
-
-              <input required placeholder="time" formControlName="horaire"
-                     type="time"
-                     class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"/>
-              <p class="text-red-600"
-                 *ngIf="matchAmicalForm.get('horaire')!.hasError('required') && matchAmicalForm.get('horaire')?.touched">
-                Champ
-                horaire est obligatoire! </p>
-
-                </div>
-              </div>
-          <div class="flex justify-center mt-4">
-
-            <button
-              class="px-8 py-2 rounded-3xl font-semibold bg-main hover:bg-mainHover disabled:bg-second text-black"
-              [disabled]="!matchAmicalForm.valid"
-              (click)="onSubmit()">Confirmer
-            </button>
+            <div *ngIf="selectedEquipeIds.includes(equipe.id)" class="col-6">
+              <!-- Input field for horaire -->
+              <input required placeholder="Horaire" formControlName="horaire{{equipe.id}}" type="time"
+                class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent text-black sm:text-sm" />
+              <!-- Error message if horaire is required and touched -->
+              <!-- <p class="text-red-600"
+                *ngIf="matchAmicalForm.get('horaire' + equipe.id)?.errors?.required && matchAmicalForm.get('horaire' + equipe.id)?.touched">
+                Champ horaire est obligatoire!
+              </p> -->
+            </div>
           </div>
 
+          <!-- Submit button -->
+          <div class="flex justify-center mt-4">
+            <button class="px-8 py-2 rounded-3xl font-semibold bg-main hover:bg-mainHover disabled:bg-second text-black"
+               (click)="onSubmit()">
+              Confirmer
+            </button>
+          </div>
         }
-        </form>
+        
+      </form>
     </div>
   </div>
 </div>

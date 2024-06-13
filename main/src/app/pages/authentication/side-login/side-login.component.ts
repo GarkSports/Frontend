@@ -21,6 +21,7 @@ import { environment } from '../../../../environments/environment';
 })
 export class AppSideLoginComponent {
   options = this.settings.getOptions();
+  errorMessage: string = '';
 
   constructor(
     private settings: CoreService,
@@ -98,11 +99,25 @@ export class AppSideLoginComponent {
             });
           },
           (error) => {
-            // Handle error
-            console.error('Authentication error', error);
-            // Display an error message or handle the failure case
-          }
-        );
-    }
+          // Handle error
+          console.error('Authentication error', error);
+
+          // Check if the error is an InvalidEmailException
+          if (error.error && error.error.message === 'Email not found') {
+            this.errorMessage = `L'adresse e-mail n'est pas enregistrée. Veuillez réessayer.`;
+            } else if (error.error && error.error.message === 'Invalid password') {
+            this.errorMessage = 'Mot de passe incorrect. Veuillez réessayer.';
+            } else if (error.error && error.error.message === 'User is blocked') {
+            this.errorMessage = `Votre compte a été bloqué. Veuillez contacter l'administrateur.`;
+            } else if (error.status === 400 || error.status === 401) {
+            // Handle other authentication errors
+            this.errorMessage = `Une erreur est survenue lors de l'authentification. Veuillez réessayer plus tard.`;
+            } else {
+            // Handle other errors
+            this.errorMessage = `Une erreur est survenue lors de l'authentification. Veuillez réessayer plus tard.`;
+            }
+        }
+      );
   }
+}
 }
