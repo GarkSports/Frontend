@@ -149,7 +149,6 @@ import {AppComptabiliteComponent} from './comptabilite/comptabilite.component'
 import {AddBeneficeDepenseComponent} from './comptabilite/add-benefice-depense/add-benefice-depense.component';
 import {UpdateBeneficeDepenseComponent} from './comptabilite/update-benefice-depense/update-benefice-depense.component';
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
-import { NgxImageViewerModule } from '@simfyz/ngx-image-viewer';
 
 
 @NgModule({
@@ -181,7 +180,6 @@ import { NgxImageViewerModule } from '@simfyz/ngx-image-viewer';
     AppMonthlyEarningsTwoComponent,
     DefaultImagePipe,
     FaIconComponent,
-    NgxImageViewerModule
   ],
   exports: [TablerIconsModule],
   declarations: [
