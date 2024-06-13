@@ -1,47 +1,52 @@
-<h2 class="f-w-500 m-b-24" mat-dialog-title><strong>{{action}}</strong></h2>
+<div mat-dialog-title>
+  <i-tabler (click)="closeDialog()" class="hover:cursor-pointer" name="arrow-left"></i-tabler>
+</div>
+
 
 <!-- Check if action is not 'Delete' -->
 <ng-container *ngIf="action !== 'Delete'">
-  <mat-dialog-content style="max-width: 600px">
     <form #disciplineForm="ngForm">
-      <div class="row">
-        <div class="col-lg-6">
-          <mat-form-field appearance="outline" class="w-100">
-            <input type="text" matInput required id="nom" name="nom" [(ngModel)]="local_data.nom" placeholder="Nom" />
-            <mat-error
-              *ngIf="disciplineForm.controls['nom'].invalid && (disciplineForm.controls['nom'].dirty || disciplineForm.controls['nom'].touched)">
-              Nom est requis
-            </mat-error>
-          </mat-form-field>
-        </div>
-        <div class="col-lg-6">
-          <mat-form-field appearance="outline" class="w-100">
-            <input type="text" matInput id="description" name="description" [(ngModel)]="local_data.description"
-              placeholder="Description" />
-          </mat-form-field>
-        </div>
-      </div>
-      <!-- Add other form fields based on your model properties -->
 
-      <button mat-flat-button (click)="doAction()" mat-flat-button color="primary" [disabled]="!disciplineForm.valid">
-        {{action}}
-      </button>
-      <button mat-stroked-button color="warn" class="m-l-8" (click)="closeDialog()">
-        Cancel
-      </button>
+      <div mat-dialog-content class="pt-12 pb-4"  >
+        <div class="row">
+          <div class="col flex justify-center">
+            <h1 class="text-xl text-black text-center">Ajouter une discipline</h1>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 mt-8 gap-8">
+          <div >
+
+            <label  class="block text-sm font-medium text-gray-900"> Nom </label>
+            <input type="text"   required id="nom" name="nom" [(ngModel)]="local_data.nom" placeholder="Nom"
+                   class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"/>
+          </div>
+          <div >
+
+            <label   class="block text-sm font-medium text-gray-900"> Description </label>
+            <input type="text" matInput id="description" name="description" [(ngModel)]="local_data.description"
+                   placeholder="Description"
+                   class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"/>
+          </div>
+        </div>
+        <div  class=" flex justify-center mt-4">
+          <button   class="bg-main font-bold rounded-3xl h-9 px-5 py-2    text-black"  (click)="doAction()">Confirmer</button>
+        </div>
+
+      </div>
     </form>
-  </mat-dialog-content>
 </ng-container>
 
 <!-- Display delete confirmation if action is 'Delete' -->
 <ng-container *ngIf="action === 'Delete'">
-  <div class="p-x-24">
-    <p>Sure to delete <span class="f-w-600">{{local_data.nom}}</span> ?</p>
+<div class="mt-24">
+  <div  class=" text-xl text-center flex justify-center mt-4">
+    <p>Voulez vous vraiment supprimer <span class="f-w-600">{{local_data.nom}}</span> ?</p>
   </div>
-  <div mat-dialog-actions class="p-x-24 p-b-24">
-    <button mat-button (click)="doAction()" mat-flat-button color="warn">
-      {{action}}
-    </button>
-    <button mat-button (click)="closeDialog()" class="m-l-8">Cancel</button>
+
+  <div  class=" flex justify-center mt-4">
+    <button   class="bg-main font-bold rounded-3xl h-9 px-5 py-2    text-black"  (click)="doAction()">Confirmer</button>
   </div>
+
+</div>
+
 </ng-container>

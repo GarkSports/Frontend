@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { BlogPosts } from 'src/models/posts.model';
-import { CookieService } from 'ngx-cookie-service';
 import {environment} from "../../environments/environment";
 
 @Injectable({
@@ -38,6 +37,10 @@ import {environment} from "../../environments/environment";
     public SetToken(token: string) {
       const params = new HttpParams().set('token', token);
       return this.http.post(`${this.apiUrl}notification/addtoken`, { params,withCredentials: true });
+    }
+
+    public getPost(id: number):Observable<BlogPosts> {
+      return this.http.get<BlogPosts>(`${this.apiUrl}posts/${id}`,{withCredentials:true});
     }
 
 

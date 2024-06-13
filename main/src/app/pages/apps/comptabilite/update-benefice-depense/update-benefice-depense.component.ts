@@ -51,7 +51,7 @@ export class UpdateBeneficeDepenseComponent implements OnInit {
             type: data.type,
             etat: data.etat,
             date: data.date,
-            prixUnite: data.prixUnite,
+            prixunite: data.prixunite,
             quantite: data.quantite,
           });
         },
@@ -67,7 +67,7 @@ export class UpdateBeneficeDepenseComponent implements OnInit {
             type: data.type,
             etat: data.etat,
             date: data.date,
-            prixunite: data.prixUnite,
+            prixunite: data.prixunite,
             quantite: data.quantite,
             beneficiaire: data.beneficiaire,
           });

@@ -1,5 +1,5 @@
 export enum TypeAbonnement {
-    Annuel,
-    Mensuel,
-    Trimestriel,
+  Annuel = 'Annuel',
+  Mensuel = 'Mensuel',
+  Trimestriel = 'Trimestriel',
 }

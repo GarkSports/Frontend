@@ -131,8 +131,8 @@ export class AppComptabiliteComponent implements OnInit {
   DepensesdisplayedColumns: string[] = [
     'Type',
     'Etat',
-    'Quantite',
     'Beneficiaire',
+    'Quantite',
     'prix_unitaire',
     'total',
     'date',
@@ -179,8 +179,25 @@ export class AppComptabiliteComponent implements OnInit {
   
 
   updateChart(): void {
+    var piedepenses: Number = 0;
+    var piebenefices: Number = 0;
+    var pienet:Number = 0;
+    var customLegend:String[] = ['Benefices ', 'Depenses ','Benefices Net'];
+    //this.monthlySums.currentMonthBenefices,this.monthlySums.currentMonthDepenses,
+
+    if(this.monthlySums.currentMonthNet <= 0 ){
+      piebenefices=this.monthlySums.currentMonthBenefices;
+      piedepenses=this.monthlySums.currentMonthDepenses;
+      pienet = 0;
+      customLegend = ['Benefices ', 'Depenses '];
+    } else if (this.monthlySums.currentMonthNet > 0 ){
+      piebenefices=this.monthlySums.currentMonthBenefices - this.monthlySums.currentMonthNet;
+      piedepenses=this.monthlySums.currentMonthDepenses;
+      pienet = this.monthlySums.currentMonthNet;
+      customLegend = ['Benefices ', 'Depenses ','Benefices Net'];
+    }
     this.currentyearChart = {
-      series: [this.monthlySums.currentMonthBenefices,this.monthlySums.currentMonthDepenses,this.monthlySums.currentMonthNet],
+      series: [piebenefices,piedepenses,pienet],
       chart: {
         type: 'donut',
         fontFamily: "'Plus Jakarta Sans', sans-serif;",
@@ -211,7 +228,7 @@ export class AppComptabiliteComponent implements OnInit {
       },
       legend: {
         show: true,
-        customLegendItems:  ['Benefices ', 'Depenses ', 'Benefices net'],
+        customLegendItems:  customLegend,
         position: 'bottom',
       },
       tooltip: {
@@ -408,21 +425,57 @@ applyFilterByMonth(): void {
 
   beneficesexportToPDF(): void {
     const doc = new jsPDF();
-    const columns = this.BeneficesdisplayedColumns.map(col => ({ title: col, dataKey: col }));
-    const data = this.BeneficesdataSource.data.map((row: any) =>
-      this.BeneficesdisplayedColumns.reduce((acc, col) => ({ ...acc, [col]: row[col] }), {})
-    );
 
-    (doc as any).autoTable(columns, data);
+    // Define columns without the 'id' field
+    const columns = [
+        { title: 'Type', dataKey: 'type' },
+        { title: 'État', dataKey: 'etat' },
+        { title: 'Quantité', dataKey: 'quantite' },
+        { title: 'Prix Unité', dataKey: 'prixunite' },
+        { title: 'Total', dataKey: 'total' },
+        { title: 'Date', dataKey: 'date' }
+    ];
+
+
+
+    // Map data to match the column titles
+    const data = this.BeneficesdataSource.data.map((row: Benefices) => {
+        const mappedRow: { [key: string]: any } = {};
+        columns.forEach(col => {
+            mappedRow[col.dataKey] = row[col.dataKey as keyof Benefices] ?? 'N/A';
+        });
+        return mappedRow;
+    });
+
+    // Generate the table and save the PDF
+    (doc as any).autoTable({
+        head: [columns.map(col => col.title)],
+        body: data.map(row => columns.map(col => row[col.dataKey])),
+    });
+
     doc.save('benefice-table.pdf');
-  }
+}
+
 
   depensesexportToPDF(): void {
     const doc = new jsPDF();
-    const columns = this.DepensesdisplayedColumns.map(col => ({ title: col, dataKey: col }));
-    const data = this.DepensesdataSource.data.map((row: any) =>
-      this.DepensesdisplayedColumns.reduce((acc, col) => ({ ...acc, [col]: row[col] }), {})
-    );
+    const columns = [
+      { title: 'Type', dataKey: 'type' },
+      { title: 'État', dataKey: 'etat' },
+      { title: 'bénéficiaire', dataKey: 'beneficiaire' },
+      { title: 'Quantité', dataKey: 'quantite' },
+      { title: 'Prix Unité', dataKey: 'prixunite' },
+      { title: 'Total', dataKey: 'total' },
+      { title: 'Date', dataKey: 'date' }
+  ];
+    // Map data to match the column titles
+    const data = this.DepensesdataSource.data.map((row: Depenses) => {
+      const mappedRow: { [key: string]: any } = {};
+      columns.forEach(col => {
+          mappedRow[col.dataKey] = row[col.dataKey as keyof Depenses] ?? 'N/A';
+      });
+      return mappedRow;
+  });
 
     (doc as any).autoTable(columns, data);
     doc.save('depenses-table.pdf');

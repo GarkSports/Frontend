@@ -189,8 +189,8 @@ export class ListEvenementComponent implements AfterViewInit {
 
   openAddEvenementDialog(): void {
     const dialogRef = this.dialog.open(AddEvenementPopupComponent, {
-      width: '720.6px',
-      height: '500px',
+      width: '600px',
+      height: '450px',
     });
 
     dialogRef.afterClosed().subscribe(result => {
