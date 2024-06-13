@@ -79,7 +79,7 @@
           <div class=" col-span-2">
             <label class="block text-sm font-medium text-gray-400"> Type Abonnement </label>
             <select class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
-                    [(ngModel)]="paiement.typeAbonnement"   required
+                    [(ngModel)]="paiement.typeAbonnement"
             >
               <option *ngFor="let type of typeAbonnements" [value]="type">{{ type }}</option>
             </select>

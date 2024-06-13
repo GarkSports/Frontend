@@ -1,12 +1,12 @@
-import { Adherent } from "./adherent.model";
-import { TypeAbonnement } from "./enums/typeAbonnement.model";
+import {Adherent} from "./adherent.model";
+import {TypeAbonnement} from "./enums/typeAbonnement.model";
 
 export class Paiement {
     id: number;
     typeAbonnement: TypeAbonnement;
-    dateDebut: Date;
-    dateFin: Date;
-    datePaiement: Date;
+  dateDebut: Date = new Date;
+  dateFin: any;
+  datePaiement: any;
     montant: number;
     reste: number;
     remarque: string;
