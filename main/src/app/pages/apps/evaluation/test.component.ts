@@ -1,43 +1,15 @@
-import {
-    Component,
-    OnInit,
-    Inject,
-    Optional,
-    ViewChild,
-    OnDestroy,
-    CUSTOM_ELEMENTS_SCHEMA
-  } from '@angular/core';
-  import { MatTableDataSource, MatTable } from '@angular/material/table';
-  import {
-    MatDialog,
-    MatDialogRef,
-    MAT_DIALOG_DATA,
-  } from '@angular/material/dialog';
-  import { MatPaginator } from '@angular/material/paginator';
-  import { Manager } from 'src/models/manager.model';
-  import { ManagerService } from 'src/app/services/manager.service';
-  import { DatePipe } from '@angular/common';
-  import { Academie } from 'src/models/academie.model';
-  import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
-  import { Role, RoleArray } from 'src/models/enums/role.model';
-  import { RoleName, RoleNameArray } from 'src/models/roleName.models';
-  import { AngularFireStorage } from '@angular/fire/compat/storage';
-  import { MatSort } from '@angular/material/sort';
-  import { Observable, forkJoin } from 'rxjs';
-  import { PaiementService } from 'src/app/services/paiement.service';
-  import { Equipe } from 'src/models/equipe.model';
-  import { ActivatedRoute, Router } from '@angular/router';
-  import { MatSelectChange } from '@angular/material/select';
-  import { Adherent } from 'src/models/adherent.model';
-  import isThisHour from 'date-fns/isThisHour';
-import { Test } from 'src/models/test.model';
-import { StaffService } from 'src/app/services/staff.service';
-import { Categorie } from 'src/models/categorie.model';
-import { Kpi } from 'src/models/kpi.model';
-import { AppStaffDialogContentComponent } from '../managers/staff/stafflist.component';
-import { AppTestDialogContentComponent } from './testDialog.component';
-  
-  @Component({
+import {Component, Inject, OnInit, Optional} from '@angular/core';
+import {MatTableDataSource} from '@angular/material/table';
+import {MAT_DIALOG_DATA, MatDialog,} from '@angular/material/dialog';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute} from '@angular/router';
+import {Test} from 'src/models/test.model';
+import {StaffService} from 'src/app/services/staff.service';
+import {Categorie} from 'src/models/categorie.model';
+import {Kpi} from 'src/models/kpi.model';
+import {AppTestDialogContentComponent} from './testDialog.component';
+
+@Component({
     // tslint:disable-next-line - Disables all
     selector: 'app-test-content',
     templateUrl: './test.component.html',
@@ -84,13 +56,13 @@ export class AppTestContentComponent implements OnInit {
         console.log(        this.local_data.testName        );
         this.getCategoriesByTestId(this.id);
         console.log("id", this.id);
-        
+
       });
   }
   toggleCategoryView(index: number): void {
     this.selectedCategoryToOpenIndex = this.selectedCategoryToOpenIndex === index ? -1 : index;
   }
-  
+
   logIt(categorieName: string, index: number): void {
     console.log("this is clicked category", categorieName);
     this.showCategorie = true;
@@ -100,19 +72,19 @@ export class AppTestContentComponent implements OnInit {
   addCategorie(action: string, obj: any, testId: number): void {
     obj.action = action;
     obj.testId = testId; // Pass the testId to the dialog
-  
+
     const dialogRef = this.dialog.open(AppTestDialogContentComponent, {
-      data: { ...obj, testForm: this.testForm },
+      data: {...obj, testForm: this.testForm}, width: '700px'
     });
-  
+
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'success') {
         this.getTestById(testId); // Refresh the test details if needed
       }
     });
   }
-  
-  deleteCategorie(test: Test, category: Categorie): void {
+
+    deleteCategorie(test: Test, category: Categorie): void {
     if (confirm(`Are you sure you want to delete the category: ${category.categorieName}?`)) {
       this.staffService.deleteCategorie(category.id).subscribe(
         response => {
@@ -126,12 +98,12 @@ export class AppTestContentComponent implements OnInit {
       );
     }
   }
-  
 
-  getTestById(id: number): void{
+
+    getTestById(id: number): void{
     this.staffService.getTestById(id).subscribe(
         (test) => {
-            this.local_data = test; 
+          this.local_data = test;
             this.initTestForm();
             this.test = test;
         }
@@ -159,9 +131,9 @@ export class AppTestContentComponent implements OnInit {
     if (confirm('Are you sure you want to delete this KPI?')) {
       this.staffService.deleteKpi(kpi.id).subscribe(() => {
        console.log("deleted");
-       this.getTestById(this.id);  
+        this.getTestById(this.id);
         console.log("id",this.id);
-        
+
       });
     }
    }
@@ -171,14 +143,14 @@ export class AppTestContentComponent implements OnInit {
   }
   selectCategory(index: number): void {
     this.selectedCategoryIndex = index;
-    
+
   }
-  
-  addKpi(categorieId: number): void {
+
+    addKpi(categorieId: number): void {
     const newKpiValue = this.testForm.get('newKpiValue')?.value;
     console.log("categorieId",categorieId);
-    
-    if (this.selectedCategoryIndex !== null && newKpiValue.trim() !== '') {
+
+      if (this.selectedCategoryIndex !== null && newKpiValue.trim() !== '') {
         this.staffService.addKpi(this.selectedCategoryIndex, newKpiValue.trim(), categorieId).subscribe(() => {
             this.testForm.get('newKpiValue')?.reset(); // Reset the newKpiValue form control
             this.selectedCategoryIndex = null; // Deselect the category

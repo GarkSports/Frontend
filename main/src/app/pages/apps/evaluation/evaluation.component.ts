@@ -1,14 +1,12 @@
-import { Component, Inject, OnInit, Optional } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
-import { EquipeService } from 'src/app/services/equipe.service';
-import { ManagerService } from 'src/app/services/manager.service';
-import { StaffService } from 'src/app/services/staff.service';
-import { Categorie } from 'src/models/categorie.model';
-import { Equipe } from 'src/models/equipe.model';
-import { Manager } from 'src/models/manager.model';
-import { Test } from 'src/models/test.model';
+import {Component, Inject, OnInit, Optional} from '@angular/core';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {MatTableDataSource} from '@angular/material/table';
+import {ManagerService} from 'src/app/services/manager.service';
+import {StaffService} from 'src/app/services/staff.service';
+import {Equipe} from 'src/models/equipe.model';
+import {Manager} from 'src/models/manager.model';
+import {Test} from 'src/models/test.model';
 
 @Component({
   selector: 'app-evaluation',
@@ -60,7 +58,7 @@ export class AppEvaluationComponent implements OnInit {
     );
   }
 
-  
+
 
 
   getTest(academieId: number): void {
@@ -77,7 +75,7 @@ export class AppEvaluationComponent implements OnInit {
       }
     );
   }
-  
+
   fetchCategories(): void {
     this.testCards.forEach(test => {
       test.categories.forEach(category => {
@@ -114,11 +112,11 @@ export class AppEvaluationComponent implements OnInit {
       );
     }
   }
-  
-  
+
+
   addTest(): void{
-    const dialogRef = this.dialog.open(AppAddTestDialogContentComponent);
-  
+    const dialogRef = this.dialog.open(AppAddTestDialogContentComponent, {width: '700px'});
+
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'success') {
         this.getProfil();
@@ -156,15 +154,15 @@ export class AppAddTestDialogContentComponent implements OnInit {
     private staffService: StaffService,
     private managerService: ManagerService
   ) {
-   
 
-}
+
+  }
 
   ngOnInit(): void {
     this.getProfil();
     this.initTestForm();
     console.log("academie id", this.academieId);
-    
+
   }
 
   initTestForm(): void {
