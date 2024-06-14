@@ -1,21 +1,25 @@
 <div class="evenement-dialog">
-    <h6 mat-dialog-title class="dialog-title">Equipes</h6>
+    <h6 mat-dialog-title class="dialog-title">Members</h6>
     <mat-dialog-content class="dialog-content">
         <table class="evenement-table">
             <thead>
                 <tr>
+                    <th>Photo</th>
                     <th>Nom</th>
-                    <th>Genre</th>
-                    <th>Groupe d'Age</th>
-                    <th>Heure</th>
+                    <th>Prenom</th>
+                    <th>Email</th>
+                    <th>Telephone</th>
+                    <th>Adresse</th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="evenement-item" *ngFor="let equipe of equipes">
-                    <td>{{ equipe.nom }}</td>
-                    <td>{{ equipe.genre }}</td>
-                    <td>{{ equipe.groupeAge }}</td>
-                    <td>{{ equipe.dateMatchAmical }}</td>
+                <tr class="evenement-item" *ngFor="let member of evenement.convocationMembres">
+                    <td><img [src]="member.photo" alt="Logo" width="40" /></td>
+                    <td>{{ member.firstname }}</td>
+                    <td>{{ member.lastname }}</td>
+                    <td>{{ member.email }}</td>
+                    <td>{{ member.telephone }}</td>
+                    <td>{{ member.adresse }}</td>
                 </tr>
             </tbody>
         </table>

@@ -364,15 +364,15 @@ export class AddPaiementPopupComponent implements OnInit {
     this.numStep = num;
   }
   isFormValid(): boolean {
-    // return (
-    //   (this.paiement.montant !== undefined && this.paiement.montant >= 0 && this.paiement.montant !== null) &&
-    //   (this.paiement.reste === undefined || this.paiement.reste >= 0) &&
-    //   this.paiement.typeAbonnement !== undefined &&
-    //   this.paiement.adherent !== undefined &&
-    //   (this.paiement.dateDebut !== undefined && this.paiement.dateDebut !== null) &&
-    //   (this.paiement.dateFin !== undefined && this.paiement.dateFin !== null) &&
-    //   (this.paiement.datePaiement !== undefined && this.paiement.datePaiement !== null)
-    // );
+    return (
+      (this.paiement.montant !== undefined && this.paiement.montant >= 0 && this.paiement.montant !== null) &&
+      (this.paiement.reste === undefined || this.paiement.reste >= 0) &&
+      this.paiement.typeAbonnement !== undefined &&
+      this.paiement.adherent !== undefined &&
+      (this.paiement.dateDebut !== undefined && this.paiement.dateDebut !== null) &&
+      (this.paiement.dateFin !== undefined && this.paiement.dateFin !== null) &&
+      (this.paiement.datePaiement !== undefined && this.paiement.datePaiement !== null)
+    );
 
     return true;
   }
@@ -450,7 +450,8 @@ export class AddPaiementPopupComponent implements OnInit {
         montant: this.paiement.montant,
         reste: this.paiement.reste,
         remarque: this.paiement.remarque,
-        retardPaiement: this.paiement.retardPaiement
+        retardPaiement: this.paiement.retardPaiement,
+        gratuit: this.paiement.gratuit,
       };
       const newPaiement: Partial<Paiement> = { ...paiementData };
       this.paiementService.addPaiement(newPaiement as Paiement, this.paiement.adherent.id)

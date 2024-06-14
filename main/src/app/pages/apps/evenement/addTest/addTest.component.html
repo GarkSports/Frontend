@@ -13,35 +13,37 @@
             </mat-radio-button>
           </mat-radio-group>
         </div>
-
+    
         <!-- Equipe selection -->
         <div *ngIf="selectedOption === 'equipe'">
           <label for="HeadlineAct" class="block text-sm font-medium text-gray-900"> Equipe </label>
-
+    
           <select [(ngModel)]="selectedEquipe" required name="HeadlineAct" id="HeadlineAct"
-            class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm">
+            class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent text-black sm:text-sm">
             <option value=""></option>
-            <option *ngFor="let equipe of equipeList" [value]="equipe.id">{{
-              equipe.nom
-              }}
-            </option>
+            <option *ngFor="let equipe of equipeList" [value]="equipe.id">{{ equipe.nom }}</option>
           </select>
         </div>
         <!-- Member selection -->
         <div *ngIf="selectedOption === 'member'">
-          <label class="block text-sm font-medium text-gray-900"> Equipe </label>
-
-          <div *ngIf="selectedOption === 'member' && selectedEquipe2">
-            <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Members</mat-label>
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-select [(ngModel)]="selectedMembers" multiple name="membres" required required>
-                <mat-option *ngFor="let member of selectedEquipe2.adherents" [value]="member.id">{{
-                  member.firstname
-                  }} {{ member.lastname }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
+          <label for="HeadlineAct" class="block text-sm font-medium text-gray-900"> Equipe </label>
+    
+          <select [(ngModel)]="selectedEquipe2" required name="HeadlineAct" id="HeadlineAct" (change)="setEquipe2($event)"
+            class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent text-black sm:text-sm">
+            <option value=""></option>
+            <option *ngFor="let equipe of equipeList" [value]="equipe.id">{{ equipe.nom }}</option>
+          </select>
+        </div>
+    
+        <div *ngIf="selectedOption === 'member' && selectedEquipe2">
+          <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Members</mat-label>
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-select [(ngModel)]="selectedMembers" multiple name="membres" required>
+              <mat-option *ngFor="let member of selectedEquipe2.adherents" [value]="member.id">
+                {{ member.firstname }} {{ member.lastname }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
       </div>
     </form>
@@ -87,24 +89,7 @@
             is required
           </mat-error>
         </div>
-        <!-- <div class="col-md-12">
-          <mat-checkbox formControlName="repetition">Se répéte</mat-checkbox>
-        </div>
-        <div *ngIf="evenementForm.get('repetition')?.value" class="col-md-12" style="margin-top: 20px;">
-          <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Chaque</mat-label>
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-select [(ngModel)]="selectedTypeRepetition" formControlName="typeRepetition" name="typeRepetition">
-              <mat-option *ngFor="let typeRepetition of typeRepetitions" [value]="typeRepetition">{{ typeRepetition }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div *ngIf="evenementForm.get('repetition')?.value" class="col-md-12" style="margin-top: 20px;">
-          <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Nombre de fois</mat-label>
-          <mat-form-field appearance="outline" class="w-100">
-            <input formControlName="nbRepetition" matInput required type="number"/>
-          </mat-form-field>
-        </div> -->
+
       </div>
       <div class="mt-4 flex justify-center">
         <button class="px-8 py-2 rounded-3xl font-semibold bg-main hover:bg-mainHover disabled:bg-second text-black"
