@@ -167,6 +167,7 @@ export class ListEvenementComponent implements AfterViewInit {
         console.log('evenements fetched successfully', evenements);
         // Assuming dataSource is defined in your component
         this.dataSource.data = evenements;
+        this.sortData('desc');
       },
       (error) => {
         console.error('Error fetching evenements', error);
@@ -500,27 +501,10 @@ export class DetailEventDialogComponent {
   templateUrl: './detailEventMatchAmical.component.html',
 })
 export class DetailEventMatchAmicalDialogComponent {
-  equipes: Equipe[] = [];
   constructor(
-    public dialogRef: MatDialogRef<DetailEventMatchAmicalDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public evenement: Evenement, private evenementService: EvenementService
+    public dialogRef: MatDialogRef<DetailEventDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public evenement: Evenement
   ) { }
-
-  ngOnInit(): void {
-    if (this.evenement.id !== undefined) {
-      this.evenementService.getEquipesByEvenementMatchAmical(this.evenement.id).subscribe(
-        (equipes: Equipe[]) => {
-          this.equipes = equipes;
-          console.log("equipes fetched successfully", this.equipes);
-        },
-        (error) => {
-          console.error('Error fetching equipes:', error);
-        }
-      );
-    } else {
-      console.error('Evenement ID is undefined');
-    }
-  }
 
   onCancelClick(): void {
     this.dialogRef.close(false); // Close the dialog with 'false' value

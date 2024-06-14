@@ -12,4 +12,5 @@ export class Paiement {
     remarque: string;
     retardPaiement: number;
     adherent?: Adherent;
+    gratuit:boolean;
 }

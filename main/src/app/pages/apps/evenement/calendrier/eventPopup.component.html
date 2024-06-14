@@ -7,9 +7,11 @@
                     <th>Nom Evenement</th>
                     <th>Lieu</th>
                     <th>Type</th>
-                    <th>Heure</th>
-                    <th>Equipe</th>
-                    <th>Statut</th>
+                    <ng-container *ngIf="evenement.heure !== null">
+                        <th>Heure</th>
+                        <th>Equipe</th>
+                        <th>Statut</th>
+                      </ng-container>
                 </tr>
             </thead>
             <tbody>
@@ -17,9 +19,11 @@
                     <td>{{ evenement.nomEvent }}</td>
                     <td>{{ evenement.lieu }}</td>
                     <td>{{ formatEnumValue(evenement.type) }}</td>
-                    <td>{{ evenement.date }} {{ evenement.heure.slice(0, 5) }}</td>
-                    <td>{{ evenement.convocationEquipe?.nom }}</td>
-                    <td>{{ evenement.statut }}</td>
+                    <ng-container *ngIf="evenement.heure !== null">
+                        <td>{{ evenement.date }} {{ evenement.heure.slice(0, 5) }}</td>
+                        <td>{{ evenement.convocationEquipe?.nom }}</td>
+                        <td>{{ evenement.statut }}</td>
+                      </ng-container>
                 </tr>
             </tbody>
         </table>
@@ -29,22 +33,22 @@
         <table class="evenement-table">
             <thead>
                 <tr>
+                    <th>Photo</th>
                     <th>Nom</th>
                     <th>Prenom</th>
                     <th>Email</th>
                     <th>Telephone</th>
                     <th>Adresse</th>
-                    <th>Equipe</th>
                 </tr>
             </thead>
             <tbody>
                 <tr class="evenement-item" *ngFor="let member of evenement.convocationMembres">
+                    <td><img [src]="member.photo" alt="Logo" width="40" /></td>
                     <td>{{ member.firstname }}</td>
                     <td>{{ member.lastname }}</td>
                     <td>{{ member.email }}</td>
                     <td>{{ member.telephone }}</td>
                     <td>{{ member.adresse }}</td>
-                    <td>{{ member.nomEquipe }}</td>
                 </tr>
             </tbody>
         </table>

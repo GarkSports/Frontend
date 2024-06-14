@@ -29,7 +29,7 @@ export class AddTestComponent {
     evenement: Evenement = new Evenement();
     selectedOption: string = 'equipe';
     selectedEquipe: number; // Define selectedEquipe property here
-    selectedEquipe2: Equipe;
+    selectedEquipe2: Equipe | undefined;
     selectedMembers: number[] = []; // Define selectedMembers property here
     typeRepetitions: string[] = Object.values(TypeRepetition).filter(value => typeof value === 'string').map(value => String(value));
     selectedTypeRepetition: string;
@@ -38,11 +38,19 @@ export class AddTestComponent {
         private formBuilder: FormBuilder,
         private eventService: EvenementService,
         private router: Router
-    ) {}
+    ) { }
 
-  setEquipe2(event:any){
-      this.selectedEquipe2 = this.equipeList.filter(equipe => equipe.id == event.target.value)[0];
-  }
+    setEquipe2(event: any): void {
+        const selectedEquipeId = event.target.value;
+        this.selectedEquipe2 = this.equipeList.find(equipe => equipe.id === parseInt(selectedEquipeId, 10));
+        if (this.selectedEquipe2 && this.selectedEquipe2.adherents) {
+            // Select all members by default
+            this.selectedMembers = this.selectedEquipe2.adherents.map(member => member.id);
+        } else {
+            this.selectedMembers = [];
+        }
+    }
+    
     ngOnInit(): void {
         this.initializeForm();
         this.getEquipes();

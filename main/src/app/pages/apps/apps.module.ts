@@ -181,6 +181,7 @@ import {FaIconComponent} from "@fortawesome/angular-fontawesome";
     AppSalesProfitComponent,
     AppMonthlyEarningsTwoComponent,
     DefaultImagePipe,
+    FaIconComponent,
   ],
   exports: [TablerIconsModule],
   declarations: [
