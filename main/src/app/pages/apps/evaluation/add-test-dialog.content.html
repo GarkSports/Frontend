@@ -1,27 +1,61 @@
-<h1 mat-dialog-title>Ajouter un nouveau modèle</h1>
-<div mat-dialog-content>
+<div mat-dialog-title>
+  <i-tabler (click)="closeDialog()" class="hover:cursor-pointer" name="arrow-left"></i-tabler>
+</div>
+<div class="pt-12 pb-4" mat-dialog-content>
+  <div class="row">
+    <div class="col flex justify-center">
+      <h1 class="text-xl text-black text-center">Ajouter un nouveau modèle</h1>
+    </div>
+  </div>
+
   <form [formGroup]="testForm">
-    <mat-form-field appearance="outline">
-      <input matInput placeholder="Test Name" formControlName="testName">
-    </mat-form-field>
-    
-    <div formArrayName="categories">
-      <div *ngFor="let categorie of categories.controls; let i = index" [formGroupName]="i">
-        <mat-form-field appearance="outline">
-          <input matInput placeholder="categorie Name" [formControlName]="'categorieName'">
-        </mat-form-field>
-        <button mat-icon-button (click)="removeCategorie(i)">
-          <mat-icon>remove_circle</mat-icon>
-        </button>
+    <div class="mt-8 mb-2">
+      <div class="px-8 ">
+        <div class="dialog-content">
+
+
+          <label class="block text-sm font-medium text-gray-900"> Nom du Test </label>
+          <input class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm" formControlName="testName" matInput
+                 placeholder="Nom du Test"/>
+
+          <div formArrayName="categories">
+            <div *ngFor="let categorie of categories.controls; let i = index" [formGroupName]="i" class="mt-2">
+
+              <div class="row">
+                <div class="col-11">
+                  <label class="block text-sm font-medium text-gray-900"> Nom de la Catégorie </label>
+                  <input [formControlName]="'categorieName'" class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm" matInput
+                         placeholder="categorie Name"/>
+                </div>
+                <div class="col-1 pt-5">
+                  <button (click)="removeCategorie(i)" mat-icon-button>
+                    <mat-icon>remove_circle</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <input formControlName="testId" type="hidden">
+        </div>
       </div>
     </div>
-    <button mat-icon-button (click)="addCategorie()">
-      <mat-icon>add_circle</mat-icon>
-    </button>
-    <input type="hidden" formControlName="testId">
   </form>
-</div>
-<div mat-dialog-actions>
-  <button mat-button (click)="closeDialog()">Cancel</button>
-  <button mat-button (click)="doAction()">Save</button>
+
+  <div class="flex justify-center w-full mt-4">
+    <button (click)="addCategorie()" class="flex justify-center">
+      <div>
+        <mat-icon color="#000000">add_circle</mat-icon>
+
+      </div>
+      <div>
+        <span class="text-sm  ">Ajouter une catégorie</span>
+
+      </div>
+    </button>
+
+  </div>
+  <div class=" flex justify-center mt-4">
+    <button (click)="doAction()" class="bg-main font-bold rounded-3xl h-9 px-5 py-2    text-white">Confirmer</button>
+  </div>
+
 </div>
