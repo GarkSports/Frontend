@@ -82,7 +82,10 @@ export class ManagerService {
       roleName: managerData.roleName,
       adresse:managerData.adresse,
       telephone: managerData.telephone,
-      photo:managerData.photo
+      photo:managerData.photo,
+      nationalite: managerData.nationalite,
+      dateNaissance: managerData.dateNaissance,
+
     };
       console.log("this is service",requestBody);
 

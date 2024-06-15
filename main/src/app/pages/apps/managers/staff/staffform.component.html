@@ -2,7 +2,7 @@
   <div class=" ">
     <div class="bg-third   px-8  py-5 rounded-3xl flex justify-center">
       <div class=" w-full">
-        <form [formGroup]="isAdherent ? adherentForm : managerForm" class="form-section">
+        <form [formGroup]="form" class="form-section">
         <div class="flex justify-end">
           <button>
             <tabler-icon name="trash" (click)="deleteUser()"></tabler-icon>
@@ -12,7 +12,7 @@
             <button (click)="fileInput.click()">
               <img
                 alt=""
-                class="size-24 rounded-full  object-cover" src="{{managerForm.get('photo')?.value|defaultImage: managerForm.get('lastname')?.value:managerForm.get('firstname')?.value:null:'000000'}}">
+                class="size-24 rounded-full  object-cover" src="{{form.get('photo')?.value|defaultImage: form.get('lastname')?.value:form.get('firstname')?.value:null:'000000'}}">
             </button>
             <input #fileInput (change)="uploadFile($event)" hidden id="photo" name="photo" type="file"/>
           </div>
@@ -162,7 +162,7 @@
           </div>
         </div>
 
-        <form [formGroup]="adherentForm">
+        <form [formGroup]="form">
           <div class="grid grid-cols-2 gap-16 mt-6">
             <div class="col-span-1">
               <label class="block text-sm font-medium text-gray-400"> Nom </label>

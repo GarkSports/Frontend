@@ -79,7 +79,7 @@ export class AppStafflistComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.dataSource = new MatTableDataSource<Manager>([]);
+    this.dataSource = new MatTableDataSource<any>([]);
     this.fetchRoleNames();
     //this.getManagers();
     this.getEquipeNames();
