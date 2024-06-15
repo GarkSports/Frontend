@@ -246,6 +246,13 @@ export class AppStaffformContentComponent implements OnInit {
                 this.local_data.id = adherent.id;
                 this.photo = adherent.photo;
                 this.getAssignedEquipesForAdherent(adherent.id);
+                // this.initForm(user: any): void{
+                //   if (this.userRole==='ADHERENT'){
+                //     this.initAdherentForm();
+                //   } else{
+                //     this.initManagerForm();
+                //   }
+                // }
                 
                 const dateNaissance = new Date(adherent.dateNaissance);
                 const today = new Date();
@@ -313,6 +320,14 @@ export class AppStaffformContentComponent implements OnInit {
       photo: [manager?.photo],
       telephone: [manager?.telephone, Validators.required],
     });
+  }
+
+  initForm(user: any): void{
+    if (this.userRole==='ADHERENT'){
+      this.initAdherentForm();
+    } else{
+      this.initManagerForm();
+    }
   }
 
   initAdherentForm(adherent?: Adherent): void {
