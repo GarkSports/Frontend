@@ -334,14 +334,14 @@ export class FullComponent implements OnInit {
           iconName: 'messages',
           route: 'apps/chat',
         },
-        {
-          displayName: 'Statistiques',
-          iconName: 'chart-dots',
-        },
-        {
-          displayName: 'Collecte',
-          iconName: 'coins',
-        },
+        // {
+        //   displayName: 'Statistiques',
+        //   iconName: 'chart-dots',
+        // },
+        // {
+        //   displayName: 'Collecte',
+        //   iconName: 'coins',
+        // },
         {
           displayName: 'Disciplines',
           iconName: 'medal',

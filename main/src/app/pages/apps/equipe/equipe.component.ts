@@ -1,18 +1,18 @@
-import { DatePipe } from '@angular/common';
-import { AfterViewInit, Component, Inject, ViewChild } from '@angular/core';
-import { AngularFireStorage } from '@angular/fire/compat/storage';
-import { NgForm } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { MatSelectionListChange } from '@angular/material/list';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
-import { EquipeService } from 'src/app/services/equipe.service';
-import { Adherent } from 'src/models/adherent.model';
-import { Discipline } from 'src/models/discipline.model';
-import { Entraineur } from 'src/models/entraineur.model';
-import { GenreEquipe } from 'src/models/enums/genreEquie.model';
-import { Equipe } from 'src/models/equipe.model';
+import {DatePipe} from '@angular/common';
+import {AfterViewInit, Component, Inject, ViewChild} from '@angular/core';
+import {AngularFireStorage} from '@angular/fire/compat/storage';
+import {NgForm} from '@angular/forms';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {MatSelectionListChange} from '@angular/material/list';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {Router} from '@angular/router';
+import {EquipeService} from 'src/app/services/equipe.service';
+import {Adherent} from 'src/models/adherent.model';
+import {Discipline} from 'src/models/discipline.model';
+import {Entraineur} from 'src/models/entraineur.model';
+import {GenreEquipe} from 'src/models/enums/genreEquie.model';
+import {Equipe} from 'src/models/equipe.model';
 
 @Component({
   templateUrl: './equipe.component.html',
@@ -346,7 +346,7 @@ export class EquipeComponent implements AfterViewInit {
 
   openUpdateDialog(equipe: Equipe): void {
     const dialogRef = this.dialog.open(UpdateEquipePopupComponent, {
-      data: equipe
+      data: equipe, width: '700px', height: '600px'
     });
 
     dialogRef.afterClosed().subscribe(updatedPaiement => {
@@ -426,7 +426,7 @@ export class UpdateEquipePopupComponent {
     } else {
       this.uploadingImage = false; // Reset uploadingImage flag if no file is selected (canceled)
     }
-  }  
+  }
 }
 
 @Component({

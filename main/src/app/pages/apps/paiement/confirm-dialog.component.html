@@ -1,59 +1,74 @@
-<h2 mat-dialog-title class="dialog-title">Confirm Action</h2>
-<div mat-dialog-content class="dialog-content">
-    <p>{{ data.message }}</p>
+<div class="border rounded-lg shadow relative w-full py-2 px-4">
+  <!--  <div class="flex justify-end p-2">-->
+  <!--    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">-->
+  <!--      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>-->
+  <!--    </button>-->
+  <!--  </div>-->
+
+  <div class="p-6 pt-0 text-center">
+    <svg class="w-20 h-20 text-red-600 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+         xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"
+            stroke-width="2"></path>
+    </svg>
+    <h3 class="text-xl font-normal text-black mt-5 mb-6">{{ data.message }}</h3>
+    <button (click)="onConfirmClick()" class="bg-red-600 font-bold rounded-3xl h-9 px-5 py-2  text-white">
+      Confirmer
+    </button>
+    <button (click)="onCancelClick()"
+            class="border-2 border-second font-bold rounded-3xl h-9 px-5 py-1.5    text-black ml-4">
+      Annuler
+    </button>
+  </div>
 </div>
-<div mat-dialog-actions class="dialog-actions">
-    <button mat-button class="action-button primary" (click)="onCancelClick()">Cancel</button>
-    <button mat-button class="action-button warn" (click)="onConfirmClick()">Confirm</button>
-</div>
 
-<style>
-    .dialog-title {
-        font-size: 1.5rem;
-        margin-bottom: 1rem;
-    }
+<!--<style>-->
+<!--  .dialog-title {-->
+<!--    font-size: 1.5rem;-->
+<!--    margin-bottom: 1rem;-->
+<!--  }-->
 
-    .dialog-content {
-        margin-bottom: 1.5rem;
-    }
+<!--  .dialog-content {-->
+<!--    margin-bottom: 1.5rem;-->
+<!--  }-->
 
-    .dialog-actions {
-        display: flex;
-        justify-content: flex-end;
-    }
+<!--  .dialog-actions {-->
+<!--    display: flex;-->
+<!--    justify-content: flex-end;-->
+<!--  }-->
 
 
-    .action-button:hover {
-        background-color: rgba(0, 0, 0, 0.1);
-    }
+<!--  .action-button:hover {-->
+<!--    background-color: rgba(0, 0, 0, 0.1);-->
+<!--  }-->
 
-    .action-button.primary {
-        background-color: #007bff;
-        color: #fff;
-    }
+<!--  .action-button.primary {-->
+<!--    background-color: #007bff;-->
+<!--    color: #fff;-->
+<!--  }-->
 
-    .action-button.primary:hover {
-        background-color: #0056b3;
-    }
+<!--  .action-button.primary:hover {-->
+<!--    background-color: #0056b3;-->
+<!--  }-->
 
-    /* Add this to your existing CSS */
-    .action-button {
-        margin-left: 1rem;
-        background-color: #007bff;
-        /* Blue background color */
-        color: #fff;
-        /* White text color */
-    }
+<!--  /* Add this to your existing CSS */-->
+<!--  .action-button {-->
+<!--    margin-left: 1rem;-->
+<!--    background-color: #007bff;-->
+<!--    /* Blue background color */-->
+<!--    color: #fff;-->
+<!--    /* White text color */-->
+<!--  }-->
 
-    .action-button.warn {
-        background-color: #dc3545;
-        /* Red background color */
-        color: #fff;
-        /* White text color */
-    }
+<!--  .action-button.warn {-->
+<!--    background-color: #dc3545;-->
+<!--    /* Red background color */-->
+<!--    color: #fff;-->
+<!--    /* White text color */-->
+<!--  }-->
 
 
-    .action-button.warn:hover {
-        background-color: #c82333;
-    }
-</style>
+<!--  .action-button.warn:hover {-->
+<!--    background-color: #c82333;-->
+<!--  }-->
+<!--</style>-->

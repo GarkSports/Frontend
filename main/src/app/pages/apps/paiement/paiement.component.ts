@@ -235,7 +235,7 @@ export class PaiementComponent implements AfterViewInit {
 
   onDeletePaiement(idPaiement: number): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: '250px',
+      width: '400px',
       data: { message: 'Are you sure you want to delete this paiement?' }
     });
 

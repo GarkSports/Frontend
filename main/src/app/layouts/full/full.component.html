@@ -27,7 +27,7 @@
             }
           </mat-nav-list>
         </ng-scrollbar>
-        
+
       </div>
     </mat-sidenav>
     }
@@ -84,16 +84,16 @@
       <main class="pageWrapper" [ngClass]="{
         maxWidth: options.boxed
       }">
-       
+
         <!-- ============================================================== -->
         <!-- Outlet -->
         <!-- ============================================================== -->
         <router-outlet></router-outlet>
-        <div class="customizerBtn">
-          <button mat-fab color="primary" (click)="customizerRight.toggle()">
-            <mat-icon>settings</mat-icon>
-          </button>
-        </div>
+        <!--        <div class="customizerBtn">-->
+        <!--          <button mat-fab color="primary" (click)="customizerRight.toggle()">-->
+        <!--            <mat-icon>settings</mat-icon>-->
+        <!--          </button>-->
+        <!--        </div>-->
       </main>
     </mat-sidenav-content>
 

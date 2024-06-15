@@ -9,13 +9,13 @@
     <mat-sidenav #chatnav [mode]="isOver() ? 'over' : 'side'" [opened]="!isOver()" (open)="sidePanelOpened = true"
       (close)="sidePanelOpened = false">
       <ng-scrollbar class="position-relative gray-background" style="height: 100%">
-        
-          <div class="d-flex justify-content-center align-items-center  p-24">
+
+        <div class="d-flex justify-content-center align-items-center  p-24">
             <button mat-flat-button class="w-100" (click)="openDialog('Ajouter', {})" color="primary">
               Ajouter Une Discussion
             </button>
           </div>
-        
+
 
         <div class="p-x-24">
           <!-- search -->
