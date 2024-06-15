@@ -282,7 +282,7 @@ import { NgxImageViewerModule } from '@simfyz/ngx-image-viewer';
     AppManagerFormComponent,
     AppComptabiliteComponent,
     AddBeneficeDepenseComponent,
-    UpdateBeneficeDepenseComponent
+    UpdateBeneficeDepenseComponent,
   ],
   providers: [DatePipe],
 })

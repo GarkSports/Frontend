@@ -24,7 +24,7 @@
           </ng-template>
           <br>
           <br>
-          <form [formGroup]="this.isAdherent ? adherentForm : managerForm" class="form-section">
+          <form [formGroup]="managerForm" class="form-section">
             <div class="row" >
                 <div class="col-sm-6"> 
                     <mat-label class="mat-subtitle-2 f-w-600 d-block m-b-16">Nom</mat-label> 
@@ -164,8 +164,8 @@
                 <mat-form-field appearance="outline" class="w-100">
                 <mat-select formControlName="equipes" multiple required id="equipes" name="equipes" 
                 (selectionChange)="onEquipeChange($event)">
-                  <mat-option *ngFor="let equipe of equipeList" [value]="equipe.nom">
-                    {{ equipe.nom }}
+                  <mat-option *ngFor="let equipe of equipeNoms" [value]="equipe">
+                    {{ equipe }}
                   </mat-option>
                   </mat-select>
               </mat-form-field>
