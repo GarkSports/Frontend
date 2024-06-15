@@ -29,11 +29,13 @@
       <label for="HeadlineAct" class="block text-sm font-medium text-gray-900"> Date </label>
       <input type="date"
              class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent text-black sm:text-sm"
-             required formControlName="date"/>
+             required formControlName="date"
+             />
       <p class="text-red-600" *ngIf="evenementForm.get('date')?.invalid && evenementForm.get('date')?.touched">
         Champ Date est obligatoire!
       </p>
     </div>
+    
 
     <div class="mt-4">
       <label for="HeadlineAct" class="block text-sm font-medium text-gray-900"> Prix D'unité </label>

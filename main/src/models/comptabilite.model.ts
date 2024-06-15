@@ -6,6 +6,7 @@ export class Benefices {
     prixunite: number; 
     total: number; 
     date: string;
+    benefpaiement:boolean;
   }
 
   export class Depenses extends Benefices {

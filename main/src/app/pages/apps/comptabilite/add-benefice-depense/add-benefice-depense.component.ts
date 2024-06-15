@@ -11,6 +11,9 @@ import { Benefices, Depenses } from 'src/models/comptabilite.model';
 })
 export class AddBeneficeDepenseComponent {
   addtype: any;
+
+    today:string;
+
   
   evenementForm: FormGroup;
 
@@ -23,10 +26,13 @@ export class AddBeneficeDepenseComponent {
 
     this.addtype = activatedRouter.snapshot.paramMap.get('type');
 
+    this.today = new Date().toISOString().split('T')[0];  // Format today's date as yyyy-MM-dd
+
+
     this.evenementForm = this.fb.group({
       type: ['', Validators.required],
       etat: ['', Validators.required],
-      date: ['', Validators.required],
+      date: [this.today, Validators.required],
       prixunite: [0, [Validators.required, Validators.min(1)]],
       quantite: [0, [Validators.required, Validators.min(1)]],
       

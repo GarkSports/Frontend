@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnInit, Optional, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -27,6 +27,7 @@ import autoTable from 'jspdf-autotable';
 import { Paiement } from 'src/models/paiement.model';
 import { Adherent } from 'src/models/adherent.model';
 import { StatutAdherent } from 'src/models/enums/statutAdherent.model';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 
 
@@ -94,15 +95,21 @@ export class AppComptabiliteComponent implements OnInit {
   paiementtotalCount: number;
   paiementquotient: number;
 
+  beneficespaiement: Benefices;
+  beneficespaiementdataSource = new MatTableDataSource<Benefices>([]);
+
 
 
   constructor(
     private ComptabiliteService: ComptabiliteService,
     private router: Router,
     private paiementService: PaiementService,
+    public dialog: MatDialog,
+
     ) 
     {
       this.selectedDate = new Date(); 
+      this.loadbeneficepaiement();
     }
 
   typeOptions: any;
@@ -145,6 +152,7 @@ export class AppComptabiliteComponent implements OnInit {
 
   
   ngOnInit(): void {
+    
     this.loadBenefices();
     this.loadDepenses();
     this.getMonthlySums();
@@ -152,6 +160,21 @@ export class AppComptabiliteComponent implements OnInit {
     this.updateChart();
     this.getPaiements();
 
+    
+    
+
+  }
+  loadbeneficepaiement() {
+    this.ComptabiliteService.getbeneficepaiement().subscribe(data =>{
+      console.log('sssssssssss',data);
+      this.beneficespaiement=data;
+
+      
+    },
+    error => {
+      console.error('Error fetching benefices', error);
+    }
+      )
   }
 
   getPaiements(): void {
@@ -171,6 +194,8 @@ export class AppComptabiliteComponent implements OnInit {
     this.paiementnonPayeCount = this.paiementnonPayeList.length;
     // Filter out adherents with defined statutAdherent
     this.paiementtotalCount = this.paiementList.filter(paiement => paiement.adherent?.statutAdherent !== undefined).length;
+
+    
   
     // Calculate quotient
     this.paiementquotient = this.paiementtotalCount > 0 ? (this.paiementnonPayeCount / this.paiementtotalCount) : 0;
@@ -247,11 +272,25 @@ export class AppComptabiliteComponent implements OnInit {
   loadBenefices(): void {
     this.ComptabiliteService.getAllBenefices().subscribe(
       data => {
+      const index = data.findIndex(item => item.type.startsWith('Benefices paiement'));
+
+      if (index !== -1) {
+        // Remove the item from the original array
+        const [beneficesPaiement] = data.splice(index, 1);
+        
+        // Place the item at the beginning of the array
+        this.beneficesList = [beneficesPaiement, ...data];
+      } else {
+        // If no such item is found, just use the original data
         this.beneficesList = data;
+      }
+
+
         this.BeneficesdataSource.data = this.beneficesList;
         this.BeneficesdataSource.paginator = this.beneficePaginator;
-        this.calculateTotalSumbenefices();
         this.populateFilterOptions();
+
+
 
       },
       error => {
@@ -260,9 +299,7 @@ export class AppComptabiliteComponent implements OnInit {
     );
   }
 
-  calculateTotalSumbenefices(): void {
-    this.totalSumBenefices = this.BeneficesdataSource.data.reduce((acc, curr) => acc + curr.total, 0);
-  }
+
 
   loadDepenses(): void {
     this.ComptabiliteService.getAllDepenses().subscribe(
@@ -270,7 +307,7 @@ export class AppComptabiliteComponent implements OnInit {
         this.depensesList = data;
         this.DepensesdataSource.data = this.depensesList;
         this.DepensesdataSource.paginator = this.depensesPaginator;
-        this.calculateTotalSumdepenses();
+        
         this.populateFilterOptions();
 
       },
@@ -279,9 +316,8 @@ export class AppComptabiliteComponent implements OnInit {
       }
     );
   }
-  calculateTotalSumdepenses() {
-    this.totalSumDepenses = this.DepensesdataSource.data.reduce((dep, deps) => dep + deps.total, 0);
-  }
+
+
 
   navigateToAddPage(type: 'benefices' | 'depenses'): void {
     this.router.navigate(['apps/comptabilite/add/',type]);
@@ -291,14 +327,39 @@ export class AppComptabiliteComponent implements OnInit {
     this.router.navigate(['apps/comptabilite/update/',type ,id]);
   }
 
+  deletebeneficesdepenses(type: 'benefices' | 'depenses',id:number): void {
+    if(type === 'benefices'){
+      this.deleteBenefice(id);
+      
+
+    }else if (type === 'depenses'){
+      this.deleteDepense(id);
+
+
+    }
+
+  }
+
 
 
   deleteBenefice(id: number): void {
     this.ComptabiliteService.deleteBenefice(id).subscribe(
       () => {
+        this.ngOnInit();
       },
       error => {
         console.error('Error deleting benefice', error);
+      }
+    );
+  }
+
+  deleteDepense(id: number): void {
+    this.ComptabiliteService.deleteDepense(id).subscribe(
+      () => {
+        this.ngOnInit();
+      },
+      error => {
+        console.error('Error deleting depense', error);
       }
     );
   }
@@ -480,5 +541,68 @@ applyFilterByMonth(): void {
     (doc as any).autoTable(columns, data);
     doc.save('depenses-table.pdf');
   }
+
+  openDialog(action: string, obj: any): void {
+    obj.action = action;
+    const dialogRef = this.dialog.open(AppComptaDialogContentComponent, {
+      data: this.paiementnonPayeList,
+    });
+
+
+  }
+
+
+
+}
   
+@Component({
+  selector: 'app-dialog-content',
+  templateUrl: 'compta-dialog.html'
+})
+
+export class AppComptaDialogContentComponent implements AfterViewInit {
+  displayedColumns: string[] = [
+    'photo',
+    'membre',
+    'equipe',
+    'telephone',
+    'type_abonnement',
+    'date_paiement',
+    'date_abonnement',
+  ];
+
+  dataSource = new MatTableDataSource<Paiement>([]);
+
+  @ViewChild(MatPaginator) nonpayePaginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+ 
+
+
+
+  constructor(
+    public dialogRef: MatDialogRef<AppComptaDialogContentComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: Paiement[]
+  ) {
+    this.dataSource.data=data;
+  }
+  ngAfterViewInit(): void {
+    
+    this.dataSource.paginator=this.nonpayePaginator;
+    this.dataSource.sort = this.sort;
+    
+  }
+  formatEnumValue(value: string): string {
+    return value.replace(/_/g, ' ');
+  }
+  doAction(): void {
+   // this.dialogRef.close({ event: this.action, data: this.local_data });
+  }
+
+  closeDialog(): void {
+    this.dialogRef.close({ event: 'Cancel' });
+  }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
 }
