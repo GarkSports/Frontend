@@ -1,17 +1,18 @@
-import { DatePipe } from '@angular/common';
-import { AfterViewInit, Component, Inject, ViewChild } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
-import { EquipeService } from 'src/app/services/equipe.service';
-import { EvenementService } from 'src/app/services/evenement.service';
-import { Adherent } from 'src/models/adherent.model';
-import { UpdateEvenementRequest } from 'src/models/dto/UpdateEvenementRequest.model';
-import { EvenementType } from 'src/models/enums/evenementType';
-import { StatutEvenement } from 'src/models/enums/statutEvenenement.model';
-import { Equipe } from 'src/models/equipe.model';
-import { Evenement } from 'src/models/evenement.model';
+import {DatePipe} from '@angular/common';
+import {AfterViewInit, Component, Inject, ViewChild} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {Router} from '@angular/router';
+import {EquipeService} from 'src/app/services/equipe.service';
+import {EvenementService} from 'src/app/services/evenement.service';
+import {Adherent} from 'src/models/adherent.model';
+import {UpdateEvenementRequest} from 'src/models/dto/UpdateEvenementRequest.model';
+import {UpdateEvenementRequestBody} from 'src/models/dto/updateMatchAmicalRequest.model';
+import {EvenementType} from 'src/models/enums/evenementType';
+import {StatutEvenement} from 'src/models/enums/statutEvenenement.model';
+import {Equipe} from 'src/models/equipe.model';
+import {Evenement} from 'src/models/evenement.model';
 
 @Component({
   templateUrl: './listEvenement.component.html',
@@ -42,6 +43,7 @@ export class ListEvenementComponent implements AfterViewInit {
     'action'
   ];
 
+  EvenementType = EvenementType;
   dataSource = new MatTableDataSource<Evenement>([]);
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator =
@@ -59,6 +61,17 @@ export class ListEvenementComponent implements AfterViewInit {
     this.getEvenements();
     this.getEquipes();
   }
+
+  getEquipeValue(element: Evenement): string {
+    if (element.convocationEquipe) {
+      return element.convocationEquipe.nom;
+    } else if (element.convocationEquipesMatchAmical && element.convocationEquipesMatchAmical.length > 0) {
+      return element.convocationEquipesMatchAmical.map(equipe => equipe.nom).join(', ');
+    } else {
+      return '';
+    }
+  }
+
 
   applyFilterByType(filterValue: string): void {
     if (this.selectedEventTypes.includes(filterValue)) {
@@ -124,18 +137,21 @@ export class ListEvenementComponent implements AfterViewInit {
 
   sortData(sortOrder: string): void {
     this.dataSource.data = this.dataSource.data.sort((a, b) => {
-      const dateA = new Date(a.date + ' ' + a.heure);
-      const dateB = new Date(b.date + ' ' + b.heure);
-      if (sortOrder === 'asc') {
-        return dateA.getTime() - dateB.getTime();
-      } else if (sortOrder === 'desc') {
-        return dateB.getTime() - dateA.getTime();
-      } else {
-        return 0;
-      }
+        // Define dateA and dateB based on the presence of the 'heure' field
+        const dateA = new Date(a.date + (a.heure ? ' ' + a.heure : ''));
+        const dateB = new Date(b.date + (b.heure ? ' ' + b.heure : ''));
+
+        if (sortOrder === 'asc') {
+            return dateA.getTime() - dateB.getTime();
+        } else if (sortOrder === 'desc') {
+            return dateB.getTime() - dateA.getTime();
+        } else {
+            return 0;
+        }
     });
     this.table.renderRows(); // Ensure the table is re-rendered to reflect the sorted data
-  }
+}
+
 
   toggleCheckboxesVisibility1() {
     this.showCheckboxes1 = !this.showCheckboxes1;
@@ -151,6 +167,7 @@ export class ListEvenementComponent implements AfterViewInit {
         console.log('evenements fetched successfully', evenements);
         // Assuming dataSource is defined in your component
         this.dataSource.data = evenements;
+        this.sortData('desc');
       },
       (error) => {
         console.error('Error fetching evenements', error);
@@ -173,8 +190,7 @@ export class ListEvenementComponent implements AfterViewInit {
 
   openAddEvenementDialog(): void {
     const dialogRef = this.dialog.open(AddEvenementPopupComponent, {
-      width: '720.6px',
-      height: '500px',
+      width: '700px',
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -247,7 +263,20 @@ export class ListEvenementComponent implements AfterViewInit {
 
   onUpdateEvenement(evenement: Evenement): void {
     const dialogRef = this.dialog.open(UpdateEvenementPopupComponent, {
-      data: evenement
+      data: evenement, width: '700px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // User confirmed update, refresh the list
+        this.getEvenements();
+      }
+    });
+  }
+
+  onUpdateEvenementMatchAmical(evenement: Evenement): void {
+    const dialogRef = this.dialog.open(UpdateEvenementMatchAmicalPopupComponent, {
+      data: evenement, width: '700px'
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -260,7 +289,18 @@ export class ListEvenementComponent implements AfterViewInit {
 
   onDetailsEvenement(evenement: Evenement): void {
     const dialogRef = this.dialog.open(DetailEventDialogComponent, {
-      data: evenement
+      data: evenement, width: '700px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+      }
+    });
+  }
+
+  onDetailsEvenementMatchAmical(evenement: Evenement): void {
+    const dialogRef = this.dialog.open(DetailEventMatchAmicalDialogComponent, {
+      data: evenement, width: '700px'
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -396,9 +436,70 @@ export class UpdateEvenementPopupComponent {
 }
 
 @Component({
+  selector: 'app-update-evenement-matchamical-popup',
+  templateUrl: './updateEvenementMatchAmical.component.html',
+})
+export class UpdateEvenementMatchAmicalPopupComponent {
+  memberList: Adherent[] = [];
+  memberIds: number[] = [];
+  constructor(public dialogRef: MatDialogRef<UpdateEvenementPopupComponent>,
+    @Inject(MAT_DIALOG_DATA) public evenement: Evenement, private evenementService: EvenementService) { }
+
+
+
+  ngOnInit(): void {
+
+  }
+
+  updateEvenement(): void {
+    if (this.evenement.id !== undefined) {
+      const requestBody: UpdateEvenementRequestBody = {
+        nomEvent: this.evenement.nomEvent,
+        lieu: this.evenement.lieu,
+        date: this.evenement.date,
+      };
+
+      this.evenementService.updateEvenementMatchAmical(this.evenement.id, requestBody).subscribe(
+        (updatedEvenement: Evenement) => {
+          console.log('Evenement updated successfully:', updatedEvenement);
+          this.dialogRef.close(updatedEvenement);
+        },
+        (error: any) => {
+          console.error('Error updating evenement:', error);
+        }
+      );
+    } else {
+      console.error('Evenement ID is undefined');
+    }
+  }
+
+  isValidForm(): boolean {
+    return !!this.evenement.nomEvent && !!this.evenement.lieu && !!this.evenement.date;
+  }
+
+  onCancelClick(): void {
+    this.dialogRef.close();
+  }
+}
+
+@Component({
   templateUrl: './detailEvent.component.html',
 })
 export class DetailEventDialogComponent {
+  constructor(
+    public dialogRef: MatDialogRef<DetailEventDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public evenement: Evenement
+  ) { }
+
+  onCancelClick(): void {
+    this.dialogRef.close(false); // Close the dialog with 'false' value
+  }
+}
+
+@Component({
+  templateUrl: './detailEventMatchAmical.component.html',
+})
+export class DetailEventMatchAmicalDialogComponent {
   constructor(
     public dialogRef: MatDialogRef<DetailEventDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public evenement: Evenement

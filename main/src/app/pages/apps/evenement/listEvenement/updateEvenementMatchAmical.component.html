@@ -1,0 +1,69 @@
+<h2 class="f-w-500 m-b-24" mat-dialog-title>Update Evenement</h2>
+<mat-dialog-content style="max-width: 600px">
+    <!-- Form fields for updating event attributes -->
+    <div class="form-row" style="margin-top: 10px;">
+        <div class="input-container" style="width: 100%;">
+            <mat-form-field appearance="outline" style="width: 100%;">
+                <mat-label>Nom</mat-label>
+                <input matInput type="text" placeholder="Nom" [(ngModel)]="evenement.nomEvent" required />
+                <mat-error *ngIf="!evenement.nomEvent">Nom est requis</mat-error>
+            </mat-form-field>
+        </div>
+        <div class="input-container" style="width: 100%;">
+            <mat-form-field appearance="outline" style="width: 100%;">
+                <mat-label>Lieu</mat-label>
+                <input matInput type="text" [(ngModel)]="evenement.lieu" required />
+                <mat-error *ngIf="!evenement.date">Lieu est requis</mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+
+
+    <div class="form-row">
+        <div class="input-container">
+            <mat-form-field appearance="outline">
+                <mat-label>Date</mat-label>
+                <input matInput [matDatepicker]="picker" [(ngModel)]="evenement.date" required />
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                <mat-error *ngIf="!evenement.date">Date est requis</mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+    
+</mat-dialog-content>
+<mat-dialog-actions>
+    <!-- Buttons for Save and Cancel -->
+    <button mat-raised-button color="primary" (click)="updateEvenement()" [disabled]="!isValidForm()">Save</button>
+    <button mat-raised-button class="cancel-button" (click)="onCancelClick()">Cancel</button>
+</mat-dialog-actions>
+
+<style>
+    .form-row {
+        display: flex;
+        margin-bottom: 16px;
+    }
+
+    .input-container {
+        flex: 1;
+        margin-right: 10px;
+    }
+
+    ::ng-deep .mat-dialog-actions button {
+        min-width: 100px;
+    }
+
+    .cancel-button {
+        background-color: #FA9175;
+        /* Custom color */
+        color: white;
+        /* Text color */
+    }
+
+    .save-button {
+        background-color: #4CAF50;
+        /* Custom color */
+        color: white;
+        /* Text color */
+    }
+</style>

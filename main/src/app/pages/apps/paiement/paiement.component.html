@@ -73,6 +73,15 @@
     <div class="table-responsive gray-background">
       <table mat-table [dataSource]="dataSource" class="w-100 gray-background">
 
+        <ng-container matColumnDef="photo">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+
+          </th>
+          <td *matCellDef="let element" class="f-s-14" mat-cell><img
+            [src]="element.adherent.photo|defaultImage: element.firstname : element.lastname :'ffffff':'000000'"
+            alt="Logo" width="40"/></td>
+        </ng-container>
+
         <ng-container matColumnDef="membre">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
             Membre
@@ -80,6 +89,8 @@
           <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.adherent.firstname }} {{
             element.adherent.lastname }}</td>
         </ng-container>
+
+
 
         <ng-container matColumnDef="telephone">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
@@ -93,6 +104,15 @@
             Type
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.typeAbonnement }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="date_paiement">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Date Paiement
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">
+            {{ element.datePaiement | date }}
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="date_abonnement">

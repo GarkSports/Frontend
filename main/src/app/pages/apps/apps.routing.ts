@@ -49,7 +49,8 @@ import { AppTestContentComponent } from './evaluation/test.component';
 import { AppManagerFormComponent } from './admin/managerform.component'; 
 import { AppComptabiliteComponent } from './comptabilite/comptabilite.component';
 import { AddBeneficeDepenseComponent } from './comptabilite/add-benefice-depense/add-benefice-depense.component';
-import { UpdateBeneficeDepenseComponent } from './comptabilite/update-benefice-depense/update-benefice-depense.component'; 
+import { UpdateBeneficeDepenseComponent } from './comptabilite/update-benefice-depense/update-benefice-depense.component';
+import {AddPostPageComponent} from './blogs/bloglist/add-post-page/add-post-page.component'
 import { NewMessagePageComponent } from './chat/new-message-page/new-message-page.component';
 import { AdminNewMessagePageComponent } from './chat/admin-new-message-page/admin-new-message-page.component';
 import { AddEquipeComponent } from './equipe/addEquipe.component';
@@ -395,6 +396,18 @@ export const AppsRoutes: Routes = [
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
             { title: 'Course Detail' },
+          ],
+        },
+      },
+      {
+        path: 'blog/post/add',
+        canActivate: [isManagerGuard],
+        component: AddPostPageComponent,
+        data: {
+          title: 'Posts',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Posts' },
           ],
         },
       },

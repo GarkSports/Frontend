@@ -107,7 +107,9 @@ import {
   AddEvenementPopupComponent,
   DeleteEventConfirmationDialogComponent,
   DetailEventDialogComponent,
+  DetailEventMatchAmicalDialogComponent,
   ListEvenementComponent,
+  UpdateEvenementMatchAmicalPopupComponent,
   UpdateEvenementPopupComponent
 } from './evenement/listEvenement/listEvenement.component';
 
@@ -144,10 +146,11 @@ import {DefaultImagePipe} from "../../pipe/default-image.pipe";
 import {AddEquipeComponent} from './equipe/addEquipe.component';
 
 import {AppComptabiliteComponent} from './comptabilite/comptabilite.component'
-import {AddBeneficeDepenseComponent} from './comptabilite/add-benefice-depense/add-benefice-depense.component';
-import {UpdateBeneficeDepenseComponent} from './comptabilite/update-benefice-depense/update-benefice-depense.component';
+import { AddBeneficeDepenseComponent } from './comptabilite/add-benefice-depense/add-benefice-depense.component';
+import { UpdateBeneficeDepenseComponent } from './comptabilite/update-benefice-depense/update-benefice-depense.component';
+import {AddPostPageComponent} from './blogs/bloglist/add-post-page/add-post-page.component'
+
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
-import { NgxImageViewerModule } from '@simfyz/ngx-image-viewer';
 
 
 @NgModule({
@@ -179,10 +182,11 @@ import { NgxImageViewerModule } from '@simfyz/ngx-image-viewer';
     AppMonthlyEarningsTwoComponent,
     DefaultImagePipe,
     FaIconComponent,
-    NgxImageViewerModule
   ],
   exports: [TablerIconsModule],
   declarations: [
+    DetailEventMatchAmicalDialogComponent,
+    UpdateEvenementMatchAmicalPopupComponent,
     AddEquipeComponent,
     NewMessagePageComponent,
     AdminNewMessagePageComponent,
@@ -283,6 +287,7 @@ import { NgxImageViewerModule } from '@simfyz/ngx-image-viewer';
     AppComptabiliteComponent,
     AddBeneficeDepenseComponent,
     UpdateBeneficeDepenseComponent,
+    AddPostPageComponent
   ],
   providers: [DatePipe],
 })

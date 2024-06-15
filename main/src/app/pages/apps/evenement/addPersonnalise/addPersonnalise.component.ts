@@ -23,7 +23,7 @@ export class AddPersonnaliseComponent {
   selectedOption: string = 'equipe';
   evenement: Evenement = new Evenement(); // Initialize Evenement object
   selectedEquipe: number; // Define selectedEquipe property here
-  selectedEquipe2: Equipe;
+  selectedEquipe2: Equipe | undefined;;
   selectedMembers: number[] = []; // Define selectedMembers property here
   typeRepetitions: string[] = Object.values(TypeRepetition).filter(value => typeof value === 'string').map(value => String(value));
   selectedTypeRepetition: string;
@@ -57,9 +57,10 @@ export class AddPersonnaliseComponent {
       typeRepetition: [TypeRepetition.SEMAINE, Validators.required],
       nbRepetition: [''],
       equipe: [''],
-      membres: ['']
+      membres: [[]]  // Initialize membres as an empty array
     });
   }
+  
 
   getEquipes(): void {
     this.eventService.getEquipes().subscribe(equipes => {
@@ -72,6 +73,21 @@ export class AddPersonnaliseComponent {
       this.memberList = members;
     });
   }
+
+  setEquipe2(event: any): void {
+    const selectedEquipeId = parseInt(event.target.value, 10);
+    this.selectedEquipe2 = this.equipeList.find(equipe => equipe.id === selectedEquipeId);
+  
+    if (this.selectedEquipe2 && this.selectedEquipe2.adherents) {
+      this.selectedMembers = this.selectedEquipe2.adherents.map(member => member.id);
+      this.evenementForm.get('membres')!.setValue(this.selectedMembers); // Non-null assertion operator
+    } else {
+      this.selectedMembers = [];
+      this.evenementForm.get('membres')!.setValue([]); // Non-null assertion operator
+    }
+  }
+  
+   
 
   changeOption(option: string): void {
     this.selectedOption = option;
@@ -111,9 +127,5 @@ export class AddPersonnaliseComponent {
     } else {
       // Form is invalid, do something like showing error messages
     }
-  }
-
-  setEquipe2(event:any){
-    this.selectedEquipe2 = this.equipeList.filter(equipe => equipe.id == event.target.value)[0];
   }
 }

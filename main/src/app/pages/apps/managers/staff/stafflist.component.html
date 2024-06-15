@@ -97,8 +97,8 @@
             <td mat-cell *matCellDef="let element" class="f-s-14">
              <img
              class="mat-card"
-              [src]="element.photo"
-              style=" width: 40px; height: 40px;" class="rounded-full object-cover m-r-5  cursor-pointer" 
+             [src]="element.photo |defaultImage: element.firstname : element.lastname :'ffffff':'000000'"
+             class="rounded-full object-cover m-r-5  cursor-pointer" style=" width: 40px; height: 40px;"
               (click)="openPhotoDialog(element.photo)"
             />
            </td>

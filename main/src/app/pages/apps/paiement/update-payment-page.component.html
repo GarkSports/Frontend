@@ -79,7 +79,7 @@
           <div class=" col-span-2">
             <label class="block text-sm font-medium text-gray-400"> Type Abonnement </label>
             <select class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
-                    [(ngModel)]="paiement.typeAbonnement"   required
+                    [(ngModel)]="paiement.typeAbonnement" (change)="getDateFin($event)"
             >
               <option *ngFor="let type of typeAbonnements" [value]="type">{{ type }}</option>
             </select>
@@ -101,11 +101,14 @@
                    [(ngModel)]="paiement.dateFin" required  type="date"/>
             <!--        <p class="text-sm text-red-600" *ngIf="paiement.dateFin === null || paiement.dateFin === undefined">
                 La date fin doit être saisie.</p>-->
+                <p class="text-sm mt-1" *ngIf="paiement.retardPaiement" [ngClass]="{'text-red-600': paiement.retardPaiement}">
+                  Retard de paiement: {{ paiement.retardPaiement }}
+                </p>
           </div>
           <div class=" col-span-2">
             <label class="block text-sm font-medium text-gray-400"> Date Paiement </label>
             <input class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
-                   placeholder="Date Paiement" [(ngModel)]="paiement.datePaiement" required  type="date"/>
+                   placeholder="Date Paiement" [(ngModel)]="paiement.datePaiement" type="date"/>
             <!--        <p class="text-sm text-red-600"   *ngIf="paiement.datePaiement === null || paiement.datePaiement === undefined">
                 La date paiement doit être saisie.</p>-->
           </div>
@@ -114,7 +117,7 @@
           <div class=" ">
             <label class="block text-sm font-medium text-gray-400"> Montant </label>
             <input class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
-                   placeholder="Montant" type="number" [(ngModel)]="paiement.montant" name="montant" min="0" required />
+                   placeholder="Montant" type="number" [(ngModel)]="paiement.montant" name="montant" min="0" required (input)="onMontantChange($event)"/>
             <!--        <p class="text-sm text-red-600"  *ngIf="paiement.montant !== undefined && paiement.montant < 0">
                 Le montant doit être positif..</p>-->
           </div>
@@ -137,7 +140,7 @@
           <div class="col-span-2 flex justify-center">
             <button
              (click)="onUpdate(paiement)"
-              class="px-8 py-2 rounded-3xl font-semibold bg-main hover:bg-mainHover disabled:bg-second text-black">Enregistrer
+              class="px-8 py-2 rounded-3xl font-semibold bg-main hover:bg-mainHover disabled:bg-second text-black" [disabled]="!isFormValid()">Enregistrer
             </button>
           </div>
 
@@ -151,6 +154,7 @@
             <th class="whitespace-nowrap px-8 py-3 font-medium text-black ">   Date de Paiement</th>
             <th class="whitespace-nowrap px-8 py-3 font-medium text-black">Retard de Paiement</th>
             <th class="whitespace-nowrap px-8 py-3 font-medium text-black">     Montant payé</th>
+            <th class="whitespace-nowrap px-8 py-3 font-medium text-black">     Statut</th>
             <th class="whitespace-nowrap px-8 py-3 font-medium text-black rounded-tr-xl rounded-br-xl">  Reste à payer</th>
           </tr>
           </thead>
@@ -162,6 +166,7 @@
                 <td class="whitespace-nowrap px-8 py-4 text-black">{{ history.datePaiement }}</td>
                 <td class="whitespace-nowrap px-8 py-4 text-black">{{ history.retardPaiement }}</td>
                 <td class="whitespace-nowrap px-8 py-4 text-black">{{ history.montant }}</td>
+                <td class="whitespace-nowrap px-8 py-4 text-black">{{ history.statutAdherent }}</td>
                 <td class="whitespace-nowrap px-8 py-4 text-black">{{ history.reste }}</td>
               </tr>
 

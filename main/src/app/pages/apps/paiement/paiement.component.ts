@@ -1,16 +1,16 @@
-import { Component, Inject, ViewChild, AfterViewInit, OnInit } from '@angular/core';
-import { MatTableDataSource, MatTable } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DatePipe } from '@angular/common';
-import { Paiement } from 'src/models/paiement.model';
-import { PaiementService } from 'src/app/services/paiement.service';
-import { TypeAbonnement } from 'src/models/enums/typeAbonnement.model';
-import { Adherent } from 'src/models/adherent.model';
-import { PaiementHistory } from 'src/models/paiementHistory.model';
-import { StatutAdherent } from 'src/models/enums/statutAdherent.model';
-import { Equipe } from 'src/models/equipe.model';
-import { Router } from '@angular/router';
+import {AfterViewInit, Component, Inject, OnInit, ViewChild} from '@angular/core';
+import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {MatPaginator} from '@angular/material/paginator';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {DatePipe} from '@angular/common';
+import {Paiement} from 'src/models/paiement.model';
+import {PaiementService} from 'src/app/services/paiement.service';
+import {TypeAbonnement} from 'src/models/enums/typeAbonnement.model';
+import {Adherent} from 'src/models/adherent.model';
+import {PaiementHistory} from 'src/models/paiementHistory.model';
+import {StatutAdherent} from 'src/models/enums/statutAdherent.model';
+import {Equipe} from 'src/models/equipe.model';
+import {Router} from '@angular/router';
 
 @Component({
   templateUrl: './paiement.component.html',
@@ -20,9 +20,11 @@ export class PaiementComponent implements AfterViewInit {
     Object.create(null);
   searchText: any;
   displayedColumns: string[] = [
+    'photo',
     'membre',
     'telephone',
     'type_abonnement',
+    'date_paiement',
     'date_abonnement',
     'statut',
     'actions'
@@ -233,7 +235,7 @@ export class PaiementComponent implements AfterViewInit {
 
   onDeletePaiement(idPaiement: number): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: '250px',
+      width: '400px',
       data: { message: 'Are you sure you want to delete this paiement?' }
     });
 
@@ -349,7 +351,7 @@ export class PaiementDetailsPopupComponent {
 export class AddPaiementPopupComponent implements OnInit {
   paiement: Paiement = new Paiement();
   members: Adherent[] = [];
-  typeAbonnements: TypeAbonnement[] = [TypeAbonnement.Annuel, TypeAbonnement.Mensuel, TypeAbonnement.Trimestriel];
+  typeAbonnements: string[] = ['Annuel', 'Mensuel', 'Trimestriel'];
 
   constructor(private router: Router, private paiementService: PaiementService) { }
 
@@ -371,36 +373,55 @@ export class AddPaiementPopupComponent implements OnInit {
       (this.paiement.dateFin !== undefined && this.paiement.dateFin !== null) &&
       (this.paiement.datePaiement !== undefined && this.paiement.datePaiement !== null)
     );
+
+    return true;
   }
 
   getTypeAbonnementName(type: TypeAbonnement): string {
     return TypeAbonnement[type];
   }
 
+  getTodayDateString(val: Date | null = null) {
+    let date = val ? new Date(val) : new Date();
+
+    let year = date.getFullYear();
+    let month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based, so add 1
+    let day = date.getDate().toString().padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  }
   getMembers(): void {
     this.paiementService.getMembers().subscribe(members => {
       this.members = members;
+      this.paiement.adherent = members[0];
+      this.paiement.dateDebut = members[0].paiementDate;
+      this.paiement.datePaiement = this.getTodayDateString();
     });
   }
 
-  onMemberSelectionChange(): void {
-    if (this.paiement.adherent) {
-      this.paiement.dateDebut = this.paiement.adherent.paiementDate;
-      this.paiement.datePaiement = new Date();
-    }
+  onMemberSelectionChange(event: any): void {
+    this.paiement.adherent = this.members.filter(member => member.id == event.target.value)[0]
+    this.paiement.dateDebut = this.members.filter(member => member.id == event.target.value)[0].paiementDate;
+    this.paiement.datePaiement = this.getTodayDateString();
+
   }
 
-  getDateFin(): void {
-    if (this.paiement.dateDebut && this.paiement.typeAbonnement !== undefined) {
+  getDateFin(event: any): void {
       const dateFin = new Date(this.paiement.dateDebut);
-      switch (this.paiement.typeAbonnement) {
-        case TypeAbonnement.Mensuel:
+
+    switch (event ? event.target.value : this.paiement.typeAbonnement.valueOf()) {
+      case 'Mensuel':
+        this.paiement.typeAbonnement = TypeAbonnement.Mensuel
           dateFin.setMonth(dateFin.getMonth() + 1);
+
           break;
-        case TypeAbonnement.Trimestriel:
+      case 'Trimestriel':
+        this.paiement.typeAbonnement = TypeAbonnement.Trimestriel
           dateFin.setMonth(dateFin.getMonth() + 3);
           break;
-        case TypeAbonnement.Annuel:
+      case 'Annuel':
+
+        this.paiement.typeAbonnement = TypeAbonnement.Annuel
           dateFin.setFullYear(dateFin.getFullYear() + 1);
           break;
         default:
@@ -408,8 +429,9 @@ export class AddPaiementPopupComponent implements OnInit {
           return;
       }
       dateFin.setDate(Math.min(dateFin.getDate(), new Date(dateFin.getFullYear(), dateFin.getMonth() + 1, 0).getDate()));
-      this.paiement.dateFin = dateFin;
-    }
+    this.paiement.dateFin = this.getTodayDateString(dateFin);
+    console.log(this.paiement.dateFin)
+
   }
 
   onCancelClick(): void {
@@ -418,16 +440,18 @@ export class AddPaiementPopupComponent implements OnInit {
   }
 
   onSaveClick(): void {
+    const datePaiement: Date | undefined = this.paiement.montant === 0 ? undefined : this.paiement.datePaiement;
     if (this.paiement.adherent) {
       const paiementData = {
         typeAbonnement: this.paiement.typeAbonnement,
         dateDebut: this.paiement.dateDebut,
         dateFin: this.paiement.dateFin,
-        datePaiement: this.paiement.datePaiement,
+        datePaiement: datePaiement,
         montant: this.paiement.montant,
         reste: this.paiement.reste,
         remarque: this.paiement.remarque,
-        retardPaiement: this.paiement.retardPaiement
+        retardPaiement: this.paiement.retardPaiement,
+        gratuit: this.paiement.gratuit,
       };
       const newPaiement: Partial<Paiement> = { ...paiementData };
       this.paiementService.addPaiement(newPaiement as Paiement, this.paiement.adherent.id)
