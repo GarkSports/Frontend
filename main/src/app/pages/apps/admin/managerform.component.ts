@@ -3,7 +3,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ManagerService } from 'src/app/services/manager.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Manager } from 'src/models/manager.model';
 import { AdminService } from 'src/app/services/admin.service';
 
@@ -26,7 +26,8 @@ export class AppManagerFormComponent implements OnInit {
     private adminService: AdminService,
     private managerService: ManagerService,
     private route: ActivatedRoute,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private router: Router
   ) {
 
     this.local_data = { ...data };
@@ -104,11 +105,7 @@ export class AppManagerFormComponent implements OnInit {
             'success'
           );
           setTimeout(() => {
-            if (window.opener) {
-              window.close();
-            } else {
-              window.history.back();
-            }
+            this.router.navigate(['/apps/staff']);
           }, 5000);
         },
         (error) => {
@@ -127,11 +124,7 @@ export class AppManagerFormComponent implements OnInit {
             'success'
           );
           setTimeout(() => {
-            if (window.opener) {
-              window.close();
-            } else {
-              window.history.back();
-            }
+            this.router.navigate(['/apps/staff']);
           }, 5000);
         },
         (error) => {

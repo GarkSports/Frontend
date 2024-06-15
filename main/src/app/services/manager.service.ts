@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable, catchError, map, of, tap, throwError } from 'rxjs';
 import { Academie } from 'src/models/academie.model';
 import { Manager } from 'src/models/manager.model';
@@ -9,6 +9,7 @@ import { ChangePasswordChange } from 'src/models/changePassword.model';
 import { User } from 'src/models/user.model';
 import { Adherent } from 'src/models/adherent.model';
 import { Test } from 'src/models/test.model';
+import { AdherentRequest } from 'src/models/adherentRequest.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -81,7 +82,10 @@ export class ManagerService {
       roleName: managerData.roleName,
       adresse:managerData.adresse,
       telephone: managerData.telephone,
-      photo:managerData.photo
+      photo:managerData.photo,
+      nationalite: managerData.nationalite,
+      dateNaissance: managerData.dateNaissance,
+
     };
       console.log("this is service",requestBody);
 
@@ -89,7 +93,7 @@ export class ManagerService {
     
   }
 
-  addEntraineur(managerData: Manager): Observable<any> {
+  addEntraineur(managerData: Manager, nomEquipesForManager: string[]): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
     const permissionsArray = Array.isArray(managerData.permissions) ? managerData.permissions : [managerData.permissions];
@@ -100,45 +104,66 @@ export class ManagerService {
       email: managerData.email,
       firstname: managerData.firstname,
       lastname: managerData.lastname,
+      dateNaissance: managerData.dateNaissance,
       role:managerData.role,
       roleName: managerData.roleName,
       adresse:managerData.adresse,
-      photo:managerData.photo
+      nationalite: managerData.nationalite,
+      photo:managerData.photo,
+      telephone: managerData.telephone
     };
+
+     let params = new HttpParams();
+    if (nomEquipesForManager.length > 0) {
+      params = params.append('equipeNames', nomEquipesForManager.join(','));
+    }
+ 
+     console.log("this is service", requestBody);
       console.log("this is service",requestBody);
 
-    return this.http.post<any>(`${this.apiUrl}/add-coach`, requestBody, { withCredentials: true, headers });
+    return this.http.post<any>(`${this.apiUrl}/add-coach`, requestBody, { headers, params, withCredentials: true });
   }
 
-  addAdherent(managerData: Adherent): Observable<any> {
+  addAdherent(adherent: Adherent, equipeNames: string[]): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     const requestBody = {
-      email: managerData.email,
-      firstname: managerData.firstname,
-      lastname: managerData.lastname,
-      role:managerData.role,
-      adresse: managerData.adresse,
-      niveauScolaire: managerData.niveauScolaire,
-      photo:managerData.photo,
+      firstname: adherent.firstname,
+      lastname: adherent.lastname,
+      adresse: adherent.adresse,
+      email: adherent.email,
+      telephone: adherent.telephone,
+      photo: adherent.photo,
+      niveauScolaire: adherent.niveauScolaire,
+      dateNaissance: adherent.dateNaissance, // Convert date to ISO string format
+      nationalite: adherent.nationalite
     };
   
+    // Construct the URL with query parameters
+    let params = new HttpParams();
+    if (equipeNames.length > 0) {
+      params = params.append('equipeNames', equipeNames.join(','));
+    }
+  
     console.log("this is service", requestBody);
-    return this.http.post<any>(`${this.apiUrl}/add-adherent`, requestBody, { withCredentials: true, headers });
+    return this.http.post<any>(`${this.apiUrl}/add-adherent`, requestBody, { headers, params, withCredentials: true });
   }
+  
 
   updateStaff(managerData: Manager): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.put<any>(`${this.apiUrl}/update-staff?id=${managerData.id}`, managerData, {withCredentials: true, headers });
   }
 
-  updateEntraineur(managerData: Manager): Observable<any> {
+  updateEntraineur(managerData: Manager, equipeNames: string[]): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.put<any>(`${this.apiUrl}/update-coach?id=${managerData.id}`, managerData, {withCredentials: true, headers });
+    const joinedEquipeNames = Array.isArray(equipeNames) ? equipeNames.join(',') : equipeNames;
+    return this.http.put<any>(`${this.apiUrl}/update-coach?id=${managerData.id}&equipeNames=${joinedEquipeNames}`, managerData, { withCredentials: true, headers });
   }
 
-  updateAdherent(adherentData: Adherent): Observable<any> {
+  updateAdherent(adherentData: Adherent, equipeNames: string[]): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.put<any>(`${this.apiUrl}/update-adherent?id=${adherentData.id}`, adherentData, {withCredentials: true, headers });
+    const joinedEquipeNames = Array.isArray(equipeNames) ? equipeNames.join(',') : equipeNames;
+    return this.http.put<any>(`${this.apiUrl}/update-adherent?id=${adherentData.id}&equipeNames=${joinedEquipeNames}`, adherentData, { withCredentials: true, headers });
   }
 
   updateParent(managerData: Manager): Observable<any> {
@@ -161,6 +186,13 @@ export class ManagerService {
     return this.http.put<any>(`${this.apiUrl}/update-manager`, managerData, { withCredentials: true,headers });
   }
 
+  getEquipesByAdherentEmail(id: number): Observable<any> { 
+    return this.http.get(`${this.apiUrl}/equipes/by-adherent-id?id=${id}`, { withCredentials: true });
+  }
+
+  getEquipesByEntraineurId(id: number): Observable<any> { 
+    return this.http.get(`${this.apiUrl}/equipes/by-entraineur-id?id=${id}`, { withCredentials: true });
+  }
 
   getRoleNames(): Observable<RoleName[]> {
     return this.http.get<RoleName[]>(`${this.apiUrl}/get-role-names`, { withCredentials: true });
