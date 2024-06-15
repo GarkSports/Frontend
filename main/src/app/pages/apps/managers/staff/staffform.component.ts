@@ -6,7 +6,6 @@ import {
   ViewChild,
   OnDestroy,
   CUSTOM_ELEMENTS_SCHEMA,
-  NgZone
 } from '@angular/core';
 import { MatTableDataSource, MatTable } from '@angular/material/table';
 import {
@@ -33,6 +32,7 @@ import { Adherent } from 'src/models/adherent.model';
 import isThisHour from 'date-fns/isThisHour';
 import { EquipeService } from 'src/app/services/equipe.service';
 import { StatutManager } from 'src/models/enums/statutManager';
+import { NgZone } from '@angular/core';
 
 @Component({
   // tslint:disable-next-line - Disables all
@@ -63,7 +63,7 @@ export class AppStaffformContentComponent implements OnInit {
   photo: string;
   displayedData: any[] = [];
   isLoading = false;
-  roleSelected: string;
+  selectedRole: string;
   selectedValue: string;
   email: string;
   assginedEquipes: Equipe[] = [];
@@ -72,6 +72,7 @@ export class AppStaffformContentComponent implements OnInit {
   initialEquipes: string[] = [];
   selectedEquipeNoms: string[] = [];
   assignedEquipes: Equipe[] = [];
+  showEquipeInput: boolean = false;
   
   constructor(
     @Optional()
@@ -82,6 +83,7 @@ export class AppStaffformContentComponent implements OnInit {
     private equipeService: EquipeService,
     private route: ActivatedRoute,
     private dialog: MatDialog,
+    private router: Router,
     private ngZone: NgZone
   ) {
 
@@ -95,14 +97,14 @@ export class AppStaffformContentComponent implements OnInit {
       const id = params['id'];
       this.photo='';
       if(this.action==='Update'){
-      this.getFormManagerById(id);
-      console.log("id", id);
-      this.initAdherentForm(this.user); 
-      this.initManagerForm(this.user);
+        this.getFormManagerById(id);
+        console.log("id", id);
+        this.initAdherentForm(this.user); 
+        this.initManagerForm(this.user);
       }
       if(this.action==='Add'){
-      this.initAdherentForm();
-      this.initManagerForm();
+        this.initAdherentForm();
+        this.initManagerForm();
       }
       this.getOnlyRoleNames();
       this.getEquipes();
@@ -122,20 +124,33 @@ export class AppStaffformContentComponent implements OnInit {
       );
     }
   }
-
-  onRoleChange(event: MatSelectChange) {
-    const selectedValue = event.value;
-    this.roleSelected = event.value;
-    console.log(this.roleSelected);
-
-    this.showRoleInput =
-      selectedValue === 'STAFF' || selectedValue === 'ENTRAINEUR';
-
-      if(selectedValue === 'ADHERENT')
-        {
+  onRoleChange(event: Event): void {
+    this.ngZone.run(() => {
+      const selectElement = event.target as HTMLSelectElement;
+      this.selectedRole = selectElement.value;
+      console.log("Selected role:", this.selectedRole);
+  // Reset all flags to false initially
+  this.showRoleInput = false;
+  this.showNiveauScolaire = false;
+  this.showEquipeInput = false;
+  this.isAdherent = false;
+      switch (this.selectedRole) {
+        case 'ENTRAINEUR':
+          this.showRoleInput = true;
+          this.showEquipeInput = true;
+          break;
+        case 'STAFF':
+          this.showRoleInput = true;
+          break;
+        case 'ADHERENT':
           this.showNiveauScolaire = true;
-          this.ifAdherent = true;
-        }
+          this.isAdherent = true;
+          this.showEquipeInput = true;
+          break;
+        default:
+          break;
+      }
+    });
   }
 
   getEquipes(): void {
@@ -247,6 +262,11 @@ export class AppStaffformContentComponent implements OnInit {
                 const manager = user as Manager;
                 this.userRole = 'MANAGER';
                 this.local_data = manager;
+                if(this.local_data.role==='STAFF'){
+                  this.showEquipeInput=false;
+                }
+                console.log("role of staff", this.local_data.role);
+                
                 this.local_data.id = manager.id;
                 this.photo = manager.photo;
                 this.showRoleInput= true;
@@ -273,7 +293,7 @@ export class AppStaffformContentComponent implements OnInit {
 
   initManagerForm(manager?: Manager): void {
     const statut = manager?.blocked ? 'BLOCKED' : 'ACTIVE';
-    const existingEquipeNoms = this.equipeNoms || [];   
+    const existingEquipeNoms = Array.isArray(this.equipeNoms) ? this.equipeNoms : (this.selectedEquipeNoms as string[]);
 
     this.managerForm = this.formBuilder.group({
       firstname: [this.local_data?.firstname || '', Validators.required],
@@ -284,7 +304,7 @@ export class AppStaffformContentComponent implements OnInit {
       nationalite: [manager?.nationalite || '', Validators.required],
       role: [manager?.role || '', Validators.required],
       statut: [statut, Validators.required],
-      equipes: [existingEquipeNoms, Validators.required], 
+      equipes: [existingEquipeNoms || [], Validators.required],
       roleName: [
         manager?.role === Role.ADHERENT || manager?.role === Role.PARENT
           ? null
@@ -297,7 +317,7 @@ export class AppStaffformContentComponent implements OnInit {
 
   initAdherentForm(adherent?: Adherent): void {
     const statut = adherent?.blocked ? 'BLOCKED' : 'ACTIVE';
-    const existingEquipeNoms = this.equipeNoms || this.selectedEquipeNoms;  
+    const existingEquipeNoms = Array.isArray(this.equipeNoms) ? this.equipeNoms : (this.selectedEquipeNoms as string[]);
 
     this.adherentForm = this.formBuilder.group({
       firstname: [adherent?.firstname || '', Validators.required],
@@ -309,7 +329,8 @@ export class AppStaffformContentComponent implements OnInit {
       telephone: [adherent?.telephone || '', Validators.required],
       nationalite: [adherent?.nationalite || '', Validators.required],
       niveauScolaire: [adherent?.niveauScolaire || '', Validators.required],
-      equipes: [existingEquipeNoms, Validators.required], 
+      role: [adherent?.role || '', Validators.required],
+      equipes: [existingEquipeNoms || [], Validators.required],
       statut: [statut || '', Validators.required],
       informationsParent: this.formBuilder.group({
         nomParent: [adherent?.informationsParent?.nomParent || '', Validators.required],
@@ -342,12 +363,20 @@ export class AppStaffformContentComponent implements OnInit {
       }
     );
   }
-  
   onEquipeChange(event: MatSelectChange): void {
     this.selectedEquipeNoms = event.value;
     console.log("this equipe selected", this.selectedEquipeNoms);
     
   }
+  
+  // onEquipeChange(event: Event): void {
+  //   const selectElement = event.target as HTMLSelectElement;
+  //   const selectedOptions = Array.from(selectElement.selectedOptions)
+  //     .map(option => option.value);
+  //   this.selectedEquipeNoms = selectedOptions as string[]; // Type assertion
+  //   console.log("This equipe selected:", this.selectedEquipeNoms);
+  // }
+  
  
   getAssignedEquipesForAdherent(id: number): void {
     this.managerService.getEquipesByAdherentEmail(id).subscribe(
@@ -390,9 +419,9 @@ getAssignedEquipesForEntraineur(id: number): void {
   doAction(): void {
     if (this.action === 'Add') {
       let addObservable = new Observable<any>();
-      console.log(this.roleSelected);
+      console.log(this.selectedRole);
 
-      switch (this.roleSelected) {
+      switch (this.selectedRole) {
         
         case 'STAFF':
           const addedStaff = this.managerForm.value;
@@ -405,23 +434,21 @@ getAssignedEquipesForEntraineur(id: number): void {
 
         case 'ENTRAINEUR':
           const addedManager = this.managerForm.value;
-          console.log("addedManager",addedManager);
           const equipeNamesForManager = this.managerForm.get('equipes')?.value || [];
-          const nomEquipesForManager = equipeNamesForManager.map((equipe: any) => equipe.nom);
+          const nomEquipesForManager = equipeNamesForManager.length > 0 ? equipeNamesForManager.map((equipe: any) => equipe.nom) : [];
             const managerWithPhoto = { ...addedManager, photo: this.photo };
             addObservable = this.managerService.addEntraineur(managerWithPhoto, nomEquipesForManager);
           
           
           break;
 
-        case 'ADHERENT':
-          const addedAdherent = this.adherentForm.value;
-          const adherentWithPhoto = { ...addedAdherent, photo: this.photo };
-          const equipeNames = this.adherentForm.get('equipes')?.value || [];
-          console.log("equipeNames", equipeNames);
-          const nomEquipes = equipeNames.map((equipe: any) => equipe.nom);
-          addObservable = this.managerService.addAdherent(adherentWithPhoto, nomEquipes);
-          break;
+          case 'ADHERENT':
+            const addedAdherent = this.adherentForm.value;
+            const equipeNames = this.adherentForm.get('equipes')?.value || [];
+            const nomEquipes = equipeNames.length > 0 ? equipeNames.map((equipe: any) => equipe.nom) : [];
+            const adherentWithPhoto = { ...addedAdherent, photo: this.photo };
+            addObservable = this.managerService.addAdherent(adherentWithPhoto, nomEquipes);
+            break;
 
         case 'PARENT':
           break;
@@ -439,11 +466,7 @@ getAssignedEquipesForEntraineur(id: number): void {
             'success'
           );
           setTimeout(() => {
-            if (window.opener) {
-              window.close();
-            } else {
-              window.history.back();
-            }
+            this.router.navigate(['/apps/staff']);
           }, 5000);
         },
         (error) => {
@@ -479,30 +502,6 @@ getAssignedEquipesForEntraineur(id: number): void {
             updateObservable = this.managerService.updateAdherent(adherentWithPhoto, updatedAdherent.equipes);
             break;
  
-          // case 'STAFF':
-          //   const updatedStaff = this.managerForm.value;
-          //   updatedStaff.id = this.local_data.id; 
-  
-          //   updatedStaff.photo = this.local_data.photo;
-          //   //const staffWithPhoto = { ...updatedManager, photo: this.photo2 };
-          // //  updateObservable = this.managerService.updateStaff(updatedStaff);
-          //   break;
-          // case 'ENTRAINEUR':
-          //   const updatedEntraineur = this.managerForm.value;
-          //   const entraineurWithPhoto = { ...updatedEntraineur, photo: this.photo };
-          //   //updateObservable = this.managerService.updateEntraineur(entraineurWithPhoto);
-          //   break;
-          //   case 'ADHERENT':
-          //     const updatedAdherent = this.adherentForm.value;
-          //     updatedAdherent.id = this.local_data.id;
-          //     updatedAdherent.photo = this.local_data.photo;
-          //     const adherentWithPhoto = { ...updatedAdherent, photo: this.photo };
-            
-          //     updateObservable = this.managerService.updateAdherent(adherentWithPhoto, this.selectedEquipeNoms);
-          //     break;
-          // case 'PARENT':
-          
-          //   break;
         default:
           console.error('Invalid role:', role);
           return; // Exit function if role is invalid
@@ -516,11 +515,7 @@ getAssignedEquipesForEntraineur(id: number): void {
             'success'
           );
           setTimeout(() => {
-            if (window.opener) {
-              window.close();
-            } else {
-              window.history.back();
-            }
+            this.router.navigate(['/apps/staff']);
           }, 5000);
         },
         (error) => {

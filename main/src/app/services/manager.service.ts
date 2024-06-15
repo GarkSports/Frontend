@@ -109,11 +109,11 @@ export class ManagerService {
       photo:managerData.photo,
       telephone: managerData.telephone
     };
-     // Construct the URL with query parameters
+
      let params = new HttpParams();
-     nomEquipesForManager.forEach(name => {
-         params = params.append('equipeNames', name);
-     });
+    if (nomEquipesForManager.length > 0) {
+      params = params.append('equipeNames', nomEquipesForManager.join(','));
+    }
  
      console.log("this is service", requestBody);
       console.log("this is service",requestBody);
@@ -123,25 +123,25 @@ export class ManagerService {
 
   addAdherent(adherent: Adherent, equipeNames: string[]): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    
-  const requestBody = {
-    firstname: adherent.firstname,
-    lastname: adherent.lastname,
-    adresse: adherent.adresse,
-    email: adherent.email,
-    telephone: adherent.telephone,
-    photo: adherent.photo,
-    niveauScolaire: adherent.niveauScolaire,
-    dateNaissance: adherent.dateNaissance, // Convert date to ISO string format
-    nationalite: adherent.nationalite
-  };
-     // Construct the URL with query parameters
-     let params = new HttpParams();
-     equipeNames.forEach(name => {
-         params = params.append('equipeNames', name);
-     });
- 
-     console.log("this is service", requestBody);
+    const requestBody = {
+      firstname: adherent.firstname,
+      lastname: adherent.lastname,
+      adresse: adherent.adresse,
+      email: adherent.email,
+      telephone: adherent.telephone,
+      photo: adherent.photo,
+      niveauScolaire: adherent.niveauScolaire,
+      dateNaissance: adherent.dateNaissance, // Convert date to ISO string format
+      nationalite: adherent.nationalite
+    };
+  
+    // Construct the URL with query parameters
+    let params = new HttpParams();
+    if (equipeNames.length > 0) {
+      params = params.append('equipeNames', equipeNames.join(','));
+    }
+  
+    console.log("this is service", requestBody);
     return this.http.post<any>(`${this.apiUrl}/add-adherent`, requestBody, { headers, params, withCredentials: true });
   }
   
@@ -153,12 +153,14 @@ export class ManagerService {
 
   updateEntraineur(managerData: Manager, equipeNames: string[]): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.put<any>(`${this.apiUrl}/update-coach?id=${managerData.id}&equipeNames=${equipeNames.join(',')}`, managerData, {withCredentials: true, headers });
+    const joinedEquipeNames = Array.isArray(equipeNames) ? equipeNames.join(',') : equipeNames;
+    return this.http.put<any>(`${this.apiUrl}/update-coach?id=${managerData.id}&equipeNames=${joinedEquipeNames}`, managerData, { withCredentials: true, headers });
   }
 
   updateAdherent(adherentData: Adherent, equipeNames: string[]): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.put<any>(`${this.apiUrl}/update-adherent?id=${adherentData.id}&equipeNames=${equipeNames.join(',')}`, adherentData, { withCredentials: true, headers });
+    const joinedEquipeNames = Array.isArray(equipeNames) ? equipeNames.join(',') : equipeNames;
+    return this.http.put<any>(`${this.apiUrl}/update-adherent?id=${adherentData.id}&equipeNames=${joinedEquipeNames}`, adherentData, { withCredentials: true, headers });
   }
 
   updateParent(managerData: Manager): Observable<any> {
