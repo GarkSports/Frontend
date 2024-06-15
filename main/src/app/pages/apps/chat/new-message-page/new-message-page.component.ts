@@ -124,6 +124,7 @@ export class NewMessagePageComponent implements OnInit{
       this.chatService.sendMessage(receiversId, message).subscribe(
         () => {
           console.log('Message sent successfully');
+          this.closeDialog();
       
           
         },
@@ -153,7 +154,7 @@ export class NewMessagePageComponent implements OnInit{
     // Perform the desired action with the updated local_data
     console.log("Action performed with data:", this.local_data);
     this.addRowData(this.local_data);
-    this.closeDialog();
+    //this.closeDialog();
   }
 
   closeDialog(): void {
