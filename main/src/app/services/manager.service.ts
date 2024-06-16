@@ -93,38 +93,39 @@ export class ManagerService {
     
   }
 
-  addEntraineur(managerData: Manager, nomEquipesForManager: string[]): Observable<any> {
+  addEntraineur(managerData: Manager, nomEquipes: string[]): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-
+  
     const permissionsArray = Array.isArray(managerData.permissions) ? managerData.permissions : [managerData.permissions];
-// Filter out any null or undefined values
+    // Filter out any null or undefined values
     const filteredPermissions = permissionsArray.filter(permission => permission !== null && permission !== undefined);
-
+  
     const requestBody = {
       email: managerData.email,
       firstname: managerData.firstname,
       lastname: managerData.lastname,
       dateNaissance: managerData.dateNaissance,
-      role:managerData.role,
+      role: managerData.role,
       roleName: managerData.roleName,
-      adresse:managerData.adresse,
+      adresse: managerData.adresse,
       nationalite: managerData.nationalite,
-      photo:managerData.photo,
+      photo: managerData.photo,
       telephone: managerData.telephone
     };
-
-     let params = new HttpParams();
-    if (nomEquipesForManager.length > 0) {
-      params = params.append('equipeNames', nomEquipesForManager.join(','));
+  
+    let params = new HttpParams();
+    if (nomEquipes.length > 0) {
+      params = params.append('equipeNames', nomEquipes.join(','));
     }
- 
-     console.log("this is service", requestBody);
-      console.log("this is service",requestBody);
-
-    return this.http.post<any>(`${this.apiUrl}/add-coach`, requestBody, { headers, params, withCredentials: true });
+  
+    console.log("this is service", requestBody);
+    console.log("this is service params", params.toString());
+  
+    return this.http.post<any>(`${this.apiUrl}/add-adherent`, requestBody, { headers, params, withCredentials: true });
   }
+  
 
-  addAdherent(adherent: Adherent, equipeNames: string[]): Observable<any> {
+  addAdherent(adherent: Adherent, nomEquipes: string[]): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     const requestBody = {
       firstname: adherent.firstname,
@@ -138,14 +139,16 @@ export class ManagerService {
       nationalite: adherent.nationalite
     };
   
-    // Construct the URL with query parameters
     let params = new HttpParams();
-    if (equipeNames.length > 0) {
-      params = params.append('equipeNames', equipeNames.join(','));
-    }
-  
-    console.log("this is service", requestBody);
-    return this.http.post<any>(`${this.apiUrl}/add-adherent`, requestBody, { headers, params, withCredentials: true });
+  if (nomEquipes.length > 0) {
+    params = params.append('equipeNames', nomEquipes.join(','));
+  }
+
+  console.log("this is service", requestBody);
+  console.log("this is service params", params.toString());
+
+  return this.http.post<any>(`${this.apiUrl}/add-adherent`, requestBody, { headers, params, withCredentials: true });
+
   }
   
 
