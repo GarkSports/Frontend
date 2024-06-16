@@ -326,7 +326,7 @@ export class AppStaffformContentComponent implements OnInit {
 
   initForm(user?: any): void {
     const statut = user?.blocked ? 'BLOCKED' : 'ACTIVE';
-    const existingEquipeNoms = Array.isArray(this.equipeNoms) ? this.equipeNoms : (this.selectedEquipeNoms as string[]);
+    const existingEquipeNoms = this.equipeNoms || this.selectedEquipeNoms;  
 
     this.form = this.formBuilder.group({
       firstname: [user?.firstname || '', Validators.required],
@@ -422,7 +422,13 @@ getAssignedEquipesForEntraineur(id: number): void {
     }
   );
 }
-
+getInitials(): string {
+  const firstname = this.form.get('firstname')?.value || '';
+  const lastname = this.form.get('lastname')?.value || '';
+  const firstInitial = firstname.charAt(0).toUpperCase();
+  const lastInitial = lastname.charAt(0).toUpperCase();
+  return `${firstInitial}${lastInitial}`;
+}
 
 
 
@@ -442,24 +448,26 @@ getAssignedEquipesForEntraineur(id: number): void {
            
           break;
 
-        case 'ENTRAINEUR':
-          const addedManager = this.form.value;
-          const equipeNamesForManager = this.form.get('equipes')?.value || [];
-          const nomEquipesForManager = equipeNamesForManager.length > 0 ? equipeNamesForManager.map((equipe: any) => equipe.nom) : [];
-            const managerWithPhoto = { ...addedManager, photo: this.photo };
-            addObservable = this.managerService.addEntraineur(managerWithPhoto, nomEquipesForManager);
-          
-          
-          break;
+          case 'ENTRAINEUR':
+            const addedManager = this.form.value;
+            const equipeNamesForManager = this.form.get('equipes')?.value || [];
+            const entraineurEquipesNames = equipeNamesForManager.length > 0 ? equipeNamesForManager : [];
+
+            const entraineurWithPhoto = { ...addedManager, photo: this.photo };
+            addObservable = this.managerService.addEntraineur(entraineurWithPhoto, entraineurEquipesNames);
+          break;          
 
           case 'ADHERENT':
             const addedAdherent = this.form.value;
             const equipeNames = this.form.get('equipes')?.value || [];
-            const nomEquipes = equipeNames.length > 0 ? equipeNames.map((equipe: any) => equipe.nom) : [];
+            // Ensure that equipeNames are correctly mapped to their names
+            const nomEquipes = equipeNames.length > 0 ? equipeNames : [];
+            console.log("nomEquipes", nomEquipes);
+          
             const adherentWithPhoto = { ...addedAdherent, photo: this.photo };
             addObservable = this.managerService.addAdherent(adherentWithPhoto, nomEquipes);
             break;
-
+          
         case 'PARENT':
           break;
 

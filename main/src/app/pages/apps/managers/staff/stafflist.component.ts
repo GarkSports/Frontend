@@ -13,6 +13,7 @@ import {Equipe} from 'src/models/equipe.model';
 import {Router} from '@angular/router';
 import { PhotoDialogComponent } from './staffform.component';
 import { EquipeService } from 'src/app/services/equipe.service';
+import { T } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-staff-list',
@@ -79,7 +80,7 @@ export class AppStafflistComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.dataSource = new MatTableDataSource<any>([]);
+    this.dataSource = new MatTableDataSource<Manager>([]);
     this.fetchRoleNames();
     //this.getManagers();
     this.getEquipeNames();
@@ -93,17 +94,17 @@ export class AppStafflistComponent implements OnInit, OnDestroy {
         nom: e.nom,
         users_id: [...(e.adherents?.map(a => a.id) ?? []), ...(e.entraineurs?.map(e => e.id) ?? [])] 
       }))
-        const maangers_with_equipe = managers.map((m) => ({
+        const managers_with_equipe = managers.map((m) => ({
           ...m,
           equipes: equipeNameByUserId.filter(item => item.users_id.includes(m.id)).map(i => i.nom) ?? []
         }))
-        this.dataSource.data = maangers_with_equipe;
-        console.log(this.dataSource.data); 
+        this.dataSource.data = managers_with_equipe;
+        console.log("managers_with_equipe",this.dataSource.data); 
       });
 
      });
    
-  
+     
 
   }
   applyFilterByStatut(): void {
