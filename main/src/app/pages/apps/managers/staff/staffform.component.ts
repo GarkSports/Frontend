@@ -137,11 +137,15 @@ export class AppStaffformContentComponent implements OnInit {
         case 'ENTRAINEUR':
           this.showRoleInput = true;
           this.showEquipeInput = true;
+          this.showNiveauScolaire = false;
           break;
         case 'STAFF':
           this.showRoleInput = true;
+          this.showNiveauScolaire = false;
+          this.showEquipeInput = false;
           break;
         case 'ADHERENT':
+          this.showRoleInput = false;
           this.showNiveauScolaire = true;
           this.isAdherent = true;
           this.showEquipeInput = true;
