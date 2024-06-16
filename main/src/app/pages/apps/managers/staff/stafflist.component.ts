@@ -12,6 +12,8 @@ import {PaiementService} from 'src/app/services/paiement.service';
 import {Equipe} from 'src/models/equipe.model';
 import {Router} from '@angular/router';
 import { PhotoDialogComponent } from './staffform.component';
+import { EquipeService } from 'src/app/services/equipe.service';
+import { T } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-staff-list',
@@ -39,6 +41,8 @@ export class AppStafflistComponent implements OnInit, OnDestroy {
   statutOptions: string[] = ['true', 'false'];
   selectedEquipe: string | null = null;
   nomEquipeOptions: string[] = [];
+  assignedEquipes: Equipe[] = [];
+  equipeNoms: string[] = [];
   rolesOptions: string[] = [];
   selectedSortingOption: string | null = null;
   selectedStatut: string | null = null;
@@ -57,6 +61,7 @@ export class AppStafflistComponent implements OnInit, OnDestroy {
   managerForm: FormGroup;
   showRoleInput: boolean = false;
   displayedData: any[] = [];
+  error: string = '';
 
   constructor(
     public dialog: MatDialog,
@@ -65,6 +70,7 @@ export class AppStafflistComponent implements OnInit, OnDestroy {
     public datePipe: DatePipe,
     public managerService: ManagerService,
     private formBuilder: FormBuilder,
+    private equipeService: EquipeService,
     private paiementService: PaiementService
   ) {
     this.local_data = { ...data };
@@ -76,11 +82,31 @@ export class AppStafflistComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.dataSource = new MatTableDataSource<Manager>([]);
     this.fetchRoleNames();
-    this.getManagers();
+    //this.getManagers();
     this.getEquipeNames();
+    this.getManagersWithEquipes();
    // this.getRolesOptions();
   }
+  getManagersWithEquipes(): void {
+     this.managerService.getManagers().subscribe((managers)=> { 
+      this.equipeService.getEquipes().subscribe((equipes)=>{
+      const equipeNameByUserId = equipes.map(e=> ({
+        nom: e.nom,
+        users_id: [...(e.adherents?.map(a => a.id) ?? []), ...(e.entraineurs?.map(e => e.id) ?? [])] 
+      }))
+        const managers_with_equipe = managers.map((m) => ({
+          ...m,
+          equipes: equipeNameByUserId.filter(item => item.users_id.includes(m.id)).map(i => i.nom) ?? []
+        }))
+        this.dataSource.data = managers_with_equipe;
+        console.log("managers_with_equipe",this.dataSource.data); 
+      });
 
+     });
+   
+     
+
+  }
   applyFilterByStatut(): void {
     // Apply the filter by Statut if selectedStatut is not null
     if (this.selectedStatut !== null) {
@@ -107,6 +133,38 @@ export class AppStafflistComponent implements OnInit, OnDestroy {
   //   });
   // }
 
+  getAssignedEquipesForEntraineur(id: number): void {
+    this.managerService.getEquipesByEntraineurId(id).subscribe(
+      (assignedEquipes: Equipe[]) => {
+        this.assignedEquipes = assignedEquipes;
+        this.equipeNoms = assignedEquipes.map((equipe: Equipe) => equipe.nom);
+        console.log('this.assignedEquipes', this.assignedEquipes);
+        console.log('this.equipeNoms', this.equipeNoms);
+        this.error = '';
+      
+  
+      },
+      (error) => {
+        this.error = 'No equipes found or an error occurred';
+      }
+    );
+  }
+
+  getAssignedEquipesForAdherent(id: number): void {
+    this.managerService.getEquipesByAdherentEmail(id).subscribe(
+      (assignedEquipes: Equipe[]) => {
+        this.assignedEquipes = assignedEquipes;
+        this.equipeNoms = assignedEquipes.map((equipe: Equipe) => equipe.nom);
+        console.log('this.assignedEquipes', this.assignedEquipes);
+        console.log('this.equipeNoms', this.equipeNoms);
+        this.error = '';
+
+      },
+      (error) => {
+        this.error = 'No equipes found or an error occurred';
+      }
+    );
+}
 
   getEquipeNames(): void {
     this.paiementService.getEquipes().subscribe((equipes: Equipe[]) => {

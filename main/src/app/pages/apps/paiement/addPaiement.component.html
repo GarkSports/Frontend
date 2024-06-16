@@ -5,10 +5,12 @@
         <div class="grid grid-cols-2 gap-16 mt-6">
           <div class=" col-span-2">
             <label class="block text-sm font-medium text-gray-400"> Membre </label>
-            <select  [(ngModel)]="paiement.adherent"  class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
-                     name="adherent"   (change)="onMemberSelectionChange()" required
+            <select
+              (change)="onMemberSelectionChange($event)"
+              class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm" name="adherent" required
                      type="text">
-              <option *ngFor="let member of members" [value]="member">{{ member.firstname }} {{ member.lastname }}</option>
+              <option *ngFor="let member of members" [value]="member.id">{{ member.firstname }} {{ member.lastname }}
+              </option>
             </select>
             <!--        <p class="text-sm text-red-600" *ngIf="paiement.adherent === null || paiement.adherent === undefined">   L'adherent doit être saisie.</p>-->
           </div>
@@ -16,9 +18,11 @@
           <div class=" col-span-2">
             <label class="block text-sm font-medium text-gray-400"> Type Abonnement </label>
             <select class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
-                    [(ngModel)]="paiement.typeAbonnement" (change)="getDateFin()" required
+                    (change)="getDateFin($event)"
+                    required
             >
-              <option *ngFor="let type of typeAbonnements" [value]="type">{{ getTypeAbonnementName(type) }}</option>
+              <option [value]="''"></option>
+              <option *ngFor="let type of typeAbonnements" [value]="type">{{ type }}</option>
             </select>
             <!--        <p class="text-sm text-red-600"  *ngIf="paiement.typeAbonnement === null || paiement.typeAbonnement === undefined">
                 Le type abonnement doit être saisie.</p>-->
@@ -27,7 +31,8 @@
           <div class=" ">
             <label class="block text-sm font-medium text-gray-400"> Date Début </label>
             <input class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
-                   placeholder="Date Début" [(ngModel)]="paiement.dateDebut" required type="date"/>
+                   (change)="getDateFin(null)" [(ngModel)]="paiement.dateDebut" placeholder="Date Début" required
+                   type="date"/>
             <!--        <p class="text-sm text-red-600" *ngIf="paiement.dateDebut === null || paiement.dateDebut === undefined">
                 La date debut doit être saisie.</p>-->
           </div>
@@ -70,6 +75,12 @@
                       rows="4"></textarea>
             <!--        <p class="text-sm text-red-600"  *ngIf="paiement.typeAbonnement === null || paiement.typeAbonnement === undefined">
                 Le type abonnement doit être saisie.</p>-->
+          </div>
+          <div class="col-span-2">
+            <label class="flex items-center">
+              <input type="checkbox" class="form-checkbox h-5 w-5 text-main" [(ngModel)]="paiement.gratuit">
+              <span class="ml-2 text-sm text-gray-400">Gratuit</span>
+            </label>
           </div>
           <div class="col-span-2 flex justify-center">
             <button

@@ -1,29 +1,41 @@
-<div class="evenement-dialog">
-    <h6 mat-dialog-title class="dialog-title">Equipes</h6>
-    <mat-dialog-content class="dialog-content">
-        <table class="evenement-table">
-            <thead>
-                <tr>
-                    <th>Nom</th>
-                    <th>Genre</th>
-                    <th>Groupe d'Age</th>
-                    <th>Heure</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="evenement-item" *ngFor="let equipe of equipes">
-                    <td>{{ equipe.nom }}</td>
-                    <td>{{ equipe.genre }}</td>
-                    <td>{{ equipe.groupeAge }}</td>
-                    <td>{{ equipe.dateMatchAmical }}</td>
-                </tr>
-            </tbody>
-        </table>
-    </mat-dialog-content>
-    <mat-dialog-actions class="dialog-actions">
-        <button mat-button mat-dialog-close color="primary" class="close-button">Fermer</button>
-    </mat-dialog-actions>
+<div mat-dialog-title>
+  <button mat-button mat-dialog-close>
+    <i-tabler class="hover:cursor-pointer" name="arrow-left"></i-tabler>
+  </button>
 </div>
+<div class="pt-12 pb-4" mat-dialog-content>
+  <div class="row">
+    <div class="col flex justify-center">
+      <h1 class="text-xl text-black text-center">Membres</h1>
+    </div>
+  </div>
+  <div class="row mt-8 w-full">
+    <div class="col flex justify-center">
+      <div class="dialog-content w-full">
+        <div *ngIf="evenement.heure !== null" class="w-full bg-third rounded-3xl px-4 py-2 mt-5 ">
+          <div class="grid grid-cols-2 mt-4">
+            <div *ngFor="let member of evenement.convocationMembres">
+              <div class="row">
+                <div class="col-2">
+                  <img [src]="member.photo |defaultImage: member.firstname : member.lastname :'ffffff':'000000'"
+                       alt="Logo" width="40"/>
+                </div>
+                <div class="col">
+                  {{ member.firstname }} {{ member.lastname }}
+                </div>
+                <!--                <div class="col-1">-->
+
+                <!--                </div>-->
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <style>
     .evenement-dialog {

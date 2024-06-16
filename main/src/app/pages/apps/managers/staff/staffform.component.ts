@@ -5,7 +5,7 @@ import {
   Optional,
   ViewChild,
   OnDestroy,
-  CUSTOM_ELEMENTS_SCHEMA
+  CUSTOM_ELEMENTS_SCHEMA,
 } from '@angular/core';
 import { MatTableDataSource, MatTable } from '@angular/material/table';
 import {
@@ -32,6 +32,7 @@ import { Adherent } from 'src/models/adherent.model';
 import isThisHour from 'date-fns/isThisHour';
 import { EquipeService } from 'src/app/services/equipe.service';
 import { StatutManager } from 'src/models/enums/statutManager';
+import { NgZone } from '@angular/core';
 
 @Component({
   // tslint:disable-next-line - Disables all
@@ -45,9 +46,11 @@ export class AppStaffformContentComponent implements OnInit {
   local_data: any;
   managerForm: FormGroup;
   adherentForm: FormGroup;
+  form: FormGroup;
   firstnameValue: string;
   roles: string[];
   roleNames: string[];
+  userRole: string;
   showParentInfo: boolean = false;
   ifAdherent: boolean = true;
   isAdherent: boolean = false;
@@ -55,13 +58,23 @@ export class AppStaffformContentComponent implements OnInit {
   dataSource = new MatTableDataSource<string>([]);
   equipeDataSource = new MatTableDataSource<Equipe>([]);
   statutManagerValues = Object.values(StatutManager);
-  user: Manager;
+  user: any;
   showRoleInput: boolean = false;
   showNiveauScolaire: boolean = false;
   photo: string;
   displayedData: any[] = [];
   isLoading = false;
-
+  selectedRole: string;
+  selectedValue: string;
+  email: string;
+  assginedEquipes: Equipe[] = [];
+  equipeNoms: string[] = [];
+  error: string = '';
+  initialEquipes: string[] = [];
+  selectedEquipeNoms: string[] = [];
+  assignedEquipes: Equipe[] = [];
+  showEquipeInput: boolean = false;
+  
   constructor(
     @Optional()
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -70,7 +83,9 @@ export class AppStaffformContentComponent implements OnInit {
     private managerService: ManagerService,
     private equipeService: EquipeService,
     private route: ActivatedRoute,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private router: Router,
+    private ngZone: NgZone
   ) {
 
   }
@@ -82,11 +97,20 @@ export class AppStaffformContentComponent implements OnInit {
       this.action = params['action'];
       const id = params['id'];
       this.photo='';
-      this.getFormManagerById(id);
+      if(this.action==='Update'){
+        this.getFormManagerById(id);
+        console.log("id", id);
+        // this.initAdherentForm(this.user); 
+        // this.initManagerForm(this.user);
+        this.initForm(this.user);
+      }
+      if(this.action==='Add'){
+        // this.initAdherentForm();
+        // this.initManagerForm();
+        this.initForm();
+      }
       this.getOnlyRoleNames();
       this.getEquipes();
-      
-
     });
   }
 
@@ -103,22 +127,55 @@ export class AppStaffformContentComponent implements OnInit {
       );
     }
   }
+  onRoleChange(event: Event): void {
+    this.ngZone.run(() => {
+      const selectElement = event.target as HTMLSelectElement;
+      this.selectedRole = selectElement.value;
+      console.log("Selected role:", this.selectedRole);
 
-  onRoleChange(event: MatSelectChange) {
-    const selectedValue = event.value;
-    this.showRoleInput =
-      selectedValue === 'STAFF' || selectedValue === 'ENTRAINEUR';
-      if(selectedValue === 'ADHERENT')
-        this.showNiveauScolaire = true;
-  }
-
-  getEquipes(): void {
-    this.equipeService.getEquipes().subscribe(equipes => {
-      this.equipeList = equipes;
-      this.equipeDataSource.data = this.equipeList;
+      switch (this.selectedRole) {
+        case 'ENTRAINEUR':
+          this.showRoleInput = true;
+          this.showEquipeInput = true;
+          this.showNiveauScolaire = false;
+          break;
+        case 'STAFF':
+          this.showRoleInput = true;
+          this.showNiveauScolaire = false;
+          this.showEquipeInput = false;
+          break;
+        case 'ADHERENT':
+          this.showRoleInput = false;
+          this.showNiveauScolaire = true;
+          this.isAdherent = true;
+          this.showEquipeInput = true;
+          break;
+        default:
+          break;
+      }
     });
   }
 
+  getEquipes(): void {
+    this.equipeService.getEquipes().subscribe(
+      (equipes) => {
+        this.equipeList = equipes;
+        this.equipeDataSource.data = this.equipeList;
+        console.log('equipes all', this.equipeList);
+        
+        // Once all equipes are fetched, fetch the assigned equipes
+      //   if(this.userRole==='ADHERENT')
+      //  { this.getAssignedEquipesForAdherent(this.local_data?.id);}
+
+        
+           this.getAssignedEquipesForEntraineur(this.local_data?.id);
+
+      },
+      (error) => {
+        console.error('Error fetching all equipes', error);
+      }
+    );
+  }
   checkAge(event: any) {
     const dateOfBirth = new Date(event.target.value);
     const today = new Date();
@@ -178,100 +235,128 @@ export class AppStaffformContentComponent implements OnInit {
 
   getFormManagerById(id: string): void {
     this.managerService.getFormManagerById(id).subscribe(
-      (user) => {
-        this.local_data = user; 
-        if(this.local_data.role === 'ADHERENT'){
-          const adherent = user as Adherent;
-          this.local_data = adherent; 
-          this.local_data.id=adherent.id;
-          this.photo=adherent.photo;
-          this.initAdherentForm(adherent); 
-          const dateNaissance = new Date(adherent.dateNaissance);          
-          console.log(dateNaissance);
+        (user) => {
+            this.local_data = user;
 
-          const today = new Date();
-          const age = today.getFullYear() - dateNaissance.getFullYear();
-          const monthDiff = today.getMonth() - dateNaissance.getMonth();
-          console.log(age);
-          
-          if (age < 18 || (age === 18 && monthDiff < 0)) {
-            this.showParentInfo = true;
-            console.log('User is under 18 years old');
-          } else {
-            this.showParentInfo = false;
-            console.log('User is 18 years old or older');
-          }
+            if (this.local_data.role === 'ADHERENT') {
+                const adherent = user as Adherent;
+                this.isAdherent=true;
+                this.userRole = 'ADHERENT';
+                this.showNiveauScolaire = true;
+                this.showEquipeInput=true;
+                this.local_data = adherent;
+                console.log("this.local_data", this.local_data);
+                
+                this.local_data.id = adherent.id;
+                this.photo = adherent.photo;
+                this.getAssignedEquipesForAdherent(adherent.id);
+                
+                const dateNaissance = new Date(adherent.dateNaissance);
+                const today = new Date();
+                const age = today.getFullYear() - dateNaissance.getFullYear();
+                const monthDiff = today.getMonth() - dateNaissance.getMonth();
+
+                if (age < 18 || (age === 18 && monthDiff < 0)) {
+                    this.showParentInfo = true;
+                } else {
+                    this.showParentInfo = false;
+                }
                 this.ifAdherent = false;
-                this.isAdherent = true;
-              }
-            else {
-              const manager = user as Manager;
-              this.local_data = manager; 
-              this.local_data.id=manager.id;
-              this.photo=manager.photo;
+            } else {
+                const manager = user as Manager;
+                this.userRole = 'MANAGER';
+                this.local_data = manager;
+                this.showEquipeInput=true;
+                if(this.local_data.role==='STAFF'){
+                  this.showEquipeInput=false;
+                }
+                console.log("role of staff", this.local_data.role);
+                
+                this.local_data.id = manager.id;
+                this.photo = manager.photo;
+                this.showRoleInput= true;
+                //this.initManagerForm(manager);  // Initialize the manager form
+                this.getAssignedEquipesForEntraineur(manager.id);  // Fetch the equipes before initializing the form
+                //this.initManagerForm(this.local_data as Manager);
+                const dateNaissance = new Date(manager.dateNaissance);
+                const today = new Date();
+                const age = today.getFullYear() - dateNaissance.getFullYear();
+                const monthDiff = today.getMonth() - dateNaissance.getMonth();
 
-              this.initManagerForm(manager); 
-              console.log("manager",manager);
-              console.error('User is not a manager nor adherent');
-              console.log("role is",manager.role);
-              console.log("type of",typeof(manager));
-              console.log("role adh",Role.MANAGER);
-              console.log(manager.role===Role.MANAGER?'oui':'non');
-              
+                if (age < 18 || (age === 18 && monthDiff < 0)) {
+                    this.showParentInfo = true;
+                } else {
+                    this.showParentInfo = false;
+                }
             }
-      },
-      (error) => {
-        console.error('Error fetching manager', error);
-      }
+        },
+        (error) => {
+            console.error('Error fetching manager', error);
+        }
     );
-  }
+}
 
-  initManagerForm(manager?: Manager): void {
-    const statut = manager?.blocked ? 'BLOCKED' : 'ACTIVE';
+  // initManagerForm(manager?: Manager): void {
+  //   const statut = manager?.blocked ? 'BLOCKED' : 'ACTIVE';
+  //   const existingEquipeNoms = Array.isArray(this.equipeNoms) ? this.equipeNoms : (this.selectedEquipeNoms as string[]);
 
-    this.managerForm = this.formBuilder.group({
-      firstname: [manager?.firstname || '', Validators.required],
-      lastname: [manager?.lastname || '', Validators.required],
-      email: [manager?.email || '', [Validators.required, Validators.email]],
-      dateNaissance: [manager?.dateNaissance || '', Validators.required],
-      adresse: [manager?.adresse || '', Validators.required],
-      role: [manager?.role, Validators.required],
-      statut: [statut, Validators.required],
-      roleName: [
-        manager?.role === Role.ADHERENT || manager?.role === Role.PARENT
-          ? null
-          : manager?.roleName,
-      ],
-      photo: [manager?.photo],
-      telephone: [manager?.telephone, Validators.required],
-    });
-  }
+  //   this.managerForm = this.formBuilder.group({
+  //     firstname: [this.local_data?.firstname || '', Validators.required],
+  //     lastname: [manager?.lastname || '', Validators.required],
+  //     email: [manager?.email || '', [Validators.required, Validators.email]],
+  //     dateNaissance: [manager?.dateNaissance || '', Validators.required],
+  //     adresse: [manager?.adresse || '', Validators.required],
+  //     nationalite: [manager?.nationalite || '', Validators.required],
+  //     role: [manager?.role || '', Validators.required],
+  //     statut: [statut, Validators.required],
+  //     equipes: [existingEquipeNoms || [], Validators.required],
+  //     roleName: [
+  //       manager?.role === Role.ADHERENT || manager?.role === Role.PARENT
+  //         ? null
+  //         : manager?.roleName,
+  //     ],
+  //     photo: [manager?.photo],
+  //     telephone: [manager?.telephone, Validators.required],
+  //   });
+  // }
 
-  initAdherentForm(adherent?: Adherent): void {
-    const statut = adherent?.blocked ? 'BLOCKED' : 'ACTIVE';
+  // initForm(user: any): void{
+  //   if (this.userRole==='ADHERENT'){
+  //     this.initAdherentForm();
+  //   } else{
+  //     this.initManagerForm();
+  //   }
+  // }
 
-    this.adherentForm = this.formBuilder.group({
-      firstname: [adherent?.firstname || '', Validators.required],
-      lastname: [adherent?.lastname || '', Validators.required],
-      email: [adherent?.email || '', [Validators.required, Validators.email]],
-      dateNaissance: [adherent?.dateNaissance || '', Validators.required],
-      adresse: [adherent?.adresse || '', Validators.required],
-      photo: [adherent?.photo || null],
-      telephone: [adherent?.telephone || '', Validators.required],
-      equipes: [adherent?.nomEquipe || '', Validators.required],
-      nationalite: [adherent?.nationalite || '', Validators.required],
-      niveauScolaire: [adherent?.niveauScolaire || '', Validators.required],
-      statut: [statut, Validators.required],
+  initForm(user?: any): void {
+    const statut = user?.blocked ? 'BLOCKED' : 'ACTIVE';
+    const existingEquipeNoms = this.equipeNoms || this.selectedEquipeNoms;  
+
+    this.form = this.formBuilder.group({
+      firstname: [user?.firstname || '', Validators.required],
+      lastname: [user?.lastname || '', Validators.required],
+      email: [user?.email || '', [Validators.required, Validators.email]],
+      dateNaissance: [user?.dateNaissance || '', Validators.required],
+      adresse: [user?.adresse || '', Validators.required],
+      photo: [user?.photo || null],
+      telephone: [user?.telephone || '', Validators.required],
+      nationalite: [user?.nationalite || '', Validators.required],
+      niveauScolaire: [user?.niveauScolaire || '', Validators.required],
+      role: [user?.role || '', Validators.required],
+      roleName: [user?.roleName|| '', Validators.required],
+      equipes: [existingEquipeNoms || [], Validators.required],
+      statut: [statut || '', Validators.required],
       informationsParent: this.formBuilder.group({
-        nomParent: [adherent?.informationsParent?.nomParent || '', Validators.required],
-        prenomParent: [adherent?.informationsParent?.prenomParent || '', Validators.required],
-        telephoneParent: [adherent?.informationsParent?.telephoneParent || '', Validators.required],
-        adresseParent: [adherent?.informationsParent?.adresseParent || '', Validators.required],
-        emailParent: [adherent?.informationsParent?.emailParent || '', [Validators.required, Validators.email]],
-        nationaliteParent: [adherent?.informationsParent?.nationaliteParent || '', Validators.required]
+        nomParent: [user?.informationsParent?.nomParent || '', Validators.required],
+        prenomParent: [user?.informationsParent?.prenomParent || '', Validators.required],
+        telephoneParent: [user?.informationsParent?.telephoneParent || '', Validators.required],
+        adresseParent: [user?.informationsParent?.adresseParent || '', Validators.required],
+        emailParent: [user?.informationsParent?.emailParent || '', [Validators.required, Validators.email]],
+        nationaliteParent: [user?.informationsParent?.nationaliteParent || '', Validators.required]
       })
     });
   }
+  
 
   onStatutChange(event: MatSelectChange): void {
     const newStatut = event.value;
@@ -292,60 +377,107 @@ export class AppStaffformContentComponent implements OnInit {
       }
     );
   }
+  onEquipeChange(event: MatSelectChange): void {
+    this.selectedEquipeNoms = event.value;
+    console.log("this equipe selected", this.selectedEquipeNoms);
+    
+  }
   
+  // onEquipeChange(event: Event): void {
+  //   const selectElement = event.target as HTMLSelectElement;
+  //   const selectedOptions = Array.from(selectElement.selectedOptions)
+  //     .map(option => option.value);
+  //   this.selectedEquipeNoms = selectedOptions as string[]; // Type assertion
+  //   console.log("This equipe selected:", this.selectedEquipeNoms);
+  // }
+  
+ 
+  getAssignedEquipesForAdherent(id: number): void {
+    this.managerService.getEquipesByAdherentEmail(id).subscribe(
+      (assignedEquipes: Equipe[]) => {
+        this.assignedEquipes = assignedEquipes;
+        this.equipeNoms = assignedEquipes.map((equipe: Equipe) => equipe.nom);
+        console.log('this.assignedEquipes', this.assignedEquipes);
+        console.log('this.equipeNoms', this.equipeNoms);
+        this.error = '';
 
-  
+        // Initialize the form with the assigned equipes
+        this.initForm(this.local_data as Adherent);
+      },
+      (error) => {
+        this.error = 'No equipes found or an error occurred';
+      }
+    );
+}
+
+getAssignedEquipesForEntraineur(id: number): void {
+  this.managerService.getEquipesByEntraineurId(id).subscribe(
+    (assignedEquipes: Equipe[]) => {
+      this.assignedEquipes = assignedEquipes;
+      this.equipeNoms = assignedEquipes.map((equipe: Equipe) => equipe.nom);
+      console.log('this.assignedEquipes', this.assignedEquipes);
+      console.log('this.equipeNoms', this.equipeNoms);
+      this.error = '';
+    
+      this.initForm(this.local_data as Manager);
+    },
+    (error) => {
+      this.error = 'No equipes found or an error occurred';
+    }
+  );
+}
+getInitials(): string {
+  const firstname = this.form.get('firstname')?.value || '';
+  const lastname = this.form.get('lastname')?.value || '';
+  const firstInitial = firstname.charAt(0).toUpperCase();
+  const lastInitial = lastname.charAt(0).toUpperCase();
+  return `${firstInitial}${lastInitial}`;
+}
+
 
 
   doAction(): void {
-    const form = this.isAdherent ? this.adherentForm : this.managerForm;
-
     if (this.action === 'Add') {
-      const role = this.managerForm.get('role')?.value;
-      console.log('role', role);
-      const addedManager = this.managerForm.value;
-
       let addObservable = new Observable<any>();
-      switch (role) {
+      console.log(this.selectedRole);
+
+      switch (this.selectedRole) {
+        
         case 'STAFF':
-          if (this.managerForm.valid) {
-            const managerWithPhoto = { ...addedManager, photo: this.photo };
+          const addedStaff = this.form.value;
+         
+            const staffWithPhoto = { ...addedStaff, photo: this.photo };
 
-            addObservable = this.managerService.addStaff(managerWithPhoto);
-            console.log('photo 2', this.photo);
-          } else {
-            console.error(
-              'Form is not valid. Please fill out all required fields.'
-            );
-          }
-          break;
-        case 'ENTRAINEUR':
-          if (this.managerForm.valid) {
-            const managerWithPhoto = { ...addedManager, photo: this.photo };
-            addObservable = this.managerService.addEntraineur(managerWithPhoto);
-          } else {
-            console.error(
-              'Form is not valid. Please fill out all required fields.'
-            );
-          }
-          break;
-        case 'ADHERENT':
-          if (this.managerForm.valid) {
-            const managerWithPhoto = { ...addedManager, photo: this.photo };
-            addObservable = this.managerService.addAdherent(managerWithPhoto);
-          } else {
-            console.error(
-              'Form is not valid. Please fill out all required fields.'
-            );
-          }
+            addObservable = this.managerService.addStaff(staffWithPhoto);
+           
           break;
 
+          case 'ENTRAINEUR':
+            const addedManager = this.form.value;
+            const equipeNamesForManager = this.form.get('equipes')?.value || [];
+            const entraineurEquipesNames = equipeNamesForManager.length > 0 ? equipeNamesForManager : [];
+
+            const entraineurWithPhoto = { ...addedManager, photo: this.photo };
+            addObservable = this.managerService.addEntraineur(entraineurWithPhoto, entraineurEquipesNames);
+          break;          
+
+          case 'ADHERENT':
+            const addedAdherent = this.form.value;
+            const equipeNames = this.form.get('equipes')?.value || [];
+            // Ensure that equipeNames are correctly mapped to their names
+            const nomEquipes = equipeNames.length > 0 ? equipeNames : [];
+            console.log("nomEquipes", nomEquipes);
+          
+            const adherentWithPhoto = { ...addedAdherent, photo: this.photo };
+            addObservable = this.managerService.addAdherent(adherentWithPhoto, nomEquipes);
+            break;
+          
         case 'PARENT':
           break;
 
         default:
-          console.error('Invalid role:', role);
-          return; // Exit function if role is invalid
+          console.error('Invalid role:');
+          return; 
       }
       addObservable.subscribe(
         (response) => {
@@ -356,11 +488,7 @@ export class AppStaffformContentComponent implements OnInit {
             'success'
           );
           setTimeout(() => {
-            if (window.opener) {
-              window.close();
-            } else {
-              window.history.back();
-            }
+            this.router.navigate(['/apps/staff']);
           }, 5000);
         },
         (error) => {
@@ -369,37 +497,34 @@ export class AppStaffformContentComponent implements OnInit {
         }
       );
     } else if (this.action === 'Update') {
-      const updatedManager = this.managerForm.value;
-      const updatedAdherent = this.adherentForm.value;
-      console.log(updatedAdherent);
-      updatedAdherent.id = this.local_data.id;
-      updatedAdherent.photo = this.local_data.photo;
-
-      updatedManager.id = this.local_data.id; // Set the id of the manager to be updated
-      updatedManager.photo = this.local_data.photo;
       const role = this.local_data.role;
       let updateObservable;
       switch (role) {
         case 'STAFF':
+          const updatedStaff = this.form.value;
+          updatedStaff.id = this.local_data.id; 
+
+          updatedStaff.photo = this.local_data.photo;
           //const staffWithPhoto = { ...updatedManager, photo: this.photo2 };
-          updateObservable = this.managerService.updateStaff(updatedManager);
+          updateObservable = this.managerService.updateStaff(updatedStaff);
           break;
         case 'ENTRAINEUR':
-          //const entraineurWithPhoto = { ...updatedManager, photo: this.photo2 };
-          updateObservable =
-            this.managerService.updateEntraineur(updatedManager);
+          const updatedEntraineur = this.form.value;
+          updatedEntraineur.id = this.local_data.id;
+          updatedEntraineur.photo = this.local_data.photo;
+          const entraineurWithPhoto = { ...updatedEntraineur, photo: this.photo };
+          updateObservable = this.managerService.updateEntraineur(entraineurWithPhoto, updatedEntraineur.equipes);
           break;
-        case 'ADHERENT':
-          const adherentWithPhoto = { ...updatedAdherent, photo: this.photo };
-
-          updateObservable =
-            this.managerService.updateAdherent(adherentWithPhoto);
-          break;
-        case 'PARENT':
-          const parentWithPhoto = { ...updatedManager, photo: this.photo };
-
-          updateObservable = this.managerService.updateParent(parentWithPhoto);
-          break;
+          case 'ADHERENT':
+            const updatedAdherent = this.form.value;
+            updatedAdherent.id = this.local_data.id;
+            updatedAdherent.photo = this.local_data.photo;
+            const adherentWithPhoto = { ...updatedAdherent, photo: this.photo };
+            console.log("updatedAdherent.equipes", updatedAdherent.equipes);
+            
+            updateObservable = this.managerService.updateAdherent(adherentWithPhoto, updatedAdherent.equipes);
+            break;
+ 
         default:
           console.error('Invalid role:', role);
           return; // Exit function if role is invalid
@@ -413,11 +538,7 @@ export class AppStaffformContentComponent implements OnInit {
             'success'
           );
           setTimeout(() => {
-            if (window.opener) {
-              window.close();
-            } else {
-              window.history.back();
-            }
+            this.router.navigate(['/apps/staff']);
           }, 5000);
         },
         (error) => {

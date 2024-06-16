@@ -1,18 +1,18 @@
-import { DatePipe } from '@angular/common';
-import { AfterViewInit, Component, Inject, ViewChild } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
-import { EquipeService } from 'src/app/services/equipe.service';
-import { EvenementService } from 'src/app/services/evenement.service';
-import { Adherent } from 'src/models/adherent.model';
-import { UpdateEvenementRequest } from 'src/models/dto/UpdateEvenementRequest.model';
-import { UpdateEvenementRequestBody } from 'src/models/dto/updateMatchAmicalRequest.model';
-import { EvenementType } from 'src/models/enums/evenementType';
-import { StatutEvenement } from 'src/models/enums/statutEvenenement.model';
-import { Equipe } from 'src/models/equipe.model';
-import { Evenement } from 'src/models/evenement.model';
+import {DatePipe} from '@angular/common';
+import {AfterViewInit, Component, Inject, ViewChild} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {Router} from '@angular/router';
+import {EquipeService} from 'src/app/services/equipe.service';
+import {EvenementService} from 'src/app/services/evenement.service';
+import {Adherent} from 'src/models/adherent.model';
+import {UpdateEvenementRequest} from 'src/models/dto/UpdateEvenementRequest.model';
+import {UpdateEvenementRequestBody} from 'src/models/dto/updateMatchAmicalRequest.model';
+import {EvenementType} from 'src/models/enums/evenementType';
+import {StatutEvenement} from 'src/models/enums/statutEvenenement.model';
+import {Equipe} from 'src/models/equipe.model';
+import {Evenement} from 'src/models/evenement.model';
 
 @Component({
   templateUrl: './listEvenement.component.html',
@@ -167,6 +167,7 @@ export class ListEvenementComponent implements AfterViewInit {
         console.log('evenements fetched successfully', evenements);
         // Assuming dataSource is defined in your component
         this.dataSource.data = evenements;
+        this.sortData('desc');
       },
       (error) => {
         console.error('Error fetching evenements', error);
@@ -189,8 +190,7 @@ export class ListEvenementComponent implements AfterViewInit {
 
   openAddEvenementDialog(): void {
     const dialogRef = this.dialog.open(AddEvenementPopupComponent, {
-      width: '720.6px',
-      height: '500px',
+      width: '700px',
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -263,7 +263,7 @@ export class ListEvenementComponent implements AfterViewInit {
 
   onUpdateEvenement(evenement: Evenement): void {
     const dialogRef = this.dialog.open(UpdateEvenementPopupComponent, {
-      data: evenement
+      data: evenement, width: '700px'
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -276,7 +276,7 @@ export class ListEvenementComponent implements AfterViewInit {
 
   onUpdateEvenementMatchAmical(evenement: Evenement): void {
     const dialogRef = this.dialog.open(UpdateEvenementMatchAmicalPopupComponent, {
-      data: evenement
+      data: evenement, width: '700px'
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -289,7 +289,7 @@ export class ListEvenementComponent implements AfterViewInit {
 
   onDetailsEvenement(evenement: Evenement): void {
     const dialogRef = this.dialog.open(DetailEventDialogComponent, {
-      data: evenement
+      data: evenement, width: '700px'
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -300,7 +300,7 @@ export class ListEvenementComponent implements AfterViewInit {
 
   onDetailsEvenementMatchAmical(evenement: Evenement): void {
     const dialogRef = this.dialog.open(DetailEventMatchAmicalDialogComponent, {
-      data: evenement
+      data: evenement, width: '700px'
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -500,27 +500,10 @@ export class DetailEventDialogComponent {
   templateUrl: './detailEventMatchAmical.component.html',
 })
 export class DetailEventMatchAmicalDialogComponent {
-  equipes: Equipe[] = [];
   constructor(
-    public dialogRef: MatDialogRef<DetailEventMatchAmicalDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public evenement: Evenement, private evenementService: EvenementService
+    public dialogRef: MatDialogRef<DetailEventDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public evenement: Evenement
   ) { }
-
-  ngOnInit(): void {
-    if (this.evenement.id !== undefined) {
-      this.evenementService.getEquipesByEvenementMatchAmical(this.evenement.id).subscribe(
-        (equipes: Equipe[]) => {
-          this.equipes = equipes;
-          console.log("equipes fetched successfully", this.equipes);
-        },
-        (error) => {
-          console.error('Error fetching equipes:', error);
-        }
-      );
-    } else {
-      console.error('Evenement ID is undefined');
-    }
-  }
 
   onCancelClick(): void {
     this.dialogRef.close(false); // Close the dialog with 'false' value

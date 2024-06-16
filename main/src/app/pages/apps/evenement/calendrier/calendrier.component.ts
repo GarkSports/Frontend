@@ -1,13 +1,13 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { CalendarOptions, EventClickArg } from '@fullcalendar/core';
+import {Component, Inject, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {CalendarOptions, EventClickArg} from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
-import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
-import { EquipeService } from 'src/app/services/equipe.service';
-import { EvenementService } from 'src/app/services/evenement.service';
-import { EvenementType } from 'src/models/enums/evenementType';
-import { Equipe } from 'src/models/equipe.model';
-import { Evenement } from 'src/models/evenement.model';
+import interactionPlugin, {DateClickArg} from '@fullcalendar/interaction';
+import {EquipeService} from 'src/app/services/equipe.service';
+import {EvenementService} from 'src/app/services/evenement.service';
+import {EvenementType} from 'src/models/enums/evenementType';
+import {Equipe} from 'src/models/equipe.model';
+import {Evenement} from 'src/models/evenement.model';
 import frLocale from '@fullcalendar/core/locales/fr';
 
 @Component({
@@ -49,6 +49,7 @@ export class CalendrierComponent implements OnInit {
     console.log(clickedEvent); // Log clickedEvent to inspect its contents
     const dialogRef = this.dialog.open(EventPopupComponent, {
       data: clickedEvent
+      , width: '700px'
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {

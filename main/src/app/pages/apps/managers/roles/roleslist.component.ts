@@ -40,8 +40,7 @@ export class AppRoleslistComponent implements OnInit {
               public managerService: ManagerService){}
 
   ngOnInit(): void {
-    this.dataSource = new MatTableDataSource<RoleName>([]);
-    this.table.renderRows();
+
     this.fetchRoleNames();
   }
 
@@ -73,19 +72,18 @@ export class AppRoleslistComponent implements OnInit {
 
   fetchRoleNames(): void {
     this.managerService.getRoleNames().subscribe(roleNames => {
-      this.roleNames = roleNames;
+      this.dataSource.data = roleNames;
       console.log(roleNames);
-      
     });
   }
 
  
-  ngAfterViewInit(): void {
-    this.managerService.getRoleNames().subscribe(roleNames => {
-      this.dataSource.data = roleNames;
-      this.dataSource.paginator = this.paginator;
-    });
-  }
+  // ngAfterViewInit(): void {
+  //   this.managerService.getRoleNames().subscribe(roleNames => {
+  //     this.dataSource.data = roleNames;
+  //     this.dataSource.paginator = this.paginator;
+  //   });
+  // }
   
 
   btnCategoryClick(val: string): number {
@@ -99,7 +97,7 @@ export class AppRoleslistComponent implements OnInit {
       data: obj
     });
 
-    dialogRef.afterClosed().subscribe((result: any) => {
+    dialogRef.afterClosed().subscribe(() => {
       this.fetchRoleNames();
     });
   }
@@ -115,7 +113,7 @@ export class AppRoleslistComponent implements OnInit {
 export class AppRolesDialogContentComponent implements OnInit {
   action: string;
   local_data: any;
-  managerForm: FormGroup;
+  rolesForm: FormGroup;
   firstnameValue: string;
   roleNames: string[] = [];
   permissions: string[] = [];
@@ -129,18 +127,18 @@ export class AppRolesDialogContentComponent implements OnInit {
     this.local_data = { ...data };
     this.action = this.local_data.action ;
     if (this.action === 'Update') {
-      this.initManagerForm();
+      this.initRolesForm();
     }
   }
 
   ngOnInit(): void {
-    this.initManagerForm();
+    this.initRolesForm();
     this.fetchRoleNames();
     this.fetchPermissions();
   }
 
-  initManagerForm(): void {
-    this.managerForm = this.formBuilder.group({
+  initRolesForm(): void {
+    this.rolesForm = this.formBuilder.group({
       name: [this.local_data.name, Validators.required],
       permissions: [this.local_data.permissions, Validators.required],
     });
@@ -165,9 +163,9 @@ export class AppRolesDialogContentComponent implements OnInit {
   }
 
   doAction(): void {
-    if (this.action === 'Add' && this.managerForm) {
-      const name = this.managerForm.get('name')?.value; // Add '?' for null check
-      const permissions = this.managerForm.get('permissions')?.value; // Add '?' for null check
+    if (this.action === 'Add' && this.rolesForm) {
+      const name = this.rolesForm.get('name')?.value; // Add '?' for null check
+      const permissions = this.rolesForm.get('permissions')?.value; // Add '?' for null check
   
   
       this.managerService.addRoleName(name, permissions).subscribe(
@@ -176,15 +174,15 @@ export class AppRolesDialogContentComponent implements OnInit {
           this.dialogRef.close(true);
         },
         (error) => {
-          console.log(this.managerForm.value);
+          console.log(this.rolesForm.value);
           // Handle error
           console.error('Error adding role name:', error);
         }
       );
    
-    } else if (this.action === 'Update' && this.managerForm) {
+    } else if (this.action === 'Update' && this.rolesForm) {
       // Handle Update action
-        const updatedRolename = this.managerForm.value;
+        const updatedRolename = this.rolesForm.value;
 
         updatedRolename.id = this.local_data.id; // Set the id of the manager to be updated
         this.managerService.updateRolename(updatedRolename).subscribe(

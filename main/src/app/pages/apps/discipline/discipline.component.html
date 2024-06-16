@@ -1,23 +1,26 @@
 <div class=" bg-third   rounded-3xl">
   <div class="p-24 bg-third  rounded-3xl">
-    <div class="row justify-content-between">
+    <div class="row bg-third justify-content-between">
       <div class="col-lg-6">
         <h2 class="text-black  font-medium text-lg">Liste des disciplines</h2>
       </div>
-      <div class="col-lg-6 d-flex align-items-center justify-content-end">
+
+      <div class="col-lg-6 d-flex align-items-center justify-content-end ">
         <div class="relative  ">
           <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
             <i-tabler name="search" class="icon-20"></i-tabler>
           </div>
           <input (keyup)="applyFilter($any($event.target).value)" type="text" id="simple-search" class="mr-8  bg-gray-50 border-[0.3px]  rounded-3xl border-gray-300  text-gray-900 text-sm    focus:ring-blue-500 focus:border-blue-500 block w-52 h-9 ps-10 p-2.5  " placeholder="Rechercher.."   />
         </div>
-        <button (click)="openDialog('Add', {})" class="bg-main font-bold rounded-3xl h-9 pt-1    shadow-md text-white">
+
+        <button (click)="openDialog('Add', {})"
+                class="bg-main font-bold rounded-3xl h-9 pt-1 px-1  shadow-md text-white">
+
           <div class="row ">
             <div class="col-1 ml-2">
               <i-tabler name="plus" class="icon-20"></i-tabler>
             </div>
-            <div class="col-1">
-              Ajouter
+            <div class="col-1">Ajouter
             </div>
           </div>
         </button>
@@ -60,11 +63,3 @@
     </div>
   </mat-card-content>
 </div>
-
-<style>
-
-.gray-background {
-    background-color: #FAFAFA;
-    /*testing color blue: FAFAFA 0000FF*/
-  }
-</style>

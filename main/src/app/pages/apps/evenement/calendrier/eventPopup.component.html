@@ -1,58 +1,50 @@
-<div class="evenement-dialog">
-    <h6 mat-dialog-title class="dialog-title">Evenement</h6>
-    <mat-dialog-content class="dialog-content">
-        <table class="evenement-table">
-            <thead>
-                <tr>
-                    <th>Nom Evenement</th>
-                    <th>Lieu</th>
-                    <th>Type</th>
-                    <th>Heure</th>
-                    <th>Equipe</th>
-                    <th>Statut</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="evenement-item">
-                    <td>{{ evenement.nomEvent }}</td>
-                    <td>{{ evenement.lieu }}</td>
-                    <td>{{ formatEnumValue(evenement.type) }}</td>
-                    <td>{{ evenement.date }} {{ evenement.heure.slice(0, 5) }}</td>
-                    <td>{{ evenement.convocationEquipe?.nom }}</td>
-                    <td>{{ evenement.statut }}</td>
-                </tr>
-            </tbody>
-        </table>
-    </mat-dialog-content>
-    <h6 mat-dialog-title class="dialog-title">Members</h6>
-    <mat-dialog-content class="dialog-content">
-        <table class="evenement-table">
-            <thead>
-                <tr>
-                    <th>Nom</th>
-                    <th>Prenom</th>
-                    <th>Email</th>
-                    <th>Telephone</th>
-                    <th>Adresse</th>
-                    <th>Equipe</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="evenement-item" *ngFor="let member of evenement.convocationMembres">
-                    <td>{{ member.firstname }}</td>
-                    <td>{{ member.lastname }}</td>
-                    <td>{{ member.email }}</td>
-                    <td>{{ member.telephone }}</td>
-                    <td>{{ member.adresse }}</td>
-                    <td>{{ member.nomEquipe }}</td>
-                </tr>
-            </tbody>
-        </table>
-    </mat-dialog-content>
-    <mat-dialog-actions class="dialog-actions">
-        <button mat-button mat-dialog-close color="primary" class="close-button">Fermer</button>
-    </mat-dialog-actions>
+<div mat-dialog-title>
+  <button mat-button mat-dialog-close>
+    <i-tabler class="hover:cursor-pointer" name="arrow-left"></i-tabler>
+  </button>
 </div>
+<div class="pt-12 pb-4" mat-dialog-content>
+  <div class="row">
+    <div class="col flex justify-center">
+      <h1 class="text-xl text-black text-center">Evenement</h1>
+    </div>
+  </div>
+  <div class="row mt-8 w-full">
+    <div class="col flex justify-center">
+      <div class="dialog-content w-full">
+        <div *ngIf="evenement.heure !== null" class="w-full bg-third rounded-3xl px-4 py-2 ">
+          <h1 class="text-black text-lg font-medium">{{ formatEnumValue(evenement.type) | titlecase }} </h1>
+          <p>Nom: {{ evenement.nomEvent }} </p>
+          <p>Date:  {{ evenement.date }} {{ evenement.heure.slice(0, 5) }}</p>
+          <p>Lieu:  {{ evenement.lieu }}</p>
+          <p>Equipe: {{ evenement.convocationEquipe?.nom }} </p>
+          <p>Statut: {{ evenement.statut }}</p>
+        </div>
+        <div *ngIf="evenement.heure !== null" class="w-full bg-third rounded-3xl px-4 py-2 mt-5 ">
+          <h1 class="text-black text-lg font-medium">Members</h1>
+          <div class="grid grid-cols-2 mt-4">
+            <div *ngFor="let member of evenement.convocationMembres">
+              <div class="row">
+                <div class="col-2">
+                  <img [src]="member.photo |defaultImage: member.firstname : member.lastname :'ffffff':'000000'"
+                       alt="Logo" width="80"/>
+                </div>
+                <div class="col">
+                  {{ member.firstname }} {{ member.lastname }}
+                </div>
+                <div class="col-1">
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <style>
     .evenement-dialog {

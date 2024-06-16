@@ -1,29 +1,32 @@
-<div class="flex justify-center items-center">
-  <div class="gray-background rounded-3xl p-24" style="min-width: 900px;">
-  <h2 class="f-w-500 m-b-24">Ajouter {{ addtype | titlecase }}</h2>
+<div class="bg-third rounded-3xl flex justify-center items-center">
+  <div class=" p-24" style="min-width: 900px;">
+    <h2 class="f-w-500 m-b-24 font-bold text-xl">Ajouter {{ addtype | titlecase }}</h2>
 
-  <form [formGroup]="evenementForm">
-    <div class="mt-4">
-      <label for="HeadlineAct" class="block text-sm font-medium text-gray-900"> Type </label>
-      <input required placeholder="Type" formControlName="type"
-             class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent text-black sm:text-sm"/>
-      <p class="text-red-600" *ngIf="evenementForm.get('type')?.invalid && evenementForm.get('type')?.touched">Champ type
-        est obligatoire!
-      </p>
-    </div>
+    <form [formGroup]="evenementForm">
+      <div class="mt-4">
+        <label class="block text-sm font-medium text-gray-900" for="HeadlineAct"> Type </label>
+        <input class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent text-black sm:text-sm"
+               formControlName="type" placeholder="Type"
+               required/>
+        <p *ngIf="evenementForm.get('type')?.invalid && evenementForm.get('type')?.touched" class="text-red-600">Champ
+          type
+          est obligatoire!
+        </p>
+      </div>
 
-    <div class="mt-4">
-      <label for="etat" class="block text-sm font-medium text-gray-900">Etat</label>
-      <select formControlName="etat" class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent text-black sm:text-sm" required>
-        <option value="" disabled selected>Choisir un état</option>
-        <option value="FIXE">FIXE</option>
-        <option value="VARIABLE">VARIABLE</option>
-      </select>
-      <p class="text-red-600" *ngIf="evenementForm.get('etat')?.invalid && evenementForm.get('etat')?.touched">
-        Champ etat est obligatoire!
-      </p>
-    </div>
-    
+      <div class="mt-4">
+        <label class="block text-sm font-medium text-gray-900" for="etat">Etat</label>
+        <select class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent text-black sm:text-sm"
+                formControlName="etat"
+                required>
+          <option disabled selected value="">Choisir un état</option>
+          <option value="FIXE">FIXE</option>
+          <option value="VARIABLE">VARIABLE</option>
+        </select>
+        <p *ngIf="evenementForm.get('etat')?.invalid && evenementForm.get('etat')?.touched" class="text-red-600">
+          Champ etat est obligatoire!
+        </p>
+      </div>
 
     <div class="mt-4">
       <label for="HeadlineAct" class="block text-sm font-medium text-gray-900"> Date </label>
@@ -37,45 +40,60 @@
     </div>
     
 
-    <div class="mt-4">
-      <label for="HeadlineAct" class="block text-sm font-medium text-gray-900"> Prix D'unité </label>
-      <input type="number"
-             class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent text-black sm:text-sm"
-             required formControlName="prixunite"/>
-      <p class="text-red-600" *ngIf="evenementForm.get('prixunite')?.invalid && evenementForm.get('prixunite')?.touched">
-        Champ Prix D'unité est obligatoire!
-      </p>
-    </div>
+      <div class="mt-4">
+        <label class="block text-sm font-medium text-gray-900" for="HeadlineAct"> Date </label>
+        <input class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent text-black sm:text-sm"
+               formControlName="date"
+               required type="date"/>
+        <p *ngIf="evenementForm.get('date')?.invalid && evenementForm.get('date')?.touched" class="text-red-600">
+          Champ Date est obligatoire!
+        </p>
+      </div>
 
-    <div class="mt-4">
-      <label for="HeadlineAct" class="block text-sm font-medium text-gray-900"> Quantité </label>
-      <input type="number"
-             class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent text-black sm:text-sm"
-             required formControlName="quantite"/>
-      <p class="text-red-600" *ngIf="evenementForm.get('quantite')?.invalid && evenementForm.get('quantite')?.touched">
-        Champ Quantité est obligatoire!
-      </p>
-    </div>
+      <div class="mt-4">
+        <label class="block text-sm font-medium text-gray-900" for="HeadlineAct"> Prix D'unité </label>
+        <input class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent text-black sm:text-sm"
+               formControlName="prixunite"
+               required type="number"/>
+        <p *ngIf="evenementForm.get('prixunite')?.invalid && evenementForm.get('prixunite')?.touched"
+           class="text-red-600">
+          Champ Prix D'unité est obligatoire!
+        </p>
+      </div>
 
-    <div class="mt-4" *ngIf="addtype === 'depenses'">
-      <label for="beneficiaire" class="block text-sm font-medium text-gray-900"> Bénéficiaire </label>
-      <input type="text"
-             class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent text-black sm:text-sm"
-             required formControlName="beneficiaire"/>
-      <p class="text-red-600" *ngIf="evenementForm.get('beneficiaire')?.invalid && evenementForm.get('beneficiaire')?.touched">
-        Champ beneficiaire est obligatoire!
-      </p>
-    </div>
+      <div class="mt-4">
+        <label class="block text-sm font-medium text-gray-900" for="HeadlineAct"> Quantité </label>
+        <input class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent text-black sm:text-sm"
+               formControlName="quantite"
+               required type="number"/>
+        <p *ngIf="evenementForm.get('quantite')?.invalid && evenementForm.get('quantite')?.touched"
+           class="text-red-600">
+          Champ Quantité est obligatoire!
+        </p>
+      </div>
 
-    <div class="mt-4 flex justify-center">
-      <button type="submit" class="px-8 py-2 rounded-3xl font-semibold bg-main hover:bg-mainHover disabled:bg-second text-black"
-              [disabled]="!evenementForm.valid"
-              (click)="add()">Confirmer
-      </button>
-    </div>
-  </form>
+      <div *ngIf="addtype === 'depenses'" class="mt-4">
+        <label class="block text-sm font-medium text-gray-900" for="beneficiaire"> Bénéficiaire </label>
+        <input class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent text-black sm:text-sm"
+               formControlName="beneficiaire"
+               required type="text"/>
+        <p *ngIf="evenementForm.get('beneficiaire')?.invalid && evenementForm.get('beneficiaire')?.touched"
+           class="text-red-600">
+          Champ beneficiaire est obligatoire!
+        </p>
+      </div>
+
+      <div class="mt-4 flex justify-center">
+        <button (click)="add()"
+                [disabled]="!evenementForm.valid"
+                class="px-8 py-2 rounded-3xl font-semibold bg-main hover:bg-mainHover disabled:bg-second text-black"
+                type="submit">Confirmer
+        </button>
+      </div>
+    </form>
+  </div>
 </div>
-</div>
+
 
 <style>
   .text-danger {

@@ -38,6 +38,7 @@
     "angular-tabler-icons": "^2.7.0",
     "apexcharts": "^3.40.0",
     "axios": "^1.6.8",
+    "bootstrap-icons": "^1.11.3",
     "date-fns": "^2.29.3",
     "firebase": "^10.12.0",
     "font-awesome": "^4.7.0",
