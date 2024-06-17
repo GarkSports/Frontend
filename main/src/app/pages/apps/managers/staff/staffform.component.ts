@@ -168,7 +168,7 @@ export class AppStaffformContentComponent implements OnInit {
       //  { this.getAssignedEquipesForAdherent(this.local_data?.id);}
 
         
-           this.getAssignedEquipesForEntraineur(this.local_data?.id);
+          // this.getAssignedEquipesForEntraineur(this.local_data?.id);
 
       },
       (error) => {
@@ -356,7 +356,10 @@ export class AppStaffformContentComponent implements OnInit {
       })
     });
   }
-  
+  loggitOut(event: Event): void {
+    const inputElement = event.target as HTMLInputElement;
+    console.log('Input value changed:', inputElement.value);
+  }
 
   onStatutChange(event: MatSelectChange): void {
     const newStatut = event.value;
@@ -439,7 +442,7 @@ getInitials(): string {
   doAction(): void {
     if (this.action === 'Add') {
       let addObservable = new Observable<any>();
-      console.log(this.selectedRole);
+      console.log("role selected",this.selectedRole);
 
       switch (this.selectedRole) {
         

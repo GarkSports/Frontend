@@ -7,7 +7,7 @@ import { Paiement } from "./paiement.model";
 import { User } from "./user.model";
 
 export class Adherent extends User {
-    informationsParent: InformationsParent;
+    informationsParent?: InformationsParent;
     discipline?: Discipline;
     academie?: Academie;
     paiement?: Paiement;

@@ -37,12 +37,13 @@ export class AppStafflistComponent implements OnInit, OnDestroy {
     'action',
   ];
 
-  dataSource = new MatTableDataSource<Manager>([]);
+  dataSource = new MatTableDataSource<any>([]);
   statutOptions: string[] = ['true', 'false'];
   selectedEquipe: string | null = null;
   nomEquipeOptions: string[] = [];
   assignedEquipes: Equipe[] = [];
   equipeNoms: string[] = [];
+  equipeSearch: Equipe[];
   rolesOptions: string[] = [];
   selectedSortingOption: string | null = null;
   selectedStatut: string | null = null;
@@ -80,13 +81,17 @@ export class AppStafflistComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.dataSource = new MatTableDataSource<Manager>([]);
+    this.getManagersWithEquipes();
+    // this.dataSource = new MatTableDataSource<any>([]);
     this.fetchRoleNames();
     //this.getManagers();
+    
     this.getEquipeNames();
-    this.getManagersWithEquipes();
+    
    // this.getRolesOptions();
   }
+
+
   getManagersWithEquipes(): void {
      this.managerService.getManagers().subscribe((managers)=> { 
       this.equipeService.getEquipes().subscribe((equipes)=>{
@@ -96,17 +101,20 @@ export class AppStafflistComponent implements OnInit, OnDestroy {
       }))
         const managers_with_equipe = managers.map((m) => ({
           ...m,
-          equipes: equipeNameByUserId.filter(item => item.users_id.includes(m.id)).map(i => i.nom) ?? []
+          equipes:  equipeNameByUserId.filter(item => item.users_id.includes(m.id)).map(i => i.nom) ?? []
         }))
-        this.dataSource.data = managers_with_equipe;
-        console.log("managers_with_equipe",this.dataSource.data); 
+        this.equipeSearch= equipes;
+        setTimeout(()=>{
+          
+          this.dataSource.data =  managers_with_equipe;
+          console.log("managers_with_equipe",this.dataSource.data); 
+        },500)
+       
       });
-
      });
-   
-     
-
   }
+
+
   applyFilterByStatut(): void {
     // Apply the filter by Statut if selectedStatut is not null
     if (this.selectedStatut !== null) {
@@ -173,21 +181,16 @@ export class AppStafflistComponent implements OnInit, OnDestroy {
   }
 
   applyFilterByEquipe(): void {
-    // Apply the filter by Equipe if selectedEquipe is not null
     if (this.selectedEquipe !== null) {
-      // Convert filter value to lowercase for case-insensitive comparison
       const filter = this.selectedEquipe.trim().toLowerCase();
 
-      // Set filter function for data source
-      this.dataSource.filterPredicate = (data: Manager, filter: string) => {
+      this.dataSource.filterPredicate = (data: any, filter: string) => {
         // Check if Equipe matches the selected Equipe
-        return this.matchesFilter(data.nomEquipe, filter);
+        return this.matchesFilter(data.equipes, filter);
       };
 
-      // Apply the filter
       this.dataSource.filter = filter;
     } else {
-      // Reset the filter if selectedEquipe is null
       this.applyFilter('');
     }
   }

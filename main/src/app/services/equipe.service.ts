@@ -78,4 +78,5 @@ export class EquipeService {
   removeEntraineurFromEquipe(entraineurId: number, equipeId: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/removeEntraineurFromEquipe/${entraineurId}/${equipeId}`);
   }
+  
 }

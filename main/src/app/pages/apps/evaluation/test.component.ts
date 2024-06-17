@@ -13,6 +13,7 @@ import {AppTestDialogContentComponent} from './testDialog.component';
     // tslint:disable-next-line - Disables all
     selector: 'app-test-content',
     templateUrl: './test.component.html',
+    styleUrls: ['./test.component.css']
   })
   // tslint:disable-next-line - Disables all
 export class AppTestContentComponent implements OnInit {
@@ -33,6 +34,7 @@ export class AppTestContentComponent implements OnInit {
   id: number;
   showCategorie: boolean= false;
   selectedCategoryToOpenIndex: number = -1;
+  isClicked: boolean = false;
 
   constructor(
     //public data: Equipe,
@@ -63,10 +65,11 @@ export class AppTestContentComponent implements OnInit {
     this.selectedCategoryToOpenIndex = this.selectedCategoryToOpenIndex === index ? -1 : index;
   }
 
-  logIt(categorieName: string, index: number): void {
+  toggleCategory(categorieName: string, index: number): void {
     console.log("this is clicked category", categorieName);
-    this.showCategorie = true;
-    this.selectedCategoryToOpenIndex = index;
+    this.showCategorie = !this.showCategorie;
+    this.isClicked = !this.isClicked;
+    this.selectedCategoryToOpenIndex = this.selectedCategoryToOpenIndex === index ? -1 : index;
   }
 
   addCategorie(action: string, obj: any, testId: number): void {
@@ -146,17 +149,13 @@ export class AppTestContentComponent implements OnInit {
 
   }
 
-    addKpi(categorieId: number): void {
-    const newKpiValue = this.testForm.get('newKpiValue')?.value;
-    console.log("categorieId",categorieId);
-
-      if (this.selectedCategoryIndex !== null && newKpiValue.trim() !== '') {
-        this.staffService.addKpi(this.selectedCategoryIndex, newKpiValue.trim(), categorieId).subscribe(() => {
-            this.testForm.get('newKpiValue')?.reset(); // Reset the newKpiValue form control
-            this.selectedCategoryIndex = null; // Deselect the category
-            this.getTestById(this.id);
-        });
+  addKpi(categorieId: number): void {
+    const newKpiValue = this.testForm.get('newKpiValue')?.value?.trim();
+    if (newKpiValue && this.selectedCategoryIndex !== null) {
+      this.staffService.addKpi(this.selectedCategoryIndex, newKpiValue, categorieId).subscribe(() => {
+        this.getTestById(this.id);
+      });
     }
-}
+  }
 
 }

@@ -1,34 +1,76 @@
-<h2 mat-dialog-title>{{ action }}</h2>
-
-<ng-container *ngIf="action !== 'Delete'">
-  <mat-dialog-content *ngIf="action === 'Add' || action === 'Update'" style="max-width: 500px; height: 200px" class="mat-typography m-t-34">
-    <form [formGroup]="rolesForm">
-      <div class="row">
-        <div class="col-sm-6 col-lg-12 mb-3">
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Role</mat-label>
-            <input formControlName="name" type="text" matInput required id="name" name="name" placeholder="Enter role name" />
-          </mat-form-field>
-        </div>
-        
-        <div class="col-sm-6 col-lg-12 mb-3">
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Permissions</mat-label>
-            <mat-select formControlName="permissions" multiple required id="permissions" name="permissions" placeholder="Select permissions">
-              <mat-option *ngFor="let permission of permissions" [value]="permission">{{ permission }}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-      </div>
-    </form>
-  </mat-dialog-content>
-</ng-container>
-
-<div mat-dialog-actions class="p-24 p-t-0 d-flex justify-content-between">
-  <button mat-flat-button (click)="doAction()" color="primary">
-    <mat-icon>check</mat-icon> {{ action }}
-  </button>
-  <button mat-stroked-button color="warn" (click)="closeDialog()">
-    <mat-icon>cancel</mat-icon> Cancel
-  </button>
+<div mat-dialog-title>
+  <i-tabler (click)="closeDialog()" class="hover:cursor-pointer" name="arrow-left"></i-tabler>
 </div>
+<div class="pt-12 pb-4" mat-dialog-content>
+  <div class="row">
+    <div class="col flex justify-center">
+      <h1 *ngIf="action === 'Add'" class="text-xl text-black text-center"> Ajout d'un nouveau role </h1>
+      <h1 *ngIf="action === 'Update'" class="text-xl text-black text-center"> Mis à jour du role </h1>
+    </div>
+  </div>
+
+  <div *ngIf="action === 'Add' || action === 'Update'">
+  <form [formGroup]="rolesForm">
+    <div class="mt-8 mb-2">
+      <div class="px-8 ">
+        <div class="dialog-content">
+          <div>
+          <label class="block text-sm font-medium text-gray-900"> Role </label>
+          <input class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent text-black sm:text-sm"
+            formControlName="name" type="text" matInput required id="name" name="name" placeholder="Enter role name"
+      
+          />
+          
+  
+        </div>
+            <label class="block text-sm font-medium text-gray-900">Permissions</label>
+                <select formControlName="permissions" multiple required id="permissions" name="permissions" placeholder="Select permissions">
+                  <option *ngFor="let permission of permissions" [value]="permission">{{ permission }}</option>
+                </select>
+               
+                
+             
+            </div>
+                <div class=" flex justify-center mt-4">
+                  <button (click)="doAction()"   class="bg-custom-green font-bold rounded-3xl h-9 px-5 py-2 text-white">
+                    Enregister
+                  </button>
+                  
+                  <button (click)="closeDialog()"
+                          class="border-2 border-second font-bold rounded-3xl h-9 px-5 py-1.5    text-black ml-4">
+                    Annuler
+                  </button>
+                </div>
+          </div>
+        </div>
+      </form>
+      </div>
+      <div *ngIf="action === 'Delete'">
+
+  <div class="p-6 pt-0 text-center">
+    <svg class="w-20 h-20 text-red-600 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+         xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"
+            stroke-width="2"></path>
+    </svg>
+    <h3 class="text-xl font-normal text-black mt-5 mb-6"> Etes vous sure
+      de supprimer ce role ?
+    </h3>
+    <button (click)="doAction()" class="bg-red-600 font-bold rounded-3xl h-9 px-5 py-2  text-white">
+     Supprimer
+    </button>
+    <button (click)="closeDialog()"
+            class="border-2 border-second font-bold rounded-3xl h-9 px-5 py-1.5    text-black ml-4">
+      Annuler
+    </button>
+  </div>
+</div>
+
+</div>
+
+<style>
+  .bg-custom-green {
+  background-color: rgb(183, 239, 63);
+}
+
+</style>
