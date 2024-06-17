@@ -10,6 +10,8 @@ import {
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
 import { ChatService } from 'src/app/services/chat.service';
+import { EvenementService } from 'src/app/services/evenement.service';
+import { Equipe } from 'src/models/equipe.model';
 @Component({
   selector: 'app-new-message-page',
   templateUrl: './new-message-page.component.html',
@@ -20,20 +22,22 @@ export class NewMessagePageComponent implements OnInit{
   local_data: any;
   friendslist: any[] = [];
   uniqueRoles: string[] = [];
-  uniqueNomEquipes: string[] = [];
   selectedRole: string = '';
-  selectedNomEquipe: string = '';
+  selectedEquipe: Equipe | null = null;;
   filteredFriendsList: any[] = [];
   selectedFriends: any[] = [];
   allTeamMembersSelected: boolean = false;
+  equipeList: Equipe[] = [];
 
   constructor(
     private managerService: ManagerService,
     public chatService: ChatService,
+    private eventService: EvenementService,
     private router: Router,
     ) {
     this.local_data = {};
     this.getManager();
+    this.getEquipes();
   }
   ngOnInit(): void {}
 
@@ -42,7 +46,6 @@ export class NewMessagePageComponent implements OnInit{
       (managers) => {
         this.friendslist = managers;
         this.uniqueRoles = [...new Set(this.friendslist.map(friend => friend.role))];
-        this.uniqueNomEquipes = [...new Set(this.friendslist.map(friend => friend.nomEquipe))];
         this.applyFilters();
       },
       (error) => {
@@ -51,6 +54,12 @@ export class NewMessagePageComponent implements OnInit{
     );
   }
 
+  getEquipes(): void {
+    this.eventService.getEquipes().subscribe(equipes => {
+        this.equipeList = equipes;
+    });
+}
+
   applyFilters(): void {
     this.filteredFriendsList = this.friendslist;
 
@@ -58,13 +67,13 @@ export class NewMessagePageComponent implements OnInit{
       this.filteredFriendsList = this.filteredFriendsList.filter(friend => friend.role === this.selectedRole);
     }
 
-    if (this.selectedRole === 'ADHERENT' && this.selectedNomEquipe) {
-      this.filteredFriendsList = this.filteredFriendsList.filter(friend => friend.nomEquipe === this.selectedNomEquipe);
+    if (this.selectedRole === 'ADHERENT' && this.selectedEquipe) {
+      this.filteredFriendsList = this.selectedEquipe.adherents ?? [];
     }
   }
 
   onRoleChange(): void {
-    this.selectedNomEquipe = ''; // Reset the nomEquipe filter when role changes
+    this.selectedEquipe = null;
     this.applyFilters();
   }
 
@@ -92,22 +101,17 @@ export class NewMessagePageComponent implements OnInit{
   }
 
   selectAllTeamMembers(): void {
-    if (this.selectedNomEquipe) {
+    if (this.selectedEquipe?.adherents) {
       if (this.allTeamMembersSelected) {
         // Deselect all team members
-        this.filteredFriendsList.forEach(friend => {
-          if (friend.nomEquipe === this.selectedNomEquipe) {
-            const index = this.selectedFriends.findIndex(selected => selected.id === friend.id);
-            if (index !== -1) {
-              this.selectedFriends.splice(index, 1);
-            }
-          }
-        });
+        this.selectedFriends = this.selectedFriends.filter(
+          friend => !this.selectedEquipe!.adherents!.includes(friend)
+        );
       } else {
         // Select all team members
-        this.filteredFriendsList.forEach(friend => {
-          if (friend.nomEquipe === this.selectedNomEquipe && !this.isSelected(friend)) {
-            this.selectedFriends.push(friend);
+        this.selectedEquipe.adherents.forEach(adherent => {
+          if (!this.isSelected(adherent)) {
+            this.selectedFriends.push(adherent);
           }
         });
       }
@@ -136,6 +140,12 @@ export class NewMessagePageComponent implements OnInit{
   }
   addRowData(data: any): void {
     this.sendMessage(data.receiver, data.msg);
+  }
+
+  resetFilters(): void {
+    this.selectedRole = '';
+    this.selectedEquipe = null;
+    this.applyFilters();
   }
 
   doAction(): void {
