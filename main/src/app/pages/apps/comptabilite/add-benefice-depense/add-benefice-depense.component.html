@@ -28,6 +28,17 @@
         </p>
       </div>
 
+    <div class="mt-4">
+      <label for="HeadlineAct" class="block text-sm font-medium text-gray-900"> Date </label>
+      <input type="date"
+             class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent text-black sm:text-sm"
+             required formControlName="date"
+             />
+      <p class="text-red-600" *ngIf="evenementForm.get('date')?.invalid && evenementForm.get('date')?.touched">
+        Champ Date est obligatoire!
+      </p>
+    </div>
+    
 
       <div class="mt-4">
         <label class="block text-sm font-medium text-gray-900" for="HeadlineAct"> Date </label>
@@ -82,3 +93,33 @@
     </form>
   </div>
 </div>
+
+
+<style>
+  .text-danger {
+    color: red;
+  }
+
+  .custom-select {
+    /* background color for the select */
+    background-color: red;
+    /* border color */
+    border: 1px solid #cccccc;
+    /* border radius */
+    border-radius: 4px;
+    /* color for the text */
+    color: #333333;
+    /* font size */
+    font-size: 14px;
+    /* padding */
+    padding: 5px 10px;
+  }
+
+  .gray-background {
+    background-color: #FAFAFA;
+  }
+
+  .no-shadow {
+    box-shadow: none;
+  }
+</style>

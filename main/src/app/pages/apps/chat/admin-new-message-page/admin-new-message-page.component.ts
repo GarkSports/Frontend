@@ -81,6 +81,7 @@ export class AdminNewMessagePageComponent implements OnInit, AfterViewInit {
       this.chatService.sendMessage(receiversId, message).subscribe(
         () => {
           console.log('Message sent successfully');
+          this.closeDialog();
         },
         (error) => {
           console.error('Error occurred while sending message:', error);

@@ -69,5 +69,9 @@ import { Benefices, Depenses } from 'src/models/comptabilite.model';
         return this.http.get(`${this.apiUrl}/benefices/monthly-sums`, {  withCredentials: true });
       }
 
+      getbeneficepaiement() :Observable<Benefices> {
+        return this.http.get<Benefices>(`${this.apiUrl}/benefices/monthBenefice`, {  withCredentials: true });
+      }
+
 
   }

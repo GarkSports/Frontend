@@ -1,6 +1,6 @@
 <div class="d-flex justify-content-center align-items-center">
   <div class="row p-24 col-lg-12 justify-content-center">
-
+    
     <div class="col-lg-3">
       <mat-form-field appearance="outline" class="w-100 hide-hint gray-background">
         <mat-label>Filtrer par mois</mat-label>
@@ -161,8 +161,9 @@
         </button>
       </div>
     </div>
-    <div class="table-responsive gray-background ">
+ 
 
+    <div class="table-responsive gray-background ">
 
       <table mat-table [dataSource]="BeneficesdataSource" class="w-100 gray-background">
         <!-- Column definitions -->
@@ -182,8 +183,14 @@
         <!-- Column: Quantite -->
         <ng-container matColumnDef="Quantite">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Quantite</th>
-          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.quantite }}</td>
+          <td mat-cell *matCellDef="let element">
+            {{ element.quantite }}
+            <ng-container *ngIf="element.benefpaiement">
+              <mat-icon mat-cell (click)="openDialog('', {})" class="text-danger">info</mat-icon>
+            </ng-container>
+          </td>
         </ng-container>
+        
 
         <!-- Column: Prix Unitaire -->
         <ng-container matColumnDef="prix_unitaire">
@@ -209,6 +216,9 @@
           <td mat-cell *matCellDef="let element">
             <button mat-icon-button style="color: gray;" (click)="navigateToUpdatePage('benefices',element.id)">
               <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="openDialog('delete', {element})">
+              <mat-icon>delete_outline</mat-icon>
             </button>
           </td>
         </ng-container>
@@ -312,6 +322,9 @@
           <td mat-cell *matCellDef="let element">
             <button mat-icon-button style="color: gray;" (click)="navigateToUpdatePage('depenses',element.id)">
               <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="deletebeneficesdepenses('depenses',element.id)">
+              <mat-icon>delete_outline</mat-icon>
             </button>
           </td>
         </ng-container>

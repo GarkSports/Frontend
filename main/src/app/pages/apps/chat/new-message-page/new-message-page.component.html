@@ -15,8 +15,8 @@
   <mat-card class="mat-card-top gray-background cardWithShadow p-24 p-t-24">
     
       
-          <div class="row align-items-center">  
-            <div class="col-sm-2 col-lg-4 align-items-center">  
+          <div class="row p-24 col-lg-12 justify-content-center">  
+            <div class="col-lg-3 align-items-center">  
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>filtrer par Role</mat-label>
                 <mat-select [(ngModel)]="selectedRole" name="role" (selectionChange)="onRoleChange()">
@@ -25,18 +25,28 @@
               </mat-form-field>
             </div>
       
-            <div  class="col-sm-2 col-lg-4 align-items-center">
+            <div  class="col-lg-3 align-items-center">
               <mat-form-field  appearance="outline" class="w-100">
                 <mat-label>filtrer par Equipe</mat-label>
-                <mat-select [(ngModel)]="selectedNomEquipe" name="nomEquipe" [disabled]="selectedRole !== 'ADHERENT'" (selectionChange)="onNomEquipeChange()">
-                  <mat-option *ngFor="let nomEquipe of uniqueNomEquipes"  [value]="nomEquipe">{{ nomEquipe }}</mat-option>
+                <mat-select [(ngModel)]="selectedEquipe" name="nomEquipe" [disabled]="selectedRole !== 'ADHERENT'" (selectionChange)="onNomEquipeChange()">
+                  <mat-option *ngFor="let equipe of equipeList"  [value]="equipe">{{ equipe.nom }}</mat-option>
                 </mat-select>
                 
               </mat-form-field>
             </div>
-            <div  class="col-sm-2 col-lg-4 align-items-center">
-            <button mat-button [disabled]="selectedRole !== 'ADHERENT'" (click)="selectAllTeamMembers()">Sélectionner toute l'équipe</button>
+
+            <div class="col-lg-1 d-flex justify-content-center align-items-center">
+              <button mat-icon-button color="primary" (click)="resetFilters()" style="color: gray;">
+                <i-tabler name="refresh"></i-tabler>
+              </button>
             </div>
+
+            <div class="col-lg-3 d-flex align-items-center">
+              <button mat-button [disabled]="!selectedEquipe || selectedRole !== 'ADHERENT'" (click)="selectAllTeamMembers()">
+                Sélectionner toute l'équipe
+              </button>
+            </div>
+            
             
           </div>
           <h3> Selectionner Au Moins Un Contact</h3>
@@ -47,7 +57,7 @@
             <div class="scrollable-friends-list">
               <div *ngFor="let friend of filteredFriendsList">
                 <mat-checkbox [checked]="isSelected(friend)" (change)="toggleSelection(friend)">
-                  {{ friend.firstname }} {{ friend.lastname }} - {{ friend.role }} - {{ friend.nomEquipe }}
+                  {{ friend.firstname }} {{ friend.lastname }} - {{ friend.role }}
                 </mat-checkbox>
               </div>
             </div>
