@@ -162,47 +162,49 @@
         </div>
 
         <form [formGroup]="form">
+          <div formGroupName="informationsParent">
           <div class="grid grid-cols-2 gap-16 mt-6">
             <div class="col-span-1">
               <label class="block text-sm font-medium text-gray-400"> Nom </label>
               <input class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
                      formControlName="nomParent"
-                     id="nomParent" type="text"/>
+                     id="nomParent" name="nomParent" type="text"/>
             </div>
 
             <div class="col-span-1">
               <label class="block text-sm font-medium text-gray-400"> Prénom </label>
               <input class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
                      formControlName="prenomParent"
-                     id="prenomParent" name="prenomParent" placeholder="prenomParent"
+                     id="prenomParent" name="prenomParent"
                      type="text"/>
             </div>
             <div class="col-span-2">
               <label class="block text-sm font-medium text-gray-400"> Adresse</label>
               <input class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
-                     formControlName="adresseParent"
+                     formControlName="adresseParent" name="adresseParent"
                      type="text"/>
             </div>
 
             <div class="col-span-2">
               <label class="block text-sm font-medium text-gray-400"> Email</label>
               <input class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
-                     formControlName="emailParent"
+                     formControlName="emailParent" name="emailParent"
                      type="email"/>
             </div>
             <div class="col-span-2">
               <label class="block text-sm font-medium text-gray-400"> Téléphone</label>
               <input class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
-                     formControlName="telephoneParent"
+                     formControlName="telephoneParent" name="telephoneParent"
                      type="number"/>
             </div>
             <div class="col-span-2">
               <label class="block text-sm font-medium text-gray-400"> Nationalité</label>
               <input class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm"
-                     formControlName="nationaliteParent"
+                     formControlName="nationaliteParent" name="nationaliteParent" (change)="loggitOut($event)"
                      type="text"/>
             </div>
           </div>
+        </div>
         </form>
       </div>
     </div>

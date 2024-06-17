@@ -137,6 +137,9 @@ export class AppRolesDialogContentComponent implements OnInit {
     this.fetchPermissions();
   }
 
+ 
+
+
   initRolesForm(): void {
     this.rolesForm = this.formBuilder.group({
       name: [this.local_data.name, Validators.required],
@@ -163,10 +166,10 @@ export class AppRolesDialogContentComponent implements OnInit {
   }
 
   doAction(): void {
-    if (this.action === 'Add' && this.rolesForm) {
+    if (this.action === 'Add') {
+     
       const name = this.rolesForm.get('name')?.value; // Add '?' for null check
       const permissions = this.rolesForm.get('permissions')?.value; // Add '?' for null check
-  
   
       this.managerService.addRoleName(name, permissions).subscribe(
         (response) => {
@@ -179,8 +182,9 @@ export class AppRolesDialogContentComponent implements OnInit {
           console.error('Error adding role name:', error);
         }
       );
-   
-    } else if (this.action === 'Update' && this.rolesForm) {
+    
+  }
+     else if (this.action === 'Update' && this.rolesForm) {
       // Handle Update action
         const updatedRolename = this.rolesForm.value;
 

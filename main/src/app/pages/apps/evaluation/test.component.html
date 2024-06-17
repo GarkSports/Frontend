@@ -12,8 +12,10 @@
                 </div>
                 <div class="flex justify-end gap-8">
 
-                  <mat-slide-toggle (click)="logIt(category.categorieName, i)" color="primary"
-                  >
+                  <mat-slide-toggle
+                    (change)="toggleCategory(category.categorieName, i)"
+                    [checked]="selectedCategoryToOpenIndex === i"
+                    color="primary">
                   </mat-slide-toggle>
                   <button (click)="deleteCategorie(test, category)">
                     <i-tabler name="trash"></i-tabler>
@@ -38,7 +40,7 @@
                 </div>
                 <div *ngIf="selectedCategoryIndex === i" class="flex justify-center mb-4">
                   <input class="mt-1.5 h-10 px-4 w-full rounded-lg border-second border-2 bg-transparent  text-black sm:text-sm" formControlName="newKpiValue" matInput
-                         placeholder="Nouveau KPI"/>
+                         placeholder="Nouveau KPI" (keyup.enter)="addKpi(category.id)"/>
                   <button (click)="addKpi(category.id)" class=" ml-4 ">
                     <i class="bi bi-plus-circle-fill"></i>
                   </button>

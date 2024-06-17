@@ -121,23 +121,35 @@ export class ManagerService {
     console.log("this is service", requestBody);
     console.log("this is service params", params.toString());
   
-    return this.http.post<any>(`${this.apiUrl}/add-adherent`, requestBody, { headers, params, withCredentials: true });
+    return this.http.post<any>(`${this.apiUrl}/add-coach`, requestBody, { headers, params, withCredentials: true });
   }
   
 
   addAdherent(adherent: Adherent, nomEquipes: string[]): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    const requestBody = {
-      firstname: adherent.firstname,
-      lastname: adherent.lastname,
-      adresse: adherent.adresse,
-      email: adherent.email,
-      telephone: adherent.telephone,
-      photo: adherent.photo,
-      niveauScolaire: adherent.niveauScolaire,
-      dateNaissance: adherent.dateNaissance, // Convert date to ISO string format
-      nationalite: adherent.nationalite
-    };
+    const informationsParent = adherent.informationsParent
+    ? {
+        nomParent: adherent.informationsParent.nomParent,
+        prenomParent: adherent.informationsParent.prenomParent,
+        telephoneParent: adherent.informationsParent.telephoneParent,
+        adresseParent: adherent.informationsParent.adresseParent,
+        emailParent: adherent.informationsParent.emailParent,
+        nationaliteParent: adherent.informationsParent.nationaliteParent,
+      }
+    : undefined;
+  
+  const requestBody = {
+    firstname: adherent.firstname,
+    lastname: adherent.lastname,
+    adresse: adherent.adresse,
+    email: adherent.email,
+    telephone: adherent.telephone,
+    photo: adherent.photo,
+    niveauScolaire: adherent.niveauScolaire,
+    dateNaissance: adherent.dateNaissance,
+    nationalite: adherent.nationalite,
+    ...(informationsParent && { informationsParent }),
+  };
   
     let params = new HttpParams();
   if (nomEquipes.length > 0) {
@@ -209,8 +221,8 @@ export class ManagerService {
     return this.http.get<string[]>(`${this.apiUrl}/get-permissions`, { withCredentials: true });
   }
 
-  getManagers(): Observable<Manager[]> {
-    return this.http.get<Manager[]>(`${this.apiUrl}/get-users`, { withCredentials: true });
+  getManagers(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/get-users`, { withCredentials: true });
   }
 
   getManagerById(ManagerId: number): Observable<Academie> {
