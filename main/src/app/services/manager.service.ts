@@ -121,7 +121,7 @@ export class ManagerService {
     console.log("this is service", requestBody);
     console.log("this is service params", params.toString());
   
-    return this.http.post<any>(`${this.apiUrl}/add-adherent`, requestBody, { headers, params, withCredentials: true });
+    return this.http.post<any>(`${this.apiUrl}/add-coach`, requestBody, { headers, params, withCredentials: true });
   }
   
 

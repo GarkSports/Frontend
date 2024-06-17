@@ -11,6 +11,7 @@ import { PostsService } from 'src/app/services/posts.service';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { EquipeService } from 'src/app/services/equipe.service';
 import { Discipline } from 'src/models/discipline.model';
+import { Router } from '@angular/router';
 
 
 
@@ -47,6 +48,8 @@ export class AppBloglistComponent implements AfterViewInit {
   constructor(
     public dialog: MatDialog,
     public postservice: PostsService,
+    private router: Router,
+
    
     ) {}
 
@@ -151,6 +154,10 @@ export class AppBloglistComponent implements AfterViewInit {
         // Handle error
       }
     );
+  }
+
+  addpostpage(){
+    this.router.navigate(['apps/blog/post/add']);
   }
 
   

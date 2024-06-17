@@ -145,10 +145,10 @@ import {AdminNewMessagePageComponent} from './chat/admin-new-message-page/admin-
 import {DefaultImagePipe} from "../../pipe/default-image.pipe";
 import {AddEquipeComponent} from './equipe/addEquipe.component';
 
-import {AppComptabiliteComponent} from './comptabilite/comptabilite.component'
+import {AppComptabiliteComponent ,AppComptaDialogContentComponent} from './comptabilite/comptabilite.component'
 import { AddBeneficeDepenseComponent } from './comptabilite/add-benefice-depense/add-benefice-depense.component';
 import { UpdateBeneficeDepenseComponent } from './comptabilite/update-benefice-depense/update-benefice-depense.component';
-import {AddPostPageComponent} from './blogs/bloglist/add-post-page/add-post-page.component'
+import {AddPostPageComponent} from './blogs/bloglist/add-post-page/add-post-page.component';
 
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 
@@ -287,7 +287,8 @@ import {FaIconComponent} from "@fortawesome/angular-fontawesome";
     AppComptabiliteComponent,
     AddBeneficeDepenseComponent,
     UpdateBeneficeDepenseComponent,
-    AddPostPageComponent
+    AddPostPageComponent,
+    AppComptaDialogContentComponent
   ],
   providers: [DatePipe],
 })
