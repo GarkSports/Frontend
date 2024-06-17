@@ -127,11 +127,11 @@
               Role
             </th>
             <td mat-cell *matCellDef="let element" class="f-s-14">
-              @if(element.role === 'ADHERENT' || element.role === 'PARENT'){
+              @if(element.role === 'ADHERENT'){
                 {{element.role}}
               }
               @else {
-                {{ element.roleName }}
+                {{ element.roleName ? element.roleName : 'Non affecté' }}
               }
             </td>
           </ng-container>
@@ -159,7 +159,7 @@
               Equipe
             </th>
             <td mat-cell *matCellDef="let element" class="f-s-14">
-              {{ element.equipes ? element.equipes : '' }}
+              {{ element.equipes && element.equipes.length > 0 ? element.equipes.join(', ') : 'Non affecté' }}
             </td>
           </ng-container>
 
