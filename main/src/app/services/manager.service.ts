@@ -53,18 +53,22 @@ export class ManagerService {
     );
   }
   
-  deleteUser(userId: number): Observable<{ success: boolean, message?: string, error?: string }> {
+  deleteUser(userId: number): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.delete<any>(`${this.apiUrl}/delete-user?id=${userId}`, { withCredentials: true, headers })
-    .pipe(
-      map((response: HttpResponse<string>) => {
-        if (response.status === 200) {
-          return { success: true, message: response.body || '' };
-        } else {
-          return { success: false, error: response.body || '' };
-        }
-      })
-    );
+    return this.http.delete(`${this.apiUrl}/delete-user?id=${userId}`, { withCredentials: true, headers, responseType: 'text' })
+      .pipe(
+        map((response: string) => {
+          if (response.includes('User deleted successfully')) {
+            return { success: true, message: response };
+          } else {
+            return { success: false, error: response };
+          }
+        }),
+        catchError((error) => {
+          console.error('Error deleting user', error);
+          return of({ success: false, error: 'An error occurred while deleting the user' });
+        })
+      );
   }
 
   addStaff(managerData: Manager): Observable<any> {
