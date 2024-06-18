@@ -113,20 +113,45 @@ export class AppStaffformContentComponent implements OnInit {
       this.getEquipes();
     });
   }
+ 
 
-  deleteUser(): void{
-    if (confirm(`Are you sure you want to delete the category: ?`)) {
+  
+deleteUser(): void {
+  const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+    data: {
+      title: 'Confirmation',
+      message: `Vous êtes sûr de supprimer ${this.local_data.firstname}?`,
+    },
+  });
+
+  dialogRef.afterClosed().subscribe((result) => {
+    if (result) {
+      // User clicked "OK"
       this.managerService.deleteUser(this.local_data.id).subscribe(
-        response => {
-          console.log('Category deleted successfully', response);
-          // Remove the deleted category from the test
+        (response: any) => {
+          if (response.success) {
+            console.log('User deleted successfully', response.message);
+            this.showNotification('Succès', 'Utilisateur supprimé avec succès!', 'success');
+            setTimeout(() => {
+              this.router.navigate(['/apps/staff']);
+            }, 3000);
+          } else {
+            console.error('Error deleting user', response.error);
+            this.showNotification('Erreur', `Erreur lors de la suppression d'utilisateur`, 'error');
+          }
         },
-        error => {
-          console.error('Error deleting category', error);
+        (error) => {
+          console.error('Error deleting user', error);
+          this.showNotification('Erreur', `Erreur lors de la suppression d'utilisateur`, 'error');
         }
       );
+    } else {
+      // User clicked "Annuler"
+      console.log('User cancelled the action');
     }
-  }
+  });
+}
+
   onRoleChange(event: Event): void {
     this.ngZone.run(() => {
       const selectElement = event.target as HTMLSelectElement;
@@ -492,7 +517,7 @@ getInitials(): string {
           );
           setTimeout(() => {
             this.router.navigate(['/apps/staff']);
-          }, 5000);
+          }, 3000);
         },
         (error) => {
           console.error('Error adding manager:', error);
@@ -508,7 +533,7 @@ getInitials(): string {
           updatedStaff.id = this.local_data.id; 
 
           updatedStaff.photo = this.local_data.photo;
-          //const staffWithPhoto = { ...updatedManager, photo: this.photo2 };
+          const staffWithPhoto = { ...updatedStaff, photo: this.photo };
           updateObservable = this.managerService.updateStaff(updatedStaff);
           break;
         case 'ENTRAINEUR':
@@ -542,7 +567,7 @@ getInitials(): string {
           );
           setTimeout(() => {
             this.router.navigate(['/apps/staff']);
-          }, 5000);
+          }, 3000);
         },
         (error) => {
           console.error('Error updating manager:', error);
@@ -553,19 +578,17 @@ getInitials(): string {
   }
 
   showNotification(title: string, message: string, type: 'success' | 'error') {
-    this.dialog.open(NotificationDialogComponent, {
+    const dialogRef: MatDialogRef<NotificationDialogComponent> = this.dialog.open(NotificationDialogComponent, {
       data: { title, message, type },
       panelClass: type, // You can use this to apply custom styles based on the type
     });
+  
+    setTimeout(() => {
+      dialogRef.close();
+    }, 3000);
   }
 
-  cancelAction(): void {
-    if (window.opener) {
-      window.close();
-    } else {
-      window.history.back();
-    }
-  }
+
 
   async uploadFile(event: any) {
     this.isLoading = true;
@@ -596,14 +619,58 @@ getInitials(): string {
   
 }
 
+
+
+@Component({
+  selector: 'app-confirm-dialog',
+  template: `
+    <div class="dialog-container">
+      <h1 class="dialog-title">{{ data.title }}</h1>
+      <div class="dialog-content">{{ data.message }}</div>
+      <div class="dialog-actions">
+        <button class="cancel-button" (click)="dialogRef.close(false)">Annuler</button>
+        <button class="ok-button" (click)="dialogRef.close(true)">OK</button>
+      </div>
+    </div>
+  `,
+  styles: [`
+    .dialog-container {
+      padding: 20px;
+      background-color: #f5f5f5;
+      border-radius: 4px;
+    }
+    .dialog-title {
+      margin-top: 0;
+    }
+    .dialog-content {
+      margin-bottom: 20px;
+    }
+    .dialog-actions {
+      display: flex;
+      justify-content: flex-end;
+    }
+    .cancel-button {
+      margin-right: auto;
+    }
+    .ok-button {
+      margin-left: 10px;
+    }
+  `]
+})
+export class ConfirmDialogComponent {
+  constructor(
+    public dialogRef: MatDialogRef<ConfirmDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: { title: string; message: string }
+  ) {}
+
+}
+
 @Component({
   selector: 'app-notification-dialog',
   template: `
     <h1 mat-dialog-title class="p-24 p-t-5">{{ data.title }}</h1>
     <div mat-dialog-content class="p-x-24 p-b-24">{{ data.message }}</div>
-    <div mat-dialog-actions class="p-24 p-t-0">
-      <button mat-stroked-button (click)="cancelAction()">OK</button>
-    </div>
+   <br>
   `,
   styles: [
     `
@@ -623,17 +690,6 @@ export class NotificationDialogComponent {
     @Inject(MAT_DIALOG_DATA)
     public data: { title: string; message: string; type: 'success' | 'error' }
   ) {}
-
-  cancelAction(): void {
-    if (window.opener) {
-      window.close();
-    } else {
-      // Optionally, you can navigate back to the previous page if the window wasn't opened as a popup
-      window.history.back();
-    }
-  }
-
-
 }
 
 @Component({
