@@ -498,10 +498,7 @@ getInitials(): string {
           
             const adherentWithPhoto = { ...addedAdherent, photo: this.photo };
             addObservable = this.managerService.addAdherent(adherentWithPhoto, nomEquipes);
-            break;
-          
-        case 'PARENT':
-          break;
+            break;  
 
         default:
           console.error('Invalid role:');
